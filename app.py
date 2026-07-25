@@ -153,6 +153,22 @@ def add_elevation_background(fig, race_df, step_m=200):
     )
 
 
+def chart_download_button(fig, filename, key):
+    """Renders a small download button right below a Plotly chart that
+    exports it as a standalone, interactive HTML snippet (zoom/hover/pan
+    all still work) - ready to paste into Blogger's HTML view, or embed
+    anywhere else via <iframe>. Uses the CDN version of Plotly.js, so the
+    snippet itself is lightweight."""
+    html_bytes = fig.to_html(full_html=False, include_plotlyjs="cdn").encode("utf-8")
+    st.download_button(
+        "📥 Download chart as HTML (for Blogger)",
+        data=html_bytes,
+        file_name=filename,
+        mime="text/html",
+        key=key,
+    )
+
+
 def match_checkpoints_with_gpx(df_gpx, checkpoints_km):
     """Receives the already-analyzed GPX DataFrame and a list of checkpoints
     [{'point': int, 'km': float}, ...] and returns a DataFrame with one row
@@ -979,6 +995,7 @@ with tab_race:
                     showlegend=False,
                 )
                 st.plotly_chart(fig_bars, use_container_width=True)
+                chart_download_button(fig_bars, "slope_breakdown.html", "dl_slope_bars")
 
                 # --- Effort distribution (same split logic used inside ER) ---
                 st.markdown("---")
@@ -1022,6 +1039,7 @@ with tab_race:
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
                 )
                 st.plotly_chart(fig_effort, use_container_width=True)
+                chart_download_button(fig_effort, "effort_distribution.html", "dl_effort_dist")
                 st.caption(
                     f"Split ≈ **{effort_dist['pct_first_half']:.0f}/{effort_dist['pct_second_half']:.0f}** "
                     f"(physical distance to reach 50% of effort vs. remaining distance). "
@@ -1074,6 +1092,7 @@ with tab_race:
                     yaxis=dict(dtick=100),
                 )
                 st.plotly_chart(fig, use_container_width=True)
+                chart_download_button(fig, "biomechanical_effort_map.html", "dl_effort_map")
 
                 with st.expander("View full point-by-point table"):
                     st.dataframe(df_gpx, use_container_width=True)
@@ -1289,6 +1308,7 @@ with tab_runner:
                             hovermode="x unified",
                         )
                         st.plotly_chart(fig_vpi, use_container_width=True)
+                        chart_download_button(fig_vpi, "vpi_chart.html", "dl_vpi")
 
                         # --- DMI chart ---
                         st.markdown("---")
@@ -1322,6 +1342,7 @@ with tab_runner:
                             hovermode="x unified",
                         )
                         st.plotly_chart(fig_dmi, use_container_width=True)
+                        chart_download_button(fig_dmi, "dmi_chart.html", "dl_dmi")
 
                         # --- ER chart ---
                         st.markdown("---")
@@ -1380,6 +1401,7 @@ with tab_runner:
                             hovermode="x unified",
                         )
                         st.plotly_chart(fig_er, use_container_width=True)
+                        chart_download_button(fig_er, "er_pacing_curve.html", "dl_er")
 
                         # --- Degradation matrix by segment (combined VPI+DMI, normalized) ---
                         st.markdown("---")
@@ -1454,6 +1476,7 @@ with tab_runner:
                             hovermode="x unified",
                         )
                         st.plotly_chart(fig_degradation, use_container_width=True)
+                        chart_download_button(fig_degradation, "degradation_curve.html", "dl_degradation")
 
                         # --- Full summary table: everything condensed into one row per checkpoint ---
                         st.markdown("---")
@@ -1622,6 +1645,7 @@ with tab_gpx:
                         hovermode="x unified",
                     )
                     st.plotly_chart(fig_er_gpx, use_container_width=True)
+                    chart_download_button(fig_er_gpx, "gpx_er_pacing_curve.html", "dl_er_gpx")
 
                     # --- Degradation curve by segment (measured) ---
                     st.markdown("---")
@@ -1659,6 +1683,7 @@ with tab_gpx:
                         hovermode="x unified",
                     )
                     st.plotly_chart(fig_gpx_degradation, use_container_width=True)
+                    chart_download_button(fig_gpx_degradation, "gpx_degradation_curve.html", "dl_gpx_degradation")
 
                     # Saved so the 'UTMB vs GPX' tab can compare against the estimate
                     st.session_state['real_degradation_df'] = df_segment_gpx
@@ -1946,6 +1971,95 @@ with tab_top:
                             ),
                         )
                         st.plotly_chart(fig_positions, use_container_width=True)
+                        chart_download_button(fig_positions, "position_progression.html", "dl_positions")
+
+                        # --- VPI progression chart ---
+                        st.markdown("---")
+                        st.markdown("### 🧗 VPI Progression")
+                        st.caption(
+                            "Each runner's VPI (m/h) at every checkpoint with steep climbing "
+                            "terrain, connected across the race. Higher is better, so the axis "
+                            "keeps the largest values at the top."
+                        )
+
+                        fig_vpi_top = go.Figure()
+                        add_elevation_background(fig_vpi_top, race_data_top["df"])
+
+                        max_vpi_seen = 0
+                        for label, df_summary_bib in results.items():
+                            df_plot = df_summary_bib[["Checkpoint", "VPI"]].dropna(subset=["VPI"]).copy()
+                            df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                            df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
+                            if df_plot.empty:
+                                continue
+                            max_vpi_seen = max(max_vpi_seen, df_plot["VPI"].astype(float).max())
+                            fig_vpi_top.add_trace(go.Scatter(
+                                x=df_plot["Km"],
+                                y=df_plot["VPI"],
+                                mode="lines+markers",
+                                name=label,
+                                hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>VPI: %{{y:.0f}} m/h<extra></extra>",
+                            ))
+
+                        fig_vpi_top.update_layout(
+                            template="plotly_dark",
+                            xaxis_title="Accumulated Km",
+                            yaxis_title="VPI (m/h)",
+                            height=480,
+                            hovermode="closest",
+                            yaxis=dict(
+                                autorange=False,
+                                range=[0, max_vpi_seen * 1.05 if max_vpi_seen else 1],
+                                dtick=50,
+                                showgrid=False,
+                            ),
+                        )
+                        st.plotly_chart(fig_vpi_top, use_container_width=True)
+                        chart_download_button(fig_vpi_top, "vpi_progression.html", "dl_vpi_top")
+
+                        # --- DMI progression chart ---
+                        st.markdown("---")
+                        st.markdown("### 📉 DMI Progression")
+                        st.caption(
+                            "Each runner's DMI (km/h) at every checkpoint with steep descending "
+                            "terrain, connected across the race. Higher is better, so the axis "
+                            "keeps the largest values at the top."
+                        )
+
+                        fig_dmi_top = go.Figure()
+                        add_elevation_background(fig_dmi_top, race_data_top["df"])
+
+                        max_dmi_seen = 0
+                        for label, df_summary_bib in results.items():
+                            df_plot = df_summary_bib[["Checkpoint", "DMI"]].dropna(subset=["DMI"]).copy()
+                            df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                            df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
+                            if df_plot.empty:
+                                continue
+                            max_dmi_seen = max(max_dmi_seen, df_plot["DMI"].astype(float).max())
+                            fig_dmi_top.add_trace(go.Scatter(
+                                x=df_plot["Km"],
+                                y=df_plot["DMI"],
+                                mode="lines+markers",
+                                name=label,
+                                hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>DMI: %{{y:.2f}} km/h<extra></extra>",
+                            ))
+
+                        fig_dmi_top.update_layout(
+                            template="plotly_dark",
+                            xaxis_title="Accumulated Km",
+                            yaxis_title="DMI (km/h)",
+                            height=480,
+                            hovermode="closest",
+                            yaxis=dict(
+                                autorange=False,
+                                range=[0, max_dmi_seen * 1.05 if max_dmi_seen else 1],
+                                dtick=1,
+                                showgrid=False,
+                            ),
+                        )
+                        st.plotly_chart(fig_dmi_top, use_container_width=True)
+                        chart_download_button(fig_dmi_top, "dmi_progression.html", "dl_dmi_top")
 
 with tab_methodology:
     st.header("📖 Indices & Calculation Methodology")
