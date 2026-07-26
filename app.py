@@ -169,7 +169,59 @@ def chart_download_button(fig, filename, key):
     )
 
 
-def match_checkpoints_with_gpx(df_gpx, checkpoints_km):
+def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_segment_degradation, df_summary):
+    """Builds a single, self-contained HTML report combining the runner
+    card, checkpoints table, performance indices, every chart (VPI, DMI,
+    ER, Degradation Curve), and the summary tables - exactly as shown in
+    the 'Runner Metrics' tab. Ready to paste directly into Blogger's
+    HTML view as one block, with full interactivity (zoom/hover/pan)
+    preserved on every chart.
+
+    Plotly.js is only loaded ONCE (via CDN) at the top, and each chart is
+    embedded as a lightweight fragment (include_plotlyjs=False) that
+    reuses it - instead of loading the library once per chart."""
+
+    def _metric_html(label, value):
+        return (
+            f"<div style='display:inline-block;margin:0 24px 12px 0;'>"
+            f"<div style='font-size:13px;color:#888;'>{label}</div>"
+            f"<div style='font-size:22px;font-weight:600;'>{value}</div>"
+            f"</div>"
+        )
+
+    parts = [
+        "<script src='https://cdn.plot.ly/plotly-2.32.0.min.js'></script>",
+        "<div style='font-family:-apple-system,Segoe UI,Roboto,sans-serif;'>",
+        f"<h2>{runner_info.get('Name') or 'Runner'}</h2>",
+        "<div>",
+        _metric_html("Finish Time", runner_info.get("Finish Time") or "-"),
+        _metric_html("Overall Rank", runner_info.get("Overall Rank") or "-"),
+        _metric_html("Category", runner_info.get("Category") or "-"),
+        "</div>",
+        "<h3>Checkpoints / Split Times</h3>",
+        df_runner.to_html(index=False, border=0),
+        "<h3>🎯 Performance Indices</h3>",
+        "<div>",
+        _metric_html("VPI", f"{indices.get('VPI')} m/h" if indices.get("VPI") is not None else "N/A"),
+        _metric_html("DMI", f"{indices.get('DMI')} km/h" if indices.get("DMI") is not None else "N/A"),
+        _metric_html("ER", indices.get("ER") if indices.get("ER") is not None else "N/A"),
+        "</div>",
+    ]
+
+    for title, fig in figures.items():
+        parts.append(f"<h3>{title}</h3>")
+        parts.append(fig.to_html(full_html=False, include_plotlyjs=False))
+
+    parts.append("<h3>📉 Degradation Curve by Segment</h3>")
+    parts.append(df_segment_degradation.to_html(index=False, border=0))
+    parts.append("<h3>📋 Full Summary Table</h3>")
+    parts.append(df_summary.to_html(index=False, border=0))
+    parts.append("</div>")
+
+    return "\n".join(parts).encode("utf-8")
+
+
+
     """Receives the already-analyzed GPX DataFrame and a list of checkpoints
     [{'point': int, 'km': float}, ...] and returns a DataFrame with one row
     per segment between consecutive checkpoints: real distance, positive/
@@ -1490,6 +1542,36 @@ with tab_runner:
                         df_summary = build_summary_table(race_segments_df, df_segment_degradation, df_runner)
 
                         st.dataframe(df_summary, use_container_width=True, hide_index=True)
+
+                        # --- Full analysis report (everything above, in one HTML file) ---
+                        st.markdown("---")
+                        st.markdown("### 📄 Full Analysis Report")
+                        st.caption(
+                            "Everything shown on this tab — runner card, checkpoints, the 4 "
+                            "charts, and both tables — bundled into a single HTML file. Paste "
+                            "it directly into Blogger's HTML view as one block."
+                        )
+                        full_report_html = build_full_runner_report_html(
+                            runner_info=runner_info,
+                            df_runner=df_runner,
+                            indices=indices,
+                            figures={
+                                "🧗 VPI - Vertical Power Index": fig_vpi,
+                                "📉 DMI - Descent Mastery Index": fig_dmi,
+                                "🏆 ER - Endurance Rating - Pacing Curve": fig_er,
+                                "📉 Degradation Curve by Segment": fig_degradation,
+                            },
+                            df_segment_degradation=df_segment_degradation,
+                            df_summary=df_summary,
+                        )
+                        st.download_button(
+                            "📄 Download Full Analysis (HTML for Blogger)",
+                            data=full_report_html,
+                            file_name=f"{(runner_info.get('Name') or 'runner').replace(' ', '_')}_full_analysis.html",
+                            mime="text/html",
+                            type="primary",
+                            use_container_width=True,
+                        )
 
 # ---------------------------------------------
 # TAB 3: GPX Metrics (mirrors Runner Metrics, but measured directly
