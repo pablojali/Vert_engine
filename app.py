@@ -221,7 +221,7 @@ def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_s
     return "\n".join(parts).encode("utf-8")
 
 
-
+def match_checkpoints_with_gpx(df_gpx, checkpoints_km):
     """Receives the already-analyzed GPX DataFrame and a list of checkpoints
     [{'point': int, 'km': float}, ...] and returns a DataFrame with one row
     per segment between consecutive checkpoints: real distance, positive/
