@@ -179,19 +179,46 @@ def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_s
 
     Plotly.js is only loaded ONCE (via CDN) at the top, and each chart is
     embedded as a lightweight fragment (include_plotlyjs=False) that
-    reuses it - instead of loading the library once per chart."""
+    reuses it - instead of loading the library once per chart. Tables
+    use VertLabs' own palette (dark slate background, cyan accent) so
+    they match the blog's existing theme instead of looking like plain
+    unstyled HTML."""
+
+    style_block = """
+    <style>
+      .vl-report { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; color: #e2e8f0; }
+      .vl-report h2 { color: #22d3ee; margin-bottom: 4px; }
+      .vl-report h3 { color: #22d3ee; margin-top: 32px; margin-bottom: 8px;
+                       border-bottom: 1px solid #334155; padding-bottom: 6px; }
+      .vl-metric { display: inline-block; margin: 0 24px 12px 0; }
+      .vl-metric-label { font-size: 13px; color: #94a3b8; }
+      .vl-metric-value { font-size: 22px; font-weight: 600; color: #f1f5f9; }
+      table.vl-table { border-collapse: collapse; width: 100%; margin-bottom: 8px;
+                        font-size: 13px; background-color: #0f172a; }
+      table.vl-table th { background-color: #1e293b; color: #22d3ee; text-align: left;
+                           padding: 8px 12px; border-bottom: 2px solid #22d3ee;
+                           white-space: nowrap; }
+      table.vl-table td { padding: 6px 12px; border-bottom: 1px solid #1e293b; color: #e2e8f0; }
+      table.vl-table tr:nth-child(even) td { background-color: #16213a; }
+      table.vl-table tr:hover td { background-color: #22314f; }
+    </style>
+    """
 
     def _metric_html(label, value):
         return (
-            f"<div style='display:inline-block;margin:0 24px 12px 0;'>"
-            f"<div style='font-size:13px;color:#888;'>{label}</div>"
-            f"<div style='font-size:22px;font-weight:600;'>{value}</div>"
+            f"<div class='vl-metric'>"
+            f"<div class='vl-metric-label'>{label}</div>"
+            f"<div class='vl-metric-value'>{value}</div>"
             f"</div>"
         )
 
+    def _table_html(df):
+        return df.to_html(index=False, border=0, classes="vl-table", na_rep="")
+
     parts = [
         "<script src='https://cdn.plot.ly/plotly-2.32.0.min.js'></script>",
-        "<div style='font-family:-apple-system,Segoe UI,Roboto,sans-serif;'>",
+        style_block,
+        "<div class='vl-report'>",
         f"<h2>{runner_info.get('Name') or 'Runner'}</h2>",
         "<div>",
         _metric_html("Finish Time", runner_info.get("Finish Time") or "-"),
@@ -199,7 +226,7 @@ def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_s
         _metric_html("Category", runner_info.get("Category") or "-"),
         "</div>",
         "<h3>Checkpoints / Split Times</h3>",
-        df_runner.to_html(index=False, border=0),
+        _table_html(df_runner),
         "<h3>🎯 Performance Indices</h3>",
         "<div>",
         _metric_html("VPI", f"{indices.get('VPI')} m/h" if indices.get("VPI") is not None else "N/A"),
@@ -213,12 +240,14 @@ def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_s
         parts.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
     parts.append("<h3>📉 Degradation Curve by Segment</h3>")
-    parts.append(df_segment_degradation.to_html(index=False, border=0))
+    parts.append(_table_html(df_segment_degradation))
     parts.append("<h3>📋 Full Summary Table</h3>")
-    parts.append(df_summary.to_html(index=False, border=0))
+    parts.append(_table_html(df_summary))
     parts.append("</div>")
 
     return "\n".join(parts).encode("utf-8")
+
+
 
 
 def match_checkpoints_with_gpx(df_gpx, checkpoints_km):
