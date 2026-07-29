@@ -87,7 +87,7 @@
           ]
         },
         "80": {
-         "gpx_file": "data/gpx/<carrera>/<anio>/<ARCHIVO>.gpx",
+         "gpx_file": "data/gpx/lavaredo/2026/<ARCHIVO>.gpx",
          "X-Tenant": "lavaredo_2026",
          "race_slug_api": "80k",
        "checkpoints": [
@@ -116,7 +116,7 @@
     "anios": {
       "2026": { 
         "SDV120": {
-                  "gpx_file": "data/gpx/<Monterosa>/<2026>/100m_2026_7cfb064644.gpx",
+                  "gpx_file": "data/gpx/Monterosa/2026/100m_2026_7cfb064644.gpx",
                   "race_slug_api": "SDV120",
                   "checkpoints": [
                     {"id": "0",    "nombre": "Start Aosta",                   "km": 0.0},
@@ -139,7 +139,7 @@
                   ]
                 },
   "MRT90": {
-        "gpx_file": "data/gpx/<Monterosa>/<2026>/MRW_2026_100_K_22d59b22b6.gpx",
+        "gpx_file": "data/gpx/Monterosa/2026/MRW_2026_100_K_22d59b22b6.gpx",
         "race_slug_api": "MRT90",
         "checkpoints": [
           {"id": "0",    "nombre": "Start Pont-Saint-Martin",       "km": 0.0},
