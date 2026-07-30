@@ -137,7 +137,7 @@
                     {"id": "52",   "nombre": "Rifugie Alpenzu","km": 116.1},
                     {"id": "100",  "nombre": "Finish Gressoney-Saint-Jean","km": 119.9}
                   ]
-                },
+       },
         "90": {
           "gpx_file": "data/gpx/Monterosa/2026/MRW_2026_100_K_22d59b22b6.gpx",
           "race_slug_api": "MRT90",
