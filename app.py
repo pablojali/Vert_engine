@@ -1014,6 +1014,86 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
     ]]
 
 
+def slugify_runner_name(name):
+    """Converts a UTMB Live-style name ('Katarzyna DOMBROWSKA', where the
+    surname is in ALL CAPS) into the 'surname-firstname' slug pattern
+    used in VertLabs' blog post URLs (e.g. 'dombrowska-katarzyna'),
+    stripping accents/diacritics. This is inferred from the examples
+    given, not guaranteed to match every post exactly - double-check the
+    generated links before publishing."""
+    import unicodedata
+
+    if not name:
+        return ""
+
+    def _strip_accents(text):
+        return "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
+
+    words = name.split()
+    surname_words = [w for w in words if w.isupper()]
+    firstname_words = [w for w in words if not w.isupper()]
+
+    surname_slug = "-".join(_strip_accents(w).lower() for w in surname_words)
+    firstname_slug = "-".join(_strip_accents(w).lower() for w in firstname_words)
+
+    parts = [p for p in [surname_slug, firstname_slug] if p]
+    return "-".join(parts) if parts else _strip_accents(name).lower().replace(" ", "-")
+
+
+def build_blog_leaderboard_html(rows, blog_base_url="https://www.vertlabs.run/p/"):
+    """Builds the exact HTML leaderboard table used on VertLabs' blog
+    (same CSS classes as the existing template: table-style-normal,
+    generated-table, tgp-style-1/3/5/6/7), ready to paste directly into
+    Blogger's HTML view. POS follows the ORDER of 'rows' as given - the
+    caller is expected to pass runners in actual finish order (e.g. the
+    order bibs were typed into the fetch box)."""
+    podium_classes = {1: "tgp-style-3", 2: "tgp-style-6", 3: "tgp-style-7"}
+
+    def _fmt(value):
+        return "" if value is None else value
+
+    body_rows = []
+    for i, row in enumerate(rows, start=1):
+        pos_class = podium_classes.get(i, "tgp-style-5")
+        name = row.get("Name") or ""
+        slug = slugify_runner_name(name)
+        view_url = f"{blog_base_url}{slug}-runner-metrics.html" if slug else "#"
+        body_rows.append(
+            "      <tr>\n"
+            f'        <td class="{pos_class}" style="text-align: center;">{i}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;">{name}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("Bib"))}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("Time"))}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("VPI (m/h)"))}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("DMI (km/h)"))}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("ER"))}</td>\n'
+            f'      <td class="tgp-style-5" style="text-align: center;"><a href="{view_url}">View</a></td>\n'
+            "      </tr>"
+        )
+
+    rows_html = "\n".join(body_rows)
+
+    return (
+        '<table class="table-style-normal generated-table" style="width: 100%;">\n'
+        "  <thead>\n"
+        "    <tr>\n"
+        '      <th class="tgp-style-1">POS</th>\n'
+        '      <th class="tgp-style-1">NAME</th>\n'
+        '      <th class="tgp-style-1">BIB</th>\n'
+        '      <th class="tgp-style-1">TIME</th>\n'
+        '      <th class="tgp-style-1">VPI</th>\n'
+        '      <th class="tgp-style-1">DMI</th>\n'
+        '      <th class="tgp-style-1">ER</th>\n'
+        '      <th class="tgp-style-1"><br></th>\n'
+        "      </tr>\n"
+        "    </thead>\n"
+        "    <tbody>\n"
+        f"{rows_html}\n"
+        "    </tbody>\n"
+        "  </table>"
+    )
+
+
 # ============================================================
 # 3. INTERFACE: three independent tabs
 # ============================================================
@@ -2136,6 +2216,27 @@ with tab_top:
                             data=leaderboard_csv,
                             file_name=f"{selected_race_top.replace(' ', '_')}_leaderboard.csv",
                             mime="text/csv",
+                        )
+
+                        # --- Blog-ready leaderboard HTML (matches VertLabs' existing template) ---
+                        st.markdown("---")
+                        st.markdown("### 🌐 Blog Leaderboard (HTML for Blogger)")
+                        st.caption(
+                            "POS follows the exact order you typed the bibs in above — paste "
+                            "them in real finish order and this table lines up automatically. "
+                            "Uses the same table/cell CSS classes as your existing blog template, "
+                            "so it should drop in without extra styling. The 'View' links are "
+                            "guessed from the runner's name (surname-firstname pattern) — check "
+                            "them before publishing, they may not match every post exactly."
+                        )
+
+                        blog_leaderboard_html = build_blog_leaderboard_html(leaderboard_rows)
+                        st.code(blog_leaderboard_html, language="html")
+                        st.download_button(
+                            "📥 Download blog leaderboard HTML",
+                            data=blog_leaderboard_html.encode("utf-8"),
+                            file_name=f"{selected_race_top.replace(' ', '_')}_blog_leaderboard.html",
+                            mime="text/html",
                         )
 
                         st.markdown("---")
