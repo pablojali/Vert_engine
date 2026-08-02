@@ -46,7 +46,12 @@ SLOPE_CATEGORY_ORDER = list(SLOPE_CATEGORY_COLORS.keys())
 
 def process_gpx_advanced(file):
     """Parses a GPX and returns a point-by-point DataFrame with
-    cumulative distance, elevation, and instantaneous slope."""
+    cumulative distance, elevation, and instantaneous slope.
+
+    Skips any point with missing elevation (None) - some real-world GPX
+    exports have a handful of points without an <ele> tag, which would
+    otherwise crash the elevation_change subtraction. Distance still
+    accumulates correctly across the gap since it only depends on lat/lon."""
     gpx = gpxpy.parse(file)
     points_data = []
     cumulative_distance = 0.0
@@ -55,6 +60,8 @@ def process_gpx_advanced(file):
     for track in gpx.tracks:
         for segment in track.segments:
             for point in segment.points:
+                if point.elevation is None:
+                    continue  # skip points with no elevation data
                 if previous_point:
                     dist = point.distance_2d(previous_point)
                     cumulative_distance += dist
@@ -595,6 +602,8 @@ def process_runner_gpx_with_time(file):
             for point in segment.points:
                 if point.time is None:
                     continue  # skip points with no timestamp
+                if point.elevation is None:
+                    continue  # skip points with no elevation data
                 if start_time is None:
                     start_time = point.time
 
