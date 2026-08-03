@@ -160,5 +160,38 @@
           }
        }
     } 
+  },
+"Trail du Saint Jacques": {
+    "nombre": "Trail du Saint Jacques by UTMB",
+    "anios": {
+      "2026": { 
+        "139": {
+                  "gpx_file": "data/gpx/Monterosa/2026/100m_2026_7cfb064644.gpx",
+                  "race_slug_api": "SDV120",
+                  "checkpoints": [
+                    
+                  ]
+       },
+        "86": {
+          "gpx_file": "data/gpx/SaintJacques/2026/Grand Trail de Saint Jacques 100k.gpx",
+          "race_slug_api": "GTSJ",
+          "checkpoints": [
+            {"id": "0",    "nombre": "Monsitrol d'Allier",             "km": 0.0},
+            {"id": "10",   "nombre": "Saint-Privat d'Allier",          "km": 11.2},
+            {"id": "12",   "nombre": "Saint Jean Lachalm",             "km": 20.2},
+            {"id": "14",   "nombre": "Alleyras",                       "km": 32.1},
+            {"id": "16",   "nombre": "Lac du Bouchet",                 "km": 48.1},
+            {"id": "18",   "nombre": "Saint-Christophe-sur-Dolaizon",  "km": 70.7},
+            {"id": "20",   "nombre": "Pont de la Roche",               "km": 74.0},
+            {"id": "26",   "nombre": "Les Chibottes",                  "km": 81.0},
+            {"id": "100",  "nombre": "Le-Puy-en-Velay",                "km": 86.6}
+          ]
+          }
+       }
+    } 
   }
+
+
+
+
 } 
