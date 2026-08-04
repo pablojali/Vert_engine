@@ -890,6 +890,129 @@ def scrape_runner_splits(url):
     return fetch_runner_by_tenant_and_bib(tenant, runner_id)
 
 
+def _seconds_to_hms(seconds):
+    """Converts a seconds count (int/float) into 'H:MM:SS'. Used by the
+    Livetrail runner endpoints, which report raceTime/restTime in raw
+    seconds instead of the pre-formatted strings utmb.world returns."""
+    if seconds is None:
+        return None
+    seconds = int(seconds)
+    h, rem = divmod(seconds, 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}:{m:02d}:{s:02d}"
+
+
+def extract_livetrail_runner_url_parts(url):
+    """Extracts (subdomain, year, bib, race_id) from a Livetrail runner
+    URL like:
+        https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda
+    Returns (None, None, None, None) if the URL doesn't match. race_id
+    may be None if the URL has no ?raceId= query param (the caller can
+    still supply it manually)."""
+    match = re.search(
+        r"https?://([a-zA-Z0-9]+)\.v3\.livetrail\.net/[a-z]{2}/(\d{4})/runners/(\d+)",
+        url,
+    )
+    if not match:
+        return None, None, None, None
+    subdomain, year, bib = match.groups()
+    race_id_match = re.search(r"[?&]raceId=([a-zA-Z0-9]+)", url)
+    race_id = race_id_match.group(1) if race_id_match else None
+    return subdomain, year, bib, race_id
+
+
+def fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id):
+    """Livetrail counterpart of fetch_runner_by_tenant_and_bib. Needs TWO
+    requests (confirmed via manual endpoint discovery):
+      - /api/events/runners/{bib}            -> name, category, club, status, ranking
+      - /api/events/runners/{bib}/detail     -> full passings (pointId, raceTime,
+        ranking per checkpoint, restTime)
+    Both require the X-Tenant header COMBINED (e.g. "aranbyutmb_2026"),
+    NOT split into X-Tenant/X-Year (that variant returns 400 on /detail).
+    Origin/Referer are derived from the tenant, same scheme as
+    fetch_livetrail_checkpoints."""
+    subdomain = tenant.rsplit("_", 1)[0]
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                      "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+        "Accept": "*/*",
+        "Origin": f"https://{subdomain}.v3.livetrail.net",
+        "Referer": f"https://{subdomain}.v3.livetrail.net/",
+        "X-Tenant": tenant,
+    }
+
+    summary_url = f"https://api.v3.livetrail.net/api/events/runners/{bib}"
+    summary_resp = requests.get(summary_url, params={"raceId": race_id}, headers=headers, timeout=15)
+    summary_resp.raise_for_status()
+    summary = summary_resp.json()
+
+    detail_url = f"https://api.v3.livetrail.net/api/events/runners/{bib}/detail"
+    detail_resp = requests.get(detail_url, params={"raceId": race_id}, headers=headers, timeout=15)
+    detail_resp.raise_for_status()
+    detail = detail_resp.json()
+
+    ranking = summary.get("ranking", {}) or {}
+    runner_info = {
+        "Name": f"{summary.get('firstName', '')} {summary.get('lastName', '')}".strip() or None,
+        "Bib": summary.get("bib"),
+        "Age": None,  # not exposed by this endpoint
+        "Category": summary.get("category"),
+        "Club": summary.get("club"),
+        "Country": summary.get("nationality"),  # ISO code only, not full name
+        "Finish Time": _seconds_to_hms(summary.get("raceTime")),
+        "Overall Rank": ranking.get("scratch"),
+        "Gender Rank": ranking.get("sex"),
+        "Category Rank": ranking.get("category"),
+        "Status": summary.get("status"),
+    }
+
+    passings = detail.get("passings", []) or []
+    rows = []
+    previous_race_time = 0
+    for p in sorted(passings, key=lambda x: x.get("raceTime") or 0):
+        race_time = p.get("raceTime")
+        ranking_p = p.get("ranking") or {}
+        segment_seconds = (race_time - previous_race_time) if race_time is not None else None
+        rows.append({
+            "Point": p.get("pointId"),
+            "Accumulated Time": _seconds_to_hms(race_time),
+            "Segment Time": _seconds_to_hms(segment_seconds),
+            "Speed (km/h)": None,   # not exposed by this endpoint (only by utmb.world)
+            "Pace (min/km)": None,  # not exposed by this endpoint (only by utmb.world)
+            "Rank": ranking_p.get("scratch"),
+            "Rest": _seconds_to_hms(p.get("restTime")),
+        })
+        if race_time is not None:
+            previous_race_time = race_time
+
+    df_passings = pd.DataFrame(rows)
+    return runner_info, df_passings
+
+
+def scrape_runner_splits_livetrail(url, manual_race_id=None):
+    """Livetrail counterpart of scrape_runner_splits. Accepts a runner URL
+    like 'https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda'.
+    If the URL has no ?raceId= (or the person pastes a bare API-style
+    link), manual_race_id is used as a fallback."""
+    subdomain, year, bib, race_id_from_url = extract_livetrail_runner_url_parts(url)
+    if not subdomain:
+        raise ValueError(
+            "Couldn't parse that URL. Make sure it has the format "
+            "'https://<subdomain>.v3.livetrail.net/en/<year>/runners/<bib>?raceId=<race_id>' "
+            "(e.g. https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda)."
+        )
+
+    race_id = race_id_from_url or manual_race_id
+    if not race_id:
+        raise ValueError(
+            "Couldn't find '?raceId=...' in that URL, and no Race ID was provided "
+            "manually. Add it to the URL or fill in the Race ID field."
+        )
+
+    tenant = f"{subdomain}_{year}"
+    return fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id)
+
+
 def fetch_livetrail_checkpoints(race_id, tenant, url):
     """
     Downloads the checkpoint list (pointId, name, distance, elevationGain)
@@ -1013,9 +1136,9 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
 if 'saved_races' not in st.session_state:
     st.session_state['saved_races'] = {}
 
-tab_race, tab_runner, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints = st.tabs(
-    ["🗺️ Race Analysis", "🏃 Runner Metrics", "🛰️ GPX Metrics", "⚖️ UTMB vs GPX",
-     "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher"]
+tab_race, tab_runner, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints = st.tabs(
+    ["🗺️ Race Analysis", "🏃 Runner Metrics (UTMB)", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
+     "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher"]
 )
 
 # ---------------------------------------------
@@ -1673,6 +1796,349 @@ with tab_runner:
                             mime="text/html",
                             type="primary",
                             use_container_width=True,
+                        )
+
+# ---------------------------------------------
+# TAB 2b: Runner Metrics via LiveTrail (mirrors "Runner Metrics (UTMB)"
+# but sources runner data from api.v3.livetrail.net instead of
+# utmblive-api.utmb.world. Kept fully independent - own session_state
+# keys and widget keys - so both tabs can coexist without interfering
+# with each other or with the "UTMB vs GPX" tab, which still reads only
+# the UTMB tab's estimate.)
+# ---------------------------------------------
+with tab_runner_lt:
+    st.header("🏃 Runner Metrics (LiveTrail)")
+    st.caption(
+        "Same as 'Runner Metrics (UTMB)', but pulls splits and rank directly from "
+        "Livetrail (api.v3.livetrail.net) instead of the UTMB Live API - works for any "
+        "race timed by Livetrail, not just UTMB-branded events."
+    )
+
+    available_races_lt = st.session_state.get('saved_races', {})
+    if not available_races_lt:
+        st.warning(
+            "⚠️ You haven't loaded any race yet. Go to the "
+            "**'🗺️ Race Analysis'** tab, select and analyze a race, and it "
+            "will show up here automatically."
+        )
+        selected_race_lt = None
+    else:
+        selected_race_lt = st.selectbox(
+            "Which race did this runner do?",
+            options=list(available_races_lt.keys()),
+            key="lt_race_selector",
+        )
+        race_data_lt_selected = available_races_lt[selected_race_lt]
+        st.caption(
+            f"Selected race: **{selected_race_lt}** · "
+            f"{race_data_lt_selected['total_km']:.1f} km total"
+        )
+
+    st.markdown("---")
+
+    runner_url_lt = st.text_input(
+        "Runner link (LiveTrail)",
+        placeholder="https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda",
+        key="lt_runner_url",
+    )
+    manual_race_id_lt = st.text_input(
+        "Race ID (only needed if the URL above has no '?raceId=...')",
+        placeholder="vda",
+        key="lt_manual_race_id",
+    )
+    load_button_lt = st.button("🔍 Load runner data (LiveTrail)", use_container_width=True, key="lt_load_button")
+
+    if load_button_lt:
+        if not runner_url_lt:
+            st.warning("Paste a valid link before clicking the button.")
+        else:
+            with st.spinner("Connecting to LiveTrail..."):
+                try:
+                    runner_info_lt, df_runner_lt = scrape_runner_splits_livetrail(
+                        runner_url_lt, manual_race_id=manual_race_id_lt or None
+                    )
+                    error_detail_lt = None
+                except Exception:
+                    runner_info_lt, df_runner_lt = None, None
+                    error_detail_lt = traceback.format_exc()
+
+            if error_detail_lt:
+                st.error("❌ An error occurred while trying to fetch the runner data.")
+                with st.expander("View technical error detail"):
+                    st.code(error_detail_lt, language="python")
+            elif df_runner_lt is None or df_runner_lt.empty:
+                st.warning(
+                    "⚠️ No data table was found at that link. "
+                    "Make sure it's the direct URL to the runner's profile, and that "
+                    "the race has finished passings recorded."
+                )
+            else:
+                st.success("✅ Runner data fetched successfully (LiveTrail)!")
+
+                c1, c2, c3, c4 = st.columns(4)
+                c1.metric("Runner", runner_info_lt.get("Name") or "-")
+                c2.metric("Finish Time", runner_info_lt.get("Finish Time") or "-")
+                c3.metric("Overall Rank", runner_info_lt.get("Overall Rank") or "-")
+                c4.metric("Category", runner_info_lt.get("Category") or "-")
+                st.caption(
+                    "Note: 'Speed' and 'Pace' per checkpoint aren't exposed by the "
+                    "LiveTrail runner endpoint (only by UTMB Live), so those columns "
+                    "show blank here - VPI/DMI/ER aren't affected, since they're "
+                    "calculated from Accumulated Time, not from these columns."
+                )
+
+                st.markdown("##### Checkpoints / Split Times")
+                st.dataframe(df_runner_lt, use_container_width=True)
+
+                st.session_state['runner_metrics_df_lt'] = df_runner_lt
+                st.session_state['runner_info_lt'] = runner_info_lt
+                st.session_state['race_selected_for_runner_lt'] = selected_race_lt
+
+                current_race_data_lt = available_races_lt.get(selected_race_lt, {}) if selected_race_lt else {}
+                race_segments_df_lt = current_race_data_lt.get("df_segments")
+
+                st.markdown("---")
+
+                if race_segments_df_lt is None or race_segments_df_lt.empty:
+                    st.warning(
+                        "⚠️ The selected race doesn't have checkpoints with km loaded yet. "
+                        "Go back to the 'Race Analysis' tab, load the checkpoints for that "
+                        "race, and reload it here to calculate the indices."
+                    )
+                else:
+                    try:
+                        total_race_gain_lt = calculate_total_elevation_gain(current_race_data_lt["df"])
+                        indices_lt, df_crossed_lt = calculate_runner_indices(
+                            race_segments_df_lt,
+                            df_runner_lt,
+                            current_race_data_lt["total_km"],
+                            total_race_gain_lt,
+                        )
+                        df_segment_degradation_lt = calculate_indices_by_segment(
+                            current_race_data_lt["df"], race_segments_df_lt, df_runner_lt
+                        )
+                        indices_error_lt = None
+                    except Exception as e:
+                        indices_lt, df_crossed_lt, df_segment_degradation_lt = None, None, None
+                        indices_error_lt = str(e)
+
+                    st.markdown("## 🎯 Performance Indices")
+                    if indices_error_lt:
+                        st.error(f"❌ Couldn't calculate the indices: {indices_error_lt}")
+                    else:
+                        if indices_lt["unmatched_segments"] > 0:
+                            st.caption(
+                                f"⚠️ {indices_lt['unmatched_segments']} race segment(s) had no "
+                                "matching checkpoint in the runner's data and were excluded from the calculation."
+                            )
+                        with st.expander("View crossed segments (race + runner times)"):
+                            st.dataframe(df_crossed_lt, use_container_width=True)
+
+                        st.session_state['estimated_degradation_df_lt'] = df_segment_degradation_lt
+                        st.session_state['estimated_degradation_race_lt'] = selected_race_lt
+                        st.session_state['estimated_global_indices_lt'] = indices_lt
+
+                        # --- VPI chart ---
+                        st.markdown("---")
+                        st.markdown("### 🧗 VPI - Vertical Power Index")
+                        st.metric(
+                            "VPI (whole race)",
+                            f"{indices_lt['VPI']} m/h" if indices_lt["VPI"] is not None else "N/A",
+                            help="Vertical Power Index: meters of elevation gain per hour on segments with slope ≥12%.",
+                        )
+                        fig_vpi_lt = go.Figure()
+                        add_elevation_background(fig_vpi_lt, current_race_data_lt["df"])
+                        fig_vpi_lt.add_trace(go.Scatter(
+                            x=df_segment_degradation_lt["End Km"],
+                            y=df_segment_degradation_lt["VPI Raw (m/h)"],
+                            mode="lines+markers",
+                            name="VPI (m/h)",
+                            line=dict(color="#22d3ee", width=3),
+                            text=df_segment_degradation_lt["Segment"],
+                            hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h<extra></extra>",
+                        ))
+                        fig_vpi_lt.update_layout(
+                            template="plotly_dark",
+                            xaxis_title="Accumulated Km",
+                            yaxis_title="VPI (m/h)",
+                            height=380,
+                            hovermode="x unified",
+                        )
+                        st.plotly_chart(fig_vpi_lt, use_container_width=True)
+                        chart_download_button(fig_vpi_lt, "vpi_chart_livetrail.html", "dl_vpi_lt")
+
+                        # --- DMI chart ---
+                        st.markdown("---")
+                        st.markdown("### 📉 DMI - Descent Mastery Index")
+                        st.metric(
+                            "DMI (whole race)",
+                            f"{indices_lt['DMI']} km/h" if indices_lt["DMI"] is not None else "N/A",
+                            help="Descent Mastery Index: average speed on segments with slope ≤-12%.",
+                        )
+                        fig_dmi_lt = go.Figure()
+                        add_elevation_background(fig_dmi_lt, current_race_data_lt["df"])
+                        fig_dmi_lt.add_trace(go.Scatter(
+                            x=df_segment_degradation_lt["End Km"],
+                            y=df_segment_degradation_lt["DMI Raw (km/h)"],
+                            mode="lines+markers",
+                            name="DMI (km/h)",
+                            line=dict(color="#ffa500", width=3),
+                            text=df_segment_degradation_lt["Segment"],
+                            hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h<extra></extra>",
+                        ))
+                        fig_dmi_lt.update_layout(
+                            template="plotly_dark",
+                            xaxis_title="Accumulated Km",
+                            yaxis_title="DMI (km/h)",
+                            height=380,
+                            hovermode="x unified",
+                        )
+                        st.plotly_chart(fig_dmi_lt, use_container_width=True)
+                        chart_download_button(fig_dmi_lt, "dmi_chart_livetrail.html", "dl_dmi_lt")
+
+                        # --- ER chart ---
+                        st.markdown("---")
+                        st.markdown("### 🏆 ER - Endurance Rating - Pacing Curve")
+                        m1, pe1, pe2 = st.columns(3)
+                        m1.metric(
+                            "ER (whole race)",
+                            f"{indices_lt['ER']}" if indices_lt["ER"] is not None else "N/A",
+                            help="Endurance Rating: 100 = stable pace, lower values indicate fatigue-driven degradation.",
+                        )
+                        pe1.metric(
+                            "First Half Pace",
+                            f"{indices_lt['effort_pace_first_half']} min/effort-km"
+                            if indices_lt.get("effort_pace_first_half") is not None else "N/A",
+                        )
+                        pe2.metric(
+                            "Second Half Pace",
+                            f"{indices_lt['effort_pace_second_half']} min/effort-km"
+                            if indices_lt.get("effort_pace_second_half") is not None else "N/A",
+                        )
+
+                        fig_er_lt = go.Figure()
+                        add_elevation_background(fig_er_lt, current_race_data_lt["df"])
+                        fig_er_lt.add_trace(go.Scatter(
+                            x=df_crossed_lt["End Km"],
+                            y=df_crossed_lt["Effort Pace (min/effort-km)"],
+                            mode="lines+markers",
+                            name="Effort Pace",
+                            line=dict(color="#c084fc", width=3),
+                            hovertemplate="Km %{x:.0f}<br>%{y:.2f} min/effort-km<extra></extra>",
+                        ))
+                        if indices_lt.get("half_effort_km") is not None:
+                            reaches_half_effort_lt = df_crossed_lt["Effort Km Accumulated"] >= indices_lt["half_effort_km"]
+                            if reaches_half_effort_lt.any():
+                                effort_midpoint_km_display_lt = df_crossed_lt.loc[reaches_half_effort_lt, "End Km"].iloc[0]
+                            else:
+                                effort_midpoint_km_display_lt = current_race_data_lt["total_km"] / 2
+                            fig_er_lt.add_vline(
+                                x=effort_midpoint_km_display_lt,
+                                line_dash="dash",
+                                line_color="#a78bfa",
+                                annotation_text="50% effort",
+                                annotation_position="top",
+                            )
+                        fig_er_lt.update_layout(
+                            template="plotly_dark",
+                            xaxis_title="Accumulated Km",
+                            yaxis_title="Effort Pace (min/effort-km)",
+                            height=380,
+                            hovermode="x unified",
+                        )
+                        st.plotly_chart(fig_er_lt, use_container_width=True)
+                        chart_download_button(fig_er_lt, "er_pacing_curve_livetrail.html", "dl_er_lt")
+
+                        # --- Degradation matrix by segment ---
+                        st.markdown("---")
+                        st.markdown("### 📉 Degradation Curve by Segment")
+
+                        df_segment_degradation_lt = df_segment_degradation_lt.merge(
+                            df_crossed_lt[["Start Km", "End Km", "Effort Pace (min/effort-km)"]],
+                            on=["Start Km", "End Km"],
+                            how="left",
+                        )
+                        valid_pace_lt = df_segment_degradation_lt["Effort Pace (min/effort-km)"].dropna()
+                        if not valid_pace_lt.empty and valid_pace_lt.iloc[0]:
+                            pace_baseline_lt = valid_pace_lt.iloc[0]
+                            df_segment_degradation_lt["ER Index (0-100)"] = (
+                                (pace_baseline_lt / df_segment_degradation_lt["Effort Pace (min/effort-km)"]) * 100
+                            ).round(1)
+                        else:
+                            df_segment_degradation_lt["ER Index (0-100)"] = None
+
+                        st.dataframe(df_segment_degradation_lt, use_container_width=True)
+
+                        fig_degradation_lt = go.Figure()
+                        add_elevation_background(fig_degradation_lt, current_race_data_lt["df"])
+                        fig_degradation_lt.add_trace(go.Scatter(
+                            x=df_segment_degradation_lt["End Km"],
+                            y=df_segment_degradation_lt["VPI Index (0-100)"],
+                            mode="lines+markers",
+                            name="VPI (Climbing)",
+                            line=dict(color="#22d3ee", width=3),
+                            text=df_segment_degradation_lt["Segment"],
+                            hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI Index: %{y:.1f}<extra></extra>",
+                        ))
+                        fig_degradation_lt.add_trace(go.Scatter(
+                            x=df_segment_degradation_lt["End Km"],
+                            y=df_segment_degradation_lt["DMI Index (0-100)"],
+                            mode="lines+markers",
+                            name="DMI (Descent)",
+                            line=dict(color="#ffa500", width=3),
+                            text=df_segment_degradation_lt["Segment"],
+                            hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI Index: %{y:.1f}<extra></extra>",
+                        ))
+                        fig_degradation_lt.add_trace(go.Scatter(
+                            x=df_segment_degradation_lt["End Km"],
+                            y=df_segment_degradation_lt["ER Index (0-100)"],
+                            mode="lines+markers",
+                            name="ER (Endurance)",
+                            line=dict(color="#c084fc", width=3),
+                            text=df_segment_degradation_lt["Segment"],
+                            hovertemplate="%{text}<br>Km %{x:.0f}<br>ER Index: %{y:.1f}<extra></extra>",
+                        ))
+                        fig_degradation_lt.update_layout(
+                            template="plotly_dark",
+                            xaxis_title="Accumulated Km",
+                            yaxis_title="Index (0-100, Segment 1 = 100)",
+                            height=420,
+                            hovermode="x unified",
+                        )
+                        st.plotly_chart(fig_degradation_lt, use_container_width=True)
+                        chart_download_button(fig_degradation_lt, "degradation_curve_livetrail.html", "dl_degradation_lt")
+
+                        # --- Full summary table ---
+                        st.markdown("---")
+                        st.markdown("### 📋 Full Summary Table")
+
+                        df_summary_lt = build_summary_table(race_segments_df_lt, df_segment_degradation_lt, df_runner_lt)
+                        st.dataframe(df_summary_lt, use_container_width=True, hide_index=True)
+
+                        # --- Full analysis report ---
+                        st.markdown("---")
+                        st.markdown("### 📄 Full Analysis Report")
+                        full_report_html_lt = build_full_runner_report_html(
+                            runner_info=runner_info_lt,
+                            df_runner=df_runner_lt,
+                            indices=indices_lt,
+                            figures={
+                                "🧗 VPI - Vertical Power Index": fig_vpi_lt,
+                                "📉 DMI - Descent Mastery Index": fig_dmi_lt,
+                                "🏆 ER - Endurance Rating - Pacing Curve": fig_er_lt,
+                                "📉 Degradation Curve by Segment": fig_degradation_lt,
+                            },
+                            df_segment_degradation=df_segment_degradation_lt,
+                            df_summary=df_summary_lt,
+                        )
+                        st.download_button(
+                            "📄 Download Full Analysis (HTML for Blogger)",
+                            data=full_report_html_lt,
+                            file_name=f"{(runner_info_lt.get('Name') or 'runner').replace(' ', '_')}_livetrail_full_analysis.html",
+                            mime="text/html",
+                            type="primary",
+                            use_container_width=True,
+                            key="dl_full_report_lt",
                         )
 
 # ---------------------------------------------
