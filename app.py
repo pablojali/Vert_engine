@@ -46,12 +46,7 @@ SLOPE_CATEGORY_ORDER = list(SLOPE_CATEGORY_COLORS.keys())
 
 def process_gpx_advanced(file):
     """Parses a GPX and returns a point-by-point DataFrame with
-    cumulative distance, elevation, and instantaneous slope.
-
-    Skips any point with missing elevation (None) - some real-world GPX
-    exports have a handful of points without an <ele> tag, which would
-    otherwise crash the elevation_change subtraction. Distance still
-    accumulates correctly across the gap since it only depends on lat/lon."""
+    cumulative distance, elevation, and instantaneous slope."""
     gpx = gpxpy.parse(file)
     points_data = []
     cumulative_distance = 0.0
@@ -60,8 +55,6 @@ def process_gpx_advanced(file):
     for track in gpx.tracks:
         for segment in track.segments:
             for point in segment.points:
-                if point.elevation is None:
-                    continue  # skip points with no elevation data
                 if previous_point:
                     dist = point.distance_2d(previous_point)
                     cumulative_distance += dist
@@ -255,6 +248,8 @@ def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_s
     return "\n".join(parts).encode("utf-8")
 
 
+
+
 def match_checkpoints_with_gpx(df_gpx, checkpoints_km):
     """Receives the already-analyzed GPX DataFrame and a list of checkpoints
     [{'point': int, 'km': float}, ...] and returns a DataFrame with one row
@@ -360,6 +355,116 @@ def calculate_effort_distribution(full_df_gpx, total_km, total_elevation_gain):
     }
 
 
+def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_gain,
+                              distance_weighting_coef=1.0):
+    """Crosses the official race segments (df_segments, computed in Tab 1
+    from the checkpoints) with the runner's real split times (df_runner)
+    to calculate VPI, DMI and ER.
+
+    The crossing is done by checkpoint number ('Point'), which must match
+    between both tables."""
+
+    if "Point" not in df_runner.columns:
+        raise ValueError("The runner table doesn't have a 'Point' column to match checkpoints.")
+
+    time_by_point = {
+        row["Point"]: parse_time_to_hours(row.get("Accumulated Time"))
+        for _, row in df_runner.iterrows()
+    }
+
+    crossed_rows = []
+    for _, seg in df_segments.iterrows():
+        p_start, p_end = seg["Start Point"], seg["End Point"]
+        if p_start in time_by_point and p_end in time_by_point:
+            runner_time_h = time_by_point[p_end] - time_by_point[p_start]
+        else:
+            runner_time_h = None
+        row = seg.to_dict()
+        row["Runner Time (h)"] = runner_time_h
+        crossed_rows.append(row)
+
+    df_crossed = pd.DataFrame(crossed_rows)
+    unmatched_segments = df_crossed["Runner Time (h)"].isna().sum()
+
+    df_valid = df_crossed.dropna(subset=["Runner Time (h)"]).copy()
+    df_valid = df_valid[df_valid["Runner Time (h)"] > 0]
+
+    if df_valid.empty:
+        raise ValueError(
+            "No checkpoint from the saved race matches the runner's points. "
+            "Check that the 'Point' numbers are the same in both tables."
+        )
+
+    # --- VPI: Strong Climb (segment average slope >= 12%) ---
+    strong_climb_segments = df_valid[df_valid["Average Slope (%)"] >= STRONG_SLOPE_THRESHOLD]
+    climb_time_h = strong_climb_segments["Runner Time (h)"].sum()
+    climb_gain_m = strong_climb_segments["Elevation Gain (m)"].sum()
+    vpi = (climb_gain_m / climb_time_h) if climb_time_h > 0 else None
+
+    # --- DMI: Strong Descent (segment average slope <= -12%) ---
+    strong_descent_segments = df_valid[df_valid["Average Slope (%)"] <= -STRONG_SLOPE_THRESHOLD]
+    descent_time_h = strong_descent_segments["Runner Time (h)"].sum()
+    descent_dist_km = strong_descent_segments["Segment Distance (km)"].sum()
+    dmi = (descent_dist_km / descent_time_h) if descent_time_h > 0 else None
+
+    # --- ER: Endurance Rating (pacing decay between 1st and 2nd half) ---
+    total_km_e = total_km + (total_elevation_gain / 100)
+    df_valid = df_valid.sort_values("Start Km").reset_index(drop=True)
+    df_valid["Effort Km Segment"] = df_valid["Segment Distance (km)"] + (
+        df_valid["Elevation Gain (m)"].fillna(0) / 100
+    )
+    df_valid["Effort Km Accumulated"] = df_valid["Effort Km Segment"].cumsum()
+    half_effort_km = total_km_e / 2
+
+    first_half = df_valid[df_valid["Effort Km Accumulated"] <= half_effort_km]
+    second_half = df_valid[df_valid["Effort Km Accumulated"] > half_effort_km]
+
+    def _effort_pace(segments):
+        time_min = segments["Runner Time (h)"].sum() * 60
+        effort_km = segments["Effort Km Segment"].sum()
+        return (time_min / effort_km) if effort_km > 0 else None
+
+    pace_1 = _effort_pace(first_half)
+    pace_2 = _effort_pace(second_half)
+
+    df_valid["Effort Pace (min/effort-km)"] = (
+        (df_valid["Runner Time (h)"] * 60) / df_valid["Effort Km Segment"]
+    ).round(2)
+
+    if pace_1 and pace_2 and pace_1 > 0:
+        pacing_decay_pct = ((pace_2 / pace_1) - 1) * 100
+        er = 100 - (pacing_decay_pct * distance_weighting_coef)
+    else:
+        pacing_decay_pct = None
+        er = None
+
+    result = {
+        "VPI": round(vpi, 1) if vpi is not None else None,
+        "DMI": round(dmi, 2) if dmi is not None else None,
+        "ER": round(er, 1) if er is not None else None,
+        "Pacing_Decay_%": round(pacing_decay_pct, 1) if pacing_decay_pct is not None else None,
+        "unmatched_segments": int(unmatched_segments),
+        "effort_pace_first_half": round(pace_1, 2) if pace_1 is not None else None,
+        "effort_pace_second_half": round(pace_2, 2) if pace_2 is not None else None,
+        "half_effort_km": half_effort_km,
+    }
+    return result, df_valid
+
+
+def normalize_segment_index(series):
+    """Normalizes a per-segment index series against its first valid
+    (non-null, non-zero) value, expressed as Segment 1 = 100. Shared by
+    both the checkpoint-estimated and the GPX-measured degradation
+    tables, so their charts are on the same comparable scale."""
+    valid_values = series.dropna()
+    if valid_values.empty:
+        return pd.Series([None] * len(series), index=series.index)
+    baseline = valid_values.iloc[0]
+    if not baseline:
+        return pd.Series([None] * len(series), index=series.index)
+    return ((series / baseline) * 100).round(1)
+
+
 def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
     """Calculates VPI and DMI INDEPENDENTLY for each segment (degradation
     matrix), instead of one global value for the whole race.
@@ -456,129 +561,6 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
     return df_segments_out
 
 
-def normalize_segment_index(series):
-    """Normalizes a per-segment index series against its first valid
-    (non-null, non-zero) value, expressed as Segment 1 = 100. Shared by
-    both the checkpoint-estimated and the GPX-measured degradation
-    tables, so their charts are on the same comparable scale."""
-    valid_values = series.dropna()
-    if valid_values.empty:
-        return pd.Series([None] * len(series), index=series.index)
-    baseline = valid_values.iloc[0]
-    if not baseline:
-        return pd.Series([None] * len(series), index=series.index)
-    return ((series / baseline) * 100).round(1)
-
-
-def calculate_runner_indices(df_segment_degradation, df_segments, df_runner, total_km, total_elevation_gain,
-                              distance_weighting_coef=1.0):
-    """Crosses the official race segments (df_segments, computed in Tab 1
-    from the checkpoints) with the runner's real split times (df_runner)
-    to calculate VPI, DMI and ER.
-
-    VPI/DMI are reconstructed from df_segment_degradation (the same
-    effort-share-based per-segment table shown in the 'Degradation Curve'
-    section), by summing each segment's estimated climb/descent gain and
-    time and dividing the totals - instead of requiring a segment's WHOLE
-    average slope to cross ±12%, which left the global number as N/A on
-    courses where checkpoints are spaced far enough apart that no single
-    segment averages that steep, even though many contain real steep
-    walls mixed with other terrain.
-
-    The crossing is done by checkpoint number ('Point'), which must match
-    between both tables."""
-
-    if "Point" not in df_runner.columns:
-        raise ValueError("The runner table doesn't have a 'Point' column to match checkpoints.")
-
-    time_by_point = {
-        row["Point"]: parse_time_to_hours(row.get("Accumulated Time"))
-        for _, row in df_runner.iterrows()
-    }
-
-    crossed_rows = []
-    for _, seg in df_segments.iterrows():
-        p_start, p_end = seg["Start Point"], seg["End Point"]
-        if p_start in time_by_point and p_end in time_by_point:
-            runner_time_h = time_by_point[p_end] - time_by_point[p_start]
-        else:
-            runner_time_h = None
-        row = seg.to_dict()
-        row["Runner Time (h)"] = runner_time_h
-        crossed_rows.append(row)
-
-    df_crossed = pd.DataFrame(crossed_rows)
-    unmatched_segments = df_crossed["Runner Time (h)"].isna().sum()
-
-    df_valid = df_crossed.dropna(subset=["Runner Time (h)"]).copy()
-    df_valid = df_valid[df_valid["Runner Time (h)"] > 0]
-
-    if df_valid.empty:
-        raise ValueError(
-            "No checkpoint from the saved race matches the runner's points. "
-            "Check that the 'Point' numbers are the same in both tables."
-        )
-
-    # --- VPI/DMI: reconstructed from the per-segment degradation table ---
-    deg = df_segment_degradation.copy()
-    climb_time_per_segment = deg["Runner Time (h)"] * deg["Climb Effort Share (%)"] / 100
-    climb_gain_per_segment = deg["VPI Raw (m/h)"] * climb_time_per_segment
-    valid_climb = climb_time_per_segment.notna() & climb_gain_per_segment.notna()
-    climb_time_h = climb_time_per_segment[valid_climb].sum()
-    climb_gain_m = climb_gain_per_segment[valid_climb].sum()
-    vpi = (climb_gain_m / climb_time_h) if climb_time_h > 0 else None
-
-    descent_time_per_segment = deg["Runner Time (h)"] * deg["Descent Effort Share (%)"] / 100
-    descent_dist_per_segment = deg["DMI Raw (km/h)"] * descent_time_per_segment
-    valid_descent = descent_time_per_segment.notna() & descent_dist_per_segment.notna()
-    descent_time_h = descent_time_per_segment[valid_descent].sum()
-    descent_dist_km = descent_dist_per_segment[valid_descent].sum()
-    dmi = (descent_dist_km / descent_time_h) if descent_time_h > 0 else None
-
-    # --- ER: Endurance Rating (pacing decay between 1st and 2nd half) ---
-    total_km_e = total_km + (total_elevation_gain / 100)
-    df_valid = df_valid.sort_values("Start Km").reset_index(drop=True)
-    df_valid["Effort Km Segment"] = df_valid["Segment Distance (km)"] + (
-        df_valid["Elevation Gain (m)"].fillna(0) / 100
-    )
-    df_valid["Effort Km Accumulated"] = df_valid["Effort Km Segment"].cumsum()
-    half_effort_km = total_km_e / 2
-
-    first_half = df_valid[df_valid["Effort Km Accumulated"] <= half_effort_km]
-    second_half = df_valid[df_valid["Effort Km Accumulated"] > half_effort_km]
-
-    def _effort_pace(segments):
-        time_min = segments["Runner Time (h)"].sum() * 60
-        effort_km = segments["Effort Km Segment"].sum()
-        return (time_min / effort_km) if effort_km > 0 else None
-
-    pace_1 = _effort_pace(first_half)
-    pace_2 = _effort_pace(second_half)
-
-    df_valid["Effort Pace (min/effort-km)"] = (
-        (df_valid["Runner Time (h)"] * 60) / df_valid["Effort Km Segment"]
-    ).round(2)
-
-    if pace_1 and pace_2 and pace_1 > 0:
-        pacing_decay_pct = ((pace_2 / pace_1) - 1) * 100
-        er = 100 - (pacing_decay_pct * distance_weighting_coef)
-    else:
-        pacing_decay_pct = None
-        er = None
-
-    result = {
-        "VPI": round(vpi, 1) if vpi is not None else None,
-        "DMI": round(dmi, 2) if dmi is not None else None,
-        "ER": round(er, 1) if er is not None else None,
-        "Pacing_Decay_%": round(pacing_decay_pct, 1) if pacing_decay_pct is not None else None,
-        "unmatched_segments": int(unmatched_segments),
-        "effort_pace_first_half": round(pace_1, 2) if pace_1 is not None else None,
-        "effort_pace_second_half": round(pace_2, 2) if pace_2 is not None else None,
-        "half_effort_km": half_effort_km,
-    }
-    return result, df_valid
-
-
 def process_runner_gpx_with_time(file):
     """Parses a runner's PERSONAL GPX track (e.g. exported from a COROS/
     Garmin watch, which includes a real timestamp on every point) into a
@@ -602,8 +584,6 @@ def process_runner_gpx_with_time(file):
             for point in segment.points:
                 if point.time is None:
                     continue  # skip points with no timestamp
-                if point.elevation is None:
-                    continue  # skip points with no elevation data
                 if start_time is None:
                     start_time = point.time
 
@@ -1023,85 +1003,6 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
     ]]
 
 
-def slugify_runner_name(name):
-    """Converts a UTMB Live-style name ('Katarzyna DOMBROWSKA', where the
-    surname is in ALL CAPS) into the 'surname-firstname' slug pattern
-    used in VertLabs' blog post URLs (e.g. 'dombrowska-katarzyna'),
-    stripping accents/diacritics. This is inferred from the examples
-    given, not guaranteed to match every post exactly - double-check the
-    generated links before publishing."""
-    import unicodedata
-
-    if not name:
-        return ""
-
-    def _strip_accents(text):
-        return "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
-
-    words = name.split()
-    surname_words = [w for w in words if w.isupper()]
-    firstname_words = [w for w in words if not w.isupper()]
-
-    surname_slug = "-".join(_strip_accents(w).lower() for w in surname_words)
-    firstname_slug = "-".join(_strip_accents(w).lower() for w in firstname_words)
-
-    parts = [p for p in [surname_slug, firstname_slug] if p]
-    return "-".join(parts) if parts else _strip_accents(name).lower().replace(" ", "-")
-
-
-def build_blog_leaderboard_html(rows, blog_base_url="https://www.vertlabs.run/p/"):
-    """Builds the exact HTML leaderboard table used on VertLabs' blog
-    (same CSS classes as the existing template: table-style-normal,
-    generated-table, tgp-style-1/3/5/6/7), ready to paste directly into
-    Blogger's HTML view. POS follows the ORDER of 'rows' as given - the
-    caller is expected to pass runners in actual finish order (e.g. the
-    order bibs were typed into the fetch box)."""
-    podium_classes = {1: "tgp-style-3", 2: "tgp-style-6", 3: "tgp-style-7"}
-
-    def _fmt(value):
-        return "" if value is None else value
-
-    body_rows = []
-    for i, row in enumerate(rows, start=1):
-        pos_class = podium_classes.get(i, "tgp-style-5")
-        name = row.get("Name") or ""
-        slug = slugify_runner_name(name)
-        view_url = f"{blog_base_url}{slug}-runner-metrics.html" if slug else "#"
-        body_rows.append(
-            "      <tr>\n"
-            f'        <td class="{pos_class}" style="text-align: center;">{i}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;">{name}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("Bib"))}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("Time"))}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("VPI (m/h)"))}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("DMI (km/h)"))}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;">{_fmt(row.get("ER"))}</td>\n'
-            f'      <td class="tgp-style-5" style="text-align: center;"><a href="{view_url}">View</a></td>\n'
-            "      </tr>"
-        )
-
-    rows_html = "\n".join(body_rows)
-
-    return (
-        '<table class="table-style-normal generated-table" style="width: 100%;">\n'
-        "  <thead>\n"
-        "    <tr>\n"
-        '      <th class="tgp-style-1">POS</th>\n'
-        '      <th class="tgp-style-1">NAME</th>\n'
-        '      <th class="tgp-style-1">BIB</th>\n'
-        '      <th class="tgp-style-1">TIME</th>\n'
-        '      <th class="tgp-style-1">VPI</th>\n'
-        '      <th class="tgp-style-1">DMI</th>\n'
-        '      <th class="tgp-style-1">ER</th>\n'
-        '      <th class="tgp-style-1"><br></th>\n'
-        "      </tr>\n"
-        "    </thead>\n"
-        "    <tbody>\n"
-        f"{rows_html}\n"
-        "    </tbody>\n"
-        "  </table>"
-    )
-
 
 # ============================================================
 # 3. INTERFACE: three independent tabs
@@ -1497,15 +1398,14 @@ with tab_runner:
                 else:
                     try:
                         total_race_gain = calculate_total_elevation_gain(current_race_data["df"])
-                        df_segment_degradation = calculate_indices_by_segment(
-                            current_race_data["df"], race_segments_df, df_runner
-                        )
                         indices, df_crossed = calculate_runner_indices(
-                            df_segment_degradation,
                             race_segments_df,
                             df_runner,
                             current_race_data["total_km"],
                             total_race_gain,
+                        )
+                        df_segment_degradation = calculate_indices_by_segment(
+                            current_race_data["df"], race_segments_df, df_runner
                         )
                         indices_error = None
                     except Exception as e:
@@ -2130,10 +2030,7 @@ with tab_top:
                         "Go back to the 'Race Analysis' tab and load them first."
                     )
                 else:
-                    total_race_gain_top = calculate_total_elevation_gain(race_data_top["df"])
-
                     results = {}
-                    leaderboard_rows = []
                     errors = {}
                     progress = st.progress(0.0, text="Fetching runners...")
 
@@ -2148,31 +2045,6 @@ with tab_top:
                             )
                             label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
                             results[label] = df_summary_bib
-
-                            # Global VPI/DMI/ER + pacing halves for this runner,
-                            # for the leaderboard table below.
-                            try:
-                                indices_bib, _ = calculate_runner_indices(
-                                    df_segment_degradation_bib,
-                                    race_segments_df_top,
-                                    df_runner_bib,
-                                    race_data_top["total_km"],
-                                    total_race_gain_top,
-                                )
-                            except Exception:
-                                indices_bib = {}
-
-                            leaderboard_rows.append({
-                                "Rank": runner_info_bib.get("Overall Rank"),
-                                "Name": runner_info_bib.get("Name"),
-                                "Bib": runner_info_bib.get("Bib") or bib,
-                                "Time": runner_info_bib.get("Finish Time"),
-                                "VPI (m/h)": indices_bib.get("VPI"),
-                                "DMI (km/h)": indices_bib.get("DMI"),
-                                "1st Half Pace (min/effort-km)": indices_bib.get("effort_pace_first_half"),
-                                "2nd Half Pace (min/effort-km)": indices_bib.get("effort_pace_second_half"),
-                                "ER": indices_bib.get("ER"),
-                            })
                         except Exception:
                             errors[bib] = traceback.format_exc()
                         progress.progress((i + 1) / len(bibs), text=f"Fetching runners... ({i + 1}/{len(bibs)})")
@@ -2189,66 +2061,6 @@ with tab_top:
                         st.error("❌ Couldn't fetch any of the bibs entered.")
                     else:
                         st.success(f"✅ Fetched {len(results)} of {len(bibs)} runner(s).")
-
-                        # --- Leaderboard table: Rank/Name/Bib/Time/VPI/DMI/Pace halves/ER ---
-                        st.markdown("### 🏅 Leaderboard")
-                        st.caption(
-                            "One row per runner, sorted by official rank — useful for a quick "
-                            "side-by-side comparison of climbing (VPI), descending (DMI) and "
-                            "pacing/fatigue (ER) across the whole field."
-                        )
-
-                        df_leaderboard = pd.DataFrame(leaderboard_rows)
-
-                        def _rank_sort_key(value):
-                            try:
-                                return float(value)
-                            except (TypeError, ValueError):
-                                return float("inf")
-
-                        df_leaderboard = df_leaderboard.sort_values(
-                            by="Rank", key=lambda col: col.map(_rank_sort_key)
-                        ).reset_index(drop=True)
-
-                        leaderboard_styler = df_leaderboard.style.highlight_max(
-                            subset=["VPI (m/h)", "DMI (km/h)", "ER"], color="#134e2b"
-                        ).highlight_min(
-                            subset=["1st Half Pace (min/effort-km)", "2nd Half Pace (min/effort-km)"],
-                            color="#134e2b",
-                        )
-
-                        st.dataframe(leaderboard_styler, use_container_width=True, hide_index=True)
-
-                        leaderboard_csv = df_leaderboard.to_csv(index=False).encode("utf-8")
-                        st.download_button(
-                            "📥 Download leaderboard as CSV",
-                            data=leaderboard_csv,
-                            file_name=f"{selected_race_top.replace(' ', '_')}_leaderboard.csv",
-                            mime="text/csv",
-                        )
-
-                        # --- Blog-ready leaderboard HTML (matches VertLabs' existing template) ---
-                        st.markdown("---")
-                        st.markdown("### 🌐 Blog Leaderboard (HTML for Blogger)")
-                        st.caption(
-                            "POS follows the exact order you typed the bibs in above — paste "
-                            "them in real finish order and this table lines up automatically. "
-                            "Uses the same table/cell CSS classes as your existing blog template, "
-                            "so it should drop in without extra styling. The 'View' links are "
-                            "guessed from the runner's name (surname-firstname pattern) — check "
-                            "them before publishing, they may not match every post exactly."
-                        )
-
-                        blog_leaderboard_html = build_blog_leaderboard_html(leaderboard_rows)
-                        st.code(blog_leaderboard_html, language="html")
-                        st.download_button(
-                            "📥 Download blog leaderboard HTML",
-                            data=blog_leaderboard_html.encode("utf-8"),
-                            file_name=f"{selected_race_top.replace(' ', '_')}_blog_leaderboard.html",
-                            mime="text/html",
-                        )
-
-                        st.markdown("---")
 
                         for label, df_summary_bib in results.items():
                             st.markdown(f"##### {label}")
@@ -2270,11 +2082,6 @@ with tab_top:
                         with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
                             sheet_name = "Top Runners"
 
-                            # Leaderboard sheet first
-                            df_leaderboard.to_excel(
-                                writer, sheet_name="Leaderboard", startrow=0, startcol=0, index=False
-                            )
-
                             # Shared geometry block (once)
                             pd.DataFrame({"Race Segment Geometry": []}).to_excel(
                                 writer, sheet_name=sheet_name, startrow=0, startcol=0, index=False
@@ -2295,7 +2102,7 @@ with tab_top:
                                 startcol += len(runner_columns) + 1
 
                         st.download_button(
-                            "📥 Download combined Excel (leaderboard + shared geometry + each runner side by side)",
+                            "📥 Download combined Excel (shared geometry + each runner side by side)",
                             data=excel_buffer.getvalue(),
                             file_name=f"{selected_race_top.replace(' ', '_')}_top_runners.xlsx",
                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
