@@ -355,6 +355,92 @@ def calculate_effort_distribution(full_df_gpx, total_km, total_elevation_gain):
     }
 
 
+def build_time_by_point(df_runner):
+    """Maps each checkpoint 'Point' this runner has a recorded split for
+    to its accumulated time in decimal hours. A checkpoint the runner has
+    NO passing for at all (common at aid stations that don't scan bibs,
+    as opposed to timing mats) simply won't appear as a key here - that
+    absence is exactly the signal merge_segments_with_runner_times uses
+    to fuse the surrounding segments together instead of leaving a gap."""
+    return {
+        row["Point"]: parse_time_to_hours(row.get("Accumulated Time"))
+        for _, row in df_runner.iterrows()
+    }
+
+
+def merge_segments_with_runner_times(df_segments, df_runner):
+    """Fuses together consecutive official segments whenever an
+    intermediate checkpoint has no recorded time for THIS runner (e.g. an
+    aid station that only hands out water/food and never scans bibs).
+    Without this, a segment like P0->P12 (a real, steep climb) gets
+    silently dropped from every calculation the moment P12 has no time -
+    even though the runner's time IS known at P0 and at the next
+    checkpoint that does have one (say P16). This merges P0->P12->P16
+    into a single P0->P16 segment (summing distance/elevation, and
+    recomputing Average Slope as a distance-weighted average of the
+    sub-segments), so the climbing/descending effort in that stretch is
+    still counted instead of vanishing.
+
+    Returns a new DataFrame with the same columns/shape as df_segments,
+    where every row's Start Point and End Point are both guaranteed to
+    have a valid runner time (any segment left open at the very end -
+    e.g. a DNF with no time at the last known point - is simply dropped,
+    same as the pre-existing 'unmatched segment' behavior)."""
+    time_by_point = build_time_by_point(df_runner)
+    sorted_segments = df_segments.sort_values("Start Km").reset_index(drop=True)
+
+    merged_rows = []
+    buffer = None
+
+    for _, seg in sorted_segments.iterrows():
+        p_start, p_end = seg["Start Point"], seg["End Point"]
+        seg_distance = seg["Segment Distance (km)"] or 0
+        seg_gain = seg["Elevation Gain (m)"] or 0
+        seg_loss = seg["Elevation Loss (m)"] or 0
+        seg_slope = seg["Average Slope (%)"] or 0
+
+        if buffer is None:
+            buffer = {
+                "Start Point": p_start,
+                "Start Km": seg["Start Km"],
+                "End Point": p_end,
+                "End Km": seg["End Km"],
+                "Segment Distance (km)": seg_distance,
+                "Elevation Gain (m)": seg_gain,
+                "Elevation Loss (m)": seg_loss,
+                "_slope_weighted_sum": seg_slope * seg_distance,
+                "_distance_sum": seg_distance,
+            }
+        else:
+            buffer["End Point"] = p_end
+            buffer["End Km"] = seg["End Km"]
+            buffer["Segment Distance (km)"] += seg_distance
+            buffer["Elevation Gain (m)"] += seg_gain
+            buffer["Elevation Loss (m)"] += seg_loss
+            buffer["_slope_weighted_sum"] += seg_slope * seg_distance
+            buffer["_distance_sum"] += seg_distance
+
+        if buffer["Start Point"] in time_by_point and p_end in time_by_point:
+            avg_slope = (
+                buffer["_slope_weighted_sum"] / buffer["_distance_sum"]
+                if buffer["_distance_sum"] else None
+            )
+            merged_rows.append({
+                "Start Point": buffer["Start Point"],
+                "End Point": buffer["End Point"],
+                "Start Km": buffer["Start Km"],
+                "End Km": buffer["End Km"],
+                "Segment Distance (km)": round(buffer["Segment Distance (km)"], 3),
+                "Elevation Gain (m)": round(buffer["Elevation Gain (m)"], 1),
+                "Elevation Loss (m)": round(buffer["Elevation Loss (m)"], 1),
+                "Average Slope (%)": round(avg_slope, 2) if avg_slope is not None else None,
+            })
+            buffer = None
+        # else: keep extending the buffer through the next segment
+
+    return pd.DataFrame(merged_rows)
+
+
 def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_gain,
                               distance_weighting_coef=1.0):
     """Crosses the official race segments (df_segments, computed in Tab 1
@@ -362,15 +448,17 @@ def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_g
     to calculate VPI, DMI and ER.
 
     The crossing is done by checkpoint number ('Point'), which must match
-    between both tables."""
+    between both tables. Segments spanning a checkpoint this runner has no
+    recorded time for are fused with their neighbors first (see
+    merge_segments_with_runner_times) instead of being dropped outright."""
 
     if "Point" not in df_runner.columns:
         raise ValueError("The runner table doesn't have a 'Point' column to match checkpoints.")
 
-    time_by_point = {
-        row["Point"]: parse_time_to_hours(row.get("Accumulated Time"))
-        for _, row in df_runner.iterrows()
-    }
+    original_segment_count = len(df_segments)
+    df_segments = merge_segments_with_runner_times(df_segments, df_runner)
+    merged_checkpoints_count = max(original_segment_count - len(df_segments), 0)
+    time_by_point = build_time_by_point(df_runner)
 
     crossed_rows = []
     for _, seg in df_segments.iterrows():
@@ -444,6 +532,7 @@ def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_g
         "ER": round(er, 1) if er is not None else None,
         "Pacing_Decay_%": round(pacing_decay_pct, 1) if pacing_decay_pct is not None else None,
         "unmatched_segments": int(unmatched_segments),
+        "merged_checkpoints": int(merged_checkpoints_count),
         "effort_pace_first_half": round(pace_1, 2) if pace_1 is not None else None,
         "effort_pace_second_half": round(pace_2, 2) if pace_2 is not None else None,
         "half_effort_km": half_effort_km,
@@ -496,10 +585,11 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
     # positive elevation gain / 100 (descents don't add an extra term).
     incremental_effort_km = incremental_dist_km + incremental_elevation_m.clip(lower=0) / 100
 
-    time_by_point = {
-        row["Point"]: parse_time_to_hours(row.get("Accumulated Time"))
-        for _, row in df_runner.iterrows()
-    }
+    # Fuse segments across any checkpoint this runner has no recorded
+    # time for (e.g. an aid station that doesn't scan bibs), so that
+    # stretch's climb/descent isn't silently dropped from the table.
+    df_segments = merge_segments_with_runner_times(df_segments, df_runner)
+    time_by_point = build_time_by_point(df_runner)
 
     sorted_segments = df_segments.sort_values("Start Km").reset_index(drop=True)
     rows = []
@@ -1559,6 +1649,12 @@ with tab_runner:
                                 f"⚠️ {indices['unmatched_segments']} race segment(s) had no "
                                 "matching checkpoint in the runner's data and were excluded from the calculation."
                             )
+                        if indices.get("merged_checkpoints", 0) > 0:
+                            st.caption(
+                                f"ℹ️ {indices['merged_checkpoints']} checkpoint(s) had no recorded time for "
+                                "this runner (common at aid stations that don't scan bibs) and were merged "
+                                "into the surrounding segment instead of being dropped."
+                            )
                         with st.expander("View crossed segments (race + runner times)"):
                             st.dataframe(df_crossed, use_container_width=True)
 
@@ -1945,6 +2041,12 @@ with tab_runner_lt:
                             st.caption(
                                 f"⚠️ {indices_lt['unmatched_segments']} race segment(s) had no "
                                 "matching checkpoint in the runner's data and were excluded from the calculation."
+                            )
+                        if indices_lt.get("merged_checkpoints", 0) > 0:
+                            st.caption(
+                                f"ℹ️ {indices_lt['merged_checkpoints']} checkpoint(s) had no recorded time for "
+                                "this runner (common at aid stations that don't scan bibs) and were merged "
+                                "into the surrounding segment instead of being dropped."
                             )
                         with st.expander("View crossed segments (race + runner times)"):
                             st.dataframe(df_crossed_lt, use_container_width=True)
