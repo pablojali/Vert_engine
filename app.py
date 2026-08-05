@@ -441,7 +441,7 @@ def merge_segments_with_runner_times(df_segments, df_runner):
     return pd.DataFrame(merged_rows)
 
 
-def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_gain,
+def calculate_runner_indices(full_df_gpx, df_segments, df_runner, total_km, total_elevation_gain,
                               distance_weighting_coef=1.0):
     """Crosses the official race segments (df_segments, computed in Tab 1
     from the checkpoints) with the runner's real split times (df_runner)
@@ -450,7 +450,17 @@ def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_g
     The crossing is done by checkpoint number ('Point'), which must match
     between both tables. Segments spanning a checkpoint this runner has no
     recorded time for are fused with their neighbors first (see
-    merge_segments_with_runner_times) instead of being dropped outright."""
+    merge_segments_with_runner_times) instead of being dropped outright.
+
+    VPI/DMI are aggregated point-by-point (via calculate_indices_by_segment)
+    rather than by filtering whole segments on their OWN average slope: a
+    fused segment (e.g. a real climb immediately followed by a descent,
+    merged together because the checkpoint between them has no runner
+    time) can have an average slope well under 12% even though it fully
+    contains a genuine steep climb - filtering on that diluted average
+    would silently drop the climb from the whole-race VPI. Using the same
+    within-segment effort-share method as the per-segment table avoids
+    that."""
 
     if "Point" not in df_runner.columns:
         raise ValueError("The runner table doesn't have a 'Point' column to match checkpoints.")
@@ -483,16 +493,25 @@ def calculate_runner_indices(df_segments, df_runner, total_km, total_elevation_g
             "Check that the 'Point' numbers are the same in both tables."
         )
 
-    # --- VPI: Strong Climb (segment average slope >= 12%) ---
-    strong_climb_segments = df_valid[df_valid["Average Slope (%)"] >= STRONG_SLOPE_THRESHOLD]
-    climb_time_h = strong_climb_segments["Runner Time (h)"].sum()
-    climb_gain_m = strong_climb_segments["Elevation Gain (m)"].sum()
+    # --- VPI / DMI: point-by-point effort-share aggregation across ALL
+    # segments (already merged), instead of a blunt whole-segment
+    # average-slope filter. df_segments here is already merged, so
+    # calling calculate_indices_by_segment again is a no-op on top of
+    # that merge (idempotent: every boundary already has a valid time).
+    df_segment_breakdown = calculate_indices_by_segment(full_df_gpx, df_segments, df_runner)
+
+    valid_climb = df_segment_breakdown.dropna(subset=["VPI Raw (m/h)", "Runner Time (h)", "Climb Effort Share (%)"])
+    climb_time_h_rows = valid_climb["Runner Time (h)"] * (valid_climb["Climb Effort Share (%)"] / 100)
+    climb_gain_m_rows = valid_climb["VPI Raw (m/h)"] * climb_time_h_rows
+    climb_time_h = climb_time_h_rows.sum()
+    climb_gain_m = climb_gain_m_rows.sum()
     vpi = (climb_gain_m / climb_time_h) if climb_time_h > 0 else None
 
-    # --- DMI: Strong Descent (segment average slope <= -12%) ---
-    strong_descent_segments = df_valid[df_valid["Average Slope (%)"] <= -STRONG_SLOPE_THRESHOLD]
-    descent_time_h = strong_descent_segments["Runner Time (h)"].sum()
-    descent_dist_km = strong_descent_segments["Segment Distance (km)"].sum()
+    valid_descent = df_segment_breakdown.dropna(subset=["DMI Raw (km/h)", "Runner Time (h)", "Descent Effort Share (%)"])
+    descent_time_h_rows = valid_descent["Runner Time (h)"] * (valid_descent["Descent Effort Share (%)"] / 100)
+    descent_dist_km_rows = valid_descent["DMI Raw (km/h)"] * descent_time_h_rows
+    descent_time_h = descent_time_h_rows.sum()
+    descent_dist_km = descent_dist_km_rows.sum()
     dmi = (descent_dist_km / descent_time_h) if descent_time_h > 0 else None
 
     # --- ER: Endurance Rating (pacing decay between 1st and 2nd half) ---
@@ -1627,6 +1646,7 @@ with tab_runner:
                     try:
                         total_race_gain = calculate_total_elevation_gain(current_race_data["df"])
                         indices, df_crossed = calculate_runner_indices(
+                            current_race_data["df"],
                             race_segments_df,
                             df_runner,
                             current_race_data["total_km"],
@@ -2020,6 +2040,7 @@ with tab_runner_lt:
                     try:
                         total_race_gain_lt = calculate_total_elevation_gain(current_race_data_lt["df"])
                         indices_lt, df_crossed_lt = calculate_runner_indices(
+                            current_race_data_lt["df"],
                             race_segments_df_lt,
                             df_runner_lt,
                             current_race_data_lt["total_km"],
