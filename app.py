@@ -1089,9 +1089,16 @@ def build_registry_checkpoints_block(gpx_file, race_slug_api, points):
 def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
     """Builds the unified, Excel-ready summary table: one row per
     checkpoint, combining the official segment geometry (Tab 1), this
-    runner's raw split data (from UTMB Live), and the calculated VPI/DMI
-    for that segment. Shared by 'Runner Metrics' (single runner) and
-    'Top Runners' (several runners side by side)."""
+    runner's raw split data (from UTMB Live or LiveTrail), and the
+    calculated VPI/DMI for that segment. Shared by 'Runner Metrics'
+    (single runner) and 'Top Runners' (several runners side by side).
+
+    Some source APIs (confirmed on UTMB Live) omit a column entirely for
+    a given runner instead of sending it as 0/null - e.g. 'restTime' can
+    be missing altogether when a runner never rested at any checkpoint,
+    which drops 'Rest' from df_runner.columns. This function tolerates
+    any of the optional runner columns being absent, filling them with
+    None instead of raising a KeyError on the merge."""
     df_summary = race_segments_df[[
         "End Point", "Segment Distance (km)", "Elevation Gain (m)",
         "Elevation Loss (m)", "Average Slope (%)", "Start Km", "End Km",
@@ -1103,8 +1110,10 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
         how="left",
     )
 
+    runner_columns_wanted = ["Point", "Speed (km/h)", "Pace (min/km)", "Rank", "Rest", "Segment Time"]
+    runner_columns_present = [c for c in runner_columns_wanted if c in df_runner.columns]
     df_summary = df_summary.merge(
-        df_runner[["Point", "Speed (km/h)", "Pace (min/km)", "Rank", "Rest", "Segment Time"]],
+        df_runner[runner_columns_present],
         left_on="End Point",
         right_on="Point",
         how="left",
@@ -1118,6 +1127,12 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
         "VPI Raw (m/h)": "VPI",
         "DMI Raw (km/h)": "DMI",
     })
+
+    # Guarantee every expected output column exists, even if the source
+    # data for this particular runner was missing one entirely.
+    for col in ["Speed", "Pace", "Rank", "Rest", "Time", "VPI", "DMI"]:
+        if col not in df_summary.columns:
+            df_summary[col] = None
 
     return df_summary[[
         "Checkpoint", "Segment Distance (km)", "Elevation Gain (m)",
