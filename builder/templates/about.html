@@ -10,7 +10,7 @@
   <p class="hero-sub">{{ t.about_intro_p1 }}</p>
   <p class="hero-sub about-emphasis">{{ t.about_intro_p2 }}</p>
 
-  <details class="metric-accordion metric-vpi" open>
+  <details class="metric-accordion metric-vpi" id="vpi" open>
     <summary>🧗 {{ t.about_vpi_title }}</summary>
     <div class="metric-accordion-body">
       <p>{{ t.about_vpi_desc }}</p>
@@ -18,7 +18,7 @@
     </div>
   </details>
 
-  <details class="metric-accordion metric-dmi">
+  <details class="metric-accordion metric-dmi" id="dmi">
     <summary>📉 {{ t.about_dmi_title }}</summary>
     <div class="metric-accordion-body">
       <p>{{ t.about_dmi_desc }}</p>
@@ -26,7 +26,7 @@
     </div>
   </details>
 
-  <details class="metric-accordion metric-er">
+  <details class="metric-accordion metric-er" id="er">
     <summary>🏆 {{ t.about_er_title }}</summary>
     <div class="metric-accordion-body">
       <p>{{ t.about_er_desc }}</p>
@@ -34,4 +34,15 @@
     </div>
   </details>
 </article>
+<script>
+  (function () {
+    var id = location.hash.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (el && el.tagName === "DETAILS") {
+      el.open = true;
+      el.scrollIntoView({ block: "start" });
+    }
+  })();
+</script>
 {% endblock %}

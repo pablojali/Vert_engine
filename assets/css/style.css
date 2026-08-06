@@ -7,6 +7,7 @@
   --color-green: #6b8e23;
   --color-orange: #ff8c42;
   --color-violet: #a78bfa;
+  --color-blue: #5b8def;
   --color-muted: #8b949e;
   --color-border: #21262d;
 
@@ -48,11 +49,17 @@ a:hover { text-decoration: underline; }
 }
 
 .site-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
   color: var(--color-text);
+  text-decoration: none;
+}
+.site-header .logo-mark { height: 40px; width: auto; display: block; }
+.site-header .logo-text {
   font-weight: 800;
   font-size: 1.3rem;
   letter-spacing: -0.02em;
-  text-decoration: none;
 }
 .site-header .logo .logo-trail { color: var(--color-green); }
 
@@ -101,6 +108,70 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
 .section-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
 .section-heading .see-all { font-size: 0.85rem; }
+
+/* --- Stat bar --- */
+.stat-hex {
+  width: 40px;
+  height: 40px;
+}
+.stat-hex polygon { fill: none; stroke: currentColor; stroke-width: 2; }
+.stat-hex-glyph { stroke: currentColor; }
+
+.stat-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-raised);
+}
+.stat-box .stat-hex { color: var(--color-muted); margin-bottom: 0.5rem; }
+.stat-box-cyan .stat-hex { color: var(--color-cyan); }
+.stat-box-orange .stat-hex { color: var(--color-orange); }
+.stat-box-violet .stat-hex { color: var(--color-violet); }
+.stat-box-blue .stat-hex { color: var(--color-blue); }
+.stat-number { font-size: 2rem; font-weight: 800; line-height: 1; }
+.stat-box-cyan .stat-number { color: var(--color-cyan); }
+.stat-box-orange .stat-number { color: var(--color-orange); }
+.stat-box-violet .stat-number { color: var(--color-violet); }
+.stat-box-blue .stat-number { color: var(--color-blue); }
+.stat-name { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 600; }
+.stat-sub { color: var(--color-muted); font-size: 0.8rem; }
+
+/* --- Metric cards (homepage) --- */
+.metric-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.metric-card {
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-raised);
+}
+.metric-card .stat-hex { margin-bottom: 0.75rem; }
+.metric-card.metric-vpi .stat-hex { color: var(--color-vpi); }
+.metric-card.metric-dmi .stat-hex { color: var(--color-dmi); }
+.metric-card.metric-er .stat-hex { color: var(--color-er); }
+.metric-card h3 { margin: 0 0 0.15rem; font-size: 1.3rem; }
+.metric-card.metric-vpi h3 { color: var(--color-vpi); }
+.metric-card.metric-dmi h3 { color: var(--color-dmi); }
+.metric-card.metric-er h3 { color: var(--color-er); }
+.metric-card-label { color: var(--color-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.75rem; }
+.metric-card p:not(.metric-card-label) { color: var(--color-muted); margin: 0 0 1rem; }
+.metric-card a { font-size: 0.85rem; font-weight: 600; }
+.metric-card.metric-vpi a { color: var(--color-vpi); }
+.metric-card.metric-dmi a { color: var(--color-dmi); }
+.metric-card.metric-er a { color: var(--color-er); }
 
 /* --- Cards / grids --- */
 .race-grid, .athlete-grid {

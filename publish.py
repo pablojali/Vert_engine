@@ -101,7 +101,7 @@ def main() -> None:
         athletes = athlete_generator.generate(loc, t)
 
         print("3/6 Generando homepage...")
-        homepage_generator.generate(races, loc, t)
+        homepage_generator.generate(races, athletes, loc, t)
 
         print("4/6 Generando rankings...")
         rankings_generator.generate(athletes, loc, t)
