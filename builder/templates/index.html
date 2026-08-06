@@ -7,6 +7,44 @@
   <p class="hero-sub">{{ t.site_hero_sub }}</p>
 </section>
 
+{% if races %}
+<section class="featured-carousel">
+  <div class="carousel-track">
+    {% for r in races[:5] %}
+    <article class="carousel-slide{{ ' active' if loop.first else '' }}" style="background-image:url('{{ r.hero_image }}')">
+      <div class="carousel-overlay">
+        <div class="carousel-text">
+          <p class="carousel-eyebrow">{{ r.name }} {{ r.year }}</p>
+          <h2>{{ t.home_featured_label }}</h2>
+          <p class="carousel-desc">{{ t.home_featured_desc }}</p>
+          <a href="{{ r.url }}" class="carousel-cta">{{ t.home_featured_cta }} →</a>
+        </div>
+        <div class="carousel-stats">
+          {% if r.distance_km %}
+          <div class="carousel-stat"><span class="carousel-stat-value">{{ r.distance_km }}<small>km</small></span><span class="carousel-stat-label">{{ t.race_distance_label }}</span></div>
+          {% endif %}
+          {% if r.elevation_gain_m %}
+          <div class="carousel-stat"><span class="carousel-stat-value">{{ r.elevation_gain_m }}<small>m+</small></span><span class="carousel-stat-label">{{ t.race_elevation_label }}</span></div>
+          {% endif %}
+          {% set winner = r.athletes|selectattr('position', 'equalto', 1)|first %}
+          {% if winner %}
+          <div class="carousel-stat"><span class="carousel-stat-value">{{ winner.finish_time }}</span><span class="carousel-stat-label">{{ t.race_winning_time_label }}</span></div>
+          {% endif %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% if races[:5]|length > 1 %}
+  <div class="carousel-dots">
+    {% for r in races[:5] %}
+    <button class="carousel-dot{{ ' active' if loop.first else '' }}" data-index="{{ loop.index0 }}" aria-label="{{ r.name }} {{ r.year }}"></button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endif %}
+
 <section class="stat-bar">
   <div class="stat-box stat-box-cyan">
     <svg class="stat-hex" viewBox="0 0 40 40"><polygon points="20,2 35,11 35,29 20,38 5,29 5,11"/><path class="stat-hex-glyph" d="M9,27 L15,17 L19,21 L24,12 L31,27" fill="none" stroke-width="2"/></svg>
@@ -20,43 +58,12 @@
     <span class="stat-name">{{ t.home_stat_athletes }}</span>
     <span class="stat-sub">{{ t.home_stat_athletes_sub }}</span>
   </div>
-  <div class="stat-box stat-box-violet">
-    <svg class="stat-hex" viewBox="0 0 40 40"><polygon points="20,2 35,11 35,29 20,38 5,29 5,11"/><path class="stat-hex-glyph" d="M12,27 V19 M20,27 V13 M28,27 V22" fill="none" stroke-width="2"/></svg>
-    <span class="stat-number">{{ stats.metrics }}</span>
+  <div class="stat-box stat-box-wide">
     <span class="stat-name">{{ t.home_stat_metrics }}</span>
-    <span class="stat-sub">{{ t.home_stat_metrics_sub }}</span>
-  </div>
-  <div class="stat-box stat-box-blue">
-    <svg class="stat-hex" viewBox="0 0 40 40"><polygon points="20,2 35,11 35,29 20,38 5,29 5,11"/><path class="stat-hex-glyph" d="M14,13 H26 V19 H14 Z M14,22 H26 V28 H14 Z" fill="none" stroke-width="2"/></svg>
-    <span class="stat-number">{{ stats.circuits }}</span>
-    <span class="stat-name">{{ t.home_stat_circuits }}</span>
-    <span class="stat-sub">{{ t.home_stat_circuits_sub }}</span>
-  </div>
-</section>
-
-<section class="homepage-section">
-  <h2>{{ t.home_metrics_title }}</h2>
-  <div class="metric-cards">
-    <div class="metric-card metric-vpi">
-      <svg class="stat-hex" viewBox="0 0 40 40"><polygon points="20,2 35,11 35,29 20,38 5,29 5,11"/><path class="stat-hex-glyph" d="M9,27 L15,17 L19,21 L24,12 L31,27" fill="none" stroke-width="2"/></svg>
-      <h3>VPI</h3>
-      <p class="metric-card-label">Vertical Power Index</p>
-      <p>{{ t.home_vpi_desc }}</p>
-      <a href="{{ locale_url(locale, 'about/') }}#vpi">{{ t.home_learn_more }}</a>
-    </div>
-    <div class="metric-card metric-dmi">
-      <svg class="stat-hex" viewBox="0 0 40 40"><polygon points="20,2 35,11 35,29 20,38 5,29 5,11"/><path class="stat-hex-glyph" d="M9,15 L18,15 L18,24 L31,24 M25,19 L31,24 L25,29" fill="none" stroke-width="2"/></svg>
-      <h3>DMI</h3>
-      <p class="metric-card-label">Descent Mastery Index</p>
-      <p>{{ t.home_dmi_desc }}</p>
-      <a href="{{ locale_url(locale, 'about/') }}#dmi">{{ t.home_learn_more }}</a>
-    </div>
-    <div class="metric-card metric-er">
-      <svg class="stat-hex" viewBox="0 0 40 40"><polygon points="20,2 35,11 35,29 20,38 5,29 5,11"/><path class="stat-hex-glyph" d="M8,20 H14 L17,13 L21,27 L24,20 L32,20" fill="none" stroke-width="2"/></svg>
-      <h3>ER</h3>
-      <p class="metric-card-label">Endurance Rating</p>
-      <p>{{ t.home_er_desc }}</p>
-      <a href="{{ locale_url(locale, 'about/') }}#er">{{ t.home_learn_more }}</a>
+    <div class="metric-mini-list">
+      <a href="{{ locale_url(locale, 'about/') }}#vpi" class="metric-mini-row metric-mini-vpi"><strong>VPI</strong><span>Vertical Power Index</span></a>
+      <a href="{{ locale_url(locale, 'about/') }}#dmi" class="metric-mini-row metric-mini-dmi"><strong>DMI</strong><span>Descent Mastery Index</span></a>
+      <a href="{{ locale_url(locale, 'about/') }}#er" class="metric-mini-row metric-mini-er"><strong>ER</strong><span>Endurance Rating</span></a>
     </div>
   </div>
 </section>

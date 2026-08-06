@@ -14,7 +14,6 @@ def generate(races: list[dict], athletes: list[dict], loc: dict, t: dict) -> Non
         "races": len(races),
         "athletes": len(athletes),
         "metrics": 3,  # VPI, DMI, ER - fixed, not derived from data
-        "circuits": len({r["circuit"] for r in races if r.get("circuit")}),
     }
 
     html = template.render(races=ordered, stats=stats, t=t, locale=loc["code"], page_path="")

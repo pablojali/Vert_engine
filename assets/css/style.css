@@ -119,9 +119,13 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
 .stat-bar {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   margin-bottom: 3rem;
+}
+@media (max-width: 700px) {
+  .stat-bar { grid-template-columns: 1fr; }
+  .stat-box-wide { grid-column: span 1; }
 }
 .stat-box {
   display: flex;
@@ -146,32 +150,95 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .stat-name { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; font-weight: 600; }
 .stat-sub { color: var(--color-muted); font-size: 0.8rem; }
 
-/* --- Metric cards (homepage) --- */
-.metric-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-}
-.metric-card {
-  padding: 1.5rem;
+/* --- Featured carousel (homepage) --- */
+.featured-carousel {
+  position: relative;
   border: 1px solid var(--color-border);
-  border-radius: 10px;
-  background: var(--color-bg-raised);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
 }
-.metric-card .stat-hex { margin-bottom: 0.75rem; }
-.metric-card.metric-vpi .stat-hex { color: var(--color-vpi); }
-.metric-card.metric-dmi .stat-hex { color: var(--color-dmi); }
-.metric-card.metric-er .stat-hex { color: var(--color-er); }
-.metric-card h3 { margin: 0 0 0.15rem; font-size: 1.3rem; }
-.metric-card.metric-vpi h3 { color: var(--color-vpi); }
-.metric-card.metric-dmi h3 { color: var(--color-dmi); }
-.metric-card.metric-er h3 { color: var(--color-er); }
-.metric-card-label { color: var(--color-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; margin: 0 0 0.75rem; }
-.metric-card p:not(.metric-card-label) { color: var(--color-muted); margin: 0 0 1rem; }
-.metric-card a { font-size: 0.85rem; font-weight: 600; }
-.metric-card.metric-vpi a { color: var(--color-vpi); }
-.metric-card.metric-dmi a { color: var(--color-dmi); }
-.metric-card.metric-er a { color: var(--color-er); }
+.carousel-track { position: relative; min-height: 380px; }
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease;
+}
+.carousel-slide.active { opacity: 1; visibility: visible; position: relative; }
+.carousel-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(13,17,23,0.96) 0%, rgba(13,17,23,0.82) 45%, rgba(13,17,23,0.4) 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+.carousel-text { max-width: 480px; }
+.carousel-eyebrow {
+  color: var(--color-cyan);
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem;
+}
+.carousel-text h2 { font-size: 2rem; margin: 0 0 0.6rem; letter-spacing: -0.02em; }
+.carousel-desc { color: var(--color-muted); margin: 0 0 1.25rem; }
+.carousel-cta {
+  display: inline-block;
+  background: var(--color-cyan);
+  color: #0d1117;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.carousel-cta:hover { text-decoration: none; filter: brightness(1.1); }
+.carousel-stats { display: flex; flex-direction: column; gap: 0.85rem; align-items: flex-end; text-align: right; }
+.carousel-stat-value { display: block; font-size: 1.4rem; font-weight: 800; }
+.carousel-stat-value small { font-size: 0.75rem; font-weight: 600; color: var(--color-muted); margin-left: 0.15rem; }
+.carousel-stat-label { display: block; font-size: 0.7rem; text-transform: uppercase; color: var(--color-muted); letter-spacing: 0.04em; }
+.carousel-dots { display: flex; justify-content: center; gap: 0.5rem; padding: 0.85rem; background: var(--color-bg-raised); }
+.carousel-dot { width: 8px; height: 8px; border-radius: 50%; border: none; background: var(--color-border); cursor: pointer; padding: 0; }
+.carousel-dot.active { background: var(--color-cyan); width: 22px; border-radius: 4px; transition: width 0.2s ease; }
+
+@media (max-width: 640px) {
+  .carousel-overlay { align-items: flex-start; }
+  .carousel-stats { align-items: flex-start; text-align: left; }
+}
+
+/* --- Wide "Performance Metrics" stat box --- */
+.stat-box-wide { grid-column: span 2; }
+.stat-box-wide .stat-name { margin-bottom: 0.5rem; }
+.metric-mini-list { display: flex; flex-direction: column; gap: 0.4rem; width: 100%; }
+.metric-mini-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  text-decoration: none;
+}
+.metric-mini-row:hover { text-decoration: none; border-color: var(--color-muted); }
+.metric-mini-row strong { font-size: 0.9rem; }
+.metric-mini-row span { color: var(--color-muted); font-size: 0.82rem; }
+.metric-mini-vpi { border-left-color: var(--color-vpi); }
+.metric-mini-vpi strong { color: var(--color-vpi); }
+.metric-mini-dmi { border-left-color: var(--color-dmi); }
+.metric-mini-dmi strong { color: var(--color-dmi); }
+.metric-mini-er { border-left-color: var(--color-er); }
+.metric-mini-er strong { color: var(--color-er); }
 
 /* --- Cards / grids --- */
 .race-grid, .athlete-grid {
