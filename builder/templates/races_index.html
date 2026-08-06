@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Carreras — Vertical Trail Labs{% endblock %}
+{% block canonical %}https://vertlabs.run/races/{% endblock %}
+
+{% block content %}
+<section class="homepage-section">
+  <h1>Carreras</h1>
+  <ul class="race-grid">
+    {% for r in races %}
+    <li class="race-card">
+      <a href="/races/{{ r.slug }}/">
+        {% if r.hero_image %}<img src="{{ r.hero_image }}" alt="" loading="lazy">{% endif %}
+        <span class="race-card-name">{{ r.name }}</span>
+        <span class="race-card-meta">{{ r.year }} · {{ r.distance_km }} km</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

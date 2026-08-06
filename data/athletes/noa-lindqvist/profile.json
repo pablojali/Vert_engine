@@ -1,0 +1,23 @@
+{
+  "slug": "noa-lindqvist",
+  "name": "Noa Lindqvist",
+  "country": "SWE",
+  "portrait": "/athletes/noa-lindqvist/images/portrait.svg",
+  "races": [
+    {
+      "race_slug": "aran-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "position": 3,
+      "finish_time": "19:47:02",
+      "vpi": 781.5,
+      "dmi": 12.9,
+      "er": 91.0
+    }
+  ],
+  "career_avg": {
+    "vpi": 781.5,
+    "dmi": 12.9,
+    "er": 91.0
+  }
+}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Atletas — Vertical Trail Labs{% endblock %}
+{% block canonical %}https://vertlabs.run/athletes/{% endblock %}
+
+{% block content %}
+<section class="homepage-section">
+  <h1>Atletas</h1>
+  <ul class="athlete-grid">
+    {% for a in athletes %}
+    <li class="athlete-card">
+      <a href="/athletes/{{ a.slug }}/">
+        {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% endif %}
+        <span class="athlete-card-name">{{ a.name }}</span>
+        {% if a.country %}<span class="athlete-card-meta">{{ a.country }}</span>{% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
