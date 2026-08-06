@@ -14,7 +14,6 @@
 
   <h1>{{ race.name }} {{ race.year }}</h1>
   <p class="race-meta">
-    {% if race.circuit %}{{ race.circuit }} · {% endif %}
     {{ race.location }} · {{ race.date }} · {{ race.distance_km }} km · {{ race.elevation_gain_m }} m D+
   </p>
 

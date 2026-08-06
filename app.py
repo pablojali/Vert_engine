@@ -3078,19 +3078,18 @@ with tab_web_export:
             col1, col2 = st.columns(2)
             with col1:
                 race_name = st.text_input("Nombre de la carrera", value=default_name)
-                race_circuit = st.text_input("Circuito", value="UTMB World Series")
                 race_year = st.text_input("Año", value=default_year)
                 race_distance_km = st.number_input(
                     "Distancia (km)", value=float(default_total_km) if default_total_km else 0.0, step=1.0,
                 )
                 race_elevation_gain_m = st.number_input("Desnivel positivo (m)", value=0.0, step=100.0)
-            with col2:
                 race_date = st.text_input("Fecha (YYYY-MM-DD)", value="")
+            with col2:
                 race_location = st.text_input("Ubicación", value="")
-                race_circuit_folder = st.text_input(
-                    "Carpeta circuito (data/races/<esto>/...)",
-                    value=_slugify(race_circuit) or "circuito",
-                    help="Solo define dónde vive el JSON en el repo, no la URL pública.",
+                race_folder = st.text_input(
+                    "Carpeta (data/races/<esto>/...)",
+                    value=_slugify(default_name) or "carrera",
+                    help="Elegí el nombre que quieras: solo define dónde vive el JSON en el repo, no la URL pública.",
                 )
                 race_distance_folder = st.text_input(
                     "Carpeta distancia (.../<esto>/race.json)",
@@ -3106,8 +3105,8 @@ with tab_web_export:
             )
 
         if export_submit:
-            if not race_slug or not race_year or not race_circuit_folder or not race_distance_folder:
-                st.error("Completá al menos slug, año, carpeta de circuito y carpeta de distancia.")
+            if not race_slug or not race_year or not race_folder or not race_distance_folder:
+                st.error("Completá al menos slug, año, carpeta y carpeta de distancia.")
             else:
                 try:
                     athletes_payload = []
@@ -3127,18 +3126,17 @@ with tab_web_export:
                     race_json = {
                         "slug": race_slug,
                         "name": race_name,
-                        "circuit": race_circuit or None,
                         "year": int(race_year),
                         "distance_km": race_distance_km or None,
                         "elevation_gain_m": race_elevation_gain_m or None,
                         "date": race_date or None,
                         "location": race_location or None,
-                        "hero_image": f"/races/{race_slug}/images/hero.jpg",
-                        "elevation_profile_image": f"/races/{race_slug}/charts/elevation_profile.png",
+                        "hero_image": f"/media/races/{race_slug}/images/hero.jpg",
+                        "elevation_profile_image": f"/media/races/{race_slug}/charts/elevation_profile.png",
                         "athletes": athletes_payload,
                     }
 
-                    race_dir = WEB_DATA_DIR / "races" / race_circuit_folder / race_year / race_distance_folder
+                    race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
                     race_dir.mkdir(parents=True, exist_ok=True)
                     (race_dir / "race.json").write_text(
                         json.dumps(race_json, ensure_ascii=False, indent=2), encoding="utf-8"
@@ -3160,7 +3158,7 @@ with tab_web_export:
                                 "slug": athlete["slug"],
                                 "name": athlete["name"],
                                 "country": None,
-                                "portrait": f"/athletes/{athlete['slug']}/images/portrait.jpg",
+                                "portrait": f"/media/athletes/{athlete['slug']}/images/portrait.jpg",
                                 "races": [],
                             }
 
