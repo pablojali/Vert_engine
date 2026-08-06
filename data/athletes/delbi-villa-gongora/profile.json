@@ -1,0 +1,23 @@
+{
+  "slug": "delbi-villa-gongora",
+  "name": "Delbi VILLA GONGORA",
+  "country": null,
+  "portrait": "/media/athletes/delbi-villa-gongora/images/portrait.png",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "position": 3,
+      "finish_time": "22:47:53",
+      "vpi": 930.0,
+      "dmi": 10.65,
+      "er": 68.7
+    }
+  ],
+  "career_avg": {
+    "vpi": 930.0,
+    "dmi": 10.6,
+    "er": 68.7
+  }
+}

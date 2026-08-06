@@ -1,0 +1,56 @@
+{
+  "slug": "val-d-aran-by-utmb-2026",
+  "name": "Val d'Aran by UTMB",
+  "year": 2026,
+  "distance_km": 160.05165725143127,
+  "elevation_gain_m": null,
+  "date": "2026-07-03",
+  "location": "Vielha",
+  "hero_image": "/media/races/val-d-aran-by-utmb-2026/images/hero.jpg",
+  "elevation_profile_image": "/media/races/val-d-aran-by-utmb-2026/charts/elevation_profile.html",
+  "athletes": [
+    {
+      "slug": "santos-gabriel-rueda",
+      "name": "Santos Gabriel RUEDA",
+      "bib": 5,
+      "finish_time": "21:32:05",
+      "position": 1,
+      "vpi": 976.5,
+      "dmi": 11.22,
+      "er": 75.8,
+      "charts": [
+        {
+          "label": "Santos Gabriel Rueda Livetrail Full Analysis",
+          "file": "/media/races/val-d-aran-by-utmb-2026/charts/runners/santos-gabriel-rueda/santos-gabriel-rueda-livetrail-full-analysis.html"
+        }
+      ]
+    },
+    {
+      "slug": "theo-soriano",
+      "name": "Théo SORIANO",
+      "bib": 27,
+      "finish_time": "22:23:51",
+      "position": 2,
+      "vpi": 951.1,
+      "dmi": 10.38,
+      "er": 73.8,
+      "charts": []
+    },
+    {
+      "slug": "delbi-villa-gongora",
+      "name": "Delbi VILLA GONGORA",
+      "bib": 22,
+      "finish_time": "22:47:53",
+      "position": 3,
+      "vpi": 930.0,
+      "dmi": 10.65,
+      "er": 68.7,
+      "charts": [
+        {
+          "label": "Delbi Villa Gongora Livetrail Full Analysis",
+          "file": "/media/races/val-d-aran-by-utmb-2026/charts/runners/delbi-villa-gongora/delbi-villa-gongora-livetrail-full-analysis.html"
+        }
+      ]
+    }
+  ]
+}

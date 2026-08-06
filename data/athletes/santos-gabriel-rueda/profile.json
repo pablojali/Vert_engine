@@ -1,0 +1,23 @@
+{
+  "slug": "santos-gabriel-rueda",
+  "name": "Santos Gabriel RUEDA",
+  "country": null,
+  "portrait": "/media/athletes/santos-gabriel-rueda/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "position": 1,
+      "finish_time": "21:32:05",
+      "vpi": 976.5,
+      "dmi": 11.22,
+      "er": 75.8
+    }
+  ],
+  "career_avg": {
+    "vpi": 976.5,
+    "dmi": 11.2,
+    "er": 75.8
+  }
+}

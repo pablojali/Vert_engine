@@ -1,0 +1,23 @@
+{
+  "slug": "theo-soriano",
+  "name": "Théo SORIANO",
+  "country": null,
+  "portrait": "/media/athletes/theo-soriano/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "position": 2,
+      "finish_time": "22:23:51",
+      "vpi": 951.1,
+      "dmi": 10.38,
+      "er": 73.8
+    }
+  ],
+  "career_avg": {
+    "vpi": 951.1,
+    "dmi": 10.4,
+    "er": 73.8
+  }
+}
