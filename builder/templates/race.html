@@ -57,5 +57,23 @@
     {{ t.race_metric_note }}
     <a href="{{ locale_url(locale, 'about/') }}">{{ t.race_how_calculated }}</a>
   </p>
+
+  {% set runners_with_charts = race.athletes|selectattr('charts')|sort(attribute='position') %}
+  {% if runners_with_charts|list %}
+  <h2>{{ t.race_runner_charts_title }}</h2>
+  {% for a in runners_with_charts %}
+  <details class="runner-charts-accordion">
+    <summary><a href="{{ a.url }}">{{ a.name }}</a></summary>
+    <div class="runner-charts-grid">
+      {% for chart in a.charts %}
+      <div class="runner-chart">
+        <p class="runner-chart-label">{{ chart.label }}</p>
+        <iframe src="{{ chart.file }}" class="elevation-profile-interactive" loading="lazy" title="{{ a.name }} — {{ chart.label }}"></iframe>
+      </div>
+      {% endfor %}
+    </div>
+  </details>
+  {% endfor %}
+  {% endif %}
 </article>
 {% endblock %}

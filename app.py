@@ -1280,6 +1280,33 @@ def _slugify(text: str) -> str:
     return text or "item"
 
 
+def _find_existing_portrait(athlete_slug: str):
+    """Returns the Path to this athlete's existing portrait on disk (any
+    of the accepted extensions), or None if they don't have one yet."""
+    portrait_dir = WEB_DATA_DIR / "athletes" / athlete_slug / "images"
+    for ext in (".jpg", ".jpeg", ".png"):
+        candidate = portrait_dir / f"portrait{ext}"
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _chart_label(filename: str) -> str:
+    """Best-effort friendly label for an uploaded chart HTML, based on
+    its filename (matches the file_name= used by chart_download_button
+    for the LiveTrail runner charts: vpi_chart_livetrail.html, etc.)."""
+    stem = Path(filename).stem.lower()
+    if "vpi" in stem:
+        return "VPI"
+    if "dmi" in stem:
+        return "DMI"
+    if "degradation" in stem:
+        return "Degradation"
+    if "er" in stem or "pacing" in stem:
+        return "ER"
+    return Path(filename).stem.replace("_", " ").replace("-", " ").title()
+
+
 def _web_export_track_result(race_key, runner_info, indices):
     """Records one runner's already-computed VPI/DMI/ER for a given race
     into st.session_state['web_export_pool'], so the 'Exportar a Web' tab
@@ -1312,8 +1339,8 @@ def _web_export_track_result(race_key, runner_info, indices):
         pass
 
 
-tab_race, tab_runner, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export = st.tabs(
-    ["🗺️ Race Analysis", "🏃 Runner Metrics (UTMB)", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export = st.tabs(
+    ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
      "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher",
      "🌐 Exportar a Web"]
 )
@@ -1606,397 +1633,16 @@ with tab_race:
                     st.write(f"- {name} ({n_checkpoints} checkpoints)")
 
 # ---------------------------------------------
-# TAB 2: Official runner metrics
-# ---------------------------------------------
-with tab_runner:
-    st.header("🏃 Official Runner Metrics")
-    st.caption("Pulls splits, pace and rank directly from the timing platform (UTMB Live).")
-
-    # --- Saved race selector (analyzed in Tab 1) ---
-    available_races = st.session_state.get('saved_races', {})
-    if not available_races:
-        st.warning(
-            "⚠️ You haven't loaded any race yet. Go to the "
-            "**'🗺️ Race Analysis'** tab, select and analyze a race, and it "
-            "will show up here automatically."
-        )
-        selected_race = None
-    else:
-        selected_race = st.selectbox(
-            "Which race did this runner do?",
-            options=list(available_races.keys()),
-        )
-        race_data = available_races[selected_race]
-        st.caption(
-            f"Selected race: **{selected_race}** · "
-            f"{race_data['total_km']:.1f} km total"
-        )
-
-    st.markdown("---")
-
-    runner_url = st.text_input(
-        "Runner link (UTMB Live)",
-        placeholder="https://live.utmb.world/aranbyutmb/2026/runners/5",
-    )
-    load_button = st.button("🔍 Load runner data", use_container_width=True)
-
-    if load_button:
-        if not runner_url:
-            st.warning("Paste a valid link before clicking the button.")
-        else:
-            with st.spinner("Connecting to the timing platform..."):
-                try:
-                    runner_info, df_runner = scrape_runner_splits(runner_url)
-                    error_detail = None
-                except Exception:
-                    runner_info, df_runner = None, None
-                    error_detail = traceback.format_exc()
-
-            # --- Feedback window ---
-            if error_detail:
-                st.error("❌ An error occurred while trying to fetch the runner data.")
-                with st.expander("View technical error detail"):
-                    st.code(error_detail, language="python")
-            elif df_runner is None or df_runner.empty:
-                st.warning(
-                    "⚠️ No data table was found at that link. "
-                    "Make sure it's the direct URL to the runner's profile."
-                )
-            else:
-                st.success("✅ Runner data fetched successfully!")
-
-                # --- Runner card (moved before the performance indices) ---
-                c1, c2, c3, c4 = st.columns(4)
-                c1.metric("Runner", runner_info.get("Name") or "-")
-                c2.metric("Finish Time", runner_info.get("Finish Time") or "-")
-                c3.metric("Overall Rank", runner_info.get("Overall Rank") or "-")
-                c4.metric("Category", runner_info.get("Category") or "-")
-
-                st.markdown("##### Checkpoints / Split Times")
-                st.dataframe(df_runner, use_container_width=True)
-
-                # Save for reuse in other tabs (including which race was
-                # chosen, for the VPI/DMI/ER calculation)
-                st.session_state['runner_metrics_df'] = df_runner
-                st.session_state['runner_info'] = runner_info
-                st.session_state['race_selected_for_runner'] = selected_race
-
-                # --- VPI / DMI / ER index calculation ---
-                # Requires the selected race to have checkpoints with km
-                # loaded on Tab 1 (df_segments).
-                current_race_data = available_races.get(selected_race, {}) if selected_race else {}
-                race_segments_df = current_race_data.get("df_segments")
-
-                st.markdown("---")
-
-                if race_segments_df is None or race_segments_df.empty:
-                    st.warning(
-                        "⚠️ The selected race doesn't have checkpoints with km loaded yet. "
-                        "Go back to the 'Race Analysis' tab, load the checkpoints for that "
-                        "race, and reload it here to calculate the indices."
-                    )
-                else:
-                    try:
-                        total_race_gain = calculate_total_elevation_gain(current_race_data["df"])
-                        indices, df_crossed = calculate_runner_indices(
-                            current_race_data["df"],
-                            race_segments_df,
-                            df_runner,
-                            current_race_data["total_km"],
-                            total_race_gain,
-                        )
-                        df_segment_degradation = calculate_indices_by_segment(
-                            current_race_data["df"], race_segments_df, df_runner
-                        )
-                        indices_error = None
-                    except Exception as e:
-                        indices, df_crossed, df_segment_degradation = None, None, None
-                        indices_error = str(e)
-
-                    st.markdown("## 🎯 Performance Indices")
-                    if indices_error:
-                        st.error(f"❌ Couldn't calculate the indices: {indices_error}")
-                    else:
-                        if indices["unmatched_segments"] > 0:
-                            st.caption(
-                                f"⚠️ {indices['unmatched_segments']} race segment(s) had no "
-                                "matching checkpoint in the runner's data and were excluded from the calculation."
-                            )
-                        if indices.get("merged_checkpoints", 0) > 0:
-                            st.caption(
-                                f"ℹ️ {indices['merged_checkpoints']} checkpoint(s) had no recorded time for "
-                                "this runner (common at aid stations that don't scan bibs) and were merged "
-                                "into the surrounding segment instead of being dropped."
-                            )
-                        with st.expander("View crossed segments (race + runner times)"):
-                            st.dataframe(df_crossed, use_container_width=True)
-
-                        # Saved so the 'UTMB vs GPX' tab can compare this
-                        # estimate against a runner's real, timestamped personal GPX.
-                        st.session_state['estimated_degradation_df'] = df_segment_degradation
-                        st.session_state['estimated_degradation_race'] = selected_race
-                        st.session_state['estimated_global_indices'] = indices
-                        _web_export_track_result(selected_race, runner_info, indices)
-
-                        # --- VPI chart ---
-                        st.markdown("---")
-                        st.markdown("### 🧗 VPI - Vertical Power Index")
-                        st.caption(
-                            "Vertical speed (meters of elevation gain per hour) on segments with "
-                            "slope ≥12%, segment by segment. Measures pure climbing efficiency, "
-                            "isolated from flat or rolling terrain."
-                        )
-                        st.metric(
-                            "VPI (whole race)",
-                            f"{indices['VPI']} m/h" if indices["VPI"] is not None else "N/A",
-                            help="Vertical Power Index: meters of elevation gain per hour on segments with slope ≥12%.",
-                        )
-                        fig_vpi = go.Figure()
-                        add_elevation_background(fig_vpi, current_race_data["df"])
-                        fig_vpi.add_trace(go.Scatter(
-                            x=df_segment_degradation["End Km"],
-                            y=df_segment_degradation["VPI Raw (m/h)"],
-                            mode="lines+markers",
-                            name="VPI (m/h)",
-                            line=dict(color="#22d3ee", width=3),
-                            text=df_segment_degradation["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h<extra></extra>",
-                        ))
-                        fig_vpi.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="VPI (m/h)",
-                            height=380,
-                            hovermode="x unified",
-                        )
-                        st.plotly_chart(fig_vpi, use_container_width=True)
-                        chart_download_button(fig_vpi, "vpi_chart.html", "dl_vpi")
-
-                        # --- DMI chart ---
-                        st.markdown("---")
-                        st.markdown("### 📉 DMI - Descent Mastery Index")
-                        st.caption(
-                            "Average running speed (km/h) on segments with slope ≤-12%, segment "
-                            "by segment. Measures technical descending ability under quadriceps "
-                            "fatigue, isolated from flat or rolling terrain."
-                        )
-                        st.metric(
-                            "DMI (whole race)",
-                            f"{indices['DMI']} km/h" if indices["DMI"] is not None else "N/A",
-                            help="Descent Mastery Index: average speed on segments with slope ≤-12%.",
-                        )
-                        fig_dmi = go.Figure()
-                        add_elevation_background(fig_dmi, current_race_data["df"])
-                        fig_dmi.add_trace(go.Scatter(
-                            x=df_segment_degradation["End Km"],
-                            y=df_segment_degradation["DMI Raw (km/h)"],
-                            mode="lines+markers",
-                            name="DMI (km/h)",
-                            line=dict(color="#ffa500", width=3),
-                            text=df_segment_degradation["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h<extra></extra>",
-                        ))
-                        fig_dmi.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="DMI (km/h)",
-                            height=380,
-                            hovermode="x unified",
-                        )
-                        st.plotly_chart(fig_dmi, use_container_width=True)
-                        chart_download_button(fig_dmi, "dmi_chart.html", "dl_dmi")
-
-                        # --- ER chart ---
-                        st.markdown("---")
-                        st.markdown("### 🏆 ER - Endurance Rating - Pacing Curve")
-                        st.caption(
-                            "Effort pace (minutes per effort-km, where effort-km = distance + "
-                            "elevation gain/100) segment by segment. ER compares the average pace "
-                            "of the two halves, split at the point where the course reaches 50% "
-                            "of its total effort — not the halfway point by raw distance."
-                        )
-                        m1, pe1, pe2 = st.columns(3)
-                        m1.metric(
-                            "ER (whole race)",
-                            f"{indices['ER']}" if indices["ER"] is not None else "N/A",
-                            help="Endurance Rating: 100 = stable pace, lower values indicate fatigue-driven degradation.",
-                        )
-                        pe1.metric(
-                            "First Half Pace",
-                            f"{indices['effort_pace_first_half']} min/effort-km"
-                            if indices.get("effort_pace_first_half") is not None else "N/A",
-                        )
-                        pe2.metric(
-                            "Second Half Pace",
-                            f"{indices['effort_pace_second_half']} min/effort-km"
-                            if indices.get("effort_pace_second_half") is not None else "N/A",
-                        )
-
-                        fig_er = go.Figure()
-                        add_elevation_background(fig_er, current_race_data["df"])
-                        fig_er.add_trace(go.Scatter(
-                            x=df_crossed["End Km"],
-                            y=df_crossed["Effort Pace (min/effort-km)"],
-                            mode="lines+markers",
-                            name="Effort Pace",
-                            line=dict(color="#c084fc", width=3),
-                            hovertemplate="Km %{x:.0f}<br>%{y:.2f} min/effort-km<extra></extra>",
-                        ))
-                        if indices.get("half_effort_km") is not None:
-                            reaches_half_effort = df_crossed["Effort Km Accumulated"] >= indices["half_effort_km"]
-                            if reaches_half_effort.any():
-                                effort_midpoint_km_display = df_crossed.loc[reaches_half_effort, "End Km"].iloc[0]
-                            else:
-                                effort_midpoint_km_display = current_race_data["total_km"] / 2
-                            fig_er.add_vline(
-                                x=effort_midpoint_km_display,
-                                line_dash="dash",
-                                line_color="#a78bfa",
-                                annotation_text="50% effort",
-                                annotation_position="top",
-                            )
-                        fig_er.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="Effort Pace (min/effort-km)",
-                            height=380,
-                            hovermode="x unified",
-                        )
-                        st.plotly_chart(fig_er, use_container_width=True)
-                        chart_download_button(fig_er, "er_pacing_curve.html", "dl_er")
-
-                        # --- Degradation matrix by segment (combined VPI+DMI, normalized) ---
-                        st.markdown("---")
-                        st.markdown("### 📉 Degradation Curve by Segment")
-                        st.caption(
-                            "VPI, DMI and ER calculated independently for each segment (not "
-                            "cumulative), normalized against this runner's Segment 1 (Segment 1 = 100)."
-                        )
-
-                        # Bring in the per-segment Effort Pace (from the ER chart's data) so
-                        # ER can be shown in this same table/chart, on the same 0-100 scale.
-                        df_segment_degradation = df_segment_degradation.merge(
-                            df_crossed[["Start Km", "End Km", "Effort Pace (min/effort-km)"]],
-                            on=["Start Km", "End Km"],
-                            how="left",
-                        )
-                        # ER Index is inverted vs VPI/DMI: a LOWER pace is better, so we flip the
-                        # ratio (baseline/segment instead of segment/baseline) to keep the same
-                        # "higher = better, dropping = fatigue" reading across all three lines.
-                        valid_pace = df_segment_degradation["Effort Pace (min/effort-km)"].dropna()
-                        if not valid_pace.empty and valid_pace.iloc[0]:
-                            pace_baseline = valid_pace.iloc[0]
-                            df_segment_degradation["ER Index (0-100)"] = (
-                                (pace_baseline / df_segment_degradation["Effort Pace (min/effort-km)"]) * 100
-                            ).round(1)
-                        else:
-                            df_segment_degradation["ER Index (0-100)"] = None
-
-                        st.dataframe(df_segment_degradation, use_container_width=True)
-                        st.caption(
-                            "VPI/DMI are estimated by allocating the runner's segment time "
-                            "proportionally to effort-km (distance + gain/100) on the steep "
-                            "sub-portions of that segment. Segments with little or no steep "
-                            "terrain show N/A instead of a low-confidence number. ER Index is "
-                            "the inverse of effort pace, so it reads on the same scale as VPI/DMI."
-                        )
-
-                        fig_degradation = go.Figure()
-                        add_elevation_background(fig_degradation, current_race_data["df"])
-                        fig_degradation.add_trace(go.Scatter(
-                            x=df_segment_degradation["End Km"],
-                            y=df_segment_degradation["VPI Index (0-100)"],
-                            mode="lines+markers",
-                            name="VPI (Climbing)",
-                            line=dict(color="#22d3ee", width=3),
-                            text=df_segment_degradation["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI Index: %{y:.1f}<extra></extra>",
-                        ))
-                        fig_degradation.add_trace(go.Scatter(
-                            x=df_segment_degradation["End Km"],
-                            y=df_segment_degradation["DMI Index (0-100)"],
-                            mode="lines+markers",
-                            name="DMI (Descent)",
-                            line=dict(color="#ffa500", width=3),
-                            text=df_segment_degradation["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI Index: %{y:.1f}<extra></extra>",
-                        ))
-                        fig_degradation.add_trace(go.Scatter(
-                            x=df_segment_degradation["End Km"],
-                            y=df_segment_degradation["ER Index (0-100)"],
-                            mode="lines+markers",
-                            name="ER (Endurance)",
-                            line=dict(color="#c084fc", width=3),
-                            text=df_segment_degradation["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>ER Index: %{y:.1f}<extra></extra>",
-                        ))
-                        fig_degradation.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="Index (0-100, Segment 1 = 100)",
-                            height=420,
-                            hovermode="x unified",
-                        )
-                        st.plotly_chart(fig_degradation, use_container_width=True)
-                        chart_download_button(fig_degradation, "degradation_curve.html", "dl_degradation")
-
-                        # --- Full summary table: everything condensed into one row per checkpoint ---
-                        st.markdown("---")
-                        st.markdown("### 📋 Full Summary Table")
-                        st.caption(
-                            "One row per checkpoint, combining the official segment geometry, "
-                            "this runner's raw split data, and the calculated VPI/DMI for that "
-                            "segment — ready to paste into Excel alongside other runners."
-                        )
-
-                        df_summary = build_summary_table(race_segments_df, df_segment_degradation, df_runner)
-
-                        st.dataframe(df_summary, use_container_width=True, hide_index=True)
-
-                        # --- Full analysis report (everything above, in one HTML file) ---
-                        st.markdown("---")
-                        st.markdown("### 📄 Full Analysis Report")
-                        st.caption(
-                            "Everything shown on this tab — runner card, checkpoints, the 4 "
-                            "charts, and both tables — bundled into a single HTML file. Paste "
-                            "it directly into Blogger's HTML view as one block."
-                        )
-                        full_report_html = build_full_runner_report_html(
-                            runner_info=runner_info,
-                            df_runner=df_runner,
-                            indices=indices,
-                            figures={
-                                "🧗 VPI - Vertical Power Index": fig_vpi,
-                                "📉 DMI - Descent Mastery Index": fig_dmi,
-                                "🏆 ER - Endurance Rating - Pacing Curve": fig_er,
-                                "📉 Degradation Curve by Segment": fig_degradation,
-                            },
-                            df_segment_degradation=df_segment_degradation,
-                            df_summary=df_summary,
-                        )
-                        st.download_button(
-                            "📄 Download Full Analysis (HTML for Blogger)",
-                            data=full_report_html,
-                            file_name=f"{(runner_info.get('Name') or 'runner').replace(' ', '_')}_full_analysis.html",
-                            mime="text/html",
-                            type="primary",
-                            use_container_width=True,
-                        )
-
-# ---------------------------------------------
-# TAB 2b: Runner Metrics via LiveTrail (mirrors "Runner Metrics (UTMB)"
-# but sources runner data from api.v3.livetrail.net instead of
-# utmblive-api.utmb.world. Kept fully independent - own session_state
-# keys and widget keys - so both tabs can coexist without interfering
-# with each other or with the "UTMB vs GPX" tab, which still reads only
-# the UTMB tab's estimate.)
+# TAB 2: Runner Metrics via LiveTrail (api.v3.livetrail.net). The
+# equivalent UTMB Live-based tab was removed - this is now the single
+# path for official runner splits, and the "UTMB vs GPX" tab reads its
+# estimate (the "_lt" session_state keys) directly.
 # ---------------------------------------------
 with tab_runner_lt:
     st.header("🏃 Runner Metrics (LiveTrail)")
     st.caption(
-        "Same as 'Runner Metrics (UTMB)', but pulls splits and rank directly from "
-        "Livetrail (api.v3.livetrail.net) instead of the UTMB Live API - works for any "
-        "race timed by Livetrail, not just UTMB-branded events."
+        "Pulls splits and rank directly from Livetrail (api.v3.livetrail.net) - "
+        "works for any race timed by Livetrail."
     )
 
     available_races_lt = st.session_state.get('saved_races', {})
@@ -2538,16 +2184,16 @@ with tab_gpx:
 # 'Runner Metrics' and 'GPX Metrics' - no new upload needed here)
 # ---------------------------------------------
 with tab_comparison:
-    st.header("⚖️ UTMB Estimate vs GPX Measurement")
+    st.header("⚖️ LiveTrail Estimate vs GPX Measurement")
     st.caption(
-        "Compares the checkpoint-based estimate (from 'Runner Metrics') against the "
-        "GPX-measured values (from 'GPX Metrics') for the same runner and race. Load "
-        "both tabs first for the same race."
+        "Compares the checkpoint-based estimate (from 'Runner Metrics (LiveTrail)') "
+        "against the GPX-measured values (from 'GPX Metrics') for the same runner and "
+        "race. Load both tabs first for the same race."
     )
 
-    estimated_df = st.session_state.get('estimated_degradation_df')
-    estimated_race = st.session_state.get('estimated_degradation_race')
-    estimated_global = st.session_state.get('estimated_global_indices')
+    estimated_df = st.session_state.get('estimated_degradation_df_lt')
+    estimated_race = st.session_state.get('estimated_degradation_race_lt')
+    estimated_global = st.session_state.get('estimated_global_indices_lt')
 
     real_df = st.session_state.get('real_degradation_df')
     real_race = st.session_state.get('real_metrics_race')
@@ -2556,7 +2202,7 @@ with tab_comparison:
     if estimated_df is None or real_df is None:
         missing = []
         if estimated_df is None:
-            missing.append("**'Runner Metrics'** (checkpoint-based estimate)")
+            missing.append("**'Runner Metrics (LiveTrail)'** (checkpoint-based estimate)")
         if real_df is None:
             missing.append("**'GPX Metrics'** (personal GPX measurement)")
         st.info(
@@ -3032,7 +2678,7 @@ with tab_checkpoints:
 with tab_web_export:
     st.header("🌐 Exportar a Web")
     st.caption(
-        "Convierte los resultados ya calculados en las pestañas 'Runner Metrics' "
+        "Convierte los resultados ya calculados en la pestaña 'Runner Metrics (LiveTrail)' "
         "en `race.json` + `profile.json`, en el formato que espera el Builder "
         "(`vertlabs.run`). No recalcula nada: solo serializa lo que ya está en pantalla."
     )
@@ -3042,8 +2688,8 @@ with tab_web_export:
     if not export_pool:
         st.info(
             "⚠️ Todavía no calculaste ningún índice esta sesión. Andá a "
-            "**'🏃 Runner Metrics (UTMB)'** o **'🏃 Runner Metrics (LiveTrail)'**, "
-            "cargá al menos un corredor, y va a aparecer acá automáticamente."
+            "**'🏃 Runner Metrics (LiveTrail)'**, cargá al menos un corredor, "
+            "y va a aparecer acá automáticamente."
         )
     else:
         pool_key = st.selectbox(
@@ -3115,6 +2761,31 @@ with tab_web_export:
                 ),
             )
 
+            st.markdown("---")
+            st.markdown("##### Fotos y gráficos por corredor (opcional)")
+            st.caption(
+                "Los gráficos HTML son los mismos que bajás con los botones "
+                "'📥 Download chart as HTML' al final de 'Runner Metrics (LiveTrail)' "
+                "(VPI, DMI, ER, Degradation) - subí los que quieras, se muestran "
+                "interactivos al lado del corredor en la página de la carrera."
+            )
+            runner_uploads = {}
+            for runner_key, r in runners_pool.items():
+                athlete_slug = _slugify(r["name"])
+                with st.expander(f"{r['name']} (Bib {r.get('bib') or '-'})"):
+                    existing_portrait = _find_existing_portrait(athlete_slug)
+                    if existing_portrait:
+                        st.image(str(existing_portrait), caption="Foto actual", width=120)
+                    portrait_upload = st.file_uploader(
+                        "Foto (reemplaza la actual si subís una nueva)",
+                        type=["jpg", "jpeg", "png"], key=f"portrait_{runner_key}",
+                    )
+                    charts_upload = st.file_uploader(
+                        "Gráficos HTML de este corredor (podés subir varios)",
+                        type=["html"], accept_multiple_files=True, key=f"charts_{runner_key}",
+                    )
+                    runner_uploads[runner_key] = {"portrait": portrait_upload, "charts": charts_upload}
+
             export_submit = st.form_submit_button(
                 "📤 Exportar carrera + corredores a data/", type="primary", use_container_width=True
             )
@@ -3135,9 +2806,30 @@ with tab_web_export:
                         (dest_dir / f"{base_name}{ext}").write_bytes(upload.getvalue())
                         return ext
 
+                    race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
+                    race_dir.mkdir(parents=True, exist_ok=True)
+
+                    hero_ext = _save_upload(hero_upload, race_dir / "images", "hero")
+                    elevation_ext = _save_upload(elevation_upload, race_dir / "charts", "elevation_profile")
+
+                    portrait_uploads_by_slug = {}
                     athletes_payload = []
-                    for r in runners_pool.values():
+                    for runner_key, r in runners_pool.items():
                         athlete_slug = _slugify(r["name"])
+                        uploads = runner_uploads.get(runner_key, {})
+                        portrait_uploads_by_slug[athlete_slug] = uploads.get("portrait")
+
+                        charts_payload = []
+                        for chart_file in uploads.get("charts") or []:
+                            charts_dir = race_dir / "charts" / "runners" / athlete_slug
+                            charts_dir.mkdir(parents=True, exist_ok=True)
+                            safe_name = _slugify(Path(chart_file.name).stem) + ".html"
+                            (charts_dir / safe_name).write_bytes(chart_file.getvalue())
+                            charts_payload.append({
+                                "label": _chart_label(chart_file.name),
+                                "file": f"/media/races/{race_slug}/charts/runners/{athlete_slug}/{safe_name}",
+                            })
+
                         athletes_payload.append({
                             "slug": athlete_slug,
                             "name": r["name"],
@@ -3147,13 +2839,8 @@ with tab_web_export:
                             "vpi": r.get("vpi"),
                             "dmi": r.get("dmi"),
                             "er": r.get("er"),
+                            "charts": charts_payload,
                         })
-
-                    race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
-                    race_dir.mkdir(parents=True, exist_ok=True)
-
-                    hero_ext = _save_upload(hero_upload, race_dir / "images", "hero")
-                    elevation_ext = _save_upload(elevation_upload, race_dir / "charts", "elevation_profile")
 
                     race_json = {
                         "slug": race_slug,
@@ -3176,6 +2863,9 @@ with tab_web_export:
                         written_paths.append(str((race_dir / "images" / f"hero{hero_ext}").relative_to(WEB_DATA_DIR.parent)))
                     if elevation_ext:
                         written_paths.append(str((race_dir / "charts" / f"elevation_profile{elevation_ext}").relative_to(WEB_DATA_DIR.parent)))
+                    n_charts_uploaded = sum(len(a["charts"]) for a in athletes_payload)
+                    if n_charts_uploaded:
+                        written_paths.append(f"({n_charts_uploaded} gráfico(s) de corredor)")
 
                     # --- One profile.json per athlete, merged with whatever
                     # already exists on disk so career history accumulates
@@ -3195,6 +2885,15 @@ with tab_web_export:
                                 "portrait": f"/media/athletes/{athlete['slug']}/images/portrait.jpg",
                                 "races": [],
                             }
+
+                        portrait_ext = _save_upload(
+                            portrait_uploads_by_slug.get(athlete["slug"]), athlete_dir / "images", "portrait"
+                        )
+                        if portrait_ext:
+                            profile["portrait"] = f"/media/athletes/{athlete['slug']}/images/portrait{portrait_ext}"
+                            written_paths.append(
+                                str((athlete_dir / "images" / f"portrait{portrait_ext}").relative_to(WEB_DATA_DIR.parent))
+                            )
 
                         profile["races"] = [
                             race_entry for race_entry in profile.get("races", [])
@@ -3233,11 +2932,19 @@ with tab_web_export:
                         missing.append("hero (images/hero.jpg)")
                     if not elevation_ext:
                         missing.append("elevation_profile (charts/elevation_profile.png)")
-                    missing.append("portrait de cada atleta (data/athletes/<slug>/images/portrait.jpg)")
-                    st.caption(
-                        f"Falta subir a mano: {', '.join(missing)}. "
-                        "Después corré `python publish.py` para regenerar el sitio."
-                    )
+                    athletes_without_portrait = [
+                        a["name"] for a in athletes_payload
+                        if not portrait_uploads_by_slug.get(a["slug"]) and not _find_existing_portrait(a["slug"])
+                    ]
+                    if athletes_without_portrait:
+                        missing.append(f"portrait de: {', '.join(athletes_without_portrait)}")
+                    if missing:
+                        st.caption(
+                            f"Falta subir a mano: {'; '.join(missing)}. "
+                            "Después corré `python publish.py` para regenerar el sitio."
+                        )
+                    else:
+                        st.caption("Todas las imágenes están listas. Corré `python publish.py` para regenerar el sitio.")
                 except Exception:
                     st.error("❌ No se pudo exportar.")
                     with st.expander("Ver detalle técnico del error"):

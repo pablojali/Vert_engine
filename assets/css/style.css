@@ -384,6 +384,42 @@ tbody tr:hover { background: var(--color-bg-raised); }
 .metric-accordion-body { padding: 0 1.25rem 1.25rem; }
 .metric-accordion-body p { margin: 0 0 0.75rem; }
 
+.runner-charts-accordion {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin: 0.75rem 0;
+  background: var(--color-bg-raised);
+  overflow: hidden;
+}
+.runner-charts-accordion summary {
+  cursor: pointer;
+  padding: 0.85rem 1.25rem;
+  font-weight: 700;
+  list-style: none;
+}
+.runner-charts-accordion summary::-webkit-details-marker { display: none; }
+.runner-charts-accordion summary::after {
+  content: "+";
+  float: right;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+.runner-charts-accordion[open] summary::after { content: "−"; }
+.runner-charts-grid {
+  padding: 0 1.25rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+}
+.runner-chart-label {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin: 0 0 0.4rem;
+}
+.runner-chart .elevation-profile-interactive { height: 320px; margin-bottom: 0; }
+
 /* --- Search --- */
 .search-page input[type="search"] {
   width: 100%;
