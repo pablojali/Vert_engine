@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ locale }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Vertical Trail Labs — Inteligencia de rendimiento en trail running{% endblock %}</title>
-  <meta name="description" content="{% block description %}Vertical Trail Labs analiza el rendimiento en trail running con tres métricas propias: VPI (escalada), DMI (descenso) y ER (resistencia).{% endblock %}">
-  <link rel="canonical" href="{% block canonical %}https://vertlabs.run/{% endblock %}">
+  <title>{% block title %}Vertical Trail Labs — {{ t.site_tagline }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ t.site_hero_sub }}{% endblock %}">
+  <link rel="canonical" href="{% block canonical %}https://vertlabs.run{{ locale_url(locale, page_path) }}{% endblock %}">
+  {% for loc in locales %}
+  <link rel="alternate" hreflang="{{ loc.code }}" href="https://vertlabs.run{{ locale_url(loc.code, page_path) }}">
+  {% endfor %}
 
   <meta property="og:site_name" content="Vertical Trail Labs">
   <meta property="og:title" content="{% block og_title %}Vertical Trail Labs{% endblock %}">
-  <meta property="og:description" content="{% block og_description %}Análisis de rendimiento en trail running: VPI, DMI y ER.{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ t.site_hero_sub }}{% endblock %}">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{% block og_url %}https://vertlabs.run/{% endblock %}">
+  <meta property="og:url" content="https://vertlabs.run{{ locale_url(locale, page_path) }}">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
@@ -19,14 +22,21 @@
 </head>
 <body>
   <header class="site-header">
-    <a href="/" class="logo">Vertical<span>Trail</span>Labs</a>
-    <nav>
-      <a href="/races/">Carreras</a>
-      <a href="/athletes/">Atletas</a>
-      <a href="/rankings/">Rankings</a>
-      <a href="/about/">El Engine</a>
-      <a href="/search/" class="search-link" aria-label="Buscar">Buscar</a>
+    <a href="{{ locale_url(locale, '') }}" class="logo">Vertical<span class="logo-trail">Trail</span>Labs</a>
+
+    <nav class="main-nav" aria-label="Main">
+      <a href="{{ locale_url(locale, 'races/') }}">{{ t.nav_races }}</a>
+      <a href="{{ locale_url(locale, 'athletes/') }}">{{ t.nav_athletes }}</a>
+      <a href="{{ locale_url(locale, 'rankings/') }}">{{ t.nav_rankings }}</a>
+      <a href="{{ locale_url(locale, 'about/') }}">{{ t.nav_about }}</a>
+      <a href="{{ locale_url(locale, 'search/') }}" class="search-link" aria-label="{{ t.nav_search }}">{{ t.nav_search }}</a>
     </nav>
+
+    <div class="lang-switcher" aria-label="Language">
+      {% for loc in locales %}
+      <a href="{{ locale_url(loc.code, page_path) }}" class="{{ 'active' if loc.code == locale else '' }}">{{ loc.label }}</a>{% if not loop.last %}<span class="lang-sep">·</span>{% endif %}
+      {% endfor %}
+    </div>
   </header>
 
   <main>
@@ -35,7 +45,7 @@
 
   <footer class="site-footer">
     <p>&copy; {{ current_year }} Vertical Trail Labs — VPI · DMI · ER</p>
-    <p class="site-footer-sub">Motor de análisis de rendimiento en trail running.</p>
+    <p class="site-footer-sub">{{ t.footer_tagline }}</p>
   </footer>
 
   <script src="/assets/js/search.js" defer></script>

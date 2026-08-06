@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}{{ athlete.name }} — Vertical Trail Labs{% endblock %}
-{% block description %}Perfil de rendimiento de {{ athlete.name }}: VPI, DMI y ER a través de sus carreras.{% endblock %}
-{% block canonical %}https://vertlabs.run/athletes/{{ athlete.slug }}/{% endblock %}
+{% block description %}{{ athlete.name }} — VPI, DMI, ER.{% endblock %}
 {% block og_title %}{{ athlete.name }} — Vertical Trail Labs{% endblock %}
-{% block og_url %}https://vertlabs.run/athletes/{{ athlete.slug }}/{% endblock %}
 
 {% block content %}
 <article class="athlete-page">
-  <p class="breadcrumb"><a href="/athletes/">Atletas</a> / {{ athlete.name }}</p>
+  <p class="breadcrumb"><a href="{{ locale_url(locale, 'athletes/') }}">{{ t.breadcrumb_athletes }}</a> / {{ athlete.name }}</p>
 
   <div class="athlete-header">
     {% if athlete.portrait %}
@@ -20,37 +18,37 @@
     </div>
   </div>
 
-  <h2>Promedios de carrera</h2>
+  <h2>{{ t.athlete_career_avg }}</h2>
   <ul class="stats-list">
-    <li><span class="stat-label">VPI</span><span class="stat-value">{{ athlete.career_avg.vpi if athlete.career_avg.vpi is not none else '—' }}</span></li>
-    <li><span class="stat-label">DMI</span><span class="stat-value">{{ athlete.career_avg.dmi if athlete.career_avg.dmi is not none else '—' }}</span></li>
-    <li><span class="stat-label">ER</span><span class="stat-value">{{ athlete.career_avg.er if athlete.career_avg.er is not none else '—' }}</span></li>
+    <li><span class="stat-label metric-vpi">VPI</span><span class="stat-value metric-vpi">{{ athlete.career_avg.vpi if athlete.career_avg.vpi is not none else '—' }}</span></li>
+    <li><span class="stat-label metric-dmi">DMI</span><span class="stat-value metric-dmi">{{ athlete.career_avg.dmi if athlete.career_avg.dmi is not none else '—' }}</span></li>
+    <li><span class="stat-label metric-er">ER</span><span class="stat-value metric-er">{{ athlete.career_avg.er if athlete.career_avg.er is not none else '—' }}</span></li>
   </ul>
 
-  <h2>Historial de carreras</h2>
+  <h2>{{ t.athlete_race_history }}</h2>
   <div class="table-scroll">
     <table class="race-table">
       <thead>
         <tr>
-          <th>Carrera</th>
-          <th>Año</th>
-          <th>Pos</th>
-          <th>Tiempo</th>
-          <th>VPI</th>
-          <th>DMI</th>
-          <th>ER</th>
+          <th>{{ t.athlete_race_col }}</th>
+          <th>{{ t.athlete_year }}</th>
+          <th>{{ t.race_pos }}</th>
+          <th>{{ t.race_time }}</th>
+          <th class="metric-vpi">VPI</th>
+          <th class="metric-dmi">DMI</th>
+          <th class="metric-er">ER</th>
         </tr>
       </thead>
       <tbody>
         {% for r in athlete.races|sort(attribute='year', reverse=True) %}
         <tr>
-          <td><a href="/races/{{ r.race_slug }}/">{{ r.race_name }}</a></td>
+          <td><a href="{{ r.url }}">{{ r.race_name }}</a></td>
           <td>{{ r.year }}</td>
           <td>{{ r.position }}</td>
           <td>{{ r.finish_time }}</td>
-          <td>{{ r.vpi if r.vpi is not none else '—' }}</td>
-          <td>{{ r.dmi if r.dmi is not none else '—' }}</td>
-          <td>{{ r.er if r.er is not none else '—' }}</td>
+          <td class="metric-vpi">{{ r.vpi if r.vpi is not none else '—' }}</td>
+          <td class="metric-dmi">{{ r.dmi if r.dmi is not none else '—' }}</td>
+          <td class="metric-er">{{ r.er if r.er is not none else '—' }}</td>
         </tr>
         {% endfor %}
       </tbody>

@@ -7,8 +7,8 @@
   "elevation_gain_m": 5900,
   "date": "2026-06-27",
   "location": "Cortina d'Ampezzo, Italia",
-  "hero_image": "/races/lavaredo-2026/images/hero.svg",
-  "elevation_profile_image": "/races/lavaredo-2026/charts/elevation_profile.svg",
+  "hero_image": "/media/races/lavaredo-2026/images/hero.svg",
+  "elevation_profile_image": "/media/races/lavaredo-2026/charts/elevation_profile.svg",
   "athletes": [
     {
       "slug": "tomas-reiner",

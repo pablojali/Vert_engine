@@ -1,36 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}Rankings — Vertical Trail Labs{% endblock %}
-{% block canonical %}https://vertlabs.run/rankings/{% endblock %}
-{% block description %}Ranking de atletas por VPI, DMI y ER (promedio de carrera).{% endblock %}
+{% block title %}{{ t.rankings_title }} — Vertical Trail Labs{% endblock %}
+{% block description %}{{ t.rankings_subtitle }}{% endblock %}
 
 {% block content %}
 <section class="homepage-section">
-  <h1>Rankings</h1>
-  <p class="hero-sub">Promedio de carrera por atleta. Solo se incluyen atletas con al menos una métrica calculada.</p>
+  <h1>{{ t.rankings_title }}</h1>
+  <p class="hero-sub">{{ t.rankings_subtitle }}</p>
 
   <div class="rankings-grid">
     <div>
-      <h2 title="Vertical Power Index">Top VPI</h2>
-      <ol class="ranking-list">
+      <h2 class="metric-vpi" title="Vertical Power Index">{{ t.rankings_top_vpi }}</h2>
+      <ol class="ranking-list ranking-vpi">
         {% for a in top_vpi %}
-        <li><a href="/athletes/{{ a.slug }}/">{{ a.name }}</a><span>{{ a.career_avg.vpi }}</span></li>
+        <li><a href="{{ a.url }}">{{ a.name }}</a><span>{{ a.career_avg.vpi }}</span></li>
         {% endfor %}
       </ol>
     </div>
     <div>
-      <h2 title="Descent Mastery Index">Top DMI</h2>
-      <ol class="ranking-list">
+      <h2 class="metric-dmi" title="Descent Mastery Index">{{ t.rankings_top_dmi }}</h2>
+      <ol class="ranking-list ranking-dmi">
         {% for a in top_dmi %}
-        <li><a href="/athletes/{{ a.slug }}/">{{ a.name }}</a><span>{{ a.career_avg.dmi }}</span></li>
+        <li><a href="{{ a.url }}">{{ a.name }}</a><span>{{ a.career_avg.dmi }}</span></li>
         {% endfor %}
       </ol>
     </div>
     <div>
-      <h2 title="Endurance Rating">Top ER</h2>
-      <ol class="ranking-list">
+      <h2 class="metric-er" title="Endurance Rating">{{ t.rankings_top_er }}</h2>
+      <ol class="ranking-list ranking-er">
         {% for a in top_er %}
-        <li><a href="/athletes/{{ a.slug }}/">{{ a.name }}</a><span>{{ a.career_avg.er }}</span></li>
+        <li><a href="{{ a.url }}">{{ a.name }}</a><span>{{ a.career_avg.er }}</span></li>
         {% endfor %}
       </ol>
     </div>

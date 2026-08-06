@@ -1,13 +1,13 @@
 """
 Reads data/races/**/race.json (nested under <circuito>/<año>/<distancia>/)
-and generates one static page per race, plus the /races/ index.
+and generates one static page per race, plus the /races/ index, for a
+given locale.
 
 Never imports from engine/: race.json is already the final, calculated
 result. This module only reads it and renders HTML.
 """
 import json
-from pathlib import Path
-from builder.env import env, write_page, DATA_DIR
+from builder.env import env, write_page, out_path, locale_url, DATA_DIR
 
 RACES_DIR = DATA_DIR / "races"
 
@@ -21,24 +21,31 @@ def load_races() -> list[dict]:
     return races
 
 
-def generate() -> list[dict]:
-    """Generates every race page and the /races/ index. Returns the race
-    list (without the internal _source_dir key) so other generators
-    (homepage, search, sitemap, publish's asset copy) can reuse it
-    without re-reading the JSON."""
+def generate(loc: dict, t: dict) -> list[dict]:
+    """Generates every race page and the /races/ index for one locale.
+    Returns the race list (still carrying _source_dir) so other
+    generators (homepage, search, sitemap, publish's asset copy) can
+    reuse it without re-reading the JSON."""
     template = env.get_template("race.html")
     index_template = env.get_template("races_index.html")
     races = load_races()
 
     for race in races:
-        html = template.render(race=race)
-        write_page(f"races/{race['slug']}/index.html", html)
+        race["url"] = locale_url(loc["code"], f"races/{race['slug']}/")
+        for a in race.get("athletes", []):
+            a["url"] = locale_url(loc["code"], f"athletes/{a['slug']}/")
+        html = template.render(race=race, t=t, locale=loc["code"], page_path=f"races/{race['slug']}/")
+        write_page(out_path(loc["prefix"], f"races/{race['slug']}/index.html"), html)
 
     ordered = sorted(races, key=lambda r: (r.get("year", 0), r.get("date", "")), reverse=True)
-    write_page("races/index.html", index_template.render(races=ordered))
+    write_page(
+        out_path(loc["prefix"], "races/index.html"),
+        index_template.render(races=ordered, t=t, locale=loc["code"], page_path="races/"),
+    )
 
     return races
 
 
 if __name__ == "__main__":
-    generate()
+    from builder.i18n import LOCALES, TRANSLATIONS
+    generate(LOCALES[0], TRANSLATIONS["en"])

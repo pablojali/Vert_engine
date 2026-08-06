@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300">
   <rect width="1200" height="300" fill="#0d1117"/>
   <polyline points="20,207 70,240 121,192 171,154 222,174 272,166 323,164 373,139 423,98 474,136 524,181 575,135 625,134 676,97 726,145 777,143 827,110 877,133 928,74 978,20 1029,65 1079,111 1130,98 1180,40 1180,280 20,280" fill="#161b22" stroke="none"/>
-  <polyline points="20,207 70,240 121,192 171,154 222,174 272,166 323,164 373,139 423,98 474,136 524,181 575,135 625,134 676,97 726,145 777,143 827,110 877,133 928,74 978,20 1029,65 1079,111 1130,98 1180,40" fill="none" stroke="#00bfff" stroke-width="3" stroke-linejoin="round"/>
-  <text x="20" y="28" font-family="-apple-system,Segoe UI,sans-serif" font-size="18" fill="#8b949e">Perfil de elevación · Val d'Aran by UTMB</text>
+  <polyline points="20,207 70,240 121,192 171,154 222,174 272,166 323,164 373,139 423,98 474,136 524,181 575,135 625,134 676,97 726,145 777,143 827,110 877,133 928,74 978,20 1029,65 1079,111 1130,98 1180,40" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linejoin="round"/>
 </svg>

@@ -5,9 +5,10 @@
 (async function () {
   const input = document.getElementById("search-input");
   const results = document.getElementById("search-results");
-  if (!input || !results) return; // only runs on /search/
+  const page = document.querySelector(".search-page");
+  if (!input || !results || !page) return; // only runs on /search/
 
-  const res = await fetch("/search.json");
+  const res = await fetch(page.dataset.searchUrl);
   const index = await res.json();
 
   input.addEventListener("input", () => {

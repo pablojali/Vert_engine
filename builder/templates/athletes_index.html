@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Atletas — Vertical Trail Labs{% endblock %}
-{% block canonical %}https://vertlabs.run/athletes/{% endblock %}
+{% block title %}{{ t.athletes_title }} — Vertical Trail Labs{% endblock %}
 
 {% block content %}
 <section class="homepage-section">
-  <h1>Atletas</h1>
+  <h1>{{ t.athletes_title }}</h1>
   <ul class="athlete-grid">
     {% for a in athletes %}
     <li class="athlete-card">
-      <a href="/athletes/{{ a.slug }}/">
+      <a href="{{ a.url }}">
         {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% endif %}
         <span class="athlete-card-name">{{ a.name }}</span>
         {% if a.country %}<span class="athlete-card-meta">{{ a.country }}</span>{% endif %}

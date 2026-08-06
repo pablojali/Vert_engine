@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}{{ race.name }} {{ race.year }} — Vertical Trail Labs{% endblock %}
-{% block description %}Análisis de rendimiento de {{ race.name }} {{ race.year }}: VPI, DMI y ER por corredor.{% endblock %}
-{% block canonical %}https://vertlabs.run/races/{{ race.slug }}/{% endblock %}
+{% block description %}{{ t.race_performance_title }}: {{ race.name }} {{ race.year }} — VPI, DMI, ER.{% endblock %}
 {% block og_title %}{{ race.name }} {{ race.year }} — Vertical Trail Labs{% endblock %}
-{% block og_url %}https://vertlabs.run/races/{{ race.slug }}/{% endblock %}
 
 {% block content %}
 <article class="race-page">
-  <p class="breadcrumb"><a href="/races/">Carreras</a> / {{ race.name }} {{ race.year }}</p>
+  <p class="breadcrumb"><a href="{{ locale_url(locale, 'races/') }}">{{ t.breadcrumb_races }}</a> / {{ race.name }} {{ race.year }}</p>
 
   {% if race.hero_image %}
   <img src="{{ race.hero_image }}" alt="{{ race.name }}" class="race-hero" loading="lazy">
@@ -21,31 +19,31 @@
   </p>
 
   {% if race.elevation_profile_image %}
-  <img src="{{ race.elevation_profile_image }}" alt="Perfil de elevación de {{ race.name }}" class="elevation-profile" loading="lazy">
+  <img src="{{ race.elevation_profile_image }}" alt="{{ race.name }}" class="elevation-profile" loading="lazy">
   {% endif %}
 
-  <h2>Rendimiento por corredor</h2>
+  <h2>{{ t.race_performance_title }}</h2>
   <div class="table-scroll">
     <table class="athlete-table">
       <thead>
         <tr>
-          <th>Pos</th>
-          <th>Corredor</th>
-          <th>Tiempo</th>
-          <th title="Vertical Power Index — m/h en tramos de fuerte pendiente">VPI</th>
-          <th title="Descent Mastery Index — km/h en tramos de fuerte descenso">DMI</th>
-          <th title="Endurance Rating — score 0-100 de estabilidad de ritmo">ER</th>
+          <th>{{ t.race_pos }}</th>
+          <th>{{ t.race_athlete }}</th>
+          <th>{{ t.race_time }}</th>
+          <th class="metric-vpi" title="Vertical Power Index">VPI</th>
+          <th class="metric-dmi" title="Descent Mastery Index">DMI</th>
+          <th class="metric-er" title="Endurance Rating">ER</th>
         </tr>
       </thead>
       <tbody>
         {% for a in race.athletes|sort(attribute='position') %}
         <tr>
           <td>{{ a.position }}</td>
-          <td><a href="/athletes/{{ a.slug }}/">{{ a.name }}</a></td>
+          <td><a href="{{ a.url }}">{{ a.name }}</a></td>
           <td>{{ a.finish_time }}</td>
-          <td>{{ a.vpi if a.vpi is not none else '—' }}</td>
-          <td>{{ a.dmi if a.dmi is not none else '—' }}</td>
-          <td>{{ a.er if a.er is not none else '—' }}</td>
+          <td class="metric-vpi">{{ a.vpi if a.vpi is not none else '—' }}</td>
+          <td class="metric-dmi">{{ a.dmi if a.dmi is not none else '—' }}</td>
+          <td class="metric-er">{{ a.er if a.er is not none else '—' }}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -53,8 +51,8 @@
   </div>
 
   <p class="metric-note">
-    VPI en m/h · DMI en km/h · ER es un score 0-100.
-    <a href="/about/">¿Cómo se calculan?</a>
+    {{ t.race_metric_note }}
+    <a href="{{ locale_url(locale, 'about/') }}">{{ t.race_how_calculated }}</a>
   </p>
 </article>
 {% endblock %}

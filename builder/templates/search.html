@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Buscar — Vertical Trail Labs{% endblock %}
-{% block canonical %}https://vertlabs.run/search/{% endblock %}
+{% block title %}{{ t.search_title }} — Vertical Trail Labs{% endblock %}
 
 {% block content %}
-<section class="search-page">
-  <h1>Buscar</h1>
-  <input type="search" id="search-input" placeholder="Carrera o atleta..." autofocus>
+<section class="search-page" data-search-url="{{ locale_url(locale, 'search.json') }}">
+  <h1>{{ t.search_title }}</h1>
+  <input type="search" id="search-input" placeholder="{{ t.search_placeholder }}" autofocus>
   <ul id="search-results" class="search-results"></ul>
 </section>
 {% endblock %}
