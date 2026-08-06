@@ -11,7 +11,7 @@
       <a href="{{ r.url }}">
         {% if r.hero_image %}<img src="{{ r.hero_image }}" alt="" loading="lazy">{% endif %}
         <span class="race-card-name">{{ r.name }}</span>
-        <span class="race-card-meta">{{ r.year }} · {{ r.distance_km }} km</span>
+        <span class="race-card-meta">{{ r.year }} · {{ r.distance_km|round(1) }} km</span>
       </a>
     </li>
     {% endfor %}

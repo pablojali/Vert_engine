@@ -21,7 +21,7 @@
         </div>
         <div class="carousel-stats">
           {% if r.distance_km %}
-          <div class="carousel-stat"><span class="carousel-stat-value">{{ r.distance_km }}<small>km</small></span><span class="carousel-stat-label">{{ t.race_distance_label }}</span></div>
+          <div class="carousel-stat"><span class="carousel-stat-value">{{ r.distance_km|round(1) }}<small>km</small></span><span class="carousel-stat-label">{{ t.race_distance_label }}</span></div>
           {% endif %}
           {% if r.elevation_gain_m %}
           <div class="carousel-stat"><span class="carousel-stat-value">{{ r.elevation_gain_m }}<small>m+</small></span><span class="carousel-stat-label">{{ t.race_elevation_label }}</span></div>
@@ -79,7 +79,7 @@
       <a href="{{ r.url }}">
         {% if r.hero_image %}<img src="{{ r.hero_image }}" alt="" loading="lazy">{% endif %}
         <span class="race-card-name">{{ r.name }}</span>
-        <span class="race-card-meta">{{ r.year }} · {{ r.distance_km }} km</span>
+        <span class="race-card-meta">{{ r.year }} · {{ r.distance_km|round(1) }} km</span>
       </a>
     </li>
     {% endfor %}
