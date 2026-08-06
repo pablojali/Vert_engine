@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
 {% block title %}{{ t.about_title }} — Vertical Trail Labs{% endblock %}
-{% block description %}{{ t.about_intro }}{% endblock %}
+{% block description %}{{ t.about_intro_p1 }}{% endblock %}
 
 {% block content %}
 <article class="about-page">
   <h1>{{ t.about_title }}</h1>
-  <p class="hero-sub">{{ t.about_intro }}</p>
+  <p class="about-eyebrow">Terrain Intelligence Engine™ v1.0.</p>
+  <p class="hero-sub">{{ t.about_intro_p1 }}</p>
+  <p class="hero-sub about-emphasis">{{ t.about_intro_p2 }}</p>
 
   <details class="metric-accordion metric-vpi" open>
     <summary>🧗 {{ t.about_vpi_title }}</summary>
@@ -31,8 +33,5 @@
       <p class="formula">{{ t.about_er_formula }}</p>
     </div>
   </details>
-
-  <h2>{{ t.about_flow_title }}</h2>
-  <p class="formula">{{ t.about_flow }}</p>
 </article>
 {% endblock %}

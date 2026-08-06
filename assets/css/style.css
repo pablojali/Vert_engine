@@ -4,16 +4,18 @@
   --color-text: #e6edf3;
   --color-accent: #ff6b35;
   --color-cyan: #22d3ee;
-  --color-green: #4ade80;
+  --color-green: #6b8e23;
   --color-orange: #ff8c42;
+  --color-violet: #a78bfa;
   --color-muted: #8b949e;
   --color-border: #21262d;
 
   /* Metric <-> color mapping, kept consistent with the Streamlit Engine's
-     own charts: VPI (climb) cyan, DMI (descent) orange, ER (endurance) green. */
+     own charts: VPI (climb) cyan, DMI (descent) orange, ER (endurance)
+     violet. Green is reserved for the logo wordmark only. */
   --color-vpi: var(--color-cyan);
   --color-dmi: var(--color-orange);
-  --color-er: var(--color-green);
+  --color-er: var(--color-violet);
 }
 
 * { box-sizing: border-box; }
@@ -189,6 +191,15 @@ tbody tr:hover { background: var(--color-bg-raised); }
 .ranking-er { border-top: 2px solid var(--color-er); padding-top: 0.5rem; }
 
 /* --- About / methodology --- */
+.about-eyebrow {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-size: 1.15rem;
+  margin: 0 0 1.25rem;
+}
+.about-emphasis { font-style: italic; }
+
 .about-page .formula {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   background: var(--color-bg-raised);

@@ -37,12 +37,15 @@ TRANSLATIONS = {
         "rankings_top_dmi": "Top DMI",
         "rankings_top_er": "Top ER",
         "about_title": "The Engine",
-        "about_intro": (
-            "Vertical Trail Labs is not a blog or a CMS. It's a data "
-            "intelligence engine whose final output is this static website: "
-            "the site never calculates anything, it only shows what the "
-            "Engine already computed from each race's official GPX and "
-            "checkpoint split times."
+        "about_intro_p1": (
+            "Every race tells a story hidden in its terrain. The Vertical "
+            "Trail Engine transforms official race profiles and checkpoint "
+            "data into objective performance intelligence, revealing how "
+            "athletes truly climb, descend, and endure."
+        ),
+        "about_intro_p2": (
+            "Our proprietary methodology goes beyond finishing times to "
+            "measure performance in the context of the terrain itself."
         ),
         "about_vpi_title": "VPI — Vertical Power Index",
         "about_vpi_desc": (
@@ -65,8 +68,6 @@ TRANSLATIONS = {
             "(distance + elevation/100) instead of raw distance."
         ),
         "about_er_formula": "ER = 100 − (pacing decay % between halves)",
-        "about_flow_title": "Data Flow",
-        "about_flow": "Engine (Python) → JSON → Builder (Jinja2) → Static HTML → Cloudflare Pages",
         "search_title": "Search",
         "search_placeholder": "Race or athlete...",
         "race_performance_title": "Performance by athlete",
@@ -108,12 +109,16 @@ TRANSLATIONS = {
         "rankings_top_dmi": "Top DMI",
         "rankings_top_er": "Top ER",
         "about_title": "El Engine",
-        "about_intro": (
-            "Vertical Trail Labs no es un blog ni un CMS. Es un motor de "
-            "inteligencia de datos cuyo resultado final es esta web estática: "
-            "el sitio nunca calcula nada, solo muestra lo que el Engine ya "
-            "calculó a partir del GPX oficial de cada carrera y los tiempos "
-            "de paso por checkpoint."
+        "about_intro_p1": (
+            "Cada carrera esconde una historia en su terreno. El Vertical "
+            "Trail Engine transforma los perfiles oficiales de carrera y los "
+            "datos de checkpoints en inteligencia de rendimiento objetiva, "
+            "revelando cómo los atletas realmente escalan, descienden y "
+            "resisten."
+        ),
+        "about_intro_p2": (
+            "Nuestra metodología propia va más allá de los tiempos finales "
+            "para medir el rendimiento en el contexto del terreno mismo."
         ),
         "about_vpi_title": "VPI — Vertical Power Index",
         "about_vpi_desc": (
@@ -137,8 +142,6 @@ TRANSLATIONS = {
             "crudos."
         ),
         "about_er_formula": "ER = 100 − (decaimiento de ritmo % entre mitades)",
-        "about_flow_title": "Flujo de datos",
-        "about_flow": "Engine (Python) → JSON → Builder (Jinja2) → HTML estático → Cloudflare Pages",
         "search_title": "Buscar",
         "search_placeholder": "Carrera o atleta...",
         "race_performance_title": "Rendimiento por corredor",
@@ -181,12 +184,17 @@ TRANSLATIONS = {
         "rankings_top_dmi": "Top DMI",
         "rankings_top_er": "Top ER",
         "about_title": "Le Moteur",
-        "about_intro": (
-            "Vertical Trail Labs n'est ni un blog ni un CMS. C'est un moteur "
-            "d'intelligence de données dont le résultat final est ce site "
-            "statique : le site ne calcule jamais rien, il affiche uniquement "
-            "ce que le Moteur a déjà calculé à partir du GPX officiel de "
-            "chaque course et des temps de passage aux points de contrôle."
+        "about_intro_p1": (
+            "Chaque course cache une histoire dans son terrain. Le Vertical "
+            "Trail Engine transforme les profils officiels de course et les "
+            "données de points de contrôle en intelligence de performance "
+            "objective, révélant comment les athlètes grimpent, descendent "
+            "et endurent réellement."
+        ),
+        "about_intro_p2": (
+            "Notre méthodologie propriétaire va au-delà des temps d'arrivée "
+            "pour mesurer la performance dans le contexte du terrain "
+            "lui-même."
         ),
         "about_vpi_title": "VPI — Vertical Power Index",
         "about_vpi_desc": (
@@ -210,8 +218,6 @@ TRANSLATIONS = {
             "distance brute."
         ),
         "about_er_formula": "ER = 100 − (décroissance du rythme % entre les moitiés)",
-        "about_flow_title": "Flux de données",
-        "about_flow": "Moteur (Python) → JSON → Builder (Jinja2) → HTML statique → Cloudflare Pages",
         "search_title": "Rechercher",
         "search_placeholder": "Course ou athlète...",
         "race_performance_title": "Performance par athlète",
