@@ -18,7 +18,11 @@
   </p>
 
   {% if race.elevation_profile_image %}
-  <img src="{{ race.elevation_profile_image }}" alt="{{ race.name }}" class="elevation-profile" loading="lazy">
+    {% if race.elevation_profile_image.endswith('.html') %}
+    <iframe src="{{ race.elevation_profile_image }}" class="elevation-profile elevation-profile-interactive" loading="lazy" title="{{ race.name }}"></iframe>
+    {% else %}
+    <img src="{{ race.elevation_profile_image }}" alt="{{ race.name }}" class="elevation-profile" loading="lazy">
+    {% endif %}
   {% endif %}
 
   <h2>{{ t.race_performance_title }}</h2>

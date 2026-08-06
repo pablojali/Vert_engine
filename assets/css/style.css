@@ -285,6 +285,11 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   margin-bottom: 1rem;
   background: #000;
 }
+.elevation-profile-interactive {
+  height: 460px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+}
 .race-meta { color: var(--color-muted); margin-top: -0.5rem; }
 
 .athlete-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }

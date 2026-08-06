@@ -3100,6 +3100,21 @@ with tab_web_export:
                     value=_slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name),
                 )
 
+            st.markdown("---")
+            hero_upload = st.file_uploader(
+                "Imagen hero (opcional)", type=["jpg", "jpeg", "png"],
+                help="Si no subís nada, podés dejar el archivo a mano después en images/hero.jpg.",
+            )
+            elevation_upload = st.file_uploader(
+                "Perfil de elevación (opcional): imagen o HTML interactivo de Plotly",
+                type=["jpg", "jpeg", "png", "html"],
+                help=(
+                    "Para el interactivo: en la pestaña 'Race Analysis', el botón "
+                    "'📥 Download chart as HTML' del gráfico de elevación. Se embebe "
+                    "como iframe en la página de la carrera (zoom/hover funcionan)."
+                ),
+            )
+
             export_submit = st.form_submit_button(
                 "📤 Exportar carrera + corredores a data/", type="primary", use_container_width=True
             )
@@ -3109,6 +3124,17 @@ with tab_web_export:
                 st.error("Completá al menos slug, año, carpeta y carpeta de distancia.")
             else:
                 try:
+                    def _save_upload(upload, dest_dir: Path, base_name: str):
+                        """Saves a Streamlit UploadedFile as base_name + its
+                        original extension inside dest_dir. Returns the
+                        extension (with dot), or None if nothing was uploaded."""
+                        if upload is None:
+                            return None
+                        ext = Path(upload.name).suffix.lower() or ".jpg"
+                        dest_dir.mkdir(parents=True, exist_ok=True)
+                        (dest_dir / f"{base_name}{ext}").write_bytes(upload.getvalue())
+                        return ext
+
                     athletes_payload = []
                     for r in runners_pool.values():
                         athlete_slug = _slugify(r["name"])
@@ -3123,6 +3149,12 @@ with tab_web_export:
                             "er": r.get("er"),
                         })
 
+                    race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
+                    race_dir.mkdir(parents=True, exist_ok=True)
+
+                    hero_ext = _save_upload(hero_upload, race_dir / "images", "hero")
+                    elevation_ext = _save_upload(elevation_upload, race_dir / "charts", "elevation_profile")
+
                     race_json = {
                         "slug": race_slug,
                         "name": race_name,
@@ -3131,17 +3163,19 @@ with tab_web_export:
                         "elevation_gain_m": race_elevation_gain_m or None,
                         "date": race_date or None,
                         "location": race_location or None,
-                        "hero_image": f"/media/races/{race_slug}/images/hero.jpg",
-                        "elevation_profile_image": f"/media/races/{race_slug}/charts/elevation_profile.png",
+                        "hero_image": f"/media/races/{race_slug}/images/hero{hero_ext or '.jpg'}",
+                        "elevation_profile_image": f"/media/races/{race_slug}/charts/elevation_profile{elevation_ext or '.png'}",
                         "athletes": athletes_payload,
                     }
 
-                    race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
-                    race_dir.mkdir(parents=True, exist_ok=True)
                     (race_dir / "race.json").write_text(
                         json.dumps(race_json, ensure_ascii=False, indent=2), encoding="utf-8"
                     )
                     written_paths = [str((race_dir / "race.json").relative_to(WEB_DATA_DIR.parent))]
+                    if hero_ext:
+                        written_paths.append(str((race_dir / "images" / f"hero{hero_ext}").relative_to(WEB_DATA_DIR.parent)))
+                    if elevation_ext:
+                        written_paths.append(str((race_dir / "charts" / f"elevation_profile{elevation_ext}").relative_to(WEB_DATA_DIR.parent)))
 
                     # --- One profile.json per athlete, merged with whatever
                     # already exists on disk so career history accumulates
@@ -3194,10 +3228,15 @@ with tab_web_export:
 
                     st.success(f"✅ Exportado. {len(written_paths)} archivo(s) escrito(s):")
                     st.code("\n".join(written_paths))
+                    missing = []
+                    if not hero_ext:
+                        missing.append("hero (images/hero.jpg)")
+                    if not elevation_ext:
+                        missing.append("elevation_profile (charts/elevation_profile.png)")
+                    missing.append("portrait de cada atleta (data/athletes/<slug>/images/portrait.jpg)")
                     st.caption(
-                        "Faltan las imágenes (hero/elevation_profile/portrait) en "
-                        "`images/`/`charts/` de cada carpeta - subilas a mano o generalas "
-                        "con el Engine. Después corré `python publish.py` para regenerar el sitio."
+                        f"Falta subir a mano: {', '.join(missing)}. "
+                        "Después corré `python publish.py` para regenerar el sitio."
                     )
                 except Exception:
                     st.error("❌ No se pudo exportar.")
