@@ -5,8 +5,11 @@ import plotly.graph_objects as go
 import gpxpy
 import re
 import io
+import json
+import unicodedata
 import traceback
 import requests
+from pathlib import Path
 from trail_metrics_config import INDEX_CONFIG, SPEED_METRICS, display_metric_documentation
 from data.gpx_loader import (
     build_cascading_selector,
@@ -1260,9 +1263,59 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
 if 'saved_races' not in st.session_state:
     st.session_state['saved_races'] = {}
 
-tab_race, tab_runner, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints = st.tabs(
+# In-memory pool feeding the "Exportar a Web" tab: every runner whose
+# VPI/DMI/ER gets computed on the UTMB or LiveTrail tabs is tracked here
+# automatically, so the export tab can later write race.json/profile.json
+# for the Builder without re-running any analysis. Pure bookkeeping - never
+# touches disk on its own, and never affects the tabs that call it.
+if 'web_export_pool' not in st.session_state:
+    st.session_state['web_export_pool'] = {}
+
+WEB_DATA_DIR = Path(__file__).parent / "data"
+
+
+def _slugify(text: str) -> str:
+    text = unicodedata.normalize("NFKD", str(text)).encode("ascii", "ignore").decode("ascii")
+    text = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
+    return text or "item"
+
+
+def _web_export_track_result(race_key, runner_info, indices):
+    """Records one runner's already-computed VPI/DMI/ER for a given race
+    into st.session_state['web_export_pool'], so the 'Exportar a Web' tab
+    can pick it up later. Called right after the existing tabs finish
+    calculating indices - wrapped so a bookkeeping error here can never
+    break the analysis tab itself."""
+    try:
+        if not race_key or not runner_info or not indices:
+            return
+        race_pool = st.session_state['web_export_pool'].setdefault(race_key, {})
+        runners = race_pool.setdefault("runners", {})
+        name = runner_info.get("Name") or "Runner"
+        bib = runner_info.get("Bib")
+        runner_key = str(bib) if bib not in (None, "") else _slugify(name)
+        position = runner_info.get("Overall Rank")
+        try:
+            position = int(position)
+        except (TypeError, ValueError):
+            pass
+        runners[runner_key] = {
+            "name": name,
+            "bib": bib,
+            "finish_time": runner_info.get("Finish Time"),
+            "position": position,
+            "vpi": indices.get("VPI"),
+            "dmi": indices.get("DMI"),
+            "er": indices.get("ER"),
+        }
+    except Exception:
+        pass
+
+
+tab_race, tab_runner, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (UTMB)", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
-     "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher"]
+     "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher",
+     "🌐 Exportar a Web"]
 )
 
 # ---------------------------------------------
@@ -1683,6 +1736,7 @@ with tab_runner:
                         st.session_state['estimated_degradation_df'] = df_segment_degradation
                         st.session_state['estimated_degradation_race'] = selected_race
                         st.session_state['estimated_global_indices'] = indices
+                        _web_export_track_result(selected_race, runner_info, indices)
 
                         # --- VPI chart ---
                         st.markdown("---")
@@ -2075,6 +2129,7 @@ with tab_runner_lt:
                         st.session_state['estimated_degradation_df_lt'] = df_segment_degradation_lt
                         st.session_state['estimated_degradation_race_lt'] = selected_race_lt
                         st.session_state['estimated_global_indices_lt'] = indices_lt
+                        _web_export_track_result(selected_race_lt, runner_info_lt, indices_lt)
 
                         # --- VPI chart ---
                         st.markdown("---")
@@ -2965,3 +3020,188 @@ with tab_checkpoints:
                     mime="application/json",
                     use_container_width=True,
                 )
+
+# ---------------------------------------------
+# TAB 9: Export to the public web (Builder input)
+#
+# Writes race.json / data/athletes/<slug>/profile.json in the format
+# builder/generators expects (see Claude.md section 4). Never computes
+# anything itself - it only serializes VPI/DMI/ER that the UTMB/LiveTrail
+# tabs already calculated this session (tracked via _web_export_track_result).
+# ---------------------------------------------
+with tab_web_export:
+    st.header("🌐 Exportar a Web")
+    st.caption(
+        "Convierte los resultados ya calculados en las pestañas 'Runner Metrics' "
+        "en `race.json` + `profile.json`, en el formato que espera el Builder "
+        "(`vertlabs.run`). No recalcula nada: solo serializa lo que ya está en pantalla."
+    )
+
+    export_pool = st.session_state.get('web_export_pool', {})
+
+    if not export_pool:
+        st.info(
+            "⚠️ Todavía no calculaste ningún índice esta sesión. Andá a "
+            "**'🏃 Runner Metrics (UTMB)'** o **'🏃 Runner Metrics (LiveTrail)'**, "
+            "cargá al menos un corredor, y va a aparecer acá automáticamente."
+        )
+    else:
+        pool_key = st.selectbox(
+            "Carrera a exportar",
+            options=list(export_pool.keys()),
+            help="Estas son las carreras para las que ya calculaste VPI/DMI/ER en esta sesión.",
+        )
+        runners_pool = export_pool[pool_key].get("runners", {})
+        race_lib_data = st.session_state.get('saved_races', {}).get(pool_key, {})
+
+        st.markdown(f"**{len(runners_pool)} corredor(es) listos para exportar:**")
+        st.dataframe(
+            [
+                {"Bib": r.get("bib"), "Nombre": r.get("name"), "Pos": r.get("position"),
+                 "Tiempo": r.get("finish_time"), "VPI": r.get("vpi"), "DMI": r.get("dmi"), "ER": r.get("er")}
+                for r in runners_pool.values()
+            ],
+            use_container_width=True, hide_index=True,
+        )
+
+        # --- Best-effort defaults parsed from "{name} {year} - {distance}K" ---
+        default_name, default_year, default_distance = pool_key, "", ""
+        m = re.match(r"^(.*?)\s+(\d{4})\s*-\s*([\d.]+)K$", pool_key)
+        if m:
+            default_name, default_year, default_distance = m.group(1), m.group(2), m.group(3)
+        default_total_km = race_lib_data.get("total_km")
+
+        st.markdown("---")
+        st.markdown("##### Metadata de la carrera (no calculada por el Engine, se completa a mano)")
+
+        with st.form("web_export_form"):
+            col1, col2 = st.columns(2)
+            with col1:
+                race_name = st.text_input("Nombre de la carrera", value=default_name)
+                race_circuit = st.text_input("Circuito", value="UTMB World Series")
+                race_year = st.text_input("Año", value=default_year)
+                race_distance_km = st.number_input(
+                    "Distancia (km)", value=float(default_total_km) if default_total_km else 0.0, step=1.0,
+                )
+                race_elevation_gain_m = st.number_input("Desnivel positivo (m)", value=0.0, step=100.0)
+            with col2:
+                race_date = st.text_input("Fecha (YYYY-MM-DD)", value="")
+                race_location = st.text_input("Ubicación", value="")
+                race_circuit_folder = st.text_input(
+                    "Carpeta circuito (data/races/<esto>/...)",
+                    value=_slugify(race_circuit) or "circuito",
+                    help="Solo define dónde vive el JSON en el repo, no la URL pública.",
+                )
+                race_distance_folder = st.text_input(
+                    "Carpeta distancia (.../<esto>/race.json)",
+                    value=f"{default_distance}k" if default_distance else "distancia",
+                )
+                race_slug = st.text_input(
+                    "Slug público (vertlabs.run/races/<esto>/)",
+                    value=_slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name),
+                )
+
+            export_submit = st.form_submit_button(
+                "📤 Exportar carrera + corredores a data/", type="primary", use_container_width=True
+            )
+
+        if export_submit:
+            if not race_slug or not race_year or not race_circuit_folder or not race_distance_folder:
+                st.error("Completá al menos slug, año, carpeta de circuito y carpeta de distancia.")
+            else:
+                try:
+                    athletes_payload = []
+                    for r in runners_pool.values():
+                        athlete_slug = _slugify(r["name"])
+                        athletes_payload.append({
+                            "slug": athlete_slug,
+                            "name": r["name"],
+                            "bib": r.get("bib"),
+                            "finish_time": r.get("finish_time"),
+                            "position": r.get("position"),
+                            "vpi": r.get("vpi"),
+                            "dmi": r.get("dmi"),
+                            "er": r.get("er"),
+                        })
+
+                    race_json = {
+                        "slug": race_slug,
+                        "name": race_name,
+                        "circuit": race_circuit or None,
+                        "year": int(race_year),
+                        "distance_km": race_distance_km or None,
+                        "elevation_gain_m": race_elevation_gain_m or None,
+                        "date": race_date or None,
+                        "location": race_location or None,
+                        "hero_image": f"/races/{race_slug}/images/hero.jpg",
+                        "elevation_profile_image": f"/races/{race_slug}/charts/elevation_profile.png",
+                        "athletes": athletes_payload,
+                    }
+
+                    race_dir = WEB_DATA_DIR / "races" / race_circuit_folder / race_year / race_distance_folder
+                    race_dir.mkdir(parents=True, exist_ok=True)
+                    (race_dir / "race.json").write_text(
+                        json.dumps(race_json, ensure_ascii=False, indent=2), encoding="utf-8"
+                    )
+                    written_paths = [str((race_dir / "race.json").relative_to(WEB_DATA_DIR.parent))]
+
+                    # --- One profile.json per athlete, merged with whatever
+                    # already exists on disk so career history accumulates
+                    # across export runs instead of being overwritten. ---
+                    for athlete in athletes_payload:
+                        athlete_dir = WEB_DATA_DIR / "athletes" / athlete["slug"]
+                        athlete_dir.mkdir(parents=True, exist_ok=True)
+                        profile_path = athlete_dir / "profile.json"
+
+                        if profile_path.exists():
+                            profile = json.loads(profile_path.read_text(encoding="utf-8"))
+                        else:
+                            profile = {
+                                "slug": athlete["slug"],
+                                "name": athlete["name"],
+                                "country": None,
+                                "portrait": f"/athletes/{athlete['slug']}/images/portrait.jpg",
+                                "races": [],
+                            }
+
+                        profile["races"] = [
+                            race_entry for race_entry in profile.get("races", [])
+                            if race_entry.get("race_slug") != race_slug
+                        ]
+                        profile["races"].append({
+                            "race_slug": race_slug,
+                            "race_name": race_name,
+                            "year": int(race_year),
+                            "position": athlete["position"],
+                            "finish_time": athlete["finish_time"],
+                            "vpi": athlete["vpi"],
+                            "dmi": athlete["dmi"],
+                            "er": athlete["er"],
+                        })
+
+                        def _avg(key):
+                            values = [r[key] for r in profile["races"] if r.get(key) is not None]
+                            return round(sum(values) / len(values), 1) if values else None
+
+                        profile["career_avg"] = {
+                            "vpi": _avg("vpi"),
+                            "dmi": _avg("dmi"),
+                            "er": _avg("er"),
+                        }
+
+                        profile_path.write_text(
+                            json.dumps(profile, ensure_ascii=False, indent=2), encoding="utf-8"
+                        )
+                        written_paths.append(str(profile_path.relative_to(WEB_DATA_DIR.parent)))
+
+                    st.success(f"✅ Exportado. {len(written_paths)} archivo(s) escrito(s):")
+                    st.code("\n".join(written_paths))
+                    st.caption(
+                        "Faltan las imágenes (hero/elevation_profile/portrait) en "
+                        "`images/`/`charts/` de cada carpeta - subilas a mano o generalas "
+                        "con el Engine. Después corré `python publish.py` para regenerar el sitio."
+                    )
+                except Exception:
+                    st.error("❌ No se pudo exportar.")
+                    with st.expander("Ver detalle técnico del error"):
+                        st.code(traceback.format_exc(), language="python")

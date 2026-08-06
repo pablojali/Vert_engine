@@ -1,0 +1,33 @@
+{
+  "slug": "tomas-reiner",
+  "name": "Tomas Reiner",
+  "country": "AUT",
+  "portrait": "/athletes/tomas-reiner/images/portrait.svg",
+  "races": [
+    {
+      "race_slug": "aran-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "position": 2,
+      "finish_time": "19:05:33",
+      "vpi": 798.1,
+      "dmi": 13.6,
+      "er": 94.2
+    },
+    {
+      "race_slug": "lavaredo-2026",
+      "race_name": "Lavaredo Ultra Trail",
+      "year": 2026,
+      "position": 1,
+      "finish_time": "12:14:50",
+      "vpi": 865.0,
+      "dmi": 15.1,
+      "er": 95.5
+    }
+  ],
+  "career_avg": {
+    "vpi": 831.6,
+    "dmi": 14.35,
+    "er": 94.9
+  }
+}

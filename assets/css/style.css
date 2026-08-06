@@ -1,0 +1,198 @@
+:root {
+  --color-bg: #0d1117;
+  --color-bg-raised: #161b22;
+  --color-text: #e6edf3;
+  --color-accent: #ff6b35;
+  --color-accent-2: #00bfff;
+  --color-muted: #8b949e;
+  --color-border: #21262d;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.55;
+}
+
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* --- Header --- */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.site-header .logo {
+  color: var(--color-text);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.site-header .logo span { color: var(--color-accent); }
+
+.site-header nav a {
+  color: var(--color-text);
+  text-decoration: none;
+  margin-left: 1.25rem;
+  font-size: 0.9rem;
+}
+.site-header nav a:first-child { margin-left: 0; }
+.site-header nav a:hover { color: var(--color-accent); }
+
+/* --- Layout --- */
+main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+.breadcrumb { color: var(--color-muted); font-size: 0.85rem; margin-bottom: 1rem; }
+.breadcrumb a { color: var(--color-muted); }
+
+/* --- Hero / homepage --- */
+.hero { padding: 2.5rem 0 1.5rem; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; }
+.hero h1 { font-size: 2.4rem; margin: 0 0 0.25rem; letter-spacing: -0.02em; }
+.hero .tagline { color: var(--color-accent); font-weight: 600; margin: 0 0 1rem; }
+.hero-sub { color: var(--color-muted); max-width: 62ch; }
+
+.section-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
+.section-heading .see-all { font-size: 0.85rem; }
+
+/* --- Cards / grids --- */
+.race-grid, .athlete-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.race-card a, .athlete-card a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-raised);
+  text-decoration: none;
+  color: var(--color-text);
+  height: 100%;
+  transition: border-color 0.15s ease;
+}
+.race-card a:hover, .athlete-card a:hover { border-color: var(--color-accent); }
+
+.race-card img, .athlete-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  background: #000;
+}
+.athlete-card img { aspect-ratio: 1 / 1; }
+
+.race-card-name, .athlete-card-name { font-weight: 700; }
+.race-card-meta, .athlete-card-meta { color: var(--color-muted); font-size: 0.85rem; }
+
+/* --- Race / athlete detail pages --- */
+.race-hero, .elevation-profile {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  background: #000;
+}
+.race-meta { color: var(--color-muted); margin-top: -0.5rem; }
+
+.athlete-header { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
+.athlete-portrait {
+  width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--color-border);
+}
+.athlete-meta { color: var(--color-muted); margin: 0.15rem 0 0; }
+
+.stats-list { list-style: none; padding: 0; display: flex; gap: 2rem; margin: 1rem 0 2rem; }
+.stats-list li { display: flex; flex-direction: column; }
+.stat-label { color: var(--color-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-value { font-size: 1.6rem; font-weight: 700; color: var(--color-accent); }
+
+.metric-note { color: var(--color-muted); font-size: 0.85rem; margin-top: 1rem; }
+
+/* --- Tables --- */
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; min-width: 480px; }
+th, td { text-align: left; padding: 0.55rem 0.6rem; border-bottom: 1px solid var(--color-border); }
+th { color: var(--color-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; }
+tbody tr:hover { background: var(--color-bg-raised); }
+
+/* --- Rankings --- */
+.rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 1.5rem; }
+.rankings-grid h2 { font-size: 1rem; color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.ranking-list { list-style: none; padding: 0; margin: 0; counter-reset: rank; }
+.ranking-list li {
+  counter-increment: rank;
+  display: flex; justify-content: space-between;
+  padding: 0.5rem 0; border-bottom: 1px solid var(--color-border);
+}
+.ranking-list li::before {
+  content: counter(rank) ".";
+  color: var(--color-muted);
+  margin-right: 0.5rem;
+}
+.ranking-list li span { color: var(--color-muted); font-variant-numeric: tabular-nums; }
+
+/* --- About / methodology --- */
+.about-page .formula {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+
+/* --- Search --- */
+.search-page input[type="search"] {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-text);
+  margin: 1rem 0;
+}
+.search-results { list-style: none; padding: 0; }
+.search-results li { padding: 0.6rem 0; border-bottom: 1px solid var(--color-border); }
+.search-results .tag {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+}
+
+/* --- Footer --- */
+.site-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--color-border);
+}
+.site-footer-sub { margin: 0.25rem 0 0; font-size: 0.75rem; }
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 1.8rem; }
+  .stats-list { gap: 1.25rem; }
+}

@@ -7,3 +7,4 @@ beautifulsoup4
 streamlit
 requests
 openpyxl
+Jinja2
