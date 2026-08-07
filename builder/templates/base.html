@@ -46,6 +46,8 @@
       <a href="{{ locale_url(locale, 'about/') }}">{{ t.nav_about }}</a>
       <a href="{{ locale_url(locale, 'search/') }}" class="search-link" aria-label="{{ t.nav_search }}">{{ t.nav_search }}</a>
     </nav>
+
+    {% block header_hero %}{% endblock %}
   </header>
 
   <main>

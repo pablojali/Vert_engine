@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block header_hero %}
 <section class="hero">
   <p class="tagline">{{ t.site_tagline }}</p>
   <p class="hero-sub">{{ t.site_hero_sub }}</p>
 </section>
+{% endblock %}
 
+{% block content %}
 {% if races %}
 <section class="featured-carousel">
   <div class="carousel-track">
