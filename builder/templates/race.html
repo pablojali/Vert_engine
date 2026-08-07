@@ -22,6 +22,7 @@
   {% for block in race.analysis_blocks %}
     {% if block.type == 'text' %}
     <div class="race-analysis-content race-analysis-text">
+      {% if block.title %}<h2>{{ block.title }}</h2>{% endif %}
       {% for para in block.content.split('\n\n') if para.strip() %}<p>{{ para.strip() }}</p>{% endfor %}
     </div>
     {% elif block.type == 'html' %}
@@ -64,55 +65,9 @@
     {% endif %}
   {% endfor %}
 
-  <h2>{{ t.race_performance_title }}</h2>
-  <div class="table-scroll">
-    <table class="athlete-table">
-      <thead>
-        <tr>
-          <th>{{ t.race_pos }}</th>
-          <th>{{ t.race_athlete }}</th>
-          <th>{{ t.race_time }}</th>
-          <th class="metric-vpi" title="Vertical Power Index">VPI</th>
-          <th class="metric-dmi" title="Descent Mastery Index">DMI</th>
-          <th class="metric-er" title="Endurance Rating">ER</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in race.athletes|sort(attribute='position') %}
-        <tr>
-          <td>{{ a.position }}</td>
-          <td><a href="{{ a.url }}">{{ a.name }}</a></td>
-          <td>{{ a.finish_time }}</td>
-          <td class="metric-vpi">{{ a.vpi if a.vpi is not none else '—' }}</td>
-          <td class="metric-dmi">{{ a.dmi if a.dmi is not none else '—' }}</td>
-          <td class="metric-er">{{ a.er if a.er is not none else '—' }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
   <p class="metric-note">
     {{ t.race_metric_note }}
     <a href="{{ locale_url(locale, 'about/') }}">{{ t.race_how_calculated }}</a>
   </p>
-
-  {% set runners_with_charts = race.athletes|selectattr('charts')|sort(attribute='position') %}
-  {% if runners_with_charts|list %}
-  <h2>{{ t.race_runner_charts_title }}</h2>
-  {% for a in runners_with_charts %}
-  <details class="runner-charts-accordion">
-    <summary><a href="{{ a.url }}">{{ a.name }}</a></summary>
-    <div class="runner-charts-grid">
-      {% for chart in a.charts %}
-      <div class="runner-chart">
-        <p class="runner-chart-label">{{ chart.label }}</p>
-        <iframe src="{{ chart.file }}" class="elevation-profile-interactive" loading="lazy" title="{{ a.name }} — {{ chart.label }}"></iframe>
-      </div>
-      {% endfor %}
-    </div>
-  </details>
-  {% endfor %}
-  {% endif %}
 </article>
 {% endblock %}

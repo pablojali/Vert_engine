@@ -3111,6 +3111,10 @@ with tab_analysis_editor:
                     st.rerun()
 
                 if btype == "text":
+                    st.text_input(
+                        "Título (opcional)", value=initial.get("title", ""), key=f"ae_text_title_{bid}",
+                        placeholder="Título (opcional) — ej. 'Performance by athlete'",
+                    )
                     st.text_area(
                         "Texto (dejá una línea en blanco entre párrafos)",
                         value=initial.get("content", ""), height=150, key=f"ae_text_{bid}",
@@ -3164,7 +3168,11 @@ with tab_analysis_editor:
             new_blocks = []
             for bid, btype in order:
                 if btype == "text":
-                    new_blocks.append({"type": "text", "content": st.session_state.get(f"ae_text_{bid}", "")})
+                    new_blocks.append({
+                        "type": "text",
+                        "title": st.session_state.get(f"ae_text_title_{bid}", ""),
+                        "content": st.session_state.get(f"ae_text_{bid}", ""),
+                    })
                 elif btype == "html":
                     new_blocks.append({"type": "html", "content": st.session_state.get(f"ae_html_{bid}", "")})
                 elif btype == "image":
