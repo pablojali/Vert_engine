@@ -3,9 +3,9 @@
   "name": "Val d'Aran by UTMB",
   "year": 2026,
   "distance_km": 160.05165725143127,
-  "elevation_gain_m": null,
+  "elevation_gain_m": 11441.0,
   "date": "2026-07-03",
-  "location": "Vielha",
+  "location": null,
   "hero_image": "/media/races/val-d-aran-by-utmb-2026/images/hero.jpg",
   "elevation_profile_image": "/media/races/val-d-aran-by-utmb-2026/charts/elevation_profile.html",
   "athletes": [
@@ -18,6 +18,7 @@
       "vpi": 976.5,
       "dmi": 11.22,
       "er": 75.8,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/santos-gabriel-rueda/report.html",
       "charts": [
         {
           "label": "Santos Gabriel Rueda Livetrail Full Analysis",
