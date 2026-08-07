@@ -37,6 +37,7 @@ TRANSLATIONS = {
             "mastery and endurance performance."
         ),
         "home_featured_cta": "View Analysis",
+        "race_date_label": "Date",
         "race_distance_label": "Distance",
         "race_elevation_label": "Total Elevation Gain",
         "race_winning_time_label": "Winning Time",
@@ -125,6 +126,7 @@ TRANSLATIONS = {
             "bajada y rendimiento de resistencia."
         ),
         "home_featured_cta": "Ver análisis",
+        "race_date_label": "Fecha",
         "race_distance_label": "Distancia",
         "race_elevation_label": "Desnivel Positivo Total",
         "race_winning_time_label": "Tiempo Ganador",
@@ -216,6 +218,7 @@ TRANSLATIONS = {
             "en descente et de la performance d'endurance."
         ),
         "home_featured_cta": "Voir l'analyse",
+        "race_date_label": "Date",
         "race_distance_label": "Distance",
         "race_elevation_label": "Dénivelé Positif Total",
         "race_winning_time_label": "Temps Vainqueur",

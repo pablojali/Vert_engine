@@ -14,12 +14,15 @@
     <article class="carousel-slide{{ ' active' if loop.first else '' }}" style="background-image:url('{{ r.hero_image }}')">
       <div class="carousel-overlay">
         <div class="carousel-text">
-          <p class="carousel-eyebrow">{{ r.name }} {{ r.year }}</p>
-          <h2>{{ t.home_featured_label }}</h2>
+          <p class="carousel-eyebrow">{{ t.home_featured_label }}</p>
+          <h2>{{ r.name }} {{ r.year }}</h2>
           <p class="carousel-desc">{{ t.home_featured_desc }}</p>
           <a href="{{ r.url }}" class="carousel-cta">{{ t.home_featured_cta }} →</a>
         </div>
         <div class="carousel-stats">
+          {% if r.date %}
+          <div class="carousel-stat"><span class="carousel-stat-value carousel-stat-date">{{ r.date }}</span><span class="carousel-stat-label">{{ t.race_date_label }}</span></div>
+          {% endif %}
           {% if r.distance_km %}
           <div class="carousel-stat"><span class="carousel-stat-value">{{ r.distance_km|round(1) }}<small>km</small></span><span class="carousel-stat-label">{{ t.race_distance_label }}</span></div>
           {% endif %}
