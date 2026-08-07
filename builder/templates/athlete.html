@@ -25,9 +25,10 @@
       <li><span class="stat-label metric-dmi">DMI</span><span class="stat-value metric-dmi">{{ athlete.career_avg.dmi if athlete.career_avg.dmi is not none else '—' }}</span></li>
       <li><span class="stat-label metric-er">ER</span><span class="stat-value metric-er">{{ athlete.career_avg.er if athlete.career_avg.er is not none else '—' }}</span></li>
     </ul>
-    {% if athlete.radar_svg %}
+    {# Radar chart hidden for now. Re-add this block to bring it back: #}
+    {#- {% if athlete.radar_svg %}
     <div class="radar-chart-wrap">{{ athlete.radar_svg | safe }}</div>
-    {% endif %}
+    {% endif %} -#}
   </div>
 
   <h2>{{ t.athlete_race_history }}</h2>
