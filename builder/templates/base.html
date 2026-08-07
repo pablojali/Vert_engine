@@ -30,7 +30,8 @@
     <nav class="main-nav" aria-label="Main">
       <a href="{{ locale_url(locale, 'races/') }}">{{ t.nav_races }}</a>
       <a href="{{ locale_url(locale, 'athletes/') }}">{{ t.nav_athletes }}</a>
-      <a href="{{ locale_url(locale, 'rankings/') }}">{{ t.nav_rankings }}</a>
+      {# Rankings hidden from nav for now (not enough real athletes yet) - page still builds at /rankings/, just unlinked. Re-add this line to bring it back: #}
+      {#- <a href="{{ locale_url(locale, 'rankings/') }}">{{ t.nav_rankings }}</a> -#}
       <a href="{{ locale_url(locale, 'about/') }}">{{ t.nav_about }}</a>
       <a href="{{ locale_url(locale, 'search/') }}" class="search-link" aria-label="{{ t.nav_search }}">{{ t.nav_search }}</a>
     </nav>
