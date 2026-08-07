@@ -86,7 +86,17 @@ def copy_public_media(races: list[dict], athletes: list[dict]) -> None:
     print(f"  ✓ media pública copiada ({count} carpetas images/charts)")
 
 
+def clean_output() -> None:
+    """Wipes output/ before regenerating, so pages/media left over from
+    data that no longer exists (renamed slugs, removed races, etc.)
+    don't linger on disk indefinitely."""
+    if OUTPUT_DIR.exists():
+        shutil.rmtree(OUTPUT_DIR)
+    OUTPUT_DIR.mkdir(parents=True)
+
+
 def main() -> None:
+    clean_output()
     races_by_locale = {}
     athletes_by_locale = {}
 
