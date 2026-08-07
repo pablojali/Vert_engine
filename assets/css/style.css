@@ -116,8 +116,8 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .breadcrumb { color: var(--color-muted); font-size: 0.85rem; margin-bottom: 1rem; }
 .breadcrumb a { color: var(--color-muted); }
 
-/* --- Hero / homepage (rendered inside the header, see header_hero block) --- */
-.hero { padding: 0.5rem 0 0; text-align: center; }
+/* --- Hero / homepage (between the carousel and the stat boxes) --- */
+.hero { padding: 0.5rem 0 2rem; text-align: center; }
 .hero .tagline {
   color: var(--color-accent);
   font-weight: 700;
