@@ -19,16 +19,26 @@ def load_athletes() -> list[dict]:
 
 def generate(loc: dict, t: dict) -> list[dict]:
     template = env.get_template("athlete.html")
+    report_template = env.get_template("report.html")
     index_template = env.get_template("athletes_index.html")
     athletes = load_athletes()
 
     for athlete in athletes:
         athlete["url"] = locale_url(loc["code"], f"athletes/{athlete['slug']}/")
         for r in athlete.get("races", []):
-            # If the athlete has an uploaded full performance report for this
-            # race, the race name links straight to it instead of the shared
-            # race results page.
-            r["url"] = r.get("report") or locale_url(loc["code"], f"races/{r['race_slug']}/")
+            if r.get("report"):
+                # Render the uploaded full-analysis HTML inside our own page
+                # (header/nav/footer intact, embedded via iframe) instead of
+                # linking straight to the raw file - a direct link would
+                # navigate away from the site entirely, losing the menu.
+                report_page_path = f"athletes/{athlete['slug']}/{r['race_slug']}/"
+                r["url"] = locale_url(loc["code"], report_page_path)
+                report_html = report_template.render(
+                    athlete=athlete, race_entry=r, t=t, locale=loc["code"], page_path=report_page_path,
+                )
+                write_page(out_path(loc["prefix"], f"{report_page_path}index.html"), report_html)
+            else:
+                r["url"] = locale_url(loc["code"], f"races/{r['race_slug']}/")
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 
