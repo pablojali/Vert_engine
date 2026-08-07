@@ -9,6 +9,6 @@
   <p class="breadcrumb"><a href="{{ athlete.url }}">← {{ t.report_back }}</a></p>
   <h1>{{ athlete.name }}</h1>
   <p class="race-meta">{{ race_entry.race_name }} {{ race_entry.year }}</p>
-  <iframe src="{{ race_entry.report }}" class="report-frame" title="{{ athlete.name }} — {{ race_entry.race_name }}" loading="lazy"></iframe>
+  <iframe src="{{ race_entry.report }}" class="report-frame" title="{{ athlete.name }} — {{ race_entry.race_name }}" scrolling="no"></iframe>
 </article>
 {% endblock %}
