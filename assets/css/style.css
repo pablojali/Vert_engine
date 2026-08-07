@@ -362,6 +362,18 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   margin-top: 0.4rem;
 }
 
+.race-analysis-figure { margin: 1.5rem 0 2.5rem; }
+.race-analysis-figure img { max-width: 100%; border-radius: 10px; display: block; margin: 0 auto; }
+.race-analysis-figure figcaption {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.top10-block { margin: 1.5rem 0 2.5rem; }
+.top10-block h3 { margin: 0 0 0.75rem; }
+
 .report-page .race-meta { margin-top: 0; margin-bottom: 1.5rem; }
 .report-frame {
   display: block;

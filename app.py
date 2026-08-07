@@ -9,6 +9,7 @@ import json
 import unicodedata
 import traceback
 import requests
+import uuid
 from pathlib import Path
 from trail_metrics_config import INDEX_CONFIG, SPEED_METRICS, display_metric_documentation
 from data.gpx_loader import (
@@ -1339,10 +1340,10 @@ def _web_export_track_result(race_key, runner_info, indices):
         pass
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export = st.tabs(
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export, tab_analysis_editor = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
      "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher",
-     "🌐 Exportar a Web"]
+     "🌐 Exportar a Web", "✏️ Editor de Análisis"]
 )
 
 # ---------------------------------------------
@@ -2730,11 +2731,6 @@ with tab_web_export:
         existing_race_for_prefill = (
             json.loads(guessed_race_path.read_text(encoding="utf-8")) if guessed_race_path.exists() else {}
         )
-        guessed_analysis_path = guessed_race_dir / "analysis.html"
-        existing_analysis_html = (
-            guessed_analysis_path.read_text(encoding="utf-8") if guessed_analysis_path.exists() else ""
-        )
-
         st.markdown("---")
         st.markdown("##### Metadata de la carrera (no calculada por el Engine, se completa a mano)")
         if existing_race_for_prefill:
@@ -2786,19 +2782,6 @@ with tab_web_export:
                     "Para el interactivo: en la pestaña 'Race Analysis', el botón "
                     "'📥 Download chart as HTML' del gráfico de elevación. Se embebe "
                     "como iframe en la página de la carrera (zoom/hover funcionan)."
-                ),
-            )
-
-            st.markdown("---")
-            analysis_html = st.text_area(
-                "Análisis de la carrera (HTML, opcional)",
-                value=existing_analysis_html,
-                height=350,
-                help=(
-                    "Pegá acá el HTML del análisis: párrafos (<p>, <h2>, <img>, etc.) y los "
-                    "fragmentos de gráficos Plotly que ya usás en Blogger (el botón '📥 Download "
-                    "chart as HTML' genera justamente eso). Se inserta tal cual en la página de "
-                    "la carrera, heredando el estilo del sitio, arriba de la tabla de resultados."
                 ),
             )
 
@@ -2957,13 +2940,6 @@ with tab_web_export:
                     )
                     written_paths = [str((race_dir / "race.json").relative_to(WEB_DATA_DIR.parent))]
 
-                    analysis_path = race_dir / "analysis.html"
-                    if analysis_html.strip():
-                        analysis_path.write_text(analysis_html, encoding="utf-8")
-                        written_paths.append(str(analysis_path.relative_to(WEB_DATA_DIR.parent)))
-                    elif analysis_path.exists():
-                        analysis_path.unlink()
-
                     if hero_ext:
                         written_paths.append(str((race_dir / "images" / f"hero{hero_ext}").relative_to(WEB_DATA_DIR.parent)))
                     if elevation_ext:
@@ -3059,3 +3035,167 @@ with tab_web_export:
                     st.error("❌ No se pudo exportar.")
                     with st.expander("Ver detalle técnico del error"):
                         st.code(traceback.format_exc(), language="python")
+
+# ---------------------------------------------
+# TAB 9: Block-based editor for the race analysis content shown on the
+# public race page. Deliberately its own tab (not mixed into "Exportar a
+# Web") so adding/reordering runners never has to scroll past it.
+# ---------------------------------------------
+with tab_analysis_editor:
+    st.header("✏️ Editor de Análisis de Carrera")
+    st.caption(
+        "Armá el contenido de la página de la carrera con bloques que podés agregar, "
+        "reordenar y borrar: texto, HTML/gráficos embebidos, imágenes, y tablas de Top 10. "
+        "Esto no toca los corredores ni sus métricas - es solo el contenido editorial de la página."
+    )
+
+    _existing_races = sorted(WEB_DATA_DIR.glob("races/**/race.json"))
+    if not _existing_races:
+        st.info("Todavía no exportaste ninguna carrera. Hacé eso primero en '🌐 Exportar a Web'.")
+    else:
+        def _race_label(p: Path) -> str:
+            data = json.loads(p.read_text(encoding="utf-8"))
+            return f"{data.get('name')} {data.get('year')} — {p.parent.name} ({data.get('slug')})"
+
+        race_path = st.selectbox(
+            "Carrera a editar", _existing_races, format_func=_race_label, key="ae_race_select",
+        )
+        race_dir = race_path.parent
+        race_data = json.loads(race_path.read_text(encoding="utf-8"))
+        race_slug = race_data.get("slug")
+        athlete_options = {"— (vacío) —": None}
+        for a in race_data.get("athletes", []):
+            athlete_options[f"{a['name']} (#{a.get('bib') or '-'})"] = a["slug"]
+        athlete_names_by_slug = {v: k for k, v in athlete_options.items() if v}
+
+        order_key = f"ae_order_{race_path}"
+        if order_key not in st.session_state:
+            blocks_path = race_dir / "analysis_blocks.json"
+            legacy_path = race_dir / "analysis.html"
+            if blocks_path.exists():
+                loaded_blocks = json.loads(blocks_path.read_text(encoding="utf-8")).get("blocks", [])
+            elif legacy_path.exists():
+                loaded_blocks = [{"type": "html", "content": legacy_path.read_text(encoding="utf-8")}]
+            else:
+                loaded_blocks = []
+            order = []
+            for b in loaded_blocks:
+                bid = str(uuid.uuid4())
+                order.append((bid, b["type"]))
+                st.session_state[f"ae_initial_{bid}"] = b
+            st.session_state[order_key] = order
+
+        order = st.session_state[order_key]
+
+        TYPE_LABELS = {"text": "📝 Texto", "html": "🧩 HTML", "image": "🖼️ Imagen", "top10": "🏆 Top 10"}
+
+        if not order:
+            st.caption("Todavía no hay bloques. Agregá el primero abajo.")
+
+        for idx, (bid, btype) in enumerate(order):
+            initial = st.session_state.get(f"ae_initial_{bid}", {})
+            with st.container(border=True):
+                c1, c2, c3, c4 = st.columns([6, 1, 1, 1])
+                c1.markdown(f"**{idx + 1}. {TYPE_LABELS.get(btype, btype)}**")
+                if c2.button("↑", key=f"ae_up_{bid}", disabled=(idx == 0), help="Subir"):
+                    order[idx - 1], order[idx] = order[idx], order[idx - 1]
+                    st.session_state[order_key] = order
+                    st.rerun()
+                if c3.button("↓", key=f"ae_down_{bid}", disabled=(idx == len(order) - 1), help="Bajar"):
+                    order[idx + 1], order[idx] = order[idx], order[idx + 1]
+                    st.session_state[order_key] = order
+                    st.rerun()
+                if c4.button("🗑️", key=f"ae_del_{bid}", help="Borrar bloque"):
+                    order.pop(idx)
+                    st.session_state[order_key] = order
+                    st.rerun()
+
+                if btype == "text":
+                    st.text_area(
+                        "Texto (dejá una línea en blanco entre párrafos)",
+                        value=initial.get("content", ""), height=150, key=f"ae_text_{bid}",
+                        label_visibility="collapsed",
+                    )
+                elif btype == "html":
+                    st.text_area(
+                        "HTML / gráfico embebido (ej. el fragmento de 'Download chart as HTML')",
+                        value=initial.get("content", ""), height=200, key=f"ae_html_{bid}",
+                        label_visibility="collapsed",
+                    )
+                elif btype == "image":
+                    existing_src = initial.get("src")
+                    if existing_src:
+                        local_path = race_dir / "images" / "analysis" / Path(existing_src).name
+                        if local_path.exists():
+                            st.image(str(local_path), caption="Imagen actual", width=240)
+                    st.file_uploader(
+                        "Reemplazar imagen (opcional si ya hay una)",
+                        type=["jpg", "jpeg", "png"], key=f"ae_image_upload_{bid}",
+                    )
+                    st.text_input("Pie de foto (opcional)", value=initial.get("caption", ""), key=f"ae_image_caption_{bid}")
+                elif btype == "top10":
+                    st.text_input("Título del bloque", value=initial.get("title", "Top 10"), key=f"ae_top10_title_{bid}")
+                    saved_slugs = initial.get("slugs", [])
+                    cols = st.columns(2)
+                    for i in range(10):
+                        saved_slug = saved_slugs[i] if i < len(saved_slugs) else None
+                        default_name = athlete_names_by_slug.get(saved_slug, "— (vacío) —")
+                        options = list(athlete_options.keys())
+                        default_index = options.index(default_name) if default_name in options else 0
+                        cols[i % 2].selectbox(
+                            f"Puesto {i + 1}", options, index=default_index, key=f"ae_top10_pos_{bid}_{i}",
+                        )
+
+        st.markdown("---")
+        add_col1, add_col2 = st.columns([3, 1])
+        new_block_label = add_col1.selectbox(
+            "Tipo de bloque a agregar", list(TYPE_LABELS.values()), key="ae_new_block_type", label_visibility="collapsed",
+        )
+        if add_col2.button("➕ Agregar bloque", use_container_width=True):
+            new_type = {v: k for k, v in TYPE_LABELS.items()}[new_block_label]
+            new_id = str(uuid.uuid4())
+            order.append((new_id, new_type))
+            st.session_state[f"ae_initial_{new_id}"] = {}
+            st.session_state[order_key] = order
+            st.rerun()
+
+        st.markdown("---")
+        if st.button("💾 Guardar análisis", type="primary", use_container_width=True):
+            new_blocks = []
+            for bid, btype in order:
+                if btype == "text":
+                    new_blocks.append({"type": "text", "content": st.session_state.get(f"ae_text_{bid}", "")})
+                elif btype == "html":
+                    new_blocks.append({"type": "html", "content": st.session_state.get(f"ae_html_{bid}", "")})
+                elif btype == "image":
+                    initial = st.session_state.get(f"ae_initial_{bid}", {})
+                    src = initial.get("src")
+                    upload = st.session_state.get(f"ae_image_upload_{bid}")
+                    if upload is not None:
+                        images_dir = race_dir / "images" / "analysis"
+                        images_dir.mkdir(parents=True, exist_ok=True)
+                        ext = Path(upload.name).suffix.lower() or ".jpg"
+                        fname = f"{bid}{ext}"
+                        (images_dir / fname).write_bytes(upload.getvalue())
+                        src = f"/media/races/{race_slug}/images/analysis/{fname}"
+                    new_blocks.append({
+                        "type": "image", "src": src,
+                        "caption": st.session_state.get(f"ae_image_caption_{bid}", ""),
+                    })
+                elif btype == "top10":
+                    slugs = []
+                    for i in range(10):
+                        picked_name = st.session_state.get(f"ae_top10_pos_{bid}_{i}")
+                        slug = athlete_options.get(picked_name)
+                        if slug:
+                            slugs.append(slug)
+                    new_blocks.append({
+                        "type": "top10",
+                        "title": st.session_state.get(f"ae_top10_title_{bid}", "Top 10"),
+                        "slugs": slugs,
+                    })
+
+            (race_dir / "analysis_blocks.json").write_text(
+                json.dumps({"blocks": new_blocks}, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+            st.success("✅ Guardado. Corré `python publish.py` para regenerar el sitio.")
