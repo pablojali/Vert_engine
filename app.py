@@ -2717,21 +2717,44 @@ with tab_web_export:
             default_name, default_year, default_distance = m.group(1), m.group(2), m.group(3)
         default_total_km = race_lib_data.get("total_km")
 
+        # --- If this same race was already exported before (same guessed
+        # folder/year/distance), pre-fill the metadata fields from the
+        # existing race.json instead of blanking them out. Re-exporting an
+        # already-published race (e.g. with more runners) shouldn't require
+        # retyping location/date/etc. every time. ---
+        guessed_race_dir = (
+            WEB_DATA_DIR / "races" / (_slugify(default_name) or "carrera")
+            / (default_year or "") / (f"{default_distance}k" if default_distance else "distancia")
+        )
+        guessed_race_path = guessed_race_dir / "race.json"
+        existing_race_for_prefill = (
+            json.loads(guessed_race_path.read_text(encoding="utf-8")) if guessed_race_path.exists() else {}
+        )
+
         st.markdown("---")
         st.markdown("##### Metadata de la carrera (no calculada por el Engine, se completa a mano)")
+        if existing_race_for_prefill:
+            st.caption(
+                "📎 Ya existe una carrera exportada en esa carpeta/año/distancia - "
+                "los campos de abajo se precargaron con lo que ya estaba guardado."
+            )
 
         with st.form("web_export_form"):
             col1, col2 = st.columns(2)
             with col1:
-                race_name = st.text_input("Nombre de la carrera", value=default_name)
+                race_name = st.text_input("Nombre de la carrera", value=existing_race_for_prefill.get("name") or default_name)
                 race_year = st.text_input("Año", value=default_year)
                 race_distance_km = st.number_input(
-                    "Distancia (km)", value=float(default_total_km) if default_total_km else 0.0, step=1.0,
+                    "Distancia (km)",
+                    value=float(existing_race_for_prefill.get("distance_km") or default_total_km or 0.0), step=1.0,
                 )
-                race_elevation_gain_m = st.number_input("Desnivel positivo (m)", value=0.0, step=100.0)
-                race_date = st.text_input("Fecha (YYYY-MM-DD)", value="")
+                race_elevation_gain_m = st.number_input(
+                    "Desnivel positivo (m)",
+                    value=float(existing_race_for_prefill.get("elevation_gain_m") or 0.0), step=100.0,
+                )
+                race_date = st.text_input("Fecha (YYYY-MM-DD)", value=existing_race_for_prefill.get("date") or "")
             with col2:
-                race_location = st.text_input("Ubicación", value="")
+                race_location = st.text_input("Ubicación", value=existing_race_for_prefill.get("location") or "")
                 race_folder = st.text_input(
                     "Carpeta (data/races/<esto>/...)",
                     value=_slugify(default_name) or "carrera",
@@ -2743,7 +2766,8 @@ with tab_web_export:
                 )
                 race_slug = st.text_input(
                     "Slug público (vertlabs.run/races/<esto>/)",
-                    value=_slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name),
+                    value=existing_race_for_prefill.get("slug")
+                    or (_slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name)),
                 )
 
             st.markdown("---")
