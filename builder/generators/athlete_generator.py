@@ -25,7 +25,10 @@ def generate(loc: dict, t: dict) -> list[dict]:
     for athlete in athletes:
         athlete["url"] = locale_url(loc["code"], f"athletes/{athlete['slug']}/")
         for r in athlete.get("races", []):
-            r["url"] = locale_url(loc["code"], f"races/{r['race_slug']}/")
+            # If the athlete has an uploaded full performance report for this
+            # race, the race name links straight to it instead of the shared
+            # race results page.
+            r["url"] = r.get("report") or locale_url(loc["code"], f"races/{r['race_slug']}/")
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 

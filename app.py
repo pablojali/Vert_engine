@@ -2780,11 +2780,19 @@ with tab_web_export:
                         "Foto (reemplaza la actual si subís una nueva)",
                         type=["jpg", "jpeg", "png"], key=f"portrait_{runner_key}",
                     )
+                    report_upload = st.file_uploader(
+                        "Informe de rendimiento completo (el HTML de 'Download Full Analysis') - "
+                        "se linkea desde el nombre de esta carrera en la página del corredor",
+                        type=["html"], key=f"report_{runner_key}",
+                    )
                     charts_upload = st.file_uploader(
-                        "Gráficos HTML de este corredor (podés subir varios)",
+                        "Otros gráficos HTML de este corredor (podés subir varios) - se muestran "
+                        "embebidos al lado del corredor en la página de la carrera",
                         type=["html"], accept_multiple_files=True, key=f"charts_{runner_key}",
                     )
-                    runner_uploads[runner_key] = {"portrait": portrait_upload, "charts": charts_upload}
+                    runner_uploads[runner_key] = {
+                        "portrait": portrait_upload, "report": report_upload, "charts": charts_upload,
+                    }
 
             export_submit = st.form_submit_button(
                 "📤 Exportar carrera + corredores a data/", type="primary", use_container_width=True
@@ -2809,26 +2817,66 @@ with tab_web_export:
                     race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
                     race_dir.mkdir(parents=True, exist_ok=True)
 
+                    # --- Merge with whatever race.json already exists at this
+                    # folder/year/distance path, so re-exporting the same race
+                    # (e.g. with more runners loaded in a later session) always
+                    # widens it instead of risking a full overwrite that drops
+                    # runners not in memory this time around. ---
+                    existing_race_path = race_dir / "race.json"
+                    existing_race_json = (
+                        json.loads(existing_race_path.read_text(encoding="utf-8"))
+                        if existing_race_path.exists() else {}
+                    )
+                    existing_athletes_by_slug = {
+                        a["slug"]: a for a in existing_race_json.get("athletes", [])
+                    }
+
                     hero_ext = _save_upload(hero_upload, race_dir / "images", "hero")
                     elevation_ext = _save_upload(elevation_upload, race_dir / "charts", "elevation_profile")
 
+                    if hero_ext:
+                        hero_image = f"/media/races/{race_slug}/images/hero{hero_ext}"
+                    else:
+                        hero_image = existing_race_json.get("hero_image") or f"/media/races/{race_slug}/images/hero.jpg"
+
+                    if elevation_ext:
+                        elevation_profile_image = f"/media/races/{race_slug}/charts/elevation_profile{elevation_ext}"
+                    else:
+                        elevation_profile_image = (
+                            existing_race_json.get("elevation_profile_image")
+                            or f"/media/races/{race_slug}/charts/elevation_profile.png"
+                        )
+
                     portrait_uploads_by_slug = {}
+                    report_by_slug = {}
                     athletes_payload = []
                     for runner_key, r in runners_pool.items():
                         athlete_slug = _slugify(r["name"])
                         uploads = runner_uploads.get(runner_key, {})
                         portrait_uploads_by_slug[athlete_slug] = uploads.get("portrait")
+                        existing_athlete = existing_athletes_by_slug.get(athlete_slug, {})
+                        runner_dir = race_dir / "charts" / "runners" / athlete_slug
 
-                        charts_payload = []
+                        report_ext = _save_upload(uploads.get("report"), runner_dir, "report")
+                        if report_ext:
+                            report_path = f"/media/races/{race_slug}/charts/runners/{athlete_slug}/report{report_ext}"
+                        else:
+                            report_path = existing_athlete.get("report")
+                        report_by_slug[athlete_slug] = report_path
+
+                        charts_payload = list(existing_athlete.get("charts", []))
                         for chart_file in uploads.get("charts") or []:
-                            charts_dir = race_dir / "charts" / "runners" / athlete_slug
-                            charts_dir.mkdir(parents=True, exist_ok=True)
+                            runner_dir.mkdir(parents=True, exist_ok=True)
                             safe_name = _slugify(Path(chart_file.name).stem) + ".html"
-                            (charts_dir / safe_name).write_bytes(chart_file.getvalue())
-                            charts_payload.append({
+                            (runner_dir / safe_name).write_bytes(chart_file.getvalue())
+                            chart_entry = {
                                 "label": _chart_label(chart_file.name),
                                 "file": f"/media/races/{race_slug}/charts/runners/{athlete_slug}/{safe_name}",
-                            })
+                            }
+                            # Replace an existing chart with the same file name (re-upload),
+                            # otherwise add it as a new one.
+                            charts_payload = [c for c in charts_payload if c["file"] != chart_entry["file"]]
+                            charts_payload.append(chart_entry)
 
                         athletes_payload.append({
                             "slug": athlete_slug,
@@ -2839,8 +2887,16 @@ with tab_web_export:
                             "vpi": r.get("vpi"),
                             "dmi": r.get("dmi"),
                             "er": r.get("er"),
+                            "report": report_path,
                             "charts": charts_payload,
                         })
+
+                    # Upsert: this export's runners replace their old entry (if
+                    # any); runners not touched this round (e.g. loaded in a
+                    # previous session, not currently in memory) are kept as-is.
+                    merged_athletes_by_slug = dict(existing_athletes_by_slug)
+                    for a in athletes_payload:
+                        merged_athletes_by_slug[a["slug"]] = a
 
                     race_json = {
                         "slug": race_slug,
@@ -2850,9 +2906,9 @@ with tab_web_export:
                         "elevation_gain_m": race_elevation_gain_m or None,
                         "date": race_date or None,
                         "location": race_location or None,
-                        "hero_image": f"/media/races/{race_slug}/images/hero{hero_ext or '.jpg'}",
-                        "elevation_profile_image": f"/media/races/{race_slug}/charts/elevation_profile{elevation_ext or '.png'}",
-                        "athletes": athletes_payload,
+                        "hero_image": hero_image,
+                        "elevation_profile_image": elevation_profile_image,
+                        "athletes": list(merged_athletes_by_slug.values()),
                     }
 
                     (race_dir / "race.json").write_text(
@@ -2863,9 +2919,12 @@ with tab_web_export:
                         written_paths.append(str((race_dir / "images" / f"hero{hero_ext}").relative_to(WEB_DATA_DIR.parent)))
                     if elevation_ext:
                         written_paths.append(str((race_dir / "charts" / f"elevation_profile{elevation_ext}").relative_to(WEB_DATA_DIR.parent)))
-                    n_charts_uploaded = sum(len(a["charts"]) for a in athletes_payload)
+                    n_charts_uploaded = sum(len(uploads_.get("charts") or []) for uploads_ in runner_uploads.values())
                     if n_charts_uploaded:
                         written_paths.append(f"({n_charts_uploaded} gráfico(s) de corredor)")
+                    n_reports_uploaded = sum(1 for u in runner_uploads.values() if u.get("report") is not None)
+                    if n_reports_uploaded:
+                        written_paths.append(f"({n_reports_uploaded} informe(s) completo(s) de corredor)")
 
                     # --- One profile.json per athlete, merged with whatever
                     # already exists on disk so career history accumulates
@@ -2908,6 +2967,7 @@ with tab_web_export:
                             "vpi": athlete["vpi"],
                             "dmi": athlete["dmi"],
                             "er": athlete["er"],
+                            "report": athlete.get("report"),
                         })
 
                         def _avg(key):
