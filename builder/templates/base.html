@@ -22,10 +22,21 @@
 </head>
 <body>
   <header class="site-header">
-    <a href="{{ locale_url(locale, '') }}" class="logo">
-      <img src="/assets/img/logo.png" alt="" class="logo-mark" width="40" height="46">
-      <span class="logo-text">Vertical<span class="logo-trail">Trail</span>Labs</span>
-    </a>
+    <div class="header-top">
+      <a href="{{ locale_url(locale, '') }}" class="logo">
+        <img src="/assets/img/logo.png" alt="" class="logo-mark" width="40" height="46">
+        <span class="logo-text-wrap">
+          <span class="logo-text">Vertical<span class="logo-trail">Trail</span>Labs</span>
+          <span class="logo-tagline">Vertlabs Intelligences Terrain Engine TM v1.0</span>
+        </span>
+      </a>
+
+      <div class="lang-switcher" aria-label="Language">
+        {% for loc in locales %}
+        <a href="{{ locale_url(loc.code, page_path) }}" class="{{ 'active' if loc.code == locale else '' }}">{{ loc.label }}</a>{% if not loop.last %}<span class="lang-sep">·</span>{% endif %}
+        {% endfor %}
+      </div>
+    </div>
 
     <nav class="main-nav" aria-label="Main">
       <a href="{{ locale_url(locale, 'races/') }}">{{ t.nav_races }}</a>
@@ -35,12 +46,6 @@
       <a href="{{ locale_url(locale, 'about/') }}">{{ t.nav_about }}</a>
       <a href="{{ locale_url(locale, 'search/') }}" class="search-link" aria-label="{{ t.nav_search }}">{{ t.nav_search }}</a>
     </nav>
-
-    <div class="lang-switcher" aria-label="Language">
-      {% for loc in locales %}
-      <a href="{{ locale_url(loc.code, page_path) }}" class="{{ 'active' if loc.code == locale else '' }}">{{ loc.label }}</a>{% if not loop.last %}<span class="lang-sep">·</span>{% endif %}
-      {% endfor %}
-    </div>
   </header>
 
   <main>

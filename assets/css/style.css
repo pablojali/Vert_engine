@@ -42,10 +42,17 @@ a:hover { text-decoration: underline; }
 .site-header {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 0.85rem;
   padding: 1.5rem 1.5rem 1.1rem;
   border-bottom: 1px solid var(--color-border);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .site-header .logo {
@@ -56,16 +63,24 @@ a:hover { text-decoration: underline; }
   text-decoration: none;
 }
 .site-header .logo-mark { height: 40px; width: auto; display: block; }
+.logo-text-wrap { display: flex; flex-direction: column; gap: 0.1rem; }
 .site-header .logo-text {
   font-weight: 800;
   font-size: 1.3rem;
   letter-spacing: -0.02em;
 }
 .site-header .logo .logo-trail { color: var(--color-green); }
+.logo-tagline {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
 
 .main-nav {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
@@ -101,10 +116,18 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .breadcrumb a { color: var(--color-muted); }
 
 /* --- Hero / homepage --- */
-.hero { padding: 2.5rem 0 1.5rem; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; text-align: center; }
-.hero h1 { font-size: 2.4rem; margin: 0 0 0.25rem; letter-spacing: -0.02em; }
-.hero .tagline { color: var(--color-accent); font-weight: 600; margin: 0 0 1rem; }
-.hero-sub { color: var(--color-muted); max-width: 62ch; margin-left: auto; margin-right: auto; }
+.hero { padding: 1.5rem 0; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; text-align: left; }
+.hero .tagline {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--color-text);
+}
+.hero-sub { color: var(--color-muted); max-width: 62ch; margin: 0; }
 
 .section-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
 .section-heading .see-all { font-size: 0.85rem; }
@@ -534,6 +557,6 @@ tbody tr:hover { background: var(--color-bg-raised); }
 .site-footer-sub { margin: 0.25rem 0 0; font-size: 0.75rem; }
 
 @media (max-width: 600px) {
-  .hero h1 { font-size: 1.8rem; }
+  .hero .tagline { font-size: 1.1rem; }
   .stats-list { gap: 1.25rem; }
 }
