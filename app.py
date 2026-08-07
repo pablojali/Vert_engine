@@ -10,6 +10,9 @@ import unicodedata
 import traceback
 import requests
 import uuid
+import shutil
+import subprocess
+from contextlib import redirect_stdout
 from pathlib import Path
 from trail_metrics_config import INDEX_CONFIG, SPEED_METRICS, display_metric_documentation
 from data.gpx_loader import (
@@ -1273,6 +1276,142 @@ if 'web_export_pool' not in st.session_state:
     st.session_state['web_export_pool'] = {}
 
 WEB_DATA_DIR = Path(__file__).parent / "data"
+ENGINE_ROOT = Path(__file__).parent
+PUBLISH_CONFIG_PATH = ENGINE_ROOT / ".local_publish_config.json"
+PUBLISH_KEEP_ENTRIES = {".git", "Backup from Blogger", "README.md"}
+
+
+def _load_publish_config() -> dict:
+    if PUBLISH_CONFIG_PATH.exists():
+        try:
+            return json.loads(PUBLISH_CONFIG_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def _save_publish_config(cfg: dict) -> None:
+    PUBLISH_CONFIG_PATH.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+
+
+def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(["git", *args], cwd=str(repo_dir), capture_output=True, text=True)
+
+
+def _sync_output_to_web_repo(web_repo_dir: Path) -> None:
+    """Mirrors Vert_engine/output/ into the vertlabs-web checkout, wiping
+    everything except .git/ and the pre-existing Blogger backup + README."""
+    for entry in web_repo_dir.iterdir():
+        if entry.name in PUBLISH_KEEP_ENTRIES:
+            continue
+        if entry.is_dir():
+            shutil.rmtree(entry)
+        else:
+            entry.unlink()
+    output_dir = ENGINE_ROOT / "output"
+    for entry in output_dir.iterdir():
+        dest = web_repo_dir / entry.name
+        if entry.is_dir():
+            shutil.copytree(entry, dest)
+        else:
+            shutil.copy2(entry, dest)
+
+
+def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> tuple[bool, str]:
+    """Builds the site (equivalent to `python publish.py`), mirrors output/
+    into the vertlabs-web checkout, and pushes it to the given branch.
+    Returns (ok, log) - never raises, so the caller can show the failure
+    in the UI instead of crashing the Streamlit app."""
+    log_lines = []
+    try:
+        import publish as publish_module
+        buf = io.StringIO()
+        with redirect_stdout(buf):
+            publish_module.main()
+        log_lines.append(buf.getvalue())
+    except Exception:
+        return False, "Falló la generación del sitio (publish.py):\n" + traceback.format_exc()
+
+    if not web_repo_dir.is_dir() or not (web_repo_dir / ".git").is_dir():
+        return False, f"'{web_repo_dir}' no es un repo git válido de vertlabs-web."
+
+    _sync_output_to_web_repo(web_repo_dir)
+
+    r = _run_git(web_repo_dir, "fetch", "origin", branch)
+    log_lines.append(r.stdout + r.stderr)
+    r = _run_git(web_repo_dir, "checkout", "-B", branch, f"origin/{branch}")
+    if r.returncode != 0:
+        r = _run_git(web_repo_dir, "checkout", "-B", branch)
+    log_lines.append(r.stdout + r.stderr)
+
+    r = _run_git(web_repo_dir, "add", "-A")
+    log_lines.append(r.stdout + r.stderr)
+
+    r = _run_git(web_repo_dir, "diff", "--cached", "--quiet")
+    if r.returncode == 0:
+        log_lines.append("Sin cambios respecto al último publish - nada para commitear.")
+    else:
+        r = _run_git(web_repo_dir, "commit", "-m", commit_message)
+        log_lines.append(r.stdout + r.stderr)
+        if r.returncode != 0:
+            return False, "Falló el commit:\n" + "\n".join(log_lines)
+
+    # Push unconditionally - even with no new commit, the branch might not
+    # exist on origin yet (first publish to it), and Cloudflare Pages only
+    # picks up branches it can see on the remote.
+    r = _run_git(web_repo_dir, "push", "-u", "origin", branch)
+    log_lines.append(r.stdout + r.stderr)
+    if r.returncode != 0:
+        return False, "Falló el push:\n" + "\n".join(log_lines)
+
+    return True, "\n".join(log_lines)
+
+
+with st.sidebar:
+    st.markdown("## 🚀 Publicar sitio")
+    st.caption(
+        "Genera el sitio (como `python publish.py`) y lo sube a `vertlabs-web`. "
+        "Disponible desde cualquier pestaña."
+    )
+
+    _publish_cfg = _load_publish_config()
+    _default_web_dir = _publish_cfg.get("vertlabs_web_dir") or str(ENGINE_ROOT.parent / "vertlabs-web")
+    web_repo_dir_str = st.text_input(
+        "Carpeta local de vertlabs-web", value=_default_web_dir, key="publish_web_repo_dir",
+        help="La carpeta donde tenés clonado el repo vertlabs-web en esta máquina.",
+    )
+
+    st.markdown("#### Vista previa (staging)")
+    st.caption("Cloudflare Pages genera una URL de preview para la rama 'staging' automáticamente.")
+    if st.button("📤 Publicar a Staging", use_container_width=True, key="publish_staging_btn"):
+        _save_publish_config({"vertlabs_web_dir": web_repo_dir_str})
+        with st.spinner("Generando sitio y subiendo a 'staging'..."):
+            ok, log = _publish_to_branch(
+                Path(web_repo_dir_str).expanduser(), "staging", "Publish desde el Engine (staging)"
+            )
+        if ok:
+            st.success("✅ Publicado en 'staging'.")
+        else:
+            st.error("❌ Falló la publicación a staging.")
+        with st.expander("Ver detalle"):
+            st.code(log or "(sin salida)")
+
+    st.markdown("#### Producción")
+    confirm_prod = st.checkbox("Confirmo publicar en PRODUCCIÓN (vertlabs.run)", key="publish_confirm_prod")
+    if st.button(
+        "✅ Promover a Producción", use_container_width=True, disabled=not confirm_prod, key="publish_prod_btn"
+    ):
+        _save_publish_config({"vertlabs_web_dir": web_repo_dir_str})
+        with st.spinner("Generando sitio y subiendo a 'main'..."):
+            ok, log = _publish_to_branch(
+                Path(web_repo_dir_str).expanduser(), "main", "Publish desde el Engine (producción)"
+            )
+        if ok:
+            st.success("✅ Publicado en 'main'.")
+        else:
+            st.error("❌ Falló la publicación a producción.")
+        with st.expander("Ver detalle"):
+            st.code(log or "(sin salida)")
 
 
 def _slugify(text: str) -> str:
@@ -3027,10 +3166,10 @@ with tab_web_export:
                     if missing:
                         st.caption(
                             f"Falta subir a mano: {'; '.join(missing)}. "
-                            "Después corré `python publish.py` para regenerar el sitio."
+                            "Después usá el botón '🚀 Publicar sitio' de la barra lateral."
                         )
                     else:
-                        st.caption("Todas las imágenes están listas. Corré `python publish.py` para regenerar el sitio.")
+                        st.caption("Todas las imágenes están listas. Usá el botón '🚀 Publicar sitio' de la barra lateral.")
                 except Exception:
                     st.error("❌ No se pudo exportar.")
                     with st.expander("Ver detalle técnico del error"):
@@ -3206,4 +3345,4 @@ with tab_analysis_editor:
             (race_dir / "analysis_blocks.json").write_text(
                 json.dumps({"blocks": new_blocks}, ensure_ascii=False, indent=2), encoding="utf-8"
             )
-            st.success("✅ Guardado. Corré `python publish.py` para regenerar el sitio.")
+            st.success("✅ Guardado. Usá el botón '🚀 Publicar sitio' de la barra lateral para subirlo.")

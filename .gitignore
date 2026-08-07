@@ -4,3 +4,4 @@ __pycache__/
 venv/
 output/
 .env
+.local_publish_config.json
