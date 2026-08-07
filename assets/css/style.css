@@ -117,7 +117,7 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .breadcrumb a { color: var(--color-muted); }
 
 /* --- Hero / homepage --- */
-.hero { padding: 1.5rem 0; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; text-align: left; }
+.hero { padding: 0.5rem 0 1.5rem; border-bottom: 1px solid var(--color-border); margin-bottom: 2rem; text-align: center; }
 .hero .tagline {
   color: var(--color-accent);
   font-weight: 700;
@@ -128,7 +128,7 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   padding-bottom: 0.6rem;
   border-bottom: 2px solid var(--color-text);
 }
-.hero-sub { color: var(--color-muted); max-width: 62ch; margin: 0; }
+.hero-sub { color: var(--color-muted); max-width: 62ch; margin: 0 auto; }
 
 .section-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; }
 .section-heading .see-all { font-size: 0.85rem; }
