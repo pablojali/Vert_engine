@@ -17,6 +17,10 @@ def load_races() -> list[dict]:
     for f in sorted(RACES_DIR.glob("**/race.json")):
         race = json.loads(f.read_text(encoding="utf-8"))
         race["_source_dir"] = f.parent
+        analysis_path = f.parent / "analysis.html"
+        race["analysis_html"] = (
+            analysis_path.read_text(encoding="utf-8") if analysis_path.exists() else None
+        )
         races.append(race)
     return races
 

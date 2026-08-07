@@ -27,6 +27,10 @@
     {% endif %}
   {% endif %}
 
+  {% if race.analysis_html %}
+  <div class="race-analysis-content">{{ race.analysis_html | safe }}</div>
+  {% endif %}
+
   <h2>{{ t.race_performance_title }}</h2>
   <div class="table-scroll">
     <table class="athlete-table">

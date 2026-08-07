@@ -2730,6 +2730,10 @@ with tab_web_export:
         existing_race_for_prefill = (
             json.loads(guessed_race_path.read_text(encoding="utf-8")) if guessed_race_path.exists() else {}
         )
+        guessed_analysis_path = guessed_race_dir / "analysis.html"
+        existing_analysis_html = (
+            guessed_analysis_path.read_text(encoding="utf-8") if guessed_analysis_path.exists() else ""
+        )
 
         st.markdown("---")
         st.markdown("##### Metadata de la carrera (no calculada por el Engine, se completa a mano)")
@@ -2782,6 +2786,19 @@ with tab_web_export:
                     "Para el interactivo: en la pestaña 'Race Analysis', el botón "
                     "'📥 Download chart as HTML' del gráfico de elevación. Se embebe "
                     "como iframe en la página de la carrera (zoom/hover funcionan)."
+                ),
+            )
+
+            st.markdown("---")
+            analysis_html = st.text_area(
+                "Análisis de la carrera (HTML, opcional)",
+                value=existing_analysis_html,
+                height=350,
+                help=(
+                    "Pegá acá el HTML del análisis: párrafos (<p>, <h2>, <img>, etc.) y los "
+                    "fragmentos de gráficos Plotly que ya usás en Blogger (el botón '📥 Download "
+                    "chart as HTML' genera justamente eso). Se inserta tal cual en la página de "
+                    "la carrera, heredando el estilo del sitio, arriba de la tabla de resultados."
                 ),
             )
 
@@ -2939,6 +2956,14 @@ with tab_web_export:
                         json.dumps(race_json, ensure_ascii=False, indent=2), encoding="utf-8"
                     )
                     written_paths = [str((race_dir / "race.json").relative_to(WEB_DATA_DIR.parent))]
+
+                    analysis_path = race_dir / "analysis.html"
+                    if analysis_html.strip():
+                        analysis_path.write_text(analysis_html, encoding="utf-8")
+                        written_paths.append(str(analysis_path.relative_to(WEB_DATA_DIR.parent)))
+                    elif analysis_path.exists():
+                        analysis_path.unlink()
+
                     if hero_ext:
                         written_paths.append(str((race_dir / "images" / f"hero{hero_ext}").relative_to(WEB_DATA_DIR.parent)))
                     if elevation_ext:
