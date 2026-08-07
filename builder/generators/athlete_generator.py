@@ -4,6 +4,7 @@ per athlete, plus the /athletes/ index, for a given locale.
 """
 import json
 from builder.env import env, write_page, out_path, locale_url, DATA_DIR
+from builder.generators.radar_chart import build_radar_svg
 
 ATHLETES_DIR = DATA_DIR / "athletes"
 
@@ -13,6 +14,8 @@ def load_athletes() -> list[dict]:
     for f in sorted(ATHLETES_DIR.glob("*/profile.json")):
         athlete = json.loads(f.read_text(encoding="utf-8"))
         athlete["_source_dir"] = f.parent
+        avg = athlete.get("career_avg") or {}
+        athlete["radar_svg"] = build_radar_svg(avg.get("vpi"), avg.get("dmi"), avg.get("er"))
         athletes.append(athlete)
     return athletes
 

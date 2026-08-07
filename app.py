@@ -3011,6 +3011,7 @@ with tab_web_export:
                             "race_slug": race_slug,
                             "race_name": race_name,
                             "year": int(race_year),
+                            "distance_km": race_distance_km or None,
                             "position": athlete["position"],
                             "finish_time": athlete["finish_time"],
                             "vpi": athlete["vpi"],

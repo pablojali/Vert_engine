@@ -354,10 +354,38 @@ main { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 }
 .athlete-meta { color: var(--color-muted); margin: 0.15rem 0 0; }
 
-.stats-list { list-style: none; padding: 0; display: flex; gap: 2rem; margin: 1rem 0 2rem; }
+.career-avg-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin: 1rem 0 2rem;
+}
+.stats-list { list-style: none; padding: 0; display: flex; gap: 2rem; margin: 0; }
 .stats-list li { display: flex; flex-direction: column; }
 .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
 .stat-value { font-size: 1.6rem; font-weight: 700; }
+
+.radar-chart-wrap { flex-shrink: 0; width: 200px; }
+.radar-chart { width: 100%; height: auto; overflow: visible; }
+.radar-grid { fill: none; stroke: var(--color-border); stroke-width: 1; }
+.radar-axis { stroke: var(--color-border); stroke-width: 1; }
+.radar-data {
+  fill: rgba(34, 211, 238, 0.25);
+  stroke: var(--color-cyan);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.radar-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  fill: var(--color-muted);
+}
+.radar-label-vpi { fill: var(--color-vpi); }
+.radar-label-dmi { fill: var(--color-dmi); }
+.radar-label-er { fill: var(--color-er); }
 
 .metric-note { color: var(--color-muted); font-size: 0.85rem; margin-top: 1rem; }
 
