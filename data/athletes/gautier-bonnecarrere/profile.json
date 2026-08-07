@@ -5,17 +5,6 @@
   "portrait": "/media/athletes/gautier-bonnecarrere/images/portrait.png",
   "races": [
     {
-      "race_slug": "val-d-aran-by-utmb-2026",
-      "race_name": "Val d'Aran by UTMB",
-      "year": 2026,
-      "position": 1,
-      "finish_time": "12:08:55",
-      "vpi": 1109.0,
-      "dmi": 12.67,
-      "er": 74.8,
-      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/gautier-bonnecarrere/report.html"
-    },
-    {
       "race_slug": "val-d-aran-by-utmb-2026-110k",
       "race_name": "Val d'Aran by UTMB",
       "year": 2026,
