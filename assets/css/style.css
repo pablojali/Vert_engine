@@ -279,6 +279,7 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
 }
+.athlete-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.75rem; }
 
 .race-card a, .athlete-card a {
   display: flex;
@@ -304,6 +305,8 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   background: #000;
 }
 .athlete-card img { aspect-ratio: 1 / 1; }
+.athlete-card a { padding: 0.5rem; }
+.athlete-card-name { font-size: 0.85rem; }
 
 .race-card-name, .athlete-card-name { font-weight: 700; }
 .race-card-meta, .athlete-card-meta { color: var(--color-muted); font-size: 0.85rem; }

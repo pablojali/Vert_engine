@@ -9,6 +9,18 @@ from builder.generators.radar_chart import build_radar_svg
 ATHLETES_DIR = DATA_DIR / "athletes"
 
 
+def _surname_sort_key(name: str) -> str:
+    """Names are stored as 'First Middle SURNAME(S)', with the surname in
+    caps (e.g. 'Katarzyna DOMBROWSKA', 'Delbi VILLA GONGORA'). Sorts by
+    that trailing all-caps block instead of the first name."""
+    words = (name or "").split()
+    i = len(words)
+    while i > 0 and words[i - 1].isupper():
+        i -= 1
+    surname = " ".join(words[i:]) if i < len(words) else name
+    return (surname or name or "").lower()
+
+
 def load_athletes() -> list[dict]:
     athletes = []
     for f in sorted(ATHLETES_DIR.glob("*/profile.json")):
@@ -45,7 +57,7 @@ def generate(loc: dict, t: dict) -> list[dict]:
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 
-    ordered = sorted(athletes, key=lambda a: a.get("name", ""))
+    ordered = sorted(athletes, key=lambda a: _surname_sort_key(a.get("name", "")))
     write_page(
         out_path(loc["prefix"], "athletes/index.html"),
         index_template.render(athletes=ordered, t=t, locale=loc["code"], page_path="athletes/"),
