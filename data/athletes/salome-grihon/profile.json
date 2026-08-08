@@ -1,0 +1,25 @@
+{
+  "slug": "salome-grihon",
+  "name": "Salomé GRIHON",
+  "country": null,
+  "portrait": "/media/athletes/salome-grihon/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 39,
+      "finish_time": "30:15:49",
+      "vpi": 704.2,
+      "dmi": 7.81,
+      "er": 62.8,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 704.2,
+    "dmi": 7.8,
+    "er": 62.8
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "aroa-sio",
+  "name": "Aroa SIO",
+  "country": null,
+  "portrait": "/media/athletes/aroa-sio/images/portrait.png",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 32,
+      "finish_time": "29:13:12",
+      "vpi": 738.5,
+      "dmi": 7.78,
+      "er": 58.1,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/aroa-sio/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 738.5,
+    "dmi": 7.8,
+    "er": 58.1
+  }
+}

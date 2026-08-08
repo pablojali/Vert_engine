@@ -1,0 +1,25 @@
+{
+  "slug": "katarzyna-dombrowska",
+  "name": "Katarzyna DOMBROWSKA",
+  "country": null,
+  "portrait": "/media/athletes/katarzyna-dombrowska/images/portrait.png",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 17,
+      "finish_time": "27:33:14",
+      "vpi": 784.4,
+      "dmi": 8.55,
+      "er": 44.6,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/katarzyna-dombrowska/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 784.4,
+    "dmi": 8.6,
+    "er": 44.6
+  }
+}

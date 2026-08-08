@@ -52,6 +52,42 @@
           "file": "/media/races/val-d-aran-by-utmb-2026/charts/runners/delbi-villa-gongora/delbi-villa-gongora-livetrail-full-analysis.html"
         }
       ]
+    },
+    {
+      "slug": "katarzyna-dombrowska",
+      "name": "Katarzyna DOMBROWSKA",
+      "bib": 4,
+      "finish_time": "27:33:14",
+      "position": 17,
+      "vpi": 784.4,
+      "dmi": 8.55,
+      "er": 44.6,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/katarzyna-dombrowska/report.html",
+      "charts": []
+    },
+    {
+      "slug": "aroa-sio",
+      "name": "Aroa SIO",
+      "bib": 6,
+      "finish_time": "29:13:12",
+      "position": 32,
+      "vpi": 738.5,
+      "dmi": 7.78,
+      "er": 58.1,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/aroa-sio/report.html",
+      "charts": []
+    },
+    {
+      "slug": "salome-grihon",
+      "name": "Salomé GRIHON",
+      "bib": 298,
+      "finish_time": "30:15:49",
+      "position": 39,
+      "vpi": 704.2,
+      "dmi": 7.81,
+      "er": 62.8,
+      "report": null,
+      "charts": []
     }
   ]
 }
