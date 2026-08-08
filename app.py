@@ -3147,16 +3147,21 @@ with tab_web_export:
 
                     if hero_ext:
                         hero_image = f"/media/races/{race_slug}/images/hero{hero_ext}"
+                    elif existing_race_json.get("hero_image"):
+                        hero_image = existing_race_json.get("hero_image")
+                    elif (race_dir / "images" / "hero.jpg").exists():
+                        hero_image = f"/media/races/{race_slug}/images/hero.jpg"
                     else:
-                        hero_image = existing_race_json.get("hero_image") or f"/media/races/{race_slug}/images/hero.jpg"
+                        hero_image = None
 
                     if elevation_ext:
                         elevation_profile_image = f"/media/races/{race_slug}/charts/elevation_profile{elevation_ext}"
+                    elif existing_race_json.get("elevation_profile_image"):
+                        elevation_profile_image = existing_race_json.get("elevation_profile_image")
+                    elif (race_dir / "charts" / "elevation_profile.png").exists():
+                        elevation_profile_image = f"/media/races/{race_slug}/charts/elevation_profile.png"
                     else:
-                        elevation_profile_image = (
-                            existing_race_json.get("elevation_profile_image")
-                            or f"/media/races/{race_slug}/charts/elevation_profile.png"
-                        )
+                        elevation_profile_image = None
 
                     portrait_uploads_by_slug = {}
                     report_by_slug = {}
@@ -3249,11 +3254,15 @@ with tab_web_export:
                         if profile_path.exists():
                             profile = json.loads(profile_path.read_text(encoding="utf-8"))
                         else:
+                            existing_portrait_path = _find_existing_portrait(athlete["slug"])
                             profile = {
                                 "slug": athlete["slug"],
                                 "name": athlete["name"],
                                 "country": None,
-                                "portrait": f"/media/athletes/{athlete['slug']}/images/portrait.jpg",
+                                "portrait": (
+                                    f"/media/athletes/{athlete['slug']}/images/{existing_portrait_path.name}"
+                                    if existing_portrait_path else None
+                                ),
                                 "races": [],
                             }
 

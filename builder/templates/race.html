@@ -4,6 +4,7 @@
 {% block title %}{{ race.name }} {{ race.year }} — Vertical Trail Labs{% endblock %}
 {% block description %}{{ t.race_performance_title }}: {{ race.name }} {{ race.year }} — VPI, DMI, ER.{% endblock %}
 {% block og_title %}{{ race.name }} {{ race.year }} — Vertical Trail Labs{% endblock %}
+{% block og_image %}{% if race.hero_image %}https://{{ site_domain }}{{ race.hero_image }}{% else %}{{ super() }}{% endif %}{% endblock %}
 
 {% block content %}
 <article class="race-page">

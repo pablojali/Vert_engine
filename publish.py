@@ -122,7 +122,7 @@ def main() -> None:
 
     print("\n=== Recursos compartidos ===")
     print("Generando sitemap y robots.txt...")
-    sitemap_generator.generate(races_by_locale, athletes_by_locale)
+    sitemap_generator.generate(races_by_locale, athletes_by_locale, posts_by_locale)
 
     print("Copiando assets estáticos...")
     copy_assets()

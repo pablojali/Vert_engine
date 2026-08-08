@@ -4,6 +4,7 @@
 {% block title %}{{ post.title }} — Vertical Trail Labs{% endblock %}
 {% block description %}{{ post.title }}{% endblock %}
 {% block og_title %}{{ post.title }} — Vertical Trail Labs{% endblock %}
+{% block og_image %}{% if post.cover_image %}https://{{ site_domain }}{{ post.cover_image }}{% else %}{{ super() }}{% endif %}{% endblock %}
 
 {% block content %}
 <article class="race-page">

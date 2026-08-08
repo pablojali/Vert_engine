@@ -3,6 +3,7 @@
 {% block title %}{{ athlete.name }} — Vertical Trail Labs{% endblock %}
 {% block description %}{{ athlete.name }} — VPI, DMI, ER.{% endblock %}
 {% block og_title %}{{ athlete.name }} — Vertical Trail Labs{% endblock %}
+{% block og_image %}{% if athlete.portrait %}https://{{ site_domain }}{{ athlete.portrait }}{% else %}{{ super() }}{% endif %}{% endblock %}
 
 {% block content %}
 <article class="athlete-page">
