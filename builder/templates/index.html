@@ -1,41 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if races %}
+{% if carousel_items %}
 <section class="featured-carousel">
   <div class="carousel-track">
-    {% for r in races[:5] %}
-    <article class="carousel-slide{{ ' active' if loop.first else '' }}" style="background-image:url('{{ r.hero_image }}')">
+    {% for item in carousel_items %}
+    <article class="carousel-slide{{ ' active' if loop.first else '' }}"{% if item.image %} style="background-image:url('{{ item.image }}')"{% endif %}>
       <div class="carousel-overlay">
         <div class="carousel-text">
-          <p class="carousel-eyebrow">{{ t.home_featured_label }}</p>
-          <h2>{{ r.name }} {{ r.year }}</h2>
+          <p class="carousel-eyebrow">{{ item.eyebrow }}</p>
+          <h2>{{ item.title }}</h2>
           <p class="carousel-desc">{{ t.home_featured_desc }}</p>
-          <a href="{{ r.url }}" class="carousel-cta">{{ t.home_featured_cta }} →</a>
+          <a href="{{ item.url }}" class="carousel-cta">{{ item.cta }} →</a>
         </div>
+        {% if item.stats %}
         <div class="carousel-stats">
-          {% if r.date %}
-          <div class="carousel-stat"><span class="carousel-stat-value carousel-stat-date">{{ r.date }}</span><span class="carousel-stat-label">{{ t.race_date_label }}</span></div>
-          {% endif %}
-          {% if r.distance_km %}
-          <div class="carousel-stat"><span class="carousel-stat-value">{{ r.distance_km|round(1) }}<small>km</small></span><span class="carousel-stat-label">{{ t.race_distance_label }}</span></div>
-          {% endif %}
-          {% if r.elevation_gain_m %}
-          <div class="carousel-stat"><span class="carousel-stat-value">{{ r.elevation_gain_m|round|int }}<small>m+</small></span><span class="carousel-stat-label">{{ t.race_elevation_label }}</span></div>
-          {% endif %}
-          {% set winner = r.athletes|selectattr('position', 'equalto', 1)|first %}
-          {% if winner %}
-          <div class="carousel-stat"><span class="carousel-stat-value">{{ winner.finish_time }}</span><span class="carousel-stat-label">{{ t.race_winning_time_label }}</span></div>
-          {% endif %}
+          {% for stat in item.stats %}
+          <div class="carousel-stat"><span class="carousel-stat-value{{ ' ' + stat.extra_class if stat.extra_class else '' }}">{{ stat.value }}{% if stat.unit %}<small>{{ stat.unit }}</small>{% endif %}</span><span class="carousel-stat-label">{{ stat.label }}</span></div>
+          {% endfor %}
         </div>
+        {% endif %}
       </div>
     </article>
     {% endfor %}
   </div>
-  {% if races[:5]|length > 1 %}
+  {% if carousel_items|length > 1 %}
   <div class="carousel-dots">
-    {% for r in races[:5] %}
-    <button class="carousel-dot{{ ' active' if loop.first else '' }}" data-index="{{ loop.index0 }}" aria-label="{{ r.name }} {{ r.year }}"></button>
+    {% for item in carousel_items %}
+    <button class="carousel-dot{{ ' active' if loop.first else '' }}" data-index="{{ loop.index0 }}" aria-label="{{ item.title }}"></button>
     {% endfor %}
   </div>
   {% endif %}
@@ -87,4 +79,23 @@
     {% endfor %}
   </ul>
 </section>
+
+{% if other_posts %}
+<section class="homepage-section">
+  <div class="section-heading">
+    <h2>{{ t.home_other_posts }}</h2>
+  </div>
+  <ul class="race-grid">
+    {% for p in other_posts %}
+    <li class="race-card">
+      <a href="{{ p.url }}">
+        {% if p.cover_image %}<img src="{{ p.cover_image }}" alt="" loading="lazy">{% endif %}
+        <span class="race-card-name">{{ p.title }}</span>
+        <span class="race-card-meta">{{ p.category }}{% if p.date %} · {{ p.date }}{% endif %}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
 {% endblock %}

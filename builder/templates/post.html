@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_blocks.html" import render_blocks %}
+
+{% block title %}{{ post.title }} — Vertical Trail Labs{% endblock %}
+{% block description %}{{ post.title }}{% endblock %}
+{% block og_title %}{{ post.title }} — Vertical Trail Labs{% endblock %}
+
+{% block content %}
+<article class="race-page">
+  <p class="breadcrumb">
+    {% if post.race %}<a href="{{ post.race.url }}">{{ post.race.name }} {{ post.race.year }}</a> / {% endif %}
+    {{ post.title }}
+  </p>
+
+  {% if post.cover_image %}
+  <img src="{{ post.cover_image }}" alt="{{ post.title }}" class="race-hero" loading="lazy">
+  {% endif %}
+
+  <h1>{{ post.title }}</h1>
+  <p class="race-meta">
+    {%- if post.category %}{{ post.category }}{% endif -%}
+    {%- if post.date %} · {{ post.date }}{% endif -%}
+  </p>
+
+  {{ render_blocks(post.blocks, t, post.title) }}
+</article>
+{% endblock %}

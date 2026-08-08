@@ -1,0 +1,47 @@
+{% macro render_blocks(blocks, t, fallback_alt='') %}
+  {% for block in blocks %}
+    {% if block.type == 'text' %}
+    <div class="race-analysis-content race-analysis-text">
+      {% if block.title %}<h2>{{ block.title }}</h2>{% endif %}
+      {% for para in block.content.split('\n\n') if para.strip() %}<p>{{ para.strip() }}</p>{% endfor %}
+    </div>
+    {% elif block.type == 'html' %}
+    <div class="race-analysis-content">{{ block.content | safe }}</div>
+    {% elif block.type == 'image' %}
+    <figure class="race-analysis-figure">
+      <img src="{{ block.src }}" alt="{{ block.caption or fallback_alt }}" loading="lazy">
+      {% if block.caption %}<figcaption>{{ block.caption }}</figcaption>{% endif %}
+    </figure>
+    {% elif block.type == 'top10' and block.entries %}
+    <div class="top10-block">
+      <h3>{{ block.title }}</h3>
+      <div class="table-scroll">
+        <table class="athlete-table">
+          <thead>
+            <tr>
+              <th>{{ t.race_pos }}</th>
+              <th>{{ t.race_athlete }}</th>
+              <th>{{ t.race_time }}</th>
+              <th class="metric-vpi">VPI</th>
+              <th class="metric-dmi">DMI</th>
+              <th class="metric-er">ER</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in block.entries %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td><a href="{{ a.url }}">{{ a.name }}</a></td>
+              <td>{{ a.finish_time }}</td>
+              <td class="metric-vpi">{{ a.vpi if a.vpi is not none else '—' }}</td>
+              <td class="metric-dmi">{{ a.dmi if a.dmi is not none else '—' }}</td>
+              <td class="metric-er">{{ a.er if a.er is not none else '—' }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+{% endmacro %}

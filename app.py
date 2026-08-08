@@ -1479,10 +1479,158 @@ def _web_export_track_result(race_key, runner_info, indices):
         pass
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export, tab_analysis_editor = st.tabs(
+# ---------------------------------------------
+# Shared block-editor engine, used by both the race Analysis Editor and
+# the Posts editor: an ordered list of content blocks (text/html/image/
+# top10), addable/reorderable/deletable, backed by st.session_state.
+# Kept generic (order_key + key_prefix passed in) so the two editors don't
+# collide and don't duplicate this ~90-line widget dance.
+# ---------------------------------------------
+BLOCK_TYPE_LABELS = {"text": "📝 Texto", "html": "🧩 HTML", "image": "🖼️ Imagen", "top10": "🏆 Top 10"}
+
+
+def _init_block_order(order_key: str, loaded_blocks: list[dict]) -> None:
+    if order_key in st.session_state:
+        return
+    order = []
+    for b in loaded_blocks:
+        bid = str(uuid.uuid4())
+        order.append((bid, b["type"]))
+        st.session_state[f"block_initial_{bid}"] = b
+    st.session_state[order_key] = order
+
+
+def _render_block_editor_ui(order_key: str, key_prefix: str, images_dir: Path, athlete_options: dict) -> None:
+    order = st.session_state[order_key]
+    athlete_names_by_slug = {v: k for k, v in athlete_options.items() if v}
+
+    if not order:
+        st.caption("Todavía no hay bloques. Agregá el primero abajo.")
+
+    for idx, (bid, btype) in enumerate(order):
+        initial = st.session_state.get(f"block_initial_{bid}", {})
+        with st.container(border=True):
+            c1, c2, c3, c4 = st.columns([6, 1, 1, 1])
+            c1.markdown(f"**{idx + 1}. {BLOCK_TYPE_LABELS.get(btype, btype)}**")
+            if c2.button("↑", key=f"{key_prefix}_up_{bid}", disabled=(idx == 0), help="Subir"):
+                order[idx - 1], order[idx] = order[idx], order[idx - 1]
+                st.session_state[order_key] = order
+                st.rerun()
+            if c3.button("↓", key=f"{key_prefix}_down_{bid}", disabled=(idx == len(order) - 1), help="Bajar"):
+                order[idx + 1], order[idx] = order[idx], order[idx + 1]
+                st.session_state[order_key] = order
+                st.rerun()
+            if c4.button("🗑️", key=f"{key_prefix}_del_{bid}", help="Borrar bloque"):
+                order.pop(idx)
+                st.session_state[order_key] = order
+                st.rerun()
+
+            if btype == "text":
+                st.text_input(
+                    "Título (opcional)", value=initial.get("title", ""), key=f"{key_prefix}_text_title_{bid}",
+                    placeholder="Título (opcional) — ej. 'Performance by athlete'",
+                )
+                st.text_area(
+                    "Texto (dejá una línea en blanco entre párrafos)",
+                    value=initial.get("content", ""), height=150, key=f"{key_prefix}_text_{bid}",
+                    label_visibility="collapsed",
+                )
+            elif btype == "html":
+                st.text_area(
+                    "HTML / gráfico embebido (ej. el fragmento de 'Download chart as HTML')",
+                    value=initial.get("content", ""), height=200, key=f"{key_prefix}_html_{bid}",
+                    label_visibility="collapsed",
+                )
+            elif btype == "image":
+                existing_src = initial.get("src")
+                if existing_src:
+                    local_path = images_dir / Path(existing_src).name
+                    if local_path.exists():
+                        st.image(str(local_path), caption="Imagen actual", width=240)
+                st.file_uploader(
+                    "Reemplazar imagen (opcional si ya hay una)",
+                    type=["jpg", "jpeg", "png"], key=f"{key_prefix}_image_upload_{bid}",
+                )
+                st.text_input(
+                    "Pie de foto (opcional)", value=initial.get("caption", ""), key=f"{key_prefix}_image_caption_{bid}"
+                )
+            elif btype == "top10":
+                st.text_input(
+                    "Título del bloque", value=initial.get("title", "Top 10"), key=f"{key_prefix}_top10_title_{bid}"
+                )
+                saved_slugs = initial.get("slugs", [])
+                cols = st.columns(2)
+                for i in range(10):
+                    saved_slug = saved_slugs[i] if i < len(saved_slugs) else None
+                    default_name = athlete_names_by_slug.get(saved_slug, "— (vacío) —")
+                    options = list(athlete_options.keys())
+                    default_index = options.index(default_name) if default_name in options else 0
+                    cols[i % 2].selectbox(
+                        f"Puesto {i + 1}", options, index=default_index, key=f"{key_prefix}_top10_pos_{bid}_{i}",
+                    )
+
+    st.markdown("---")
+    add_col1, add_col2 = st.columns([3, 1])
+    new_block_label = add_col1.selectbox(
+        "Tipo de bloque a agregar", list(BLOCK_TYPE_LABELS.values()),
+        key=f"{key_prefix}_new_block_type", label_visibility="collapsed",
+    )
+    if add_col2.button("➕ Agregar bloque", use_container_width=True, key=f"{key_prefix}_add_block_btn"):
+        new_type = {v: k for k, v in BLOCK_TYPE_LABELS.items()}[new_block_label]
+        new_id = str(uuid.uuid4())
+        order.append((new_id, new_type))
+        st.session_state[f"block_initial_{new_id}"] = {}
+        st.session_state[order_key] = order
+        st.rerun()
+
+
+def _collect_blocks_from_state(
+    order_key: str, key_prefix: str, images_dir: Path, images_url_prefix: str, athlete_options: dict
+) -> list[dict]:
+    order = st.session_state[order_key]
+    blocks = []
+    for bid, btype in order:
+        if btype == "text":
+            blocks.append({
+                "type": "text",
+                "title": st.session_state.get(f"{key_prefix}_text_title_{bid}", ""),
+                "content": st.session_state.get(f"{key_prefix}_text_{bid}", ""),
+            })
+        elif btype == "html":
+            blocks.append({"type": "html", "content": st.session_state.get(f"{key_prefix}_html_{bid}", "")})
+        elif btype == "image":
+            initial = st.session_state.get(f"block_initial_{bid}", {})
+            src = initial.get("src")
+            upload = st.session_state.get(f"{key_prefix}_image_upload_{bid}")
+            if upload is not None:
+                images_dir.mkdir(parents=True, exist_ok=True)
+                ext = Path(upload.name).suffix.lower() or ".jpg"
+                fname = f"{bid}{ext}"
+                (images_dir / fname).write_bytes(upload.getvalue())
+                src = f"{images_url_prefix}/{fname}"
+            blocks.append({
+                "type": "image", "src": src,
+                "caption": st.session_state.get(f"{key_prefix}_image_caption_{bid}", ""),
+            })
+        elif btype == "top10":
+            slugs = []
+            for i in range(10):
+                picked_name = st.session_state.get(f"{key_prefix}_top10_pos_{bid}_{i}")
+                slug = athlete_options.get(picked_name)
+                if slug:
+                    slugs.append(slug)
+            blocks.append({
+                "type": "top10",
+                "title": st.session_state.get(f"{key_prefix}_top10_title_{bid}", "Top 10"),
+                "slugs": slugs,
+            })
+    return blocks
+
+
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export, tab_analysis_editor, tab_posts = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
      "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher",
-     "🌐 Exportar a Web", "✏️ Editor de Análisis"]
+     "🌐 Exportar a Web", "✏️ Editor de Análisis", "📰 Posts"]
 )
 
 # ---------------------------------------------
@@ -3205,7 +3353,6 @@ with tab_analysis_editor:
         athlete_options = {"— (vacío) —": None}
         for a in race_data.get("athletes", []):
             athlete_options[f"{a['name']} (#{a.get('bib') or '-'})"] = a["slug"]
-        athlete_names_by_slug = {v: k for k, v in athlete_options.items() if v}
 
         order_key = f"ae_order_{race_path}"
         if order_key not in st.session_state:
@@ -3217,132 +3364,128 @@ with tab_analysis_editor:
                 loaded_blocks = [{"type": "html", "content": legacy_path.read_text(encoding="utf-8")}]
             else:
                 loaded_blocks = []
-            order = []
-            for b in loaded_blocks:
-                bid = str(uuid.uuid4())
-                order.append((bid, b["type"]))
-                st.session_state[f"ae_initial_{bid}"] = b
-            st.session_state[order_key] = order
+            _init_block_order(order_key, loaded_blocks)
 
-        order = st.session_state[order_key]
-
-        TYPE_LABELS = {"text": "📝 Texto", "html": "🧩 HTML", "image": "🖼️ Imagen", "top10": "🏆 Top 10"}
-
-        if not order:
-            st.caption("Todavía no hay bloques. Agregá el primero abajo.")
-
-        for idx, (bid, btype) in enumerate(order):
-            initial = st.session_state.get(f"ae_initial_{bid}", {})
-            with st.container(border=True):
-                c1, c2, c3, c4 = st.columns([6, 1, 1, 1])
-                c1.markdown(f"**{idx + 1}. {TYPE_LABELS.get(btype, btype)}**")
-                if c2.button("↑", key=f"ae_up_{bid}", disabled=(idx == 0), help="Subir"):
-                    order[idx - 1], order[idx] = order[idx], order[idx - 1]
-                    st.session_state[order_key] = order
-                    st.rerun()
-                if c3.button("↓", key=f"ae_down_{bid}", disabled=(idx == len(order) - 1), help="Bajar"):
-                    order[idx + 1], order[idx] = order[idx], order[idx + 1]
-                    st.session_state[order_key] = order
-                    st.rerun()
-                if c4.button("🗑️", key=f"ae_del_{bid}", help="Borrar bloque"):
-                    order.pop(idx)
-                    st.session_state[order_key] = order
-                    st.rerun()
-
-                if btype == "text":
-                    st.text_input(
-                        "Título (opcional)", value=initial.get("title", ""), key=f"ae_text_title_{bid}",
-                        placeholder="Título (opcional) — ej. 'Performance by athlete'",
-                    )
-                    st.text_area(
-                        "Texto (dejá una línea en blanco entre párrafos)",
-                        value=initial.get("content", ""), height=150, key=f"ae_text_{bid}",
-                        label_visibility="collapsed",
-                    )
-                elif btype == "html":
-                    st.text_area(
-                        "HTML / gráfico embebido (ej. el fragmento de 'Download chart as HTML')",
-                        value=initial.get("content", ""), height=200, key=f"ae_html_{bid}",
-                        label_visibility="collapsed",
-                    )
-                elif btype == "image":
-                    existing_src = initial.get("src")
-                    if existing_src:
-                        local_path = race_dir / "images" / "analysis" / Path(existing_src).name
-                        if local_path.exists():
-                            st.image(str(local_path), caption="Imagen actual", width=240)
-                    st.file_uploader(
-                        "Reemplazar imagen (opcional si ya hay una)",
-                        type=["jpg", "jpeg", "png"], key=f"ae_image_upload_{bid}",
-                    )
-                    st.text_input("Pie de foto (opcional)", value=initial.get("caption", ""), key=f"ae_image_caption_{bid}")
-                elif btype == "top10":
-                    st.text_input("Título del bloque", value=initial.get("title", "Top 10"), key=f"ae_top10_title_{bid}")
-                    saved_slugs = initial.get("slugs", [])
-                    cols = st.columns(2)
-                    for i in range(10):
-                        saved_slug = saved_slugs[i] if i < len(saved_slugs) else None
-                        default_name = athlete_names_by_slug.get(saved_slug, "— (vacío) —")
-                        options = list(athlete_options.keys())
-                        default_index = options.index(default_name) if default_name in options else 0
-                        cols[i % 2].selectbox(
-                            f"Puesto {i + 1}", options, index=default_index, key=f"ae_top10_pos_{bid}_{i}",
-                        )
-
-        st.markdown("---")
-        add_col1, add_col2 = st.columns([3, 1])
-        new_block_label = add_col1.selectbox(
-            "Tipo de bloque a agregar", list(TYPE_LABELS.values()), key="ae_new_block_type", label_visibility="collapsed",
-        )
-        if add_col2.button("➕ Agregar bloque", use_container_width=True):
-            new_type = {v: k for k, v in TYPE_LABELS.items()}[new_block_label]
-            new_id = str(uuid.uuid4())
-            order.append((new_id, new_type))
-            st.session_state[f"ae_initial_{new_id}"] = {}
-            st.session_state[order_key] = order
-            st.rerun()
+        _render_block_editor_ui(order_key, "ae", race_dir / "images" / "analysis", athlete_options)
 
         st.markdown("---")
         if st.button("💾 Guardar análisis", type="primary", use_container_width=True):
-            new_blocks = []
-            for bid, btype in order:
-                if btype == "text":
-                    new_blocks.append({
-                        "type": "text",
-                        "title": st.session_state.get(f"ae_text_title_{bid}", ""),
-                        "content": st.session_state.get(f"ae_text_{bid}", ""),
-                    })
-                elif btype == "html":
-                    new_blocks.append({"type": "html", "content": st.session_state.get(f"ae_html_{bid}", "")})
-                elif btype == "image":
-                    initial = st.session_state.get(f"ae_initial_{bid}", {})
-                    src = initial.get("src")
-                    upload = st.session_state.get(f"ae_image_upload_{bid}")
-                    if upload is not None:
-                        images_dir = race_dir / "images" / "analysis"
-                        images_dir.mkdir(parents=True, exist_ok=True)
-                        ext = Path(upload.name).suffix.lower() or ".jpg"
-                        fname = f"{bid}{ext}"
-                        (images_dir / fname).write_bytes(upload.getvalue())
-                        src = f"/media/races/{race_slug}/images/analysis/{fname}"
-                    new_blocks.append({
-                        "type": "image", "src": src,
-                        "caption": st.session_state.get(f"ae_image_caption_{bid}", ""),
-                    })
-                elif btype == "top10":
-                    slugs = []
-                    for i in range(10):
-                        picked_name = st.session_state.get(f"ae_top10_pos_{bid}_{i}")
-                        slug = athlete_options.get(picked_name)
-                        if slug:
-                            slugs.append(slug)
-                    new_blocks.append({
-                        "type": "top10",
-                        "title": st.session_state.get(f"ae_top10_title_{bid}", "Top 10"),
-                        "slugs": slugs,
-                    })
-
+            new_blocks = _collect_blocks_from_state(
+                order_key, "ae", race_dir / "images" / "analysis",
+                f"/media/races/{race_slug}/images/analysis", athlete_options,
+            )
             (race_dir / "analysis_blocks.json").write_text(
                 json.dumps({"blocks": new_blocks}, ensure_ascii=False, indent=2), encoding="utf-8"
             )
             st.success("✅ Guardado. Usá el botón '🚀 Publicar sitio' de la barra lateral para subirlo.")
+
+with tab_posts:
+    st.header("📰 Editor de Posts")
+    st.caption(
+        "Artículos separados de las carreras: pre-race, análisis de métricas, o cualquier otra cosa "
+        "que quieras publicar. Podés asociarlos a una carrera (opcional) y elegir si van al carousel "
+        "de portada o a la sección 'Más del Lab' de la home."
+    )
+
+    def _sync_post_slug_from_title():
+        st.session_state["post_slug_input"] = _slugify(st.session_state.get("post_title_input", ""))
+
+    post_title = st.text_input("Título del post", key="post_title_input", on_change=_sync_post_slug_from_title)
+    post_slug = st.text_input(
+        "Slug (define la URL /posts/<esto>/ y dónde se guarda)", key="post_slug_input",
+    )
+
+    if not post_slug:
+        st.info("Escribí un título (o directamente un slug) para empezar.")
+    else:
+        post_dir = WEB_DATA_DIR / "posts" / post_slug
+        post_path = post_dir / "post.json"
+        existing_post = json.loads(post_path.read_text(encoding="utf-8")) if post_path.exists() else {}
+        if existing_post:
+            st.caption(f"📎 Ya existe un post en '{post_slug}' - se precargó lo que ya estaba guardado.")
+
+        col1, col2 = st.columns(2)
+        with col1:
+            post_category = st.text_input(
+                "Categoría", value=existing_post.get("category") or "", key="post_category_input",
+                placeholder="ej. Pre-race, Análisis de métricas",
+            )
+            post_date = st.text_input("Fecha (YYYY-MM-DD)", value=existing_post.get("date") or "", key="post_date_input")
+        with col2:
+            _existing_races_for_posts = sorted(WEB_DATA_DIR.glob("races/**/race.json"))
+            race_options = {"— Ninguna —": None}
+            for p in _existing_races_for_posts:
+                d = json.loads(p.read_text(encoding="utf-8"))
+                race_options[f"{d.get('name')} {d.get('year')} — {p.parent.name} ({d.get('slug')})"] = d.get("slug")
+            default_race_label = next(
+                (k for k, v in race_options.items() if v == existing_post.get("race_slug")), "— Ninguna —"
+            )
+            race_label = st.selectbox(
+                "Carrera asociada (opcional)", list(race_options.keys()),
+                index=list(race_options.keys()).index(default_race_label), key="post_race_select",
+            )
+            post_race_slug = race_options[race_label]
+
+            placement_label = st.radio(
+                "Dónde aparece en la portada",
+                ["Carousel (destacado)", "Más del Lab (listado)"],
+                index=0 if existing_post.get("placement") == "carousel" else 1,
+                key="post_placement_radio",
+            )
+            post_placement = "carousel" if placement_label.startswith("Carousel") else "list"
+
+        cover_existing = existing_post.get("cover_image")
+        if cover_existing:
+            local_cover = post_dir / "images" / Path(cover_existing).name
+            if local_cover.exists():
+                st.image(str(local_cover), caption="Imagen de portada actual", width=280)
+        cover_upload = st.file_uploader(
+            "Imagen de portada (opcional)", type=["jpg", "jpeg", "png"], key="post_cover_upload"
+        )
+
+        athlete_options = {"— (vacío) —": None}
+        if post_race_slug:
+            race_json_path = next(
+                (p for p in _existing_races_for_posts
+                 if json.loads(p.read_text(encoding="utf-8")).get("slug") == post_race_slug), None,
+            )
+            if race_json_path:
+                race_json = json.loads(race_json_path.read_text(encoding="utf-8"))
+                for a in race_json.get("athletes", []):
+                    athlete_options[f"{a['name']} (#{a.get('bib') or '-'})"] = a["slug"]
+
+        order_key = f"post_order_{post_slug}"
+        if order_key not in st.session_state:
+            _init_block_order(order_key, existing_post.get("blocks", []))
+
+        st.markdown("---")
+        _render_block_editor_ui(order_key, f"post_{post_slug}", post_dir / "images" / "content", athlete_options)
+
+        st.markdown("---")
+        if st.button("💾 Guardar post", type="primary", use_container_width=True, key="post_save_btn"):
+            new_blocks = _collect_blocks_from_state(
+                order_key, f"post_{post_slug}", post_dir / "images" / "content",
+                f"/media/posts/{post_slug}/images/content", athlete_options,
+            )
+            post_dir.mkdir(parents=True, exist_ok=True)
+
+            cover_image = cover_existing
+            if cover_upload is not None:
+                images_dir = post_dir / "images"
+                images_dir.mkdir(parents=True, exist_ok=True)
+                ext = Path(cover_upload.name).suffix.lower() or ".jpg"
+                (images_dir / f"cover{ext}").write_bytes(cover_upload.getvalue())
+                cover_image = f"/media/posts/{post_slug}/images/cover{ext}"
+
+            post_json = {
+                "slug": post_slug,
+                "title": post_title or post_slug,
+                "date": post_date or None,
+                "category": post_category or None,
+                "race_slug": post_race_slug,
+                "placement": post_placement,
+                "cover_image": cover_image,
+                "blocks": new_blocks,
+            }
+            post_path.write_text(json.dumps(post_json, ensure_ascii=False, indent=2), encoding="utf-8")
+            st.success("✅ Post guardado. Usá el botón '🚀 Publicar sitio' de la barra lateral para subirlo.")
