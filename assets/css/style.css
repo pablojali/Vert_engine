@@ -98,6 +98,13 @@ a:hover { text-decoration: underline; }
 }
 .main-nav a:hover { color: var(--color-cyan); border-color: var(--color-cyan); }
 
+.header-top-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
 .lang-switcher {
   display: flex;
   align-items: center;
@@ -108,6 +115,10 @@ a:hover { text-decoration: underline; }
 .lang-switcher a { color: var(--color-muted); text-decoration: none; font-weight: 600; }
 .lang-switcher a.active { color: var(--color-green); }
 .lang-switcher a:hover { color: var(--color-cyan); }
+
+.social-links { display: flex; align-items: center; gap: 0.65rem; }
+.social-links a { color: var(--color-muted); display: flex; transition: color 0.15s ease; }
+.social-links a:hover { color: var(--color-cyan); }
 .lang-sep { color: var(--color-border); }
 
 /* --- Layout --- */

@@ -35,10 +35,20 @@
         </span>
       </a>
 
-      <div class="lang-switcher" aria-label="Language">
-        {% for loc in locales %}
-        <a href="{{ locale_url(loc.code, page_path) }}" class="{{ 'active' if loc.code == locale else '' }}">{{ loc.label }}</a>{% if not loop.last %}<span class="lang-sep">·</span>{% endif %}
-        {% endfor %}
+      <div class="header-top-right">
+        <div class="lang-switcher" aria-label="Language">
+          {% for loc in locales %}
+          <a href="{{ locale_url(loc.code, page_path) }}" class="{{ 'active' if loc.code == locale else '' }}">{{ loc.label }}</a>{% if not loop.last %}<span class="lang-sep">·</span>{% endif %}
+          {% endfor %}
+        </div>
+        <div class="social-links" aria-label="Social media">
+          <a href="https://www.instagram.com/vertlabs.run" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+          </a>
+          <a href="https://www.facebook.com/share/1HW26QLoZY/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M14 9h3V5h-3c-2.2 0-4 1.8-4 4v2H7v4h3v7h4v-7h3l1-4h-4V9c0-.6.4-1 1-1z"/></svg>
+          </a>
+        </div>
       </div>
     </div>
 
