@@ -149,7 +149,9 @@ def main() -> None:
     copy_assets()
 
     print("Copiando imágenes y charts públicos...")
-    copy_public_media(races_by_locale["en"], athletes_by_locale["en"], posts_by_locale["en"])
+    copy_public_media(
+        races_by_locale["en"] + events_by_locale["en"], athletes_by_locale["en"], posts_by_locale["en"]
+    )
 
     print(f"\nListo. Sitio generado en: {OUTPUT_DIR}")
     print("Siguiente paso: copiar output/ al repo público vertlabs-web y pushear.")

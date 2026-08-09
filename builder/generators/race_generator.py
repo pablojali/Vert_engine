@@ -44,29 +44,46 @@ def load_races() -> list[dict]:
     return races
 
 
+def _find_event_icon(year_dir, event_slug: str):
+    """The event icon is uploaded once (Exportar a Web, shared by every
+    distance under that event) and lives one level up from any single
+    distance folder - e.g. data/races/val-d-aran-by-utmb/2026/images/icon.*,
+    a sibling of the 110k/ and 163k/ distance folders."""
+    images_dir = year_dir / "images"
+    for ext in (".jpg", ".jpeg", ".png"):
+        if (images_dir / f"icon{ext}").exists():
+            return f"/media/races/{event_slug}/images/icon{ext}"
+    return None
+
+
 def _build_events(races: list[dict], loc: dict) -> list[dict]:
-    """Groups distances that share the same (name, year) into one event -
-    e.g. Val d'Aran by UTMB 2026's 110k and 163k become two "distances"
-    under one "Val d'Aran by UTMB 2026" event, instead of two unrelated
-    top-level races."""
-    groups: dict[tuple, list[dict]] = {}
+    """Groups distances that share the same <circuito>/<año> data folder
+    into one event - e.g. Val d'Aran by UTMB 2026's 110k and 163k become
+    two "distances" under one "Val d'Aran by UTMB 2026" event, instead of
+    two unrelated top-level races. Grouping by folder (not by name/year
+    text) avoids silently splitting an event over a typo/casing mismatch."""
+    groups: dict = {}
     for race in races:
-        key = (race.get("name", ""), race.get("year", 0))
-        groups.setdefault(key, []).append(race)
+        year_dir = race["_source_dir"].parent
+        groups.setdefault(year_dir, []).append(race)
 
     events = []
-    for (name, year), distances in groups.items():
+    for year_dir, distances in groups.items():
         distances = sorted(distances, key=lambda r: r.get("distance_km") or 0)
+        name = distances[0].get("name", "")
+        year = distances[0].get("year", 0)
         slug = _slugify(f"{name}-{year}")
+        icon = _find_event_icon(year_dir, slug)
         events.append({
             "slug": slug,
             "name": name,
             "year": year,
             "location": next((r.get("location") for r in distances if r.get("location")), None),
             "date": next((r.get("date") for r in distances if r.get("date")), None),
-            "hero_image": next((r.get("hero_image") for r in distances if r.get("hero_image")), None),
+            "hero_image": icon or next((r.get("hero_image") for r in distances if r.get("hero_image")), None),
             "distances": distances,
             "url": locale_url(loc["code"], f"races/{slug}/"),
+            "_source_dir": year_dir,
         })
     return events
 

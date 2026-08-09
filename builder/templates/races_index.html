@@ -5,13 +5,13 @@
 {% block content %}
 <section class="homepage-section">
   <h1>{{ t.races_title }}</h1>
-  <ul class="race-grid">
+  <ul class="event-grid">
     {% for e in events %}
-    <li class="race-card">
+    <li class="event-card">
       <a href="{{ e.url }}">
         {% if e.hero_image %}<img src="{{ e.hero_image }}" alt="" loading="lazy">{% endif %}
-        <span class="race-card-name">{{ e.name }}</span>
-        <span class="race-card-meta">{{ e.year }}{% if e.location %} · {{ e.location }}{% endif %}</span>
+        <span class="event-card-name">{{ e.name }}</span>
+        <span class="event-card-meta">{{ e.year }}{% if e.location %} · {{ e.location }}{% endif %}</span>
       </a>
     </li>
     {% endfor %}

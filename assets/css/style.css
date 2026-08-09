@@ -318,6 +318,40 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .race-card-name { font-weight: 700; }
 .race-card-meta { color: var(--color-muted); font-size: 0.85rem; }
 
+/* --- Events index: dense icon grid, 4-6 per row --- */
+.event-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 1rem;
+}
+.event-card a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-raised);
+  text-decoration: none;
+  color: var(--color-text);
+  height: 100%;
+  transition: border-color 0.15s ease;
+}
+.event-card a:hover { border-color: var(--color-cyan); }
+.event-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  background: #000;
+}
+.event-card-name { font-weight: 700; }
+.event-card-meta { color: var(--color-muted); font-size: 0.85rem; }
+
 /* --- Event hub: distances side by side, each with its own posts --- */
 .event-distances {
   display: grid;
@@ -333,19 +367,30 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .race-posts { margin: 1.5rem 0 2rem; }
 .race-posts h2 { margin-bottom: 0.5rem; }
 
-.event-post-list { list-style: none; padding: 0; margin: 1rem 0 0; }
-.event-post-list li { border-bottom: 1px solid var(--color-border); }
-.event-post-list a {
+/* --- Post rows with thumbnail: event hub columns + race "Latest Posts" --- */
+.post-row-list { list-style: none; padding: 0; margin: 1rem 0 0; }
+.post-row-list li { border-bottom: 1px solid var(--color-border); }
+.post-row-list a {
   display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
+  align-items: center;
+  gap: 0.65rem;
   padding: 0.6rem 0;
   text-decoration: none;
   color: var(--color-text);
 }
-.event-post-list a:hover .event-post-title { color: var(--color-cyan); }
-.event-post-title { font-weight: 600; }
-.event-post-meta { color: var(--color-muted); font-size: 0.85rem; }
+.post-row-list a:hover .post-row-title { color: var(--color-cyan); }
+.post-row-list img,
+.post-row-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--color-bg-raised);
+}
+.post-row-text { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.post-row-title { font-weight: 600; }
+.post-row-meta { color: var(--color-muted); font-size: 0.85rem; }
 
 /* --- Athletes directory: alphabetical, for scaling past 100+ profiles --- */
 .alpha-jump {

@@ -1483,6 +1483,18 @@ def _find_existing_portrait(athlete_slug: str):
     return None
 
 
+def _find_existing_image(dir_path: Path, base_name: str):
+    """Same idea as _find_existing_portrait, generalized to any base_name
+    (used for the event icon, which lives one level up from a distance -
+    e.g. data/races/val-d-aran-by-utmb/2026/images/icon.jpg, shared by
+    every distance under that event)."""
+    for ext in (".jpg", ".jpeg", ".png"):
+        candidate = dir_path / f"{base_name}{ext}"
+        if candidate.exists():
+            return candidate
+    return None
+
+
 def _chart_label(filename: str) -> str:
     """Best-effort friendly label for an uploaded chart HTML, based on
     its filename (matches the file_name= used by chart_download_button
@@ -3070,6 +3082,8 @@ with tab_web_export:
         existing_race_for_prefill = (
             json.loads(guessed_race_path.read_text(encoding="utf-8")) if guessed_race_path.exists() else {}
         )
+        guessed_event_icon = _find_existing_image(guessed_race_dir.parent / "images", "icon")
+
         st.markdown("---")
         st.markdown("##### Metadata de la carrera (no calculada por el Engine, se completa a mano)")
         if existing_race_for_prefill:
@@ -3113,6 +3127,16 @@ with tab_web_export:
             hero_upload = st.file_uploader(
                 "Imagen hero (opcional)", type=["jpg", "jpeg", "png"],
                 help="Si no subís nada, podés dejar el archivo a mano después en images/hero.jpg.",
+            )
+            if guessed_event_icon:
+                st.image(str(guessed_event_icon), caption="Ícono actual del evento", width=120)
+            event_icon_upload = st.file_uploader(
+                "Ícono del evento (opcional)", type=["jpg", "jpeg", "png"],
+                help=(
+                    "Se usa como miniatura en la grilla de /races/ para el EVENTO completo "
+                    "(no para esta distancia sola) - compartido entre todas sus distancias, "
+                    "así que con subirlo una vez alcanza."
+                ),
             )
             elevation_upload = st.file_uploader(
                 "Perfil de elevación (opcional): imagen o HTML interactivo de Plotly",
@@ -3179,6 +3203,8 @@ with tab_web_export:
 
                     race_dir = WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
                     race_dir.mkdir(parents=True, exist_ok=True)
+
+                    event_icon_ext = _save_upload(event_icon_upload, race_dir.parent / "images", "icon")
 
                     # --- Merge with whatever race.json already exists at this
                     # folder/year/distance path, so re-exporting the same race
@@ -3286,6 +3312,10 @@ with tab_web_export:
 
                     if hero_ext:
                         written_paths.append(str((race_dir / "images" / f"hero{hero_ext}").relative_to(WEB_DATA_DIR.parent)))
+                    if event_icon_ext:
+                        written_paths.append(
+                            str((race_dir.parent / "images" / f"icon{event_icon_ext}").relative_to(WEB_DATA_DIR.parent))
+                        )
                     if elevation_ext:
                         written_paths.append(str((race_dir / "charts" / f"elevation_profile{elevation_ext}").relative_to(WEB_DATA_DIR.parent)))
                     n_charts_uploaded = sum(len(uploads_.get("charts") or []) for uploads_ in runner_uploads.values())
