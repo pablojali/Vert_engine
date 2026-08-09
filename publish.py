@@ -4,27 +4,30 @@ Single entry point of the publish pipeline.
     python publish.py
 
 Flow (per locale: en at the root, es at /es/, fr at /fr/):
-  1. generate race pages (+ /races/ index)      -> data/races/**/race.json
-  2. generate athlete pages (+ /athletes/ index) -> data/athletes/*/profile.json
-  3. generate homepage
-  4. generate /rankings/
-  5. generate /about/ and /search/
-  6. generate search.json
+  1. load posts metadata (just enough to know which race each is tied to)
+  2. generate race pages (+ event hub pages + /races/ index) -> data/races/**/race.json
+  3. generate athlete pages (+ /athletes/ index) -> data/athletes/*/profile.json
+  4. generate post pages (fully resolved against their race, if any)
+  5. generate homepage
+  6. generate /rankings/
+  7. generate /about/ and /search/
+  8. generate search.json
 
 Then, once for the whole site:
-  7. generate sitemap.xml + robots.txt (all locales, with hreflang)
-  8. copy assets/ -> output/assets/ (shared, not localized)
-  9. copy ONLY images/ and charts/ (public) from data/ -> output/media/
-     (shared across locales - images aren't language-dependent)
+  9. generate sitemap.xml + robots.txt (all locales, with hreflang)
+  10. copy assets/ -> output/assets/ (shared, not localized)
+  11. copy ONLY images/ and charts/ (public) from data/ -> output/media/
+      (shared across locales - images aren't language-dependent)
 
 Security rule (see Claude.md section 6): output/ must never contain
 Python code, raw GPX, raw results/, or internal calculation parameters.
-Step 9 enforces this by construction - it only ever copies directories
+Step 11 enforces this by construction - it only ever copies directories
 literally named "images" or "charts", nothing else from data/.
 """
 import shutil
 from pathlib import Path
 
+from builder.env import locale_url
 from builder.i18n import LOCALES, TRANSLATIONS
 from builder.generators import (
     race_generator,
@@ -84,45 +87,63 @@ def clean_output() -> None:
     OUTPUT_DIR.mkdir(parents=True)
 
 
+def _group_posts_by_race(posts: list[dict]) -> dict:
+    by_race = {}
+    for p in posts:
+        if p.get("race_slug"):
+            by_race.setdefault(p["race_slug"], []).append(p)
+    for lst in by_race.values():
+        lst.sort(key=lambda p: p.get("date") or "", reverse=True)
+    return by_race
+
+
 def main() -> None:
     clean_output()
     races_by_locale = {}
     athletes_by_locale = {}
     posts_by_locale = {}
+    events_by_locale = {}
 
     for loc in LOCALES:
         t = TRANSLATIONS[loc["code"]]
         print(f"\n=== Locale: {loc['code']} ({loc['name']}) ===")
 
-        print("1/7 Generando páginas de carrera...")
-        races = race_generator.generate(loc, t)
+        print("1/8 Cargando posts...")
+        posts = post_generator.load_posts()
+        for p in posts:
+            p["url"] = locale_url(loc["code"], f"posts/{p['slug']}/")
+        posts_by_race_slug = _group_posts_by_race(posts)
+
+        print("2/8 Generando páginas de carrera y eventos...")
+        races, events = race_generator.generate(loc, t, posts_by_race_slug)
         races_by_slug = {r["slug"]: r for r in races}
 
-        print("2/7 Generando páginas de atleta...")
+        print("3/8 Generando páginas de atleta...")
         athletes = athlete_generator.generate(loc, t)
 
-        print("3/7 Generando posts...")
-        posts = post_generator.generate(loc, t, races_by_slug)
+        print("4/8 Generando páginas de posts...")
+        posts = post_generator.generate(loc, t, races_by_slug, posts)
 
-        print("4/7 Generando homepage...")
-        homepage_generator.generate(races, athletes, posts, loc, t)
+        print("5/8 Generando homepage...")
+        homepage_generator.generate(races, events, athletes, posts, loc, t)
 
-        print("5/7 Generando rankings...")
+        print("6/8 Generando rankings...")
         rankings_generator.generate(athletes, loc, t)
 
-        print("6/7 Generando about/ y search/...")
+        print("7/8 Generando about/ y search/...")
         static_pages_generator.generate(loc, t)
 
-        print("7/7 Generando índice de búsqueda...")
+        print("8/8 Generando índice de búsqueda...")
         search_generator.generate(races, athletes, loc)
 
         races_by_locale[loc["code"]] = races
         athletes_by_locale[loc["code"]] = athletes
         posts_by_locale[loc["code"]] = posts
+        events_by_locale[loc["code"]] = events
 
     print("\n=== Recursos compartidos ===")
     print("Generando sitemap y robots.txt...")
-    sitemap_generator.generate(races_by_locale, athletes_by_locale, posts_by_locale)
+    sitemap_generator.generate(races_by_locale, athletes_by_locale, posts_by_locale, events_by_locale)
 
     print("Copiando assets estáticos...")
     copy_assets()

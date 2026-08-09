@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.name }} {{ event.year }} — Vertical Trail Labs{% endblock %}
+{% block description %}{{ event.name }} {{ event.year }}{% if event.location %} — {{ event.location }}{% endif %}{% endblock %}
+{% block og_title %}{{ event.name }} {{ event.year }} — Vertical Trail Labs{% endblock %}
+{% block og_image %}{% if event.hero_image %}https://{{ site_domain }}{{ event.hero_image }}{% else %}{{ super() }}{% endif %}{% endblock %}
+
+{% block content %}
+<article class="event-page">
+  <p class="breadcrumb"><a href="{{ locale_url(locale, 'races/') }}">{{ t.breadcrumb_races }}</a> / {{ event.name }} {{ event.year }}</p>
+
+  {% if event.hero_image %}
+  <img src="{{ event.hero_image }}" alt="{{ event.name }}" class="race-hero" loading="lazy">
+  {% endif %}
+
+  <h1>{{ event.name }} {{ event.year }}</h1>
+  <p class="race-meta">
+    {{ event.location }}{% if event.date %} · {{ event.date }}{% endif %}
+  </p>
+
+  <div class="event-distances">
+    {% for d in event.distances %}
+    <div class="event-distance-col">
+      <h2><a href="{{ d.url }}">{{ d.distance_km|round(1) if d.distance_km else '' }} km</a></h2>
+      <p class="race-meta">{% if d.elevation_gain_m %}{{ d.elevation_gain_m|round|int }} m D+{% endif %}</p>
+      {% if d.posts %}
+      <ul class="event-post-list">
+        {% for p in d.posts %}
+        <li>
+          <a href="{{ p.url }}">
+            <span class="event-post-title">{{ p.title }}</span>
+            <span class="event-post-meta">{{ p.category }}{% if p.date %} · {{ p.date }}{% endif %}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="event-post-empty">{{ t.event_no_posts }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</article>
+{% endblock %}

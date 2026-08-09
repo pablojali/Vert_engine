@@ -21,13 +21,17 @@ def load_posts() -> list[dict]:
     return posts
 
 
-def generate(loc: dict, t: dict, races_by_slug: dict) -> list[dict]:
+def generate(loc: dict, t: dict, races_by_slug: dict, posts: list[dict]) -> list[dict]:
     """races_by_slug: {race_slug: race_dict} from this same locale's
     race_generator.generate() call, already carrying .url on the race and
     its athletes - reused here to resolve top10 blocks and link back to
-    the race, instead of re-reading race.json."""
+    the race, instead of re-reading race.json.
+
+    posts: already loaded (publish.py needs them earlier than this, to
+    group by race before the race pages themselves are rendered) - this
+    function finishes resolving each one (race link, top10 entries) and
+    writes its page."""
     template = env.get_template("post.html")
-    posts = load_posts()
 
     for post in posts:
         post["url"] = locale_url(loc["code"], f"posts/{post['slug']}/")
@@ -49,4 +53,4 @@ def generate(loc: dict, t: dict, races_by_slug: dict) -> list[dict]:
 
 if __name__ == "__main__":
     from builder.i18n import LOCALES, TRANSLATIONS
-    generate(LOCALES[0], TRANSLATIONS["en"], {})
+    generate(LOCALES[0], TRANSLATIONS["en"], {}, load_posts())

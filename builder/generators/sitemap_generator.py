@@ -11,13 +11,17 @@ BASE_URL = f"https://{env.globals['site_domain']}"
 STATIC_PAGE_PATHS = ["", "races/", "athletes/", "about/", "search/"]
 
 
-def generate(races_by_locale: dict, athletes_by_locale: dict, posts_by_locale: dict) -> None:
+def generate(
+    races_by_locale: dict, athletes_by_locale: dict, posts_by_locale: dict, events_by_locale: dict
+) -> None:
     # Collect the set of page_paths that exist (same across locales, since
-    # every race/athlete/post slug is generated for every locale).
+    # every race/athlete/post/event slug is generated for every locale).
     en_races = races_by_locale.get("en", [])
     en_athletes = athletes_by_locale.get("en", [])
     en_posts = posts_by_locale.get("en", [])
+    en_events = events_by_locale.get("en", [])
     page_paths = list(STATIC_PAGE_PATHS)
+    page_paths += [f"races/{e['slug']}/" for e in en_events]
     page_paths += [f"races/{r['slug']}/" for r in en_races]
     page_paths += [f"athletes/{a['slug']}/" for a in en_athletes]
     page_paths += [f"posts/{p['slug']}/" for p in en_posts]

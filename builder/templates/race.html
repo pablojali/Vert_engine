@@ -8,7 +8,10 @@
 
 {% block content %}
 <article class="race-page">
-  <p class="breadcrumb"><a href="{{ locale_url(locale, 'races/') }}">{{ t.breadcrumb_races }}</a> / {{ race.name }} {{ race.year }}</p>
+  <p class="breadcrumb">
+    <a href="{{ locale_url(locale, 'races/') }}">{{ t.breadcrumb_races }}</a> /
+    {% if race.event_url %}<a href="{{ race.event_url }}">{{ race.event_name }} {{ race.event_year }}</a>{% else %}{{ race.name }} {{ race.year }}{% endif %}
+  </p>
 
   {% if race.hero_image %}
   <img src="{{ race.hero_image }}" alt="{{ race.name }}" class="race-hero" loading="lazy">
@@ -20,6 +23,22 @@
     {%- if race.distance_km %} · {{ race.distance_km|round(1) }} km{% endif -%}
     {%- if race.elevation_gain_m %} · {{ race.elevation_gain_m|round|int }} m D+{% endif %}
   </p>
+
+  {% if race.posts %}
+  <div class="race-posts">
+    <h2>{{ t.race_latest_posts }}</h2>
+    <ul class="event-post-list">
+      {% for p in race.posts %}
+      <li>
+        <a href="{{ p.url }}">
+          <span class="event-post-title">{{ p.title }}</span>
+          <span class="event-post-meta">{{ p.category }}{% if p.date %} · {{ p.date }}{% endif %}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
 
   {{ render_blocks(race.analysis_blocks, t, race.name) }}
 

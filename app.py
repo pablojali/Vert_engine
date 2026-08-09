@@ -3444,8 +3444,9 @@ with tab_posts:
     st.header("📰 Editor de Posts")
     st.caption(
         "Artículos separados de las carreras: pre-race, análisis de métricas, o cualquier otra cosa "
-        "que quieras publicar. Podés asociarlos a una carrera (opcional) y elegir si van al carousel "
-        "de portada o a la sección 'Más del Lab' de la home."
+        "que quieras publicar. Podés asociarlos a una carrera (opcional) - si lo hacés, aparece en la "
+        "página de esa carrera y de su evento. El carousel de la home siempre muestra los posts más "
+        "recientes, sin necesidad de elegir nada."
     )
 
     def _sync_post_slug_from_title():
@@ -3486,14 +3487,6 @@ with tab_posts:
                 index=list(race_options.keys()).index(default_race_label), key="post_race_select",
             )
             post_race_slug = race_options[race_label]
-
-            placement_label = st.radio(
-                "Dónde aparece en la portada",
-                ["Carousel (destacado)", "Más del Lab (listado)"],
-                index=0 if existing_post.get("placement") == "carousel" else 1,
-                key="post_placement_radio",
-            )
-            post_placement = "carousel" if placement_label.startswith("Carousel") else "list"
 
         cover_existing = existing_post.get("cover_image")
         if cover_existing:
@@ -3544,7 +3537,6 @@ with tab_posts:
                 "date": post_date or None,
                 "category": post_category or None,
                 "race_slug": post_race_slug,
-                "placement": post_placement,
                 "cover_image": cover_image,
                 "blocks": new_blocks,
             }

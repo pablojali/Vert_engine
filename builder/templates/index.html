@@ -68,25 +68,25 @@
     <a href="{{ locale_url(locale, 'races/') }}" class="see-all">{{ t.home_see_all }}</a>
   </div>
   <ul class="race-grid">
-    {% for r in races[:6] %}
+    {% for e in events[:6] %}
     <li class="race-card">
-      <a href="{{ r.url }}">
-        {% if r.hero_image %}<img src="{{ r.hero_image }}" alt="" loading="lazy">{% endif %}
-        <span class="race-card-name">{{ r.name }}</span>
-        <span class="race-card-meta">{{ r.year }} · {{ r.distance_km|round(1) }} km</span>
+      <a href="{{ e.url }}">
+        {% if e.hero_image %}<img src="{{ e.hero_image }}" alt="" loading="lazy">{% endif %}
+        <span class="race-card-name">{{ e.name }}</span>
+        <span class="race-card-meta">{{ e.year }}{% if e.location %} · {{ e.location }}{% endif %}</span>
       </a>
     </li>
     {% endfor %}
   </ul>
 </section>
 
-{% if other_posts %}
+{% if latest_posts %}
 <section class="homepage-section">
   <div class="section-heading">
-    <h2>{{ t.home_other_posts }}</h2>
+    <h2>{{ t.home_latest_posts }}</h2>
   </div>
   <ul class="race-grid">
-    {% for p in other_posts %}
+    {% for p in latest_posts %}
     <li class="race-card">
       <a href="{{ p.url }}">
         {% if p.cover_image %}<img src="{{ p.cover_image }}" alt="" loading="lazy">{% endif %}
