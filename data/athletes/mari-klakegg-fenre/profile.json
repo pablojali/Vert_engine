@@ -1,0 +1,25 @@
+{
+  "slug": "mari-klakegg-fenre",
+  "name": "Mari Klakegg FENRE",
+  "country": null,
+  "portrait": "/media/athletes/mari-klakegg-fenre/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 16,
+      "finish_time": "14:25:16",
+      "vpi": 951.5,
+      "dmi": 10.11,
+      "er": 80.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/mari-klakegg-fenre/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 951.5,
+    "dmi": 10.1,
+    "er": 80.2
+  }
+}

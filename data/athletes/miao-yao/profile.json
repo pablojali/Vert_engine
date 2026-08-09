@@ -1,0 +1,25 @@
+{
+  "slug": "miao-yao",
+  "name": "Miao YAO",
+  "country": null,
+  "portrait": "/media/athletes/miao-yao/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 8,
+      "finish_time": "13:04:34",
+      "vpi": 1031.6,
+      "dmi": 11.42,
+      "er": 72.1,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/miao-yao/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1031.6,
+    "dmi": 11.4,
+    "er": 72.1
+  }
+}

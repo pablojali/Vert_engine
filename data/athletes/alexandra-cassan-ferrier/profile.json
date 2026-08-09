@@ -1,0 +1,25 @@
+{
+  "slug": "alexandra-cassan-ferrier",
+  "name": "Alexandra CASSAN-FERRIER",
+  "country": null,
+  "portrait": "/media/athletes/alexandra-cassan-ferrier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 13,
+      "finish_time": "14:01:37",
+      "vpi": 966.1,
+      "dmi": 10.85,
+      "er": 80.9,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/alexandra-cassan-ferrier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 966.1,
+    "dmi": 10.8,
+    "er": 80.9
+  }
+}
