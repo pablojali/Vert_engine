@@ -35,6 +35,7 @@
       "vpi": 951.1,
       "dmi": 10.38,
       "er": 73.8,
+      "report": null,
       "charts": []
     },
     {
@@ -86,7 +87,31 @@
       "vpi": 704.2,
       "dmi": 7.81,
       "er": 62.8,
-      "report": null,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/salome-grihon/report.html",
+      "charts": []
+    },
+    {
+      "slug": "marta-serret",
+      "name": "Marta SERRET",
+      "bib": 316,
+      "finish_time": "31:47:53",
+      "position": 60,
+      "vpi": 680.9,
+      "dmi": 7.33,
+      "er": 54.9,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/marta-serret/report.html",
+      "charts": []
+    },
+    {
+      "slug": "sandra-cuello-capistros",
+      "name": "Sandra CUELLO CAPISTRÓS",
+      "bib": 20,
+      "finish_time": "32:21:48",
+      "position": 70,
+      "vpi": 672.0,
+      "dmi": 7.17,
+      "er": 48.5,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/sandra-cuello-capistros/report.html",
       "charts": []
     }
   ]

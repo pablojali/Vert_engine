@@ -1,0 +1,25 @@
+{
+  "slug": "sandra-cuello-capistros",
+  "name": "Sandra CUELLO CAPISTRÓS",
+  "country": null,
+  "portrait": "/media/athletes/sandra-cuello-capistros/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 70,
+      "finish_time": "32:21:48",
+      "vpi": 672.0,
+      "dmi": 7.17,
+      "er": 48.5,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/sandra-cuello-capistros/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 672.0,
+    "dmi": 7.2,
+    "er": 48.5
+  }
+}

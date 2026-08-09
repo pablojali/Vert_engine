@@ -8,12 +8,13 @@
       "race_slug": "val-d-aran-by-utmb-2026",
       "race_name": "Val d'Aran by UTMB",
       "year": 2026,
+      "distance_km": 160.05165725143127,
       "position": 2,
       "finish_time": "22:23:51",
       "vpi": 951.1,
       "dmi": 10.38,
       "er": 73.8,
-      "distance_km": 160.05165725143127
+      "report": null
     }
   ],
   "career_avg": {

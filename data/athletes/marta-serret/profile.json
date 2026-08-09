@@ -1,0 +1,25 @@
+{
+  "slug": "marta-serret",
+  "name": "Marta SERRET",
+  "country": null,
+  "portrait": "/media/athletes/marta-serret/images/portrait.png",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 60,
+      "finish_time": "31:47:53",
+      "vpi": 680.9,
+      "dmi": 7.33,
+      "er": 54.9,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/marta-serret/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 680.9,
+    "dmi": 7.3,
+    "er": 54.9
+  }
+}
