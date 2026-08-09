@@ -1309,30 +1309,72 @@ def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
 
 
 def _sync_output_to_web_repo(web_repo_dir: Path) -> None:
-    """Mirrors Vert_engine/output/ into the vertlabs-web checkout, wiping
-    everything except .git/ and the pre-existing Blogger backup + README."""
-    for entry in web_repo_dir.iterdir():
-        if entry.name in PUBLISH_KEEP_ENTRIES:
-            continue
-        if entry.is_dir():
-            shutil.rmtree(entry)
-        else:
-            entry.unlink()
+    """Mirrors Vert_engine/output/ into the vertlabs-web checkout.
+
+    Copies/overwrites the fresh content FIRST and only removes stale
+    leftovers afterward (instead of wiping everything up front) - if this
+    gets interrupted partway (Codespace hang, closed browser tab), the
+    working tree still ends up with old+new content mixed rather than
+    half-deleted with nothing to replace it."""
     output_dir = ENGINE_ROOT / "output"
+    output_entries = {e.name for e in output_dir.iterdir()}
+
     for entry in output_dir.iterdir():
         dest = web_repo_dir / entry.name
+        if dest.exists():
+            if dest.is_dir():
+                shutil.rmtree(dest)
+            else:
+                dest.unlink()
         if entry.is_dir():
             shutil.copytree(entry, dest)
         else:
             shutil.copy2(entry, dest)
 
+    for entry in web_repo_dir.iterdir():
+        if entry.name in PUBLISH_KEEP_ENTRIES or entry.name in output_entries:
+            continue
+        if entry.is_dir():
+            shutil.rmtree(entry)
+        else:
+            entry.unlink()
+
+
+def _backup_engine_data() -> tuple[bool, str]:
+    """Commits+pushes Vert_engine's own data/ to GitHub. Runs before the
+    site is even built, so a Codespace dying or hanging right after this
+    never loses race/athlete data again - only ever the site rebuild,
+    which is a 2-minute redo, not a from-scratch data re-entry."""
+    r = _run_git(ENGINE_ROOT, "add", "data/")
+    log = r.stdout + r.stderr
+    r = _run_git(ENGINE_ROOT, "diff", "--cached", "--quiet")
+    if r.returncode == 0:
+        return True, log + "Sin cambios en data/ - nada para respaldar.\n"
+    r = _run_git(ENGINE_ROOT, "commit", "-m", "Backup de datos desde el botón Publicar")
+    log += r.stdout + r.stderr
+    if r.returncode != 0:
+        return False, "Falló el respaldo de data/ (commit):\n" + log
+
+    r = _run_git(ENGINE_ROOT, "rev-parse", "--abbrev-ref", "HEAD")
+    current_branch = r.stdout.strip() or "HEAD"
+    r = _run_git(ENGINE_ROOT, "push", "-u", "origin", current_branch)
+    log += r.stdout + r.stderr
+    if r.returncode != 0:
+        return False, "Falló el respaldo de data/ (push):\n" + log
+    return True, log
+
 
 def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> tuple[bool, str]:
-    """Builds the site (equivalent to `python publish.py`), mirrors output/
-    into the vertlabs-web checkout, and pushes it to the given branch.
-    Returns (ok, log) - never raises, so the caller can show the failure
-    in the UI instead of crashing the Streamlit app."""
-    log_lines = []
+    """Backs up data/ first, then builds the site (equivalent to
+    `python publish.py`), mirrors output/ into the vertlabs-web checkout,
+    and pushes it to the given branch. Returns (ok, log) - never raises,
+    so the caller can show the failure in the UI instead of crashing the
+    Streamlit app."""
+    backup_ok, backup_log = _backup_engine_data()
+    log_lines = [f"--- Respaldo de data/ ---\n{backup_log}"]
+    if not backup_ok:
+        return False, "\n".join(log_lines)
+
     try:
         import publish as publish_module
         buf = io.StringIO()
