@@ -5,16 +5,28 @@
 {% block content %}
 <section class="homepage-section">
   <h1>{{ t.athletes_title }}</h1>
-  <ul class="athlete-grid">
-    {% for a in athletes %}
-    <li class="athlete-card">
+
+  {% if groups %}
+  <nav class="alpha-jump" aria-label="{{ t.athletes_jump_label }}">
+    {% for letter, group in groups %}
+    <a href="#letter-{{ letter }}">{{ letter }}</a>
+    {% endfor %}
+  </nav>
+  {% endif %}
+
+  {% for letter, group in groups %}
+  <h2 id="letter-{{ letter }}" class="alpha-heading">{{ letter }}</h2>
+  <ul class="athlete-list">
+    {% for a in group %}
+    <li class="athlete-row">
       <a href="{{ a.url }}">
-        {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% endif %}
-        <span class="athlete-card-name">{{ a.name }}</span>
-        {% if a.country %}<span class="athlete-card-meta">{{ a.country }}</span>{% endif %}
+        {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% else %}<span class="athlete-row-avatar-placeholder"></span>{% endif %}
+        <span class="athlete-row-name">{{ a.name }}</span>
+        {% if a.country %}<span class="athlete-row-meta">{{ a.country }}</span>{% endif %}
       </a>
     </li>
     {% endfor %}
   </ul>
+  {% endfor %}
 </section>
 {% endblock %}

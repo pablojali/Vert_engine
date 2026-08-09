@@ -44,6 +44,7 @@ TRANSLATIONS = {
         "race_winning_time_label": "Winning Time",
         "races_title": "Races",
         "athletes_title": "Athletes",
+        "athletes_jump_label": "Jump to letter",
         "rankings_title": "Rankings",
         "rankings_subtitle": (
             "Career average per athlete. Only athletes with at least one "
@@ -135,6 +136,7 @@ TRANSLATIONS = {
         "race_winning_time_label": "Tiempo Ganador",
         "races_title": "Carreras",
         "athletes_title": "Atletas",
+        "athletes_jump_label": "Saltar a letra",
         "rankings_title": "Rankings",
         "rankings_subtitle": (
             "Promedio de carrera por atleta. Solo se incluyen atletas con al "
@@ -229,6 +231,7 @@ TRANSLATIONS = {
         "race_winning_time_label": "Temps Vainqueur",
         "races_title": "Courses",
         "athletes_title": "Athlètes",
+        "athletes_jump_label": "Aller à la lettre",
         "rankings_title": "Classements",
         "rankings_subtitle": (
             "Moyenne de carrière par athlète. Seuls les athlètes avec au "

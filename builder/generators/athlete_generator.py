@@ -3,6 +3,8 @@ Reads data/athletes/<slug>/profile.json and generates one static page
 per athlete, plus the /athletes/ index, for a given locale.
 """
 import json
+import unicodedata
+from itertools import groupby
 from builder.env import env, write_page, out_path, locale_url, DATA_DIR
 from builder.generators.radar_chart import build_radar_svg
 
@@ -19,6 +21,18 @@ def _surname_sort_key(name: str) -> str:
         i -= 1
     surname = " ".join(words[i:]) if i < len(words) else name
     return (surname or name or "").lower()
+
+
+def _index_letter(name: str) -> str:
+    """A-Z bucket for the alphabetical athlete directory, based on the
+    first character of the surname sort key. Accents are folded (Étienne
+    -> E) so they land in the expected letter instead of getting their
+    own one-off bucket; anything left non-alphabetic goes to '#'."""
+    key = _surname_sort_key(name)
+    if not key:
+        return "#"
+    ascii_char = unicodedata.normalize("NFKD", key[0]).encode("ascii", "ignore").decode("ascii")
+    return ascii_char.upper() if ascii_char.isalpha() else "#"
 
 
 def load_athletes() -> list[dict]:
@@ -58,9 +72,12 @@ def generate(loc: dict, t: dict) -> list[dict]:
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 
     ordered = sorted(athletes, key=lambda a: _surname_sort_key(a.get("name", "")))
+    groups = [
+        (letter, list(group)) for letter, group in groupby(ordered, key=lambda a: _index_letter(a.get("name", "")))
+    ]
     write_page(
         out_path(loc["prefix"], "athletes/index.html"),
-        index_template.render(athletes=ordered, t=t, locale=loc["code"], page_path="athletes/"),
+        index_template.render(groups=groups, t=t, locale=loc["code"], page_path="athletes/"),
     )
 
     return athletes
