@@ -47,7 +47,11 @@
     {
       "type": "top10",
       "title": "Top 10",
-      "slugs": []
+      "slugs": [
+        "miao-yao",
+        "alexandra-cassan-ferrier",
+        "mari-klakegg-fenre"
+      ]
     },
     {
       "type": "text",
