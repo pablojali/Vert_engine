@@ -113,6 +113,18 @@
       "er": 48.5,
       "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/sandra-cuello-capistros/report.html",
       "charts": []
+    },
+    {
+      "slug": "thomas-duvivier",
+      "name": "Thomas DUVIVIER",
+      "bib": 34,
+      "finish_time": "23:11:09",
+      "position": 4,
+      "vpi": 916.8,
+      "dmi": 10.35,
+      "er": 65.1,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/thomas-duvivier/report.html",
+      "charts": []
     }
   ]
 }

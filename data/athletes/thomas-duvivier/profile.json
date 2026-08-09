@@ -1,0 +1,25 @@
+{
+  "slug": "thomas-duvivier",
+  "name": "Thomas DUVIVIER",
+  "country": null,
+  "portrait": "/media/athletes/thomas-duvivier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 4,
+      "finish_time": "23:11:09",
+      "vpi": 916.8,
+      "dmi": 10.35,
+      "er": 65.1,
+      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/thomas-duvivier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 916.8,
+    "dmi": 10.4,
+    "er": 65.1
+  }
+}
