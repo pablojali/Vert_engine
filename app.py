@@ -160,6 +160,16 @@ def add_elevation_background(fig, race_df, step_m=200):
     )
 
 
+def _ascii_filename(text: str) -> str:
+    """Strips accents/non-ASCII characters from a piece of a download
+    filename (e.g. a runner's name going into file_name= for
+    st.download_button). Browsers can silently fail a download - no
+    Python traceback, no server-side error - when the Content-Disposition
+    header isn't plain ASCII, so this only touches the filename, never
+    the runner's name as shown inside the report itself."""
+    return unicodedata.normalize("NFKD", str(text)).encode("ascii", "ignore").decode("ascii")
+
+
 def chart_download_button(fig, filename, key):
     """Renders a small download button right below a Plotly chart that
     exports it as a standalone, interactive HTML snippet (zoom/hover/pan
@@ -2261,7 +2271,7 @@ with tab_runner_lt:
                         st.download_button(
                             "📄 Download Full Analysis (HTML for Blogger)",
                             data=full_report_html_lt,
-                            file_name=f"{(runner_info_lt.get('Name') or 'runner').replace(' ', '_')}_livetrail_full_analysis.html",
+                            file_name=f"{_ascii_filename(runner_info_lt.get('Name') or 'runner').replace(' ', '_')}_livetrail_full_analysis.html",
                             mime="text/html",
                             type="primary",
                             use_container_width=True,
@@ -2697,7 +2707,7 @@ with tab_top:
                         st.download_button(
                             "📥 Download combined Excel (shared geometry + each runner side by side)",
                             data=excel_buffer.getvalue(),
-                            file_name=f"{selected_race_top.replace(' ', '_')}_top_runners.xlsx",
+                            file_name=f"{_ascii_filename(selected_race_top).replace(' ', '_')}_top_runners.xlsx",
                             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                             use_container_width=True,
                         )
