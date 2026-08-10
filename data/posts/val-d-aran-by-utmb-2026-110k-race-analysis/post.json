@@ -1,6 +1,6 @@
 {
   "slug": "val-d-aran-by-utmb-2026-110k-race-analysis",
-  "title": "Val d'Aran by UTMB 2026 — CDH 110k — Race Analysis",
+  "title": "val-d-aran-by-utmb-2026-110k-race-analysis",
   "date": "2026-07-03",
   "category": "Race Analysis",
   "race_slug": "val-d-aran-by-utmb-2026-110k",
@@ -33,7 +33,16 @@
       "type": "top10",
       "title": "Top 10",
       "slugs": [
-        "gautier-bonnecarrere"
+        "gautier-bonnecarrere",
+        "abel-carretero",
+        "matis-leray",
+        "remy-brassac",
+        "benjamin-tremont",
+        "julen-calvo-vigara",
+        "bastien-enjalbert",
+        "igor-goikolea-larrauri",
+        "are-fetveit",
+        "daniel-luque-gonzalez"
       ]
     },
     {
