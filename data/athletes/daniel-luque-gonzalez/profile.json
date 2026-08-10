@@ -1,0 +1,25 @@
+{
+  "slug": "daniel-luque-gonzalez",
+  "name": "Daniel LUQUE GONZALEZ",
+  "country": null,
+  "portrait": "/media/athletes/daniel-luque-gonzalez/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 11,
+      "finish_time": "13:55:43",
+      "vpi": 969.6,
+      "dmi": 11.0,
+      "er": 71.9,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/daniel-luque-gonzalez/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 969.6,
+    "dmi": 11.0,
+    "er": 71.9
+  }
+}

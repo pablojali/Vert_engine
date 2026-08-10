@@ -1,0 +1,25 @@
+{
+  "slug": "abel-carretero",
+  "name": "Abel CARRETERO",
+  "country": null,
+  "portrait": "/media/athletes/abel-carretero/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 2,
+      "finish_time": "12:19:21",
+      "vpi": 1096.8,
+      "dmi": 12.17,
+      "er": 71.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/abel-carretero/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1096.8,
+    "dmi": 12.2,
+    "er": 71.7
+  }
+}

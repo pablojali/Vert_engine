@@ -1,6 +1,6 @@
 {
   "slug": "val-d-aran-by-utmb-2026-110k",
-  "name": "Val d'Aran by UTMB",
+  "name": "Val d'Aran by UTMB - CDH 110k",
   "year": 2026,
   "distance_km": 108.84385386686421,
   "elevation_gain_m": 6981.0,
@@ -55,6 +55,114 @@
       "dmi": 10.11,
       "er": 80.2,
       "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/mari-klakegg-fenre/report.html",
+      "charts": []
+    },
+    {
+      "slug": "abel-carretero",
+      "name": "Abel CARRETERO",
+      "bib": 1008,
+      "finish_time": "12:19:21",
+      "position": 2,
+      "vpi": 1096.8,
+      "dmi": 12.17,
+      "er": 71.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/abel-carretero/report.html",
+      "charts": []
+    },
+    {
+      "slug": "matis-leray",
+      "name": "Matis LERAY",
+      "bib": 1024,
+      "finish_time": "12:27:12",
+      "position": 3,
+      "vpi": 1092.0,
+      "dmi": 12.04,
+      "er": 70.5,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/matis-leray/report.html",
+      "charts": []
+    },
+    {
+      "slug": "remy-brassac",
+      "name": "Remy BRASSAC",
+      "bib": 1021,
+      "finish_time": "12:32:31",
+      "position": 4,
+      "vpi": 1082.2,
+      "dmi": 12.27,
+      "er": 71.6,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/remy-brassac/report.html",
+      "charts": []
+    },
+    {
+      "slug": "benjamin-tremont",
+      "name": "Benjamin TREMONT",
+      "bib": 1029,
+      "finish_time": "12:42:02",
+      "position": 5,
+      "vpi": 1075.8,
+      "dmi": 11.85,
+      "er": 78.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/benjamin-tremont/report.html",
+      "charts": []
+    },
+    {
+      "slug": "igor-goikolea-larrauri",
+      "name": "Igor GOIKOLEA LARRAURI",
+      "bib": 1056,
+      "finish_time": "13:23:12",
+      "position": 9,
+      "vpi": 1024.4,
+      "dmi": 11.0,
+      "er": 71.9,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/igor-goikolea-larrauri/report.html",
+      "charts": []
+    },
+    {
+      "slug": "bastien-enjalbert",
+      "name": "Bastien ENJALBERT",
+      "bib": 1057,
+      "finish_time": "12:54:27",
+      "position": 7,
+      "vpi": 1043.3,
+      "dmi": 11.92,
+      "er": 74.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/bastien-enjalbert/report.html",
+      "charts": []
+    },
+    {
+      "slug": "julen-calvo-vigara",
+      "name": "Julen CALVO VIGARA",
+      "bib": 1004,
+      "finish_time": "12:47:48",
+      "position": 6,
+      "vpi": 1000.7,
+      "dmi": 12.28,
+      "er": 62.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/julen-calvo-vigara/report.html",
+      "charts": []
+    },
+    {
+      "slug": "are-fetveit",
+      "name": "Are FETVEIT",
+      "bib": 1072,
+      "finish_time": "13:34:58",
+      "position": 10,
+      "vpi": 993.0,
+      "dmi": 11.41,
+      "er": 76.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/are-fetveit/report.html",
+      "charts": []
+    },
+    {
+      "slug": "daniel-luque-gonzalez",
+      "name": "Daniel LUQUE GONZALEZ",
+      "bib": 1026,
+      "finish_time": "13:55:43",
+      "position": 11,
+      "vpi": 969.6,
+      "dmi": 11.0,
+      "er": 71.9,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/daniel-luque-gonzalez/report.html",
       "charts": []
     }
   ]

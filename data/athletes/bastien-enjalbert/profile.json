@@ -1,0 +1,25 @@
+{
+  "slug": "bastien-enjalbert",
+  "name": "Bastien ENJALBERT",
+  "country": null,
+  "portrait": "/media/athletes/bastien-enjalbert/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 7,
+      "finish_time": "12:54:27",
+      "vpi": 1043.3,
+      "dmi": 11.92,
+      "er": 74.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/bastien-enjalbert/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1043.3,
+    "dmi": 11.9,
+    "er": 74.7
+  }
+}

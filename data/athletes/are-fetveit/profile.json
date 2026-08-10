@@ -1,0 +1,25 @@
+{
+  "slug": "are-fetveit",
+  "name": "Are FETVEIT",
+  "country": null,
+  "portrait": "/media/athletes/are-fetveit/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 10,
+      "finish_time": "13:34:58",
+      "vpi": 993.0,
+      "dmi": 11.41,
+      "er": 76.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/are-fetveit/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 993.0,
+    "dmi": 11.4,
+    "er": 76.7
+  }
+}

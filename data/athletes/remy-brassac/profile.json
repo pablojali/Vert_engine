@@ -1,0 +1,25 @@
+{
+  "slug": "remy-brassac",
+  "name": "Remy BRASSAC",
+  "country": null,
+  "portrait": "/media/athletes/remy-brassac/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 4,
+      "finish_time": "12:32:31",
+      "vpi": 1082.2,
+      "dmi": 12.27,
+      "er": 71.6,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/remy-brassac/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1082.2,
+    "dmi": 12.3,
+    "er": 71.6
+  }
+}
