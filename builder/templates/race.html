@@ -24,6 +24,13 @@
     {%- if race.elevation_gain_m %} · {{ race.elevation_gain_m|round|int }} m D+{% endif %}
   </p>
 
+  {{ render_blocks(race.analysis_blocks, t, race.name) }}
+
+  <p class="metric-note">
+    {{ t.race_metric_note }}
+    <a href="{{ locale_url(locale, 'about/') }}">{{ t.race_how_calculated }}</a>
+  </p>
+
   {% if race.posts %}
   <div class="race-posts">
     <h2>{{ t.race_latest_posts }}</h2>
@@ -42,12 +49,5 @@
     </ul>
   </div>
   {% endif %}
-
-  {{ render_blocks(race.analysis_blocks, t, race.name) }}
-
-  <p class="metric-note">
-    {{ t.race_metric_note }}
-    <a href="{{ locale_url(locale, 'about/') }}">{{ t.race_how_calculated }}</a>
-  </p>
 </article>
 {% endblock %}
