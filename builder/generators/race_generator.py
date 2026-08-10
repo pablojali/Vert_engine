@@ -109,6 +109,7 @@ def generate(loc: dict, t: dict, posts_by_race_slug: dict | None = None) -> tupl
 
     for race in races:
         race["url"] = locale_url(loc["code"], f"races/{race['slug']}/")
+        race["distance_label"] = race["_source_dir"].name
         race["posts"] = posts_by_race_slug.get(race["slug"], [])
         event = event_by_race_slug.get(race["slug"])
         race["event_name"] = event["name"] if event else None
