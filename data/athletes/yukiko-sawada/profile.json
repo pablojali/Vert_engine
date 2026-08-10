@@ -1,0 +1,25 @@
+{
+  "slug": "yukiko-sawada",
+  "name": "Yukiko SAWADA",
+  "country": null,
+  "portrait": "/media/athletes/yukiko-sawada/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 81,
+      "finish_time": "33:16:19",
+      "vpi": 663.2,
+      "dmi": 6.45,
+      "er": 45.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/yukiko-sawada/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 663.2,
+    "dmi": 6.4,
+    "er": 45.2
+  }
+}

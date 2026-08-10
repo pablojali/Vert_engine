@@ -1,0 +1,25 @@
+{
+  "slug": "junko-kageyama",
+  "name": "Junko KAGEYAMA",
+  "country": null,
+  "portrait": "/media/athletes/junko-kageyama/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 107,
+      "finish_time": "35:10:50",
+      "vpi": 613.7,
+      "dmi": 6.75,
+      "er": 57.4,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/junko-kageyama/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 613.7,
+    "dmi": 6.8,
+    "er": 57.4
+  }
+}

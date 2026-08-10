@@ -1,0 +1,25 @@
+{
+  "slug": "anastasiia-ianina",
+  "name": "Anastasiia IANINA",
+  "country": null,
+  "portrait": "/media/athletes/anastasiia-ianina/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 65,
+      "finish_time": "32:11:53",
+      "vpi": 670.3,
+      "dmi": 7.28,
+      "er": 46.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/anastasiia-ianina/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 670.3,
+    "dmi": 7.3,
+    "er": 46.2
+  }
+}

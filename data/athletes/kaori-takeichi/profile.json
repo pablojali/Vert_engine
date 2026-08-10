@@ -1,0 +1,25 @@
+{
+  "slug": "kaori-takeichi",
+  "name": "Kaori TAKEICHI",
+  "country": null,
+  "portrait": "/media/athletes/kaori-takeichi/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 100,
+      "finish_time": "34:49:37",
+      "vpi": 622.1,
+      "dmi": 6.6,
+      "er": 66.0,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/kaori-takeichi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 622.1,
+    "dmi": 6.6,
+    "er": 66.0
+  }
+}

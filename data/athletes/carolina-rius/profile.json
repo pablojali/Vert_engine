@@ -1,0 +1,25 @@
+{
+  "slug": "carolina-rius",
+  "name": "Carolina RIUS",
+  "country": null,
+  "portrait": "/media/athletes/carolina-rius/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 78,
+      "finish_time": "33:02:41",
+      "vpi": 666.5,
+      "dmi": 6.97,
+      "er": 47.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/carolina-rius/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 666.5,
+    "dmi": 7.0,
+    "er": 47.7
+  }
+}

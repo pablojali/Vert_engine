@@ -111,7 +111,7 @@
       "vpi": 672.0,
       "dmi": 7.17,
       "er": 48.5,
-      "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/sandra-cuello-capistros/report.html",
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/sandra-cuello-capistros/report.html",
       "charts": []
     },
     {
@@ -124,6 +124,66 @@
       "dmi": 10.35,
       "er": 65.1,
       "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/thomas-duvivier/report.html",
+      "charts": []
+    },
+    {
+      "slug": "junko-kageyama",
+      "name": "Junko KAGEYAMA",
+      "bib": 374,
+      "finish_time": "35:10:50",
+      "position": 107,
+      "vpi": 613.7,
+      "dmi": 6.75,
+      "er": 57.4,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/junko-kageyama/report.html",
+      "charts": []
+    },
+    {
+      "slug": "anastasiia-ianina",
+      "name": "Anastasiia IANINA",
+      "bib": 351,
+      "finish_time": "32:11:53",
+      "position": 65,
+      "vpi": 670.3,
+      "dmi": 7.28,
+      "er": 46.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/anastasiia-ianina/report.html",
+      "charts": []
+    },
+    {
+      "slug": "carolina-rius",
+      "name": "Carolina RIUS",
+      "bib": 48,
+      "finish_time": "33:02:41",
+      "position": 78,
+      "vpi": 666.5,
+      "dmi": 6.97,
+      "er": 47.7,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/carolina-rius/report.html",
+      "charts": []
+    },
+    {
+      "slug": "yukiko-sawada",
+      "name": "Yukiko SAWADA",
+      "bib": 46,
+      "finish_time": "33:16:19",
+      "position": 81,
+      "vpi": 663.2,
+      "dmi": 6.45,
+      "er": 45.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/yukiko-sawada/report.html",
+      "charts": []
+    },
+    {
+      "slug": "kaori-takeichi",
+      "name": "Kaori TAKEICHI",
+      "bib": 47,
+      "finish_time": "34:49:37",
+      "position": 100,
+      "vpi": 622.1,
+      "dmi": 6.6,
+      "er": 66.0,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/kaori-takeichi/report.html",
       "charts": []
     }
   ]
