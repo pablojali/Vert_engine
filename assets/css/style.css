@@ -318,6 +318,18 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 .race-card-name { font-weight: 700; }
 .race-card-meta { color: var(--color-muted); font-size: 0.85rem; }
 
+/* --- Event hub header: small icon + name, like the site logo --- */
+.event-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+.event-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--color-bg-raised);
+}
+.event-header h1 { margin: 0; }
+
 /* --- Events index: dense icon grid, 4-6 per row --- */
 .event-grid {
   list-style: none;

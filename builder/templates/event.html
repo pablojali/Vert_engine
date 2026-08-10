@@ -9,14 +9,15 @@
 <article class="event-page">
   <p class="breadcrumb"><a href="{{ locale_url(locale, 'races/') }}">{{ t.breadcrumb_races }}</a> / {{ event.name }} {{ event.year }}</p>
 
-  {% if event.hero_image %}
-  <img src="{{ event.hero_image }}" alt="{{ event.name }}" class="race-hero" loading="lazy">
-  {% endif %}
-
-  <h1>{{ event.name }} {{ event.year }}</h1>
-  <p class="race-meta">
-    {{ event.location }}{% if event.date %} · {{ event.date }}{% endif %}
-  </p>
+  <div class="event-header">
+    {% if event.hero_image %}<img src="{{ event.hero_image }}" alt="" class="event-icon" loading="lazy">{% endif %}
+    <div>
+      <h1>{{ event.name }} {{ event.year }}</h1>
+      <p class="race-meta">
+        {{ event.location }}{% if event.date %} · {{ event.date }}{% endif %}
+      </p>
+    </div>
+  </div>
 
   <div class="event-distances">
     {% for d in event.distances %}
