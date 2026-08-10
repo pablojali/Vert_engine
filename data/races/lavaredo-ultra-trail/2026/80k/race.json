@@ -1,0 +1,49 @@
+{
+  "slug": "lavaredo-ultra-trail-2026-80k",
+  "name": "Lavaredo Ultra Trail by UTMB - 80k",
+  "year": 2026,
+  "distance_km": 79.28318683035891,
+  "elevation_gain_m": 4907.0,
+  "date": "2026-06-27",
+  "location": null,
+  "hero_image": null,
+  "elevation_profile_image": null,
+  "athletes": [
+    {
+      "slug": "bart-przedwojewski",
+      "name": "Bart PRZEDWOJEWSKI",
+      "bib": 2002,
+      "finish_time": "7:40:30",
+      "position": 1,
+      "vpi": 1225.7,
+      "dmi": 16.21,
+      "er": 78.7,
+      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/bart-przedwojewski/report.html",
+      "charts": []
+    },
+    {
+      "slug": "robin-juillaguet",
+      "name": "Robin JUILLAGUET",
+      "bib": 2007,
+      "finish_time": "7:51:31",
+      "position": 2,
+      "vpi": 1191.3,
+      "dmi": 16.2,
+      "er": 78.7,
+      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/robin-juillaguet/report.html",
+      "charts": []
+    },
+    {
+      "slug": "marcin-rzeszotko",
+      "name": "Marcin RZESZÓTKO",
+      "bib": 2006,
+      "finish_time": "7:58:28",
+      "position": 3,
+      "vpi": 1171.5,
+      "dmi": 15.98,
+      "er": 80.8,
+      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/marcin-rzeszotko/report.html",
+      "charts": []
+    }
+  ]
+}

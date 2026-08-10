@@ -1,0 +1,25 @@
+{
+  "slug": "robin-juillaguet",
+  "name": "Robin JUILLAGUET",
+  "country": null,
+  "portrait": "/media/athletes/robin-juillaguet/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-2026-80k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 80k",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 2,
+      "finish_time": "7:51:31",
+      "vpi": 1191.3,
+      "dmi": 16.2,
+      "er": 78.7,
+      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/robin-juillaguet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1191.3,
+    "dmi": 16.2,
+    "er": 78.7
+  }
+}
