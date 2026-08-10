@@ -10,7 +10,7 @@
         <div class="carousel-text">
           <p class="carousel-eyebrow">{{ item.eyebrow }}</p>
           <h2>{{ item.title }}</h2>
-          <p class="carousel-desc">{{ t.home_featured_desc }}</p>
+          <p class="carousel-desc">{{ item.desc }}</p>
           <a href="{{ item.url }}" class="carousel-cta">{{ item.cta }} →</a>
         </div>
         {% if item.stats %}
@@ -62,24 +62,6 @@
   </div>
 </section>
 
-<section class="homepage-section">
-  <div class="section-heading">
-    <h2>{{ t.home_latest_races }}</h2>
-    <a href="{{ locale_url(locale, 'races/') }}" class="see-all">{{ t.home_see_all }}</a>
-  </div>
-  <ul class="event-grid">
-    {% for e in events[:6] %}
-    <li class="event-card">
-      <a href="{{ e.url }}">
-        {% if e.hero_image %}<img src="{{ e.hero_image }}" alt="" loading="lazy">{% endif %}
-        <span class="event-card-name">{{ e.name }}</span>
-        <span class="event-card-meta">{{ e.year }}{% if e.location %} · {{ e.location }}{% endif %}</span>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
-
 {% if latest_posts %}
 <section class="homepage-section">
   <div class="section-heading">
@@ -98,4 +80,22 @@
   </ul>
 </section>
 {% endif %}
+
+<section class="homepage-section">
+  <div class="section-heading">
+    <h2>{{ t.home_latest_races }}</h2>
+    <a href="{{ locale_url(locale, 'races/') }}" class="see-all">{{ t.home_see_all }}</a>
+  </div>
+  <ul class="event-grid">
+    {% for e in events[:6] %}
+    <li class="event-card">
+      <a href="{{ e.url }}">
+        {% if e.hero_image %}<img src="{{ e.hero_image }}" alt="" loading="lazy">{% endif %}
+        <span class="event-card-name">{{ e.name }}</span>
+        <span class="event-card-meta">{{ e.year }}{% if e.location %} · {{ e.location }}{% endif %}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
 {% endblock %}
