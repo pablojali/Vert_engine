@@ -1,0 +1,25 @@
+{
+  "slug": "stephanie-howe",
+  "name": "Stephanie HOWE",
+  "country": null,
+  "portrait": "/media/athletes/stephanie-howe/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 47,
+      "finish_time": "15:44:10",
+      "vpi": 874.8,
+      "dmi": 9.14,
+      "er": 70.3,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/stephanie-howe/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 874.8,
+    "dmi": 9.1,
+    "er": 70.3
+  }
+}

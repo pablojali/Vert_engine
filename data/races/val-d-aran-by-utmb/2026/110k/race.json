@@ -164,6 +164,90 @@
       "er": 71.9,
       "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/daniel-luque-gonzalez/report.html",
       "charts": []
+    },
+    {
+      "slug": "claudia-tremps",
+      "name": "Claudia TREMPS",
+      "bib": 1007,
+      "finish_time": "14:46:26",
+      "position": 21,
+      "vpi": 947.2,
+      "dmi": 9.82,
+      "er": 72.3,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/claudia-tremps/report.html",
+      "charts": []
+    },
+    {
+      "slug": "mireia-pons",
+      "name": "Mireia PONS",
+      "bib": 1015,
+      "finish_time": "14:56:54",
+      "position": 24,
+      "vpi": 909.3,
+      "dmi": 10.06,
+      "er": 72.5,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/mireia-pons/report.html",
+      "charts": []
+    },
+    {
+      "slug": "camille-lescuyer",
+      "name": "Camille LESCUYER",
+      "bib": 1017,
+      "finish_time": "15:00:42",
+      "position": 26,
+      "vpi": 896.5,
+      "dmi": 10.11,
+      "er": 67.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/camille-lescuyer/report.html",
+      "charts": []
+    },
+    {
+      "slug": "stephanie-howe",
+      "name": "Stephanie HOWE",
+      "bib": 1033,
+      "finish_time": "15:44:10",
+      "position": 47,
+      "vpi": 874.8,
+      "dmi": 9.14,
+      "er": 70.3,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/stephanie-howe/report.html",
+      "charts": []
+    },
+    {
+      "slug": "ingrid-m-due-gundersen",
+      "name": "Ingrid M DUE-GUNDERSEN",
+      "bib": 1038,
+      "finish_time": "15:53:55",
+      "position": 49,
+      "vpi": 859.4,
+      "dmi": 9.3,
+      "er": 71.8,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/ingrid-m-due-gundersen/report.html",
+      "charts": []
+    },
+    {
+      "slug": "ainara-arkarazo-legarreta",
+      "name": "Ainara ARKARAZO LEGARRETA",
+      "bib": 1040,
+      "finish_time": "16:03:07",
+      "position": 55,
+      "vpi": 844.7,
+      "dmi": 9.39,
+      "er": 69.3,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/ainara-arkarazo-legarreta/report.html",
+      "charts": []
+    },
+    {
+      "slug": "erola-tortades-verdaguer",
+      "name": "Erola TORTADÈS VERDAGUER",
+      "bib": 1597,
+      "finish_time": "16:39:52",
+      "position": 71,
+      "vpi": 817.2,
+      "dmi": 9.06,
+      "er": 71.0,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/erola-tortades-verdaguer/report.html",
+      "charts": []
     }
   ]
 }

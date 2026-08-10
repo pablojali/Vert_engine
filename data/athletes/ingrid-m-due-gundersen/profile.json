@@ -1,0 +1,25 @@
+{
+  "slug": "ingrid-m-due-gundersen",
+  "name": "Ingrid M DUE-GUNDERSEN",
+  "country": null,
+  "portrait": "/media/athletes/ingrid-m-due-gundersen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 49,
+      "finish_time": "15:53:55",
+      "vpi": 859.4,
+      "dmi": 9.3,
+      "er": 71.8,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/ingrid-m-due-gundersen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 859.4,
+    "dmi": 9.3,
+    "er": 71.8
+  }
+}

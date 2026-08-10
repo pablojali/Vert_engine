@@ -1,0 +1,25 @@
+{
+  "slug": "mireia-pons",
+  "name": "Mireia PONS",
+  "country": null,
+  "portrait": "/media/athletes/mireia-pons/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 24,
+      "finish_time": "14:56:54",
+      "vpi": 909.3,
+      "dmi": 10.06,
+      "er": 72.5,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/mireia-pons/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 909.3,
+    "dmi": 10.1,
+    "er": 72.5
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "erola-tortades-verdaguer",
+  "name": "Erola TORTADÈS VERDAGUER",
+  "country": null,
+  "portrait": "/media/athletes/erola-tortades-verdaguer/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 71,
+      "finish_time": "16:39:52",
+      "vpi": 817.2,
+      "dmi": 9.06,
+      "er": 71.0,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/erola-tortades-verdaguer/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 817.2,
+    "dmi": 9.1,
+    "er": 71.0
+  }
+}

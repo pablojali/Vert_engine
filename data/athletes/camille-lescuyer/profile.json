@@ -1,0 +1,25 @@
+{
+  "slug": "camille-lescuyer",
+  "name": "Camille LESCUYER",
+  "country": null,
+  "portrait": "/media/athletes/camille-lescuyer/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-110k",
+      "race_name": "Val d'Aran by UTMB - CDH 110k",
+      "year": 2026,
+      "distance_km": 108.84385386686421,
+      "position": 26,
+      "finish_time": "15:00:42",
+      "vpi": 896.5,
+      "dmi": 10.11,
+      "er": 67.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/camille-lescuyer/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 896.5,
+    "dmi": 10.1,
+    "er": 67.2
+  }
+}
