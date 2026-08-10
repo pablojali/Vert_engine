@@ -467,6 +467,14 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   margin-bottom: 1rem;
   background: #000;
 }
+.post-hero {
+  max-width: 260px;
+  width: 100%;
+  display: block;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  background: #000;
+}
 .elevation-profile-interactive {
   height: 460px;
   border: 1px solid var(--color-border);
