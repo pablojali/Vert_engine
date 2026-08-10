@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% from "_blocks.html" import render_blocks %}
 
 {% block title %}{{ race.name }} {{ race.year }} — Vertical Trail Labs{% endblock %}
 {% block description %}{{ t.race_performance_title }}: {{ race.name }} {{ race.year }} — VPI, DMI, ER.{% endblock %}
@@ -23,8 +22,6 @@
     {%- if race.distance_km %} · {{ race.distance_km|round(1) }} km{% endif -%}
     {%- if race.elevation_gain_m %} · {{ race.elevation_gain_m|round|int }} m D+{% endif %}
   </p>
-
-  {{ render_blocks(race.analysis_blocks, t, race.name) }}
 
   <p class="metric-note">
     {{ t.race_metric_note }}

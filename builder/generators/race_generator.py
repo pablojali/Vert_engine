@@ -28,18 +28,6 @@ def load_races() -> list[dict]:
     for f in sorted(RACES_DIR.glob("**/race.json")):
         race = json.loads(f.read_text(encoding="utf-8"))
         race["_source_dir"] = f.parent
-
-        blocks_path = f.parent / "analysis_blocks.json"
-        legacy_path = f.parent / "analysis.html"
-        if blocks_path.exists():
-            race["analysis_blocks"] = json.loads(blocks_path.read_text(encoding="utf-8")).get("blocks", [])
-        elif legacy_path.exists():
-            # Pre-block-editor races: treat the old single HTML blob as one
-            # raw-HTML block so nothing written before is lost.
-            race["analysis_blocks"] = [{"type": "html", "content": legacy_path.read_text(encoding="utf-8")}]
-        else:
-            race["analysis_blocks"] = []
-
         races.append(race)
     return races
 
@@ -117,13 +105,6 @@ def generate(loc: dict, t: dict, posts_by_race_slug: dict | None = None) -> tupl
         race["event_url"] = event["url"] if event else None
         for a in race.get("athletes", []):
             a["url"] = locale_url(loc["code"], f"athletes/{a['slug']}/")
-
-        athletes_by_slug = {a["slug"]: a for a in race.get("athletes", [])}
-        for block in race["analysis_blocks"]:
-            if block.get("type") == "top10":
-                block["entries"] = [
-                    athletes_by_slug[slug] for slug in block.get("slugs", []) if slug in athletes_by_slug
-                ]
 
         html = template.render(race=race, t=t, locale=loc["code"], page_path=f"races/{race['slug']}/")
         write_page(out_path(loc["prefix"], f"races/{race['slug']}/index.html"), html)

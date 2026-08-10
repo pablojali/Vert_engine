@@ -21,21 +21,12 @@
 
   <div class="event-distances">
     {% for d in event.distances %}
-    {% set hub_items = d.posts %}
-    {% if d.analysis_blocks %}
-      {% set hub_items = hub_items + [{
-        "url": d.url, "cover_image": d.hero_image,
-        "title": d.name ~ " " ~ d.year ~ " — " ~ t.race_analysis_entry_title,
-        "category": t.race_analysis_entry_title, "date": d.date,
-      }] %}
-    {% endif %}
-    {% set hub_items = hub_items|sort(attribute="date", reverse=True) %}
     <div class="event-distance-col">
       <h2>{{ d.distance_label }}</h2>
       <p class="race-meta">{% if d.elevation_gain_m %}{{ d.elevation_gain_m|round|int }} m D+{% endif %}</p>
-      {% if hub_items %}
+      {% if d.posts %}
       <ul class="post-row-list">
-        {% for p in hub_items %}
+        {% for p in d.posts %}
         <li class="post-row">
           <a href="{{ p.url }}">
             {% if p.cover_image %}<img src="{{ p.cover_image }}" alt="" loading="lazy">{% else %}<span class="post-row-placeholder"></span>{% endif %}

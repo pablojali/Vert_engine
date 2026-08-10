@@ -1691,10 +1691,10 @@ def _collect_blocks_from_state(
     return blocks
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export, tab_analysis_editor, tab_posts = st.tabs(
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
      "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher",
-     "🌐 Exportar a Web", "✏️ Editor de Análisis", "📰 Posts"]
+     "🌐 Exportar a Web", "📰 Posts"]
 )
 
 # ---------------------------------------------
@@ -3415,61 +3415,6 @@ with tab_web_export:
                         st.code(traceback.format_exc(), language="python")
 
 # ---------------------------------------------
-# TAB 9: Block-based editor for the race analysis content shown on the
-# public race page. Deliberately its own tab (not mixed into "Exportar a
-# Web") so adding/reordering runners never has to scroll past it.
-# ---------------------------------------------
-with tab_analysis_editor:
-    st.header("✏️ Editor de Análisis de Carrera")
-    st.caption(
-        "Armá el contenido de la página de la carrera con bloques que podés agregar, "
-        "reordenar y borrar: texto, HTML/gráficos embebidos, imágenes, y tablas de Top 10. "
-        "Esto no toca los corredores ni sus métricas - es solo el contenido editorial de la página."
-    )
-
-    _existing_races = sorted(WEB_DATA_DIR.glob("races/**/race.json"))
-    if not _existing_races:
-        st.info("Todavía no exportaste ninguna carrera. Hacé eso primero en '🌐 Exportar a Web'.")
-    else:
-        def _race_label(p: Path) -> str:
-            data = json.loads(p.read_text(encoding="utf-8"))
-            return f"{data.get('name')} {data.get('year')} — {p.parent.name} ({data.get('slug')})"
-
-        race_path = st.selectbox(
-            "Carrera a editar", _existing_races, format_func=_race_label, key="ae_race_select",
-        )
-        race_dir = race_path.parent
-        race_data = json.loads(race_path.read_text(encoding="utf-8"))
-        race_slug = race_data.get("slug")
-        athlete_options = {"— (vacío) —": None}
-        for a in race_data.get("athletes", []):
-            athlete_options[f"{a['name']} (#{a.get('bib') or '-'})"] = a["slug"]
-
-        order_key = f"ae_order_{race_path}"
-        if order_key not in st.session_state:
-            blocks_path = race_dir / "analysis_blocks.json"
-            legacy_path = race_dir / "analysis.html"
-            if blocks_path.exists():
-                loaded_blocks = json.loads(blocks_path.read_text(encoding="utf-8")).get("blocks", [])
-            elif legacy_path.exists():
-                loaded_blocks = [{"type": "html", "content": legacy_path.read_text(encoding="utf-8")}]
-            else:
-                loaded_blocks = []
-            _init_block_order(order_key, loaded_blocks)
-
-        _render_block_editor_ui(order_key, "ae", race_dir / "images" / "analysis", athlete_options)
-
-        st.markdown("---")
-        if st.button("💾 Guardar análisis", type="primary", use_container_width=True):
-            new_blocks = _collect_blocks_from_state(
-                order_key, "ae", race_dir / "images" / "analysis",
-                f"/media/races/{race_slug}/images/analysis", athlete_options,
-            )
-            (race_dir / "analysis_blocks.json").write_text(
-                json.dumps({"blocks": new_blocks}, ensure_ascii=False, indent=2), encoding="utf-8"
-            )
-            st.success("✅ Guardado. Usá el botón '🚀 Publicar sitio' de la barra lateral para subirlo.")
-
 with tab_posts:
     st.header("📰 Editor de Posts")
     st.caption(
