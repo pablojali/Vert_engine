@@ -3424,6 +3424,25 @@ with tab_posts:
         "recientes, sin necesidad de elegir nada."
     )
 
+    _existing_posts_for_edit = sorted(WEB_DATA_DIR.glob("posts/*/post.json"))
+    _post_edit_options = {"— Nuevo post —": None}
+    for _p in _existing_posts_for_edit:
+        _d = json.loads(_p.read_text(encoding="utf-8"))
+        _post_edit_options[f"{_d.get('title') or _p.parent.name} ({_p.parent.name})"] = _p.parent.name
+
+    def _load_post_for_edit():
+        chosen_slug = _post_edit_options.get(st.session_state.get("post_edit_select"))
+        if chosen_slug:
+            data = json.loads((WEB_DATA_DIR / "posts" / chosen_slug / "post.json").read_text(encoding="utf-8"))
+            st.session_state["post_title_input"] = data.get("title", "")
+            st.session_state["post_slug_input"] = chosen_slug
+
+    st.selectbox(
+        "📂 Editar post existente", list(_post_edit_options.keys()), key="post_edit_select",
+        on_change=_load_post_for_edit,
+        help="Elegí un post ya publicado para cargarlo y seguir editándolo, en vez de escribir su título/slug a mano.",
+    )
+
     def _sync_post_slug_from_title():
         st.session_state["post_slug_input"] = _slugify(st.session_state.get("post_title_input", ""))
 
