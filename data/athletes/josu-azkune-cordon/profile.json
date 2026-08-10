@@ -1,0 +1,25 @@
+{
+  "slug": "josu-azkune-cordon",
+  "name": "Josu AZKUNE CORDON",
+  "country": null,
+  "portrait": "/media/athletes/josu-azkune-cordon/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 10,
+      "finish_time": "24:36:08",
+      "vpi": 861.5,
+      "dmi": 9.72,
+      "er": 71.4,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/josu-azkune-cordon/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 861.5,
+    "dmi": 9.7,
+    "er": 71.4
+  }
+}

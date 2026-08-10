@@ -1,0 +1,25 @@
+{
+  "slug": "pau-rius",
+  "name": "Pau RIUS",
+  "country": null,
+  "portrait": "/media/athletes/pau-rius/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 5,
+      "finish_time": "23:13:32",
+      "vpi": 911.0,
+      "dmi": 10.64,
+      "er": 67.0,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/pau-rius/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 911.0,
+    "dmi": 10.6,
+    "er": 67.0
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "maxime-bisson",
+  "name": "Maxime BISSON",
+  "country": null,
+  "portrait": "/media/athletes/maxime-bisson/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 9,
+      "finish_time": "24:30:38",
+      "vpi": 866.0,
+      "dmi": 9.76,
+      "er": 70.2,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/maxime-bisson/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 866.0,
+    "dmi": 9.8,
+    "er": 70.2
+  }
+}

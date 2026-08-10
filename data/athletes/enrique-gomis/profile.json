@@ -1,0 +1,25 @@
+{
+  "slug": "enrique-gomis",
+  "name": "Enrique GOMIS",
+  "country": null,
+  "portrait": "/media/athletes/enrique-gomis/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 7,
+      "finish_time": "23:46:50",
+      "vpi": 895.7,
+      "dmi": 10.04,
+      "er": 68.1,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/enrique-gomis/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 895.7,
+    "dmi": 10.0,
+    "er": 68.1
+  }
+}

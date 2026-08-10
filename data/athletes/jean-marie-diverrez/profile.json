@@ -1,0 +1,25 @@
+{
+  "slug": "jean-marie-diverrez",
+  "name": "Jean-Marie DIVERREZ",
+  "country": null,
+  "portrait": "/media/athletes/jean-marie-diverrez/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 8,
+      "finish_time": "24:09:45",
+      "vpi": 866.8,
+      "dmi": 9.68,
+      "er": 79.4,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/jean-marie-diverrez/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 866.8,
+    "dmi": 9.7,
+    "er": 79.4
+  }
+}

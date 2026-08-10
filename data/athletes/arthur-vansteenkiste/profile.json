@@ -1,0 +1,25 @@
+{
+  "slug": "arthur-vansteenkiste",
+  "name": "Arthur VANSTEENKISTE",
+  "country": null,
+  "portrait": "/media/athletes/arthur-vansteenkiste/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 6,
+      "finish_time": "23:43:30",
+      "vpi": 887.7,
+      "dmi": 10.26,
+      "er": 65.3,
+      "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/arthur-vansteenkiste/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 887.7,
+    "dmi": 10.3,
+    "er": 65.3
+  }
+}
