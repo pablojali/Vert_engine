@@ -22,7 +22,12 @@
       "slugs": [
         "bart-przedwojewski",
         "robin-juillaguet",
-        "marcin-rzeszotko"
+        "marcin-rzeszotko",
+        "lasse-finstad",
+        "pierre-adrien-hivert",
+        "genis-porqueras",
+        "bogdan-ibanescu",
+        "moreno-sala"
       ]
     },
     {
@@ -56,7 +61,18 @@
     {
       "type": "top10",
       "title": "Top 10",
-      "slugs": []
+      "slugs": [
+        "elisa-kristinsdottir",
+        "marie-goncalves",
+        "nicol-guidolin",
+        "kinga-kwiatkowska",
+        "sylvie-geissler",
+        "giulia-marchesoni",
+        "agathe-bes",
+        "viva-de-moustier",
+        "arden-young",
+        "magdalena-kraszpulska"
+      ]
     },
     {
       "type": "text",
