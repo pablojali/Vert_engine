@@ -109,11 +109,11 @@ def generate(loc: dict, t: dict, posts_by_race_slug: dict | None = None) -> tupl
         html = template.render(race=race, t=t, locale=loc["code"], page_path=f"races/{race['slug']}/")
         write_page(out_path(loc["prefix"], f"races/{race['slug']}/index.html"), html)
 
-    for event in sorted(events, key=lambda e: (e.get("year", 0), e.get("date", "")), reverse=True):
+    for event in sorted(events, key=lambda e: (e.get("year") or 0, e.get("date") or ""), reverse=True):
         html = event_template.render(event=event, t=t, locale=loc["code"], page_path=f"races/{event['slug']}/")
         write_page(out_path(loc["prefix"], f"races/{event['slug']}/index.html"), html)
 
-    ordered_events = sorted(events, key=lambda e: (e.get("year", 0), e.get("date", "")), reverse=True)
+    ordered_events = sorted(events, key=lambda e: (e.get("year") or 0, e.get("date") or ""), reverse=True)
     write_page(
         out_path(loc["prefix"], "races/index.html"),
         index_template.render(events=ordered_events, t=t, locale=loc["code"], page_path="races/"),

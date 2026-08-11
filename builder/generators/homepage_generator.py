@@ -49,7 +49,7 @@ def generate(
     posts that didn't make the carousel) sits right under it; "Latest
     Analyses" (event-grouped, for browsing by race) comes after."""
     template = env.get_template("index.html")
-    ordered_events = sorted(events, key=lambda e: (e.get("year", 0), e.get("date", "")), reverse=True)
+    ordered_events = sorted(events, key=lambda e: (e.get("year") or 0, e.get("date") or ""), reverse=True)
     ordered_posts = sorted(posts, key=lambda p: p.get("date") or "", reverse=True)
 
     carousel_items = [_post_carousel_item(p, t) for p in ordered_posts[:CAROUSEL_SIZE]]
