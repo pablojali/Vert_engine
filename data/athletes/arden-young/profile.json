@@ -1,0 +1,25 @@
+{
+  "slug": "arden-young",
+  "name": "Arden YOUNG",
+  "country": null,
+  "portrait": "/media/athletes/arden-young/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 35,
+      "finish_time": "10:24:35",
+      "vpi": 911.4,
+      "dmi": 11.65,
+      "er": 70.2,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/arden-young/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 911.4,
+    "dmi": 11.6,
+    "er": 70.2
+  }
+}

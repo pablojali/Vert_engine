@@ -1,0 +1,25 @@
+{
+  "slug": "agathe-bes",
+  "name": "Agathe BES",
+  "country": null,
+  "portrait": "/media/athletes/agathe-bes/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 28,
+      "finish_time": "10:10:48",
+      "vpi": 916.3,
+      "dmi": 12.82,
+      "er": 79.0,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/agathe-bes/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 916.3,
+    "dmi": 12.8,
+    "er": 79.0
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "magdalena-kraszpulska",
+  "name": "Magdalena KRASZPULSKA",
+  "country": null,
+  "portrait": "/media/athletes/magdalena-kraszpulska/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 40,
+      "finish_time": "10:33:53",
+      "vpi": 889.5,
+      "dmi": 11.92,
+      "er": 84.2,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/magdalena-kraszpulska/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 889.5,
+    "dmi": 11.9,
+    "er": 84.2
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "nicol-guidolin",
+  "name": "Nicol GUIDOLIN",
+  "country": null,
+  "portrait": "/media/athletes/nicol-guidolin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 23,
+      "finish_time": "9:54:26",
+      "vpi": 950.0,
+      "dmi": 12.55,
+      "er": 80.6,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/nicol-guidolin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 950.0,
+    "dmi": 12.6,
+    "er": 80.6
+  }
+}

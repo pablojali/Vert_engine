@@ -1,0 +1,25 @@
+{
+  "slug": "pierre-adrien-hivert",
+  "name": "Pierre-Adrien HIVERT",
+  "country": null,
+  "portrait": "/media/athletes/pierre-adrien-hivert/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 7,
+      "finish_time": "8:38:04",
+      "vpi": 1083.0,
+      "dmi": 14.66,
+      "er": 81.8,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/pierre-adrien-hivert/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1083.0,
+    "dmi": 14.7,
+    "er": 81.8
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "kinga-kwiatkowska",
+  "name": "Kinga KWIATKOWSKA",
+  "country": null,
+  "portrait": "/media/athletes/kinga-kwiatkowska/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 24,
+      "finish_time": "9:57:39",
+      "vpi": 939.3,
+      "dmi": 12.7,
+      "er": 81.8,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/kinga-kwiatkowska/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 939.3,
+    "dmi": 12.7,
+    "er": 81.8
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "bogdan-ibanescu",
+  "name": "Bogdan IBANESCU",
+  "country": null,
+  "portrait": "/media/athletes/bogdan-ibanescu/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 10,
+      "finish_time": "9:01:55",
+      "vpi": 1037.7,
+      "dmi": 14.03,
+      "er": 85.7,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/bogdan-ibanescu/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1037.7,
+    "dmi": 14.0,
+    "er": 85.7
+  }
+}

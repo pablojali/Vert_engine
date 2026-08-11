@@ -1,0 +1,25 @@
+{
+  "slug": "lasse-finstad",
+  "name": "Lasse FINSTAD",
+  "country": null,
+  "portrait": "/media/athletes/lasse-finstad/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 6,
+      "finish_time": "8:36:48",
+      "vpi": 1089.8,
+      "dmi": 14.6,
+      "er": 83.4,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/lasse-finstad/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1089.8,
+    "dmi": 14.6,
+    "er": 83.4
+  }
+}

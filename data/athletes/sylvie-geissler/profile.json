@@ -1,0 +1,25 @@
+{
+  "slug": "sylvie-geissler",
+  "name": "Sylvie GEISSLER",
+  "country": null,
+  "portrait": "/media/athletes/sylvie-geissler/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 26,
+      "finish_time": "10:07:50",
+      "vpi": 933.1,
+      "dmi": 12.15,
+      "er": 82.5,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/sylvie-geissler/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 933.1,
+    "dmi": 12.2,
+    "er": 82.5
+  }
+}

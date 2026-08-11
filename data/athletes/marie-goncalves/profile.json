@@ -1,0 +1,25 @@
+{
+  "slug": "marie-goncalves",
+  "name": "Marie GONCALVES",
+  "country": null,
+  "portrait": "/media/athletes/marie-goncalves/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 12,
+      "finish_time": "9:12:49",
+      "vpi": 1017.9,
+      "dmi": 13.63,
+      "er": 76.7,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/marie-goncalves/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1017.9,
+    "dmi": 13.6,
+    "er": 76.7
+  }
+}

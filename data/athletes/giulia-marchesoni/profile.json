@@ -1,0 +1,25 @@
+{
+  "slug": "giulia-marchesoni",
+  "name": "Giulia MARCHESONI",
+  "country": null,
+  "portrait": "/media/athletes/giulia-marchesoni/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 27,
+      "finish_time": "10:10:00",
+      "vpi": 922.2,
+      "dmi": 12.24,
+      "er": 73.3,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/giulia-marchesoni/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 922.2,
+    "dmi": 12.2,
+    "er": 73.3
+  }
+}

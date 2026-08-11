@@ -1,0 +1,25 @@
+{
+  "slug": "moreno-sala",
+  "name": "Moreno SALA",
+  "country": null,
+  "portrait": "/media/athletes/moreno-sala/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 11,
+      "finish_time": "9:09:41",
+      "vpi": 1031.7,
+      "dmi": 13.61,
+      "er": 74.4,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/moreno-sala/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1031.7,
+    "dmi": 13.6,
+    "er": 74.4
+  }
+}

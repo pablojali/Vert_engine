@@ -1,0 +1,25 @@
+{
+  "slug": "viva-de-moustier",
+  "name": "Viva DE MOUSTIER",
+  "country": null,
+  "portrait": "/media/athletes/viva-de-moustier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 30,
+      "finish_time": "10:15:43",
+      "vpi": 911.8,
+      "dmi": 12.29,
+      "er": 78.8,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/viva-de-moustier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 911.8,
+    "dmi": 12.3,
+    "er": 78.8
+  }
+}
