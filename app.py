@@ -14,7 +14,6 @@ import shutil
 import subprocess
 from contextlib import redirect_stdout
 from pathlib import Path
-from trail_metrics_config import INDEX_CONFIG, SPEED_METRICS, display_metric_documentation
 from data.gpx_loader import (
     build_cascading_selector,
     get_gpx_path,
@@ -1538,6 +1537,8 @@ def _web_export_track_result(race_key, runner_info, indices):
             "vpi": indices.get("VPI"),
             "dmi": indices.get("DMI"),
             "er": indices.get("ER"),
+            "pace_first_half": indices.get("effort_pace_first_half"),
+            "pace_second_half": indices.get("effort_pace_second_half"),
         }
     except Exception:
         pass
@@ -1691,9 +1692,9 @@ def _collect_blocks_from_state(
     return blocks
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
-     "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher",
+     "⚖️ UTMB vs GPX", "🏆 Top Runners", "🧩 Checkpoint Fetcher",
      "🌐 Exportar a Web", "📰 Posts"]
 )
 
@@ -2902,31 +2903,6 @@ with tab_top:
                         st.plotly_chart(fig_dmi_top, use_container_width=True)
                         chart_download_button(fig_dmi_top, "dmi_progression.html", "dl_dmi_top")
 
-with tab_methodology:
-    st.header("📖 Indices & Calculation Methodology")
-    st.caption(
-        "Definitions, geometric criteria and formulas for VertLabs' proprietary indices. "
-        "These indices cross the official GPX terrain (the 'Race Analysis' tab) with the "
-        "runner's real split times (the 'Runner Metrics' tab)."
-    )
-
-    st.markdown("### 📐 Performance Indices")
-    for index_key in INDEX_CONFIG:
-        cfg = INDEX_CONFIG[index_key]
-        with st.expander(f"{cfg['icon']} {cfg['name']} ({index_key})", expanded=False):
-            st.markdown(display_metric_documentation(index_key))
-
-    st.markdown("---")
-    st.markdown("### ⚡ Speed Metrics")
-    for metric_key, cfg in SPEED_METRICS.items():
-        with st.expander(cfg['name'], expanded=False):
-            st.markdown(f"""
-            * **Description:** {cfg['description']}
-            * **Data Source:** {cfg['source']}
-            * **Formula:** `{cfg['formula']}`
-            * **Unit:** {cfg['unit']}
-            """)
-
 # ---------------------------------------------
 # TAB 7: Checkpoint Fetcher (Livetrail) - generates the exact block to
 # paste into data/races_registry.json for a new race/edition
@@ -3281,6 +3257,8 @@ with tab_web_export:
                             "vpi": r.get("vpi"),
                             "dmi": r.get("dmi"),
                             "er": r.get("er"),
+                            "pace_first_half": r.get("pace_first_half"),
+                            "pace_second_half": r.get("pace_second_half"),
                             "report": report_path,
                             "charts": charts_payload,
                         })
