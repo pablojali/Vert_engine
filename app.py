@@ -7,7 +7,6 @@ import re
 import io
 import traceback
 import requests
-from trail_metrics_config import INDEX_CONFIG, SPEED_METRICS, display_metric_documentation
 from data.gpx_loader import (
     build_cascading_selector,
     get_gpx_path,
@@ -949,6 +948,7 @@ def fetch_runner_by_tenant_and_bib(tenant, bib):
         "Bib": resume.get("bib"),
         "Age": info.get("age"),
         "Category": info.get("category"),
+        "Sex": info.get("sex"),
         "Club": info.get("club"),
         "Country": country.get("name"),
         "Finish Time": resume.get("raceTime"),
@@ -1260,9 +1260,9 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
 if 'saved_races' not in st.session_state:
     st.session_state['saved_races'] = {}
 
-tab_race, tab_runner, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_methodology, tab_checkpoints = st.tabs(
+tab_race, tab_runner, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_checkpoints = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (UTMB)", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
-     "⚖️ UTMB vs GPX", "🏆 Top Runners", "📖 Indices & Methodology", "🧩 Checkpoint Fetcher"]
+     "⚖️ UTMB vs GPX", "🏆 Top Runners", "🧩 Checkpoint Fetcher"]
 )
 
 # ---------------------------------------------
@@ -2634,8 +2634,11 @@ with tab_top:
                         "Go back to the 'Race Analysis' tab and load them first."
                     )
                 else:
+                    total_race_gain_top = calculate_total_elevation_gain(race_data_top["df"])
+
                     results = {}
                     errors = {}
+                    detailed_rows = []
                     progress = st.progress(0.0, text="Fetching runners...")
 
                     for i, bib in enumerate(bibs):
@@ -2649,6 +2652,27 @@ with tab_top:
                             )
                             label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
                             results[label] = df_summary_bib
+
+                            try:
+                                global_indices_bib, _ = calculate_runner_indices(
+                                    race_data_top["df"], race_segments_df_top, df_runner_bib,
+                                    race_data_top["total_km"], total_race_gain_top,
+                                )
+                            except Exception:
+                                global_indices_bib = {}
+
+                            detailed_rows.append({
+                                "Sexo": runner_info_bib.get("Sex"),
+                                "POS": runner_info_bib.get("Gender Rank"),
+                                "BIB": runner_info_bib.get("Bib") or bib,
+                                "NOMBRE": runner_info_bib.get("Name"),
+                                "TIEMPO FINAL": runner_info_bib.get("Finish Time"),
+                                "VPI": global_indices_bib.get("VPI"),
+                                "DMI": global_indices_bib.get("DMI"),
+                                "ER": global_indices_bib.get("ER"),
+                                "1st Half Pace Effort": global_indices_bib.get("effort_pace_first_half"),
+                                "2nd Half Pace Effort": global_indices_bib.get("effort_pace_second_half"),
+                            })
                         except Exception:
                             errors[bib] = traceback.format_exc()
                         progress.progress((i + 1) / len(bibs), text=f"Fetching runners... ({i + 1}/{len(bibs)})")
@@ -2665,6 +2689,31 @@ with tab_top:
                         st.error("❌ Couldn't fetch any of the bibs entered.")
                     else:
                         st.success(f"✅ Fetched {len(results)} of {len(bibs)} runner(s).")
+
+                        # --- Detailed race analysis: Top 10 men / Top 10 women ---
+                        st.markdown("---")
+                        st.markdown("### 🥇 Análisis Detallado de la Carrera - Top 10")
+                        st.caption(
+                            "POS = posición dentro de su categoría (Gender Rank). VPI, DMI y ER son "
+                            "los índices globales de carrera (no por segmento). Requiere que los bibs "
+                            "cargados cubran ambos top 10; los que no encajen entre los primeros 10 "
+                            "de su categoría no se muestran."
+                        )
+                        df_detailed = pd.DataFrame(detailed_rows)
+                        detailed_columns = [
+                            "POS", "BIB", "NOMBRE", "TIEMPO FINAL", "VPI", "DMI", "ER",
+                            "1st Half Pace Effort", "2nd Half Pace Effort",
+                        ]
+
+                        col_men, col_women = st.columns(2)
+                        with col_men:
+                            st.markdown("##### 🚹 Top 10 Hombres")
+                            df_men = df_detailed[df_detailed["Sexo"] == "H"].sort_values("POS").head(10)
+                            st.dataframe(df_men[detailed_columns], use_container_width=True, hide_index=True)
+                        with col_women:
+                            st.markdown("##### 🚺 Top 10 Mujeres")
+                            df_women = df_detailed[df_detailed["Sexo"] == "F"].sort_values("POS").head(10)
+                            st.dataframe(df_women[detailed_columns], use_container_width=True, hide_index=True)
 
                         for label, df_summary_bib in results.items():
                             st.markdown(f"##### {label}")
@@ -2848,31 +2897,6 @@ with tab_top:
                         )
                         st.plotly_chart(fig_dmi_top, use_container_width=True)
                         chart_download_button(fig_dmi_top, "dmi_progression.html", "dl_dmi_top")
-
-with tab_methodology:
-    st.header("📖 Indices & Calculation Methodology")
-    st.caption(
-        "Definitions, geometric criteria and formulas for VertLabs' proprietary indices. "
-        "These indices cross the official GPX terrain (the 'Race Analysis' tab) with the "
-        "runner's real split times (the 'Runner Metrics' tab)."
-    )
-
-    st.markdown("### 📐 Performance Indices")
-    for index_key in INDEX_CONFIG:
-        cfg = INDEX_CONFIG[index_key]
-        with st.expander(f"{cfg['icon']} {cfg['name']} ({index_key})", expanded=False):
-            st.markdown(display_metric_documentation(index_key))
-
-    st.markdown("---")
-    st.markdown("### ⚡ Speed Metrics")
-    for metric_key, cfg in SPEED_METRICS.items():
-        with st.expander(cfg['name'], expanded=False):
-            st.markdown(f"""
-            * **Description:** {cfg['description']}
-            * **Data Source:** {cfg['source']}
-            * **Formula:** `{cfg['formula']}`
-            * **Unit:** {cfg['unit']}
-            """)
 
 # ---------------------------------------------
 # TAB 7: Checkpoint Fetcher (Livetrail) - generates the exact block to
