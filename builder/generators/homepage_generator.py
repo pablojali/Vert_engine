@@ -40,16 +40,12 @@ def _post_carousel_item(p: dict, t: dict) -> dict:
     }
 
 
-def generate(
-    races: list[dict], events: list[dict], athletes: list[dict], posts: list[dict], loc: dict, t: dict
-) -> None:
+def generate(races: list[dict], athletes: list[dict], posts: list[dict], loc: dict, t: dict) -> None:
     """The carousel is posts only, newest first - a post is the direct,
     specific thing someone shares/clicks into, unlike an event (which
-    would need a second click to pick a distance). "Latest Posts" (real
-    posts that didn't make the carousel) sits right under it; "Latest
-    Analyses" (event-grouped, for browsing by race) comes after."""
+    would need a second click to pick a distance). "Latest Posts" below
+    it shows whatever real posts didn't make the carousel."""
     template = env.get_template("index.html")
-    ordered_events = sorted(events, key=lambda e: (e.get("year") or 0, e.get("date") or ""), reverse=True)
     ordered_posts = sorted(posts, key=lambda p: p.get("date") or "", reverse=True)
 
     carousel_items = [_post_carousel_item(p, t) for p in ordered_posts[:CAROUSEL_SIZE]]
@@ -62,7 +58,7 @@ def generate(
     }
 
     html = template.render(
-        carousel_items=carousel_items, events=ordered_events, latest_posts=latest_posts,
+        carousel_items=carousel_items, latest_posts=latest_posts,
         stats=stats, t=t, locale=loc["code"], page_path="",
     )
     write_page(out_path(loc["prefix"], "index.html"), html)

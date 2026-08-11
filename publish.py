@@ -125,7 +125,7 @@ def main() -> None:
         posts = post_generator.generate(loc, t, races_by_slug, posts)
 
         print("5/8 Generando homepage...")
-        homepage_generator.generate(races, events, athletes, posts, loc, t)
+        homepage_generator.generate(races, athletes, posts, loc, t)
 
         print("6/8 Generando rankings...")
         rankings_generator.generate(athletes, loc, t)

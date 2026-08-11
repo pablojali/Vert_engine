@@ -24,8 +24,6 @@ TRANSLATIONS = {
             "performance analytics. Explore races, compare athletes, and "
             "understand performance beyond the results."
         ),
-        "home_latest_races": "Latest Analyses",
-        "home_see_all": "See all →",
         "home_latest_posts": "Latest Posts",
         "race_latest_posts": "Latest Posts",
         "event_no_posts": "No posts yet",
@@ -121,8 +119,6 @@ TRANSLATIONS = {
             "analítica de rendimiento propia. Explorá carreras, comparás "
             "atletas y entendé el rendimiento más allá de los resultados."
         ),
-        "home_latest_races": "Últimos análisis",
-        "home_see_all": "Ver todas →",
         "home_latest_posts": "Últimos Posts",
         "race_latest_posts": "Últimos Posts",
         "event_no_posts": "Todavía no hay posts",
@@ -221,8 +217,6 @@ TRANSLATIONS = {
             "comparez les athlètes et comprenez la performance au-delà des "
             "résultats."
         ),
-        "home_latest_races": "Dernières analyses",
-        "home_see_all": "Voir tout →",
         "home_latest_posts": "Derniers Articles",
         "race_latest_posts": "Derniers Articles",
         "event_no_posts": "Pas encore d'articles",
