@@ -1,0 +1,25 @@
+{
+  "slug": "kellen-blumberg",
+  "name": "Kellen BLUMBERG",
+  "country": null,
+  "portrait": "/media/athletes/kellen-blumberg/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 5,
+      "finish_time": "8:21:42",
+      "vpi": 1118.7,
+      "dmi": 15.12,
+      "er": 81.2,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/kellen-blumberg/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1118.7,
+    "dmi": 15.1,
+    "er": 81.2
+  }
+}

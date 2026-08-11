@@ -1,0 +1,25 @@
+{
+  "slug": "stefan-ungericht",
+  "name": "Stefan UNGERICHT",
+  "country": null,
+  "portrait": "/media/athletes/stefan-ungericht/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 4,
+      "finish_time": "8:19:49",
+      "vpi": 1131.3,
+      "dmi": 15.03,
+      "er": 72.7,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/stefan-ungericht/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1131.3,
+    "dmi": 15.0,
+    "er": 72.7
+  }
+}

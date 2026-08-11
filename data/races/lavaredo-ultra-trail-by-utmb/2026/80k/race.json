@@ -1,0 +1,41 @@
+{
+  "slug": "lavaredo-ultra-trail-by-utmb-2026",
+  "name": "Lavaredo Ultra Trail by UTMB",
+  "year": 2026,
+  "distance_km": 79.28318683035891,
+  "elevation_gain_m": null,
+  "date": null,
+  "location": null,
+  "hero_image": null,
+  "elevation_profile_image": null,
+  "athletes": [
+    {
+      "slug": "stefan-ungericht",
+      "name": "Stefan UNGERICHT",
+      "bib": 2015,
+      "finish_time": "8:19:49",
+      "position": 4,
+      "vpi": 1131.3,
+      "dmi": 15.03,
+      "er": 72.7,
+      "pace_first_half": 3.37,
+      "pace_second_half": 4.29,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/stefan-ungericht/report.html",
+      "charts": []
+    },
+    {
+      "slug": "kellen-blumberg",
+      "name": "Kellen BLUMBERG",
+      "bib": 2008,
+      "finish_time": "8:21:42",
+      "position": 5,
+      "vpi": 1118.7,
+      "dmi": 15.12,
+      "er": 81.2,
+      "pace_first_half": 3.52,
+      "pace_second_half": 4.18,
+      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/kellen-blumberg/report.html",
+      "charts": []
+    }
+  ]
+}
