@@ -172,6 +172,10 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   border-radius: 10px;
   background: var(--color-bg-raised);
 }
+a.stat-box { text-decoration: none; color: var(--color-text); transition: border-color 0.15s ease; }
+a.stat-box:hover { border-color: var(--color-muted); text-decoration: none; }
+a.stat-box.stat-box-cyan:hover { border-color: var(--color-cyan); }
+a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 .stat-box .stat-hex { color: var(--color-muted); margin-bottom: 0.5rem; }
 .stat-box-cyan .stat-hex { color: var(--color-cyan); }
 .stat-box-orange .stat-hex { color: var(--color-orange); }
@@ -259,11 +263,13 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 /* --- Wide "Performance Metrics" stat box --- */
 .stat-box-wide { grid-column: span 2; }
 .stat-box-wide .stat-name { margin-bottom: 0.5rem; }
+.stat-name-link { color: var(--color-text); text-decoration: none; }
+.stat-name-link:hover { color: var(--color-cyan); text-decoration: none; }
 .metric-mini-list { display: flex; flex-direction: column; gap: 0.4rem; width: 100%; }
 .metric-mini-row {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.6rem;
   padding: 0.45rem 0.7rem;
   border: 1px solid var(--color-border);
   border-left: 3px solid var(--color-border);
@@ -272,14 +278,19 @@ main { max-width: 1176px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
   text-decoration: none;
 }
 .metric-mini-row:hover { text-decoration: none; border-color: var(--color-muted); }
+.metric-mini-icon { width: 26px; height: 26px; flex-shrink: 0; }
+.metric-mini-text { display: flex; align-items: baseline; gap: 0.5rem; }
 .metric-mini-row strong { font-size: 0.9rem; }
 .metric-mini-row span { color: var(--color-muted); font-size: 0.82rem; }
 .metric-mini-vpi { border-left-color: var(--color-vpi); }
 .metric-mini-vpi strong { color: var(--color-vpi); }
+.metric-mini-vpi .metric-mini-icon { color: var(--color-vpi); }
 .metric-mini-dmi { border-left-color: var(--color-dmi); }
 .metric-mini-dmi strong { color: var(--color-dmi); }
+.metric-mini-dmi .metric-mini-icon { color: var(--color-dmi); }
 .metric-mini-er { border-left-color: var(--color-er); }
 .metric-mini-er strong { color: var(--color-er); }
+.metric-mini-er .metric-mini-icon { color: var(--color-er); }
 
 /* --- Cards / grids --- */
 .race-grid {
