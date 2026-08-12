@@ -1147,25 +1147,41 @@ def scrape_runner_splits_livetrail(url, manual_race_id=None):
 
 
 def parse_livetrail_url(url: str) -> dict:
-    """Best-effort extraction of the X-Tenant ('e=') and Race ID ('c=')
-    query params from a Livetrail live-results URL, so the Checkpoint
-    Fetcher doesn't require digging through DevTools for those two
-    values. Handles both a plain query string and the '#/route?e=...'
-    hash-based routing Livetrail's frontend also uses. Returns {} (never
-    raises) if the URL doesn't match - callers keep the tenant/race ID
-    fields manually editable as a fallback."""
+    """Best-effort extraction of the X-Tenant and Race ID from a Livetrail
+    live-results URL, so the Checkpoint Fetcher doesn't require digging
+    through DevTools for those two values. Different Livetrail frontends
+    encode this differently, so tries a few known shapes in order:
+      - query/hash params 'e=' (tenant) and 'c=' or 'raceId=' (race id)
+      - <subdomain>.v3.livetrail.net + a 4-digit year found anywhere in
+        the URL, combined into "<subdomain>_<year>" (matches the tenant
+        format fetch_livetrail_checkpoints already expects), used when
+        there's no explicit 'e=' param
+    Returns {} (never raises, no partial/guessed values) for whatever it
+    can't confidently read - callers keep the tenant/race ID fields
+    manually editable as a fallback."""
     if not url:
         return {}
-    parsed = urlparse(url.strip())
+    url = url.strip()
+    parsed = urlparse(url)
     query_string = parsed.query
     if not query_string and "?" in parsed.fragment:
         query_string = parsed.fragment.split("?", 1)[1]
     params = parse_qs(query_string)
+
     result = {}
+    for key in ("raceId", "c", "race"):
+        if params.get(key):
+            result["race_id"] = params[key][0]
+            break
+
     if params.get("e"):
         result["tenant"] = params["e"][0]
-    if params.get("c"):
-        result["race_id"] = params["c"][0]
+    else:
+        subdomain_match = re.match(r"([a-z0-9-]+)\.v3\.livetrail\.net", parsed.netloc, re.I)
+        year_match = re.search(r"(20\d{2})", url)
+        if subdomain_match and year_match:
+            result["tenant"] = f"{subdomain_match.group(1)}_{year_match.group(1)}"
+
     return result
 
 
