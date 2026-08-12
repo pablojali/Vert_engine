@@ -3002,8 +3002,11 @@ with tab_checkpoints:
         else:
             gpx_dir_rel = f"data/gpx/{cf_carrera_slug}/{cf_anio}"
             cf_gpx_filename = st.text_input(
-                "Nombre del archivo GPX (la carpeta se crea ahora, subís el archivo después)",
-                value=f"{cf_distancia}.gpx", key="cf_gpx_filename_input",
+                "Nombre del archivo GPX", value=f"{cf_distancia}.gpx", key="cf_gpx_filename_input",
+            )
+            cf_gpx_upload = st.file_uploader(
+                "GPX oficial de la carrera (opcional acá - también lo podés subir después a mano)",
+                type=["gpx"], key="cf_gpx_upload",
             )
             gpx_file_rel = f"{gpx_dir_rel}/{cf_gpx_filename}"
             effective_slug = cf_race_slug_api.strip() or cf_race_id
@@ -3039,15 +3042,24 @@ with tab_checkpoints:
                 registry[cf_carrera_slug].setdefault("anios", {}).setdefault(cf_anio, {})[cf_distancia] = new_entry
                 registry_path.write_text(json.dumps(registry, ensure_ascii=False, indent=2), encoding="utf-8")
 
-                (WEB_DATA_DIR / "gpx" / cf_carrera_slug / cf_anio).mkdir(parents=True, exist_ok=True)
+                gpx_dir_abs = WEB_DATA_DIR / "gpx" / cf_carrera_slug / cf_anio
+                gpx_dir_abs.mkdir(parents=True, exist_ok=True)
+                if cf_gpx_upload is not None:
+                    (gpx_dir_abs / cf_gpx_filename).write_bytes(cf_gpx_upload.getvalue())
 
                 gpx_loader.load_registry.cache_clear()
 
-                st.success(
-                    f"✅ Guardado: {cf_carrera_slug} / {cf_anio} / {cf_distancia}K. "
-                    f"Subí el GPX oficial a `{gpx_dir_rel}/` con el nombre `{cf_gpx_filename}` "
-                    "y ya vas a poder elegir esta carrera en '🗺️ Race Analysis'."
-                )
+                if cf_gpx_upload is not None:
+                    st.success(
+                        f"✅ Guardado: {cf_carrera_slug} / {cf_anio} / {cf_distancia}K, con el GPX incluido. "
+                        "Ya podés elegir esta carrera en '🗺️ Race Analysis'."
+                    )
+                else:
+                    st.success(
+                        f"✅ Guardado: {cf_carrera_slug} / {cf_anio} / {cf_distancia}K. "
+                        f"Subí el GPX oficial a `{gpx_dir_rel}` cuando lo tengas "
+                        "y ya vas a poder elegir esta carrera en '🗺️ Race Analysis'."
+                    )
 
 # ---------------------------------------------
 # TAB 9: Export to the public web (Builder input)
