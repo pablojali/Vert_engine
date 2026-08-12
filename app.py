@@ -57,24 +57,30 @@ def process_gpx_advanced(file):
     points_data = []
     cumulative_distance = 0.0
     previous_point = None
+    # Some GPX files have points with no <ele> reading (gaps in the
+    # device/course's altitude data) - carry the last known elevation
+    # forward instead of crashing on None arithmetic.
+    last_known_elevation = 0.0
 
     for track in gpx.tracks:
         for segment in track.segments:
             for point in segment.points:
+                elevation = point.elevation if point.elevation is not None else last_known_elevation
                 if previous_point:
                     dist = point.distance_2d(previous_point)
                     cumulative_distance += dist
 
-                    elevation_change = point.elevation - previous_point.elevation
+                    elevation_change = elevation - last_known_elevation
                     # Avoid division by zero on identical points
                     slope = (elevation_change / dist) * 100 if dist > 0 else 0
 
                     points_data.append({
                         "Distance (km)": cumulative_distance / 1000.0,
-                        "Elevation (m)": point.elevation,
+                        "Elevation (m)": elevation,
                         "Slope (%)": slope
                     })
                 previous_point = point
+                last_known_elevation = elevation
     return pd.DataFrame(points_data)
 
 
