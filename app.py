@@ -1525,11 +1525,17 @@ def _web_export_track_result(race_key, runner_info, indices):
             position = int(position)
         except (TypeError, ValueError):
             pass
+        gender_rank = runner_info.get("Gender Rank")
+        try:
+            gender_rank = int(gender_rank)
+        except (TypeError, ValueError):
+            pass
         runners[runner_key] = {
             "name": name,
             "bib": bib,
             "finish_time": runner_info.get("Finish Time"),
             "position": position,
+            "gender_rank": gender_rank,
             "vpi": indices.get("VPI"),
             "dmi": indices.get("DMI"),
             "er": indices.get("ER"),
@@ -3325,6 +3331,7 @@ with tab_web_export:
                             "bib": r.get("bib"),
                             "finish_time": r.get("finish_time"),
                             "position": r.get("position"),
+                            "gender_rank": r.get("gender_rank"),
                             "vpi": r.get("vpi"),
                             "dmi": r.get("dmi"),
                             "er": r.get("er"),
@@ -3416,6 +3423,7 @@ with tab_web_export:
                             "year": int(race_year),
                             "distance_km": race_distance_km or None,
                             "position": athlete["position"],
+                            "gender_rank": athlete.get("gender_rank"),
                             "finish_time": athlete["finish_time"],
                             "vpi": athlete["vpi"],
                             "dmi": athlete["dmi"],

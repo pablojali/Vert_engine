@@ -41,6 +41,7 @@
           <th>{{ t.athlete_year }}</th>
           <th>{{ t.athlete_distance_col }}</th>
           <th>{{ t.race_pos }}</th>
+          <th>{{ t.athlete_gender_pos }}</th>
           <th>{{ t.race_time }}</th>
           <th class="metric-vpi">VPI</th>
           <th class="metric-dmi">DMI</th>
@@ -54,6 +55,7 @@
           <td>{{ r.year }}</td>
           <td>{{ r.distance_km|round(1) ~ ' km' if r.distance_km else '—' }}</td>
           <td>{{ r.position }}</td>
+          <td>{{ r.gender_rank if r.gender_rank is defined and r.gender_rank is not none else '—' }}</td>
           <td>{{ r.finish_time }}</td>
           <td class="metric-vpi">{{ r.vpi if r.vpi is not none else '—' }}</td>
           <td class="metric-dmi">{{ r.dmi if r.dmi is not none else '—' }}</td>
