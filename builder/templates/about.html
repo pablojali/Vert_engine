@@ -11,7 +11,12 @@
   <p class="hero-sub about-emphasis">{{ t.about_intro_p2 }}</p>
 
   <details class="metric-accordion metric-vpi" id="vpi" open>
-    <summary>🧗 {{ t.about_vpi_title }}</summary>
+    <summary>
+      🧗 {{ t.about_vpi_title }}
+      <button type="button" class="video-trigger" data-video-src="/assets/video/vpi-explainer.mp4" aria-label="{{ t.video_vpi_label }}">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+    </summary>
     <div class="metric-accordion-body">
       <p>{{ t.about_vpi_desc }}</p>
       <p class="formula">{{ t.about_vpi_formula }}</p>

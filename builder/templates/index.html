@@ -56,7 +56,12 @@
   <div class="stat-box stat-box-wide">
     <a class="stat-name stat-name-link" href="{{ locale_url(locale, 'about/') }}">{{ t.home_stat_metrics }} →</a>
     <div class="metric-mini-list">
-      <a href="{{ locale_url(locale, 'about/') }}#vpi" class="metric-mini-row metric-mini-vpi">{{ metric_icon('vpi') }}<span class="metric-mini-text"><strong>VPI</strong><span>Vertical Power Index</span></span></a>
+      <div class="metric-mini-row metric-mini-vpi">
+        <a href="{{ locale_url(locale, 'about/') }}#vpi" class="metric-mini-link">{{ metric_icon('vpi') }}<span class="metric-mini-text"><strong>VPI</strong><span>Vertical Power Index</span></span></a>
+        <button type="button" class="video-trigger" data-video-src="/assets/video/vpi-explainer.mp4" aria-label="{{ t.video_vpi_label }}">
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+      </div>
       <a href="{{ locale_url(locale, 'about/') }}#dmi" class="metric-mini-row metric-mini-dmi">{{ metric_icon('dmi') }}<span class="metric-mini-text"><strong>DMI</strong><span>Descent Mastery Index</span></span></a>
       <a href="{{ locale_url(locale, 'about/') }}#er" class="metric-mini-row metric-mini-er">{{ metric_icon('er') }}<span class="metric-mini-text"><strong>ER</strong><span>Endurance Rating</span></span></a>
     </div>

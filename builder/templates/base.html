@@ -71,8 +71,17 @@
     <p class="site-footer-sub">{{ t.footer_tagline }}</p>
   </footer>
 
+  <div id="video-modal" class="video-modal" hidden>
+    <div class="video-modal-backdrop" data-video-close></div>
+    <div class="video-modal-panel">
+      <button type="button" class="video-modal-close" data-video-close aria-label="{{ t.video_close }}">×</button>
+      <video id="video-modal-player" controls playsinline></video>
+    </div>
+  </div>
+
   <script src="/assets/js/search.js" defer></script>
   <script src="/assets/js/carousel.js" defer></script>
   <script src="/assets/js/report-frame.js" defer></script>
+  <script src="/assets/js/video-modal.js" defer></script>
 </body>
 </html>
