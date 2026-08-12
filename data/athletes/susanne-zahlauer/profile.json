@@ -1,0 +1,25 @@
+{
+  "slug": "susanne-zahlauer",
+  "name": "Susanne ZAHLAUER",
+  "country": null,
+  "portrait": "/media/athletes/susanne-zahlauer/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 54,
+      "finish_time": "16:13:16",
+      "vpi": 734.2,
+      "dmi": 10.52,
+      "er": 77.1,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/susanne-zahlauer/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 734.2,
+    "dmi": 10.5,
+    "er": 77.1
+  }
+}

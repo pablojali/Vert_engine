@@ -1,0 +1,25 @@
+{
+  "slug": "anna-louden",
+  "name": "Anna LOUDEN",
+  "country": null,
+  "portrait": "/media/athletes/anna-louden/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 66,
+      "finish_time": "16:30:54",
+      "vpi": 717.8,
+      "dmi": 10.34,
+      "er": 67.5,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/anna-louden/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 717.8,
+    "dmi": 10.3,
+    "er": 67.5
+  }
+}

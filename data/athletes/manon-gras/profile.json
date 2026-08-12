@@ -1,0 +1,25 @@
+{
+  "slug": "manon-gras",
+  "name": "Manon GRAS",
+  "country": null,
+  "portrait": "/media/athletes/manon-gras/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 27,
+      "finish_time": "15:07:51",
+      "vpi": 787.1,
+      "dmi": 11.36,
+      "er": 84.6,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/manon-gras/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 787.1,
+    "dmi": 11.4,
+    "er": 84.6
+  }
+}

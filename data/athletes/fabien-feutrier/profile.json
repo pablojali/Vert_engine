@@ -1,0 +1,25 @@
+{
+  "slug": "fabien-feutrier",
+  "name": "Fabien FEUTRIER",
+  "country": null,
+  "portrait": "/media/athletes/fabien-feutrier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 8,
+      "finish_time": "13:16:19",
+      "vpi": 894.9,
+      "dmi": 13.03,
+      "er": 78.7,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/fabien-feutrier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 894.9,
+    "dmi": 13.0,
+    "er": 78.7
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "slug": "peter-frano",
+  "name": "Peter FRAŇO",
+  "country": null,
+  "portrait": "/media/athletes/peter-frano/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 4,
+      "finish_time": "12:32:57",
+      "vpi": 947.1,
+      "dmi": 13.74,
+      "er": 78.5,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/peter-frano/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 947.1,
+    "dmi": 13.7,
+    "er": 78.5
+  }
+}

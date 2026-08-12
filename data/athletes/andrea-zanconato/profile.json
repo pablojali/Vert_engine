@@ -1,0 +1,25 @@
+{
+  "slug": "andrea-zanconato",
+  "name": "Andrea ZANCONATO",
+  "country": null,
+  "portrait": "/media/athletes/andrea-zanconato/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 12,
+      "finish_time": "13:38:12",
+      "vpi": 876.5,
+      "dmi": 12.72,
+      "er": 84.9,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/andrea-zanconato/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 876.5,
+    "dmi": 12.7,
+    "er": 84.9
+  }
+}

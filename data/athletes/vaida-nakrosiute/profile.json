@@ -1,0 +1,25 @@
+{
+  "slug": "vaida-nakrosiute",
+  "name": "Vaida NAKROSIUTE",
+  "country": null,
+  "portrait": "/media/athletes/vaida-nakrosiute/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 76,
+      "finish_time": "16:50:24",
+      "vpi": 689.6,
+      "dmi": 10.51,
+      "er": 80.3,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/vaida-nakrosiute/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 689.6,
+    "dmi": 10.5,
+    "er": 80.3
+  }
+}

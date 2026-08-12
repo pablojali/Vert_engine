@@ -1,0 +1,25 @@
+{
+  "slug": "ethan-peters",
+  "name": "Ethan PETERS",
+  "country": null,
+  "portrait": "/media/athletes/ethan-peters/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 6,
+      "finish_time": "12:59:24",
+      "vpi": 916.8,
+      "dmi": 13.14,
+      "er": 77.1,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/ethan-peters/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 916.8,
+    "dmi": 13.1,
+    "er": 77.1
+  }
+}

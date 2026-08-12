@@ -1,0 +1,25 @@
+{
+  "slug": "emma-stuart",
+  "name": "Emma STUART",
+  "country": null,
+  "portrait": "/media/athletes/emma-stuart/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 24,
+      "finish_time": "14:47:42",
+      "vpi": 803.0,
+      "dmi": 11.7,
+      "er": 80.6,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/emma-stuart/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 803.0,
+    "dmi": 11.7,
+    "er": 80.6
+  }
+}

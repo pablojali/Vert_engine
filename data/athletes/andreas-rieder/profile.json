@@ -1,0 +1,25 @@
+{
+  "slug": "andreas-rieder",
+  "name": "Andreas RIEDER",
+  "country": null,
+  "portrait": "/media/athletes/andreas-rieder/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 5,
+      "finish_time": "12:41:38",
+      "vpi": 940.9,
+      "dmi": 13.51,
+      "er": 79.5,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/andreas-rieder/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 940.9,
+    "dmi": 13.5,
+    "er": 79.5
+  }
+}

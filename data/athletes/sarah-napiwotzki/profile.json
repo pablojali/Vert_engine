@@ -1,0 +1,25 @@
+{
+  "slug": "sarah-napiwotzki",
+  "name": "Sarah NAPIWOTZKI",
+  "country": null,
+  "portrait": "/media/athletes/sarah-napiwotzki/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 63,
+      "finish_time": "16:26:39",
+      "vpi": 728.4,
+      "dmi": 10.3,
+      "er": 73.7,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/sarah-napiwotzki/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 728.4,
+    "dmi": 10.3,
+    "er": 73.7
+  }
+}

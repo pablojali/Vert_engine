@@ -1,0 +1,25 @@
+{
+  "slug": "hannes-namberger",
+  "name": "Hannes NAMBERGER",
+  "country": null,
+  "portrait": "/media/athletes/hannes-namberger/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 1,
+      "finish_time": "11:45:31",
+      "vpi": 1006.0,
+      "dmi": 14.91,
+      "er": 87.3,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/hannes-namberger/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1006.0,
+    "dmi": 14.9,
+    "er": 87.3
+  }
+}

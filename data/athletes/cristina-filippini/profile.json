@@ -1,0 +1,25 @@
+{
+  "slug": "cristina-filippini",
+  "name": "Cristina FILIPPINI",
+  "country": null,
+  "portrait": "/media/athletes/cristina-filippini/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 65,
+      "finish_time": "16:29:27",
+      "vpi": 721.6,
+      "dmi": 10.34,
+      "er": 73.4,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/cristina-filippini/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 721.6,
+    "dmi": 10.3,
+    "er": 73.4
+  }
+}

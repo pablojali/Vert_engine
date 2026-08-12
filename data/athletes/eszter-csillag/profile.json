@@ -1,0 +1,25 @@
+{
+  "slug": "eszter-csillag",
+  "name": "Eszter CSILLAG",
+  "country": null,
+  "portrait": "/media/athletes/eszter-csillag/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 33,
+      "finish_time": "15:11:25",
+      "vpi": 778.9,
+      "dmi": 11.35,
+      "er": 76.2,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/eszter-csillag/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 778.9,
+    "dmi": 11.4,
+    "er": 76.2
+  }
+}

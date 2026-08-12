@@ -1,0 +1,25 @@
+{
+  "slug": "clement-mugnier",
+  "name": "Clément MUGNIER",
+  "country": null,
+  "portrait": "/media/athletes/clement-mugnier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 7,
+      "finish_time": "13:12:33",
+      "vpi": 904.1,
+      "dmi": 13.02,
+      "er": 77.9,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/clement-mugnier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 904.1,
+    "dmi": 13.0,
+    "er": 77.9
+  }
+}

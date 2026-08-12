@@ -1,0 +1,25 @@
+{
+  "slug": "andreas-reiterer",
+  "name": "Andreas REITERER",
+  "country": null,
+  "portrait": "/media/athletes/andreas-reiterer/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "lavaredo-ultra-trail-120k",
+      "race_name": "Lavaredo Ultra Trail by UTMB - 120k",
+      "year": 2026,
+      "distance_km": 119.61436349178003,
+      "position": 2,
+      "finish_time": "11:55:26",
+      "vpi": 1006.6,
+      "dmi": 14.42,
+      "er": 84.6,
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/andreas-reiterer/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1006.6,
+    "dmi": 14.4,
+    "er": 84.6
+  }
+}
