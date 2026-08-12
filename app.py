@@ -3001,13 +3001,18 @@ with tab_checkpoints:
             st.info("Completá slug, nombre, año y distancia arriba para poder guardar esto en el registry.")
         else:
             gpx_dir_rel = f"data/gpx/{cf_carrera_slug}/{cf_anio}"
-            cf_gpx_filename = st.text_input(
-                "Nombre del archivo GPX", value=f"{cf_distancia}.gpx", key="cf_gpx_filename_input",
-            )
             cf_gpx_upload = st.file_uploader(
                 "GPX oficial de la carrera (opcional acá - también lo podés subir después a mano)",
                 type=["gpx"], key="cf_gpx_upload",
             )
+            if cf_gpx_upload is not None:
+                cf_gpx_filename = cf_gpx_upload.name
+                st.caption(f"Se va a guardar como `{cf_gpx_filename}`.")
+            else:
+                cf_gpx_filename = st.text_input(
+                    "Nombre del archivo GPX (lo subís después a mano con este nombre)",
+                    value=f"{cf_distancia}.gpx", key="cf_gpx_filename_input",
+                )
             gpx_file_rel = f"{gpx_dir_rel}/{cf_gpx_filename}"
             effective_slug = cf_race_slug_api.strip() or cf_race_id
 
