@@ -14,6 +14,8 @@ import shutil
 import subprocess
 from contextlib import redirect_stdout
 from pathlib import Path
+from urllib.parse import urlparse, parse_qs
+from data import gpx_loader
 from data.gpx_loader import (
     build_cascading_selector,
     get_gpx_path,
@@ -1144,6 +1146,29 @@ def scrape_runner_splits_livetrail(url, manual_race_id=None):
     return fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id)
 
 
+def parse_livetrail_url(url: str) -> dict:
+    """Best-effort extraction of the X-Tenant ('e=') and Race ID ('c=')
+    query params from a Livetrail live-results URL, so the Checkpoint
+    Fetcher doesn't require digging through DevTools for those two
+    values. Handles both a plain query string and the '#/route?e=...'
+    hash-based routing Livetrail's frontend also uses. Returns {} (never
+    raises) if the URL doesn't match - callers keep the tenant/race ID
+    fields manually editable as a fallback."""
+    if not url:
+        return {}
+    parsed = urlparse(url.strip())
+    query_string = parsed.query
+    if not query_string and "?" in parsed.fragment:
+        query_string = parsed.fragment.split("?", 1)[1]
+    params = parse_qs(query_string)
+    result = {}
+    if params.get("e"):
+        result["tenant"] = params["e"][0]
+    if params.get("c"):
+        result["race_id"] = params["c"][0]
+    return result
+
+
 def fetch_livetrail_checkpoints(race_id, tenant, url):
     """
     Downloads the checkpoint list (pointId, name, distance, elevationGain)
@@ -1164,57 +1189,6 @@ def fetch_livetrail_checkpoints(race_id, tenant, url):
     response = requests.get(url, params={"raceId": race_id}, headers=headers, timeout=15)
     response.raise_for_status()
     return response.json()
-
-
-def build_registry_checkpoints_block(gpx_file, race_slug_api, points):
-    """
-    Converts the raw Livetrail response into the exact text block pasted
-    into data/races_registry.json:
-
-        {
-          "gpx_file": "...",
-          "race_slug_api": "...",
-          "checkpoints": [
-            {"id": "0", "nombre": "...", "km": 0.0},
-            ...
-          ]
-        },
-
-    Sorts by ascending distance, uses 'name' (not 'shortName'), and aligns
-    the checkpoints array columns in the same manual style already used
-    in the existing registry, so copy-pasting doesn't break the visual
-    formatting.
-    """
-    sorted_points = sorted(points, key=lambda p: p["distance"])
-    checkpoints = [
-        {
-            "id": str(p["pointId"]),
-            "nombre": p["name"],
-            "km": round(p["distance"] / 1000, 1),
-        }
-        for p in sorted_points
-    ]
-
-    id_width = max(len(f'"{cp["id"]}"') for cp in checkpoints) + 1
-    nombre_width = max(len(f'"{cp["nombre"]}"') for cp in checkpoints) + 1
-
-    lines = []
-    for cp in checkpoints:
-        id_str = f'"{cp["id"]}",'.ljust(id_width + 1)
-        nombre_str = f'"{cp["nombre"]}",'.ljust(nombre_width + 1)
-        lines.append(f'    {{"id": {id_str} "nombre": {nombre_str} "km": {cp["km"]}}}')
-
-    checkpoints_block = ",\n".join(lines)
-
-    return (
-        "{\n"
-        f'  "gpx_file": "{gpx_file}",\n'
-        f'  "race_slug_api": "{race_slug_api}",\n'
-        '  "checkpoints": [\n'
-        f"{checkpoints_block}\n"
-        "  ]\n"
-        "},"
-    )
 
 
 def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
@@ -2916,89 +2890,147 @@ with tab_top:
 with tab_checkpoints:
     st.header("🧩 Checkpoint Fetcher (Livetrail)")
     st.caption(
-        "Descarga la lista de checkpoints (id, nombre, km) de cualquier carrera que use "
-        "Livetrail como proveedor de cronometraje, y genera el bloque listo para pegar "
-        "en `data/races_registry.json`."
+        "Pegá el link de resultados en vivo de Livetrail para autocompletar el tenant y el "
+        "race ID, bajá los checkpoints, y guardalos directo en `data/races_registry.json` - "
+        "sin copiar/pegar JSON a mano. También te deja la carpeta del GPX creada y lista."
     )
 
-    with st.form("checkpoint_fetcher_form"):
-        col1, col2 = st.columns(2)
-        with col1:
-            cf_race_id = st.text_input(
-                "Race ID (raceId)", value="vda",
-                help="El slug de la carrera dentro del tenant, ej: 'vda' para Val d'Aran.",
-            )
-            cf_tenant = st.text_input(
-                "X-Tenant", value="aranbyutmb_2026",
-                help="Formato raceslug_year, ej: 'aranbyutmb_2026'.",
-            )
-            cf_url = st.text_input(
-                "Request URL (endpoint de Livetrail)",
-                value="https://api.v3.livetrail.net/api/events/points",
-                help="La Request URL exacta vista en DevTools > Network (sin el query string).",
-            )
-        with col2:
-            cf_gpx_file = st.text_input(
-                "gpx_file (ruta relativa)",
-                value="data/gpx/<carrera>/<anio>/<ARCHIVO>.gpx",
-                help="Ruta al GPX oficial que vas a subir/ya subiste para esta carrera.",
-            )
-            cf_race_slug_api = st.text_input(
-                "race_slug_api", value="",
-                help="Normalmente igual al Race ID (se autocompleta si lo dejas vacío).",
-            )
+    def _cf_parse_url():
+        parsed = parse_livetrail_url(st.session_state.get("cf_url_input", ""))
+        if parsed.get("tenant"):
+            st.session_state["cf_tenant_input"] = parsed["tenant"]
+        if parsed.get("race_id"):
+            st.session_state["cf_race_id_input"] = parsed["race_id"]
 
-        cf_submit = st.form_submit_button("🧩 Fetch checkpoints", type="primary", use_container_width=True)
+    def _cf_sync_slug_from_nombre():
+        st.session_state["cf_carrera_slug_input"] = _slugify(st.session_state.get("cf_carrera_nombre_input", ""))
 
-    if cf_submit:
-        if not cf_race_id or not cf_tenant or not cf_url:
-            st.warning("Completa al menos Race ID, X-Tenant y Request URL.")
+    st.text_input(
+        "Link de Livetrail (resultados en vivo)", key="cf_url_input", on_change=_cf_parse_url,
+        placeholder="https://aranbyutmb.v3.livetrail.net/?e=aranbyutmb_2026&c=vda",
+        help="El link que abrís normalmente para ver resultados en vivo de esta carrera.",
+    )
+
+    col1, col2 = st.columns(2)
+    with col1:
+        cf_race_id = st.text_input(
+            "Race ID (raceId)", key="cf_race_id_input",
+            help="Se autocompleta del link. El slug de la carrera dentro del tenant, ej: 'vda'.",
+        )
+        cf_tenant = st.text_input(
+            "X-Tenant", key="cf_tenant_input",
+            help="Se autocompleta del link. Formato raceslug_year, ej: 'aranbyutmb_2026'.",
+        )
+        cf_endpoint = st.text_input(
+            "Request URL (endpoint de Livetrail)",
+            value="https://api.v3.livetrail.net/api/events/points", key="cf_endpoint_input",
+        )
+        cf_race_slug_api = st.text_input(
+            "race_slug_api (opcional)", key="cf_race_slug_api_input",
+            help="Normalmente igual al Race ID (se autocompleta si lo dejas vacío).",
+        )
+    with col2:
+        cf_carrera_nombre = st.text_input(
+            "Nombre visible de la carrera", key="cf_carrera_nombre_input", on_change=_cf_sync_slug_from_nombre,
+            help='Ej: "Val d\'Aran by UTMB"',
+        )
+        cf_carrera_slug = st.text_input(
+            "Slug interno (clave del registry)", key="cf_carrera_slug_input",
+            help="Se sugiere solo del nombre. Ej: 'aran', 'lavaredo'.",
+        )
+        cf_anio = st.text_input("Año", key="cf_anio_input", help="Ej: 2026")
+        cf_distancia = st.text_input(
+            "Distancia (clave)", key="cf_distancia_input",
+            help="Solo el número, ej: '163', '110', '80'.",
+        )
+
+    if st.button("🧩 Fetch checkpoints", type="primary", use_container_width=True, key="cf_fetch_btn"):
+        if not cf_race_id or not cf_tenant or not cf_endpoint:
+            st.warning("Completa al menos Race ID, X-Tenant y Request URL (pegá el link de arriba, o cargalos a mano).")
         else:
             with st.spinner("Consultando Livetrail..."):
                 try:
-                    raw_points = fetch_livetrail_checkpoints(cf_race_id, cf_tenant, cf_url)
-                    cf_error = None
+                    raw_points = fetch_livetrail_checkpoints(cf_race_id, cf_tenant, cf_endpoint)
+                    st.session_state["cf_raw_points"] = raw_points
+                    st.session_state["cf_fetch_error"] = None
                 except Exception:
-                    raw_points = None
-                    cf_error = traceback.format_exc()
+                    st.session_state["cf_raw_points"] = None
+                    st.session_state["cf_fetch_error"] = traceback.format_exc()
 
-            if cf_error:
-                st.error("❌ No se pudo obtener la lista de checkpoints.")
-                with st.expander("Ver detalle técnico del error"):
-                    st.code(cf_error, language="python")
-            elif not raw_points:
-                st.warning("⚠️ La respuesta llegó vacía. Revisa el Race ID y el X-Tenant.")
-            else:
-                effective_slug = cf_race_slug_api.strip() or cf_race_id
+    cf_fetch_error = st.session_state.get("cf_fetch_error")
+    cf_raw_points = st.session_state.get("cf_raw_points")
 
-                st.success(f"✅ {len(raw_points)} checkpoints encontrados para raceId='{cf_race_id}'.")
+    if cf_fetch_error:
+        st.error("❌ No se pudo obtener la lista de checkpoints.")
+        with st.expander("Ver detalle técnico del error"):
+            st.code(cf_fetch_error, language="python")
+    elif cf_raw_points is not None and not cf_raw_points:
+        st.warning("⚠️ La respuesta llegó vacía. Revisa el Race ID y el X-Tenant.")
+    elif cf_raw_points:
+        st.success(f"✅ {len(cf_raw_points)} checkpoints encontrados para raceId='{cf_race_id}'.")
 
-                # Preview en tabla, ordenada por distancia
-                preview_rows = [
-                    {
-                        "id": p["pointId"],
-                        "nombre": p["name"],
-                        "km": round(p["distance"] / 1000, 1),
-                        "altitud (m)": p.get("altitude"),
-                        "ganancia acum. (m)": p.get("elevationGain"),
-                    }
-                    for p in sorted(raw_points, key=lambda x: x["distance"])
-                ]
-                st.dataframe(preview_rows, use_container_width=True, hide_index=True)
+        preview_rows = [
+            {
+                "id": p["pointId"],
+                "nombre": p["name"],
+                "km": round(p["distance"] / 1000, 1),
+                "altitud (m)": p.get("altitude"),
+                "ganancia acum. (m)": p.get("elevationGain"),
+            }
+            for p in sorted(cf_raw_points, key=lambda x: x["distance"])
+        ]
+        st.dataframe(preview_rows, use_container_width=True, hide_index=True)
 
-                registry_block = build_registry_checkpoints_block(
-                    cf_gpx_file, effective_slug, raw_points
+        if not (cf_carrera_slug and cf_carrera_nombre and cf_anio and cf_distancia):
+            st.info("Completá slug, nombre, año y distancia arriba para poder guardar esto en el registry.")
+        else:
+            gpx_dir_rel = f"data/gpx/{cf_carrera_slug}/{cf_anio}"
+            cf_gpx_filename = st.text_input(
+                "Nombre del archivo GPX (la carpeta se crea ahora, subís el archivo después)",
+                value=f"{cf_distancia}.gpx", key="cf_gpx_filename_input",
+            )
+            gpx_file_rel = f"{gpx_dir_rel}/{cf_gpx_filename}"
+            effective_slug = cf_race_slug_api.strip() or cf_race_id
+
+            checkpoints = [
+                {"id": str(p["pointId"]), "nombre": p["name"], "km": round(p["distance"] / 1000, 1)}
+                for p in sorted(cf_raw_points, key=lambda x: x["distance"])
+            ]
+            new_entry = {"gpx_file": gpx_file_rel, "race_slug_api": effective_slug, "checkpoints": checkpoints}
+
+            registry_path = WEB_DATA_DIR / "races_registry.json"
+            registry = json.loads(registry_path.read_text(encoding="utf-8")) if registry_path.exists() else {}
+            already_exists = (
+                cf_carrera_slug in registry
+                and cf_anio in registry.get(cf_carrera_slug, {}).get("anios", {})
+                and cf_distancia in registry.get(cf_carrera_slug, {}).get("anios", {}).get(cf_anio, {})
+            )
+
+            st.markdown("##### 📋 Esto se va a guardar en el registry")
+            st.code(json.dumps(new_entry, ensure_ascii=False, indent=2), language="json")
+
+            if already_exists:
+                st.warning(
+                    f"⚠️ Ya existe una entrada para '{cf_carrera_slug}' / {cf_anio} / {cf_distancia}K "
+                    "en el registry. Guardar la va a sobreescribir."
                 )
 
-                st.markdown("##### 📋 Bloque listo para pegar en `races_registry.json`")
-                st.code(registry_block, language="json")
+            if st.button(
+                "💾 Guardar en el registry y crear carpeta del GPX",
+                type="primary", use_container_width=True, key="cf_save_btn",
+            ):
+                registry.setdefault(cf_carrera_slug, {})["nombre"] = cf_carrera_nombre
+                registry[cf_carrera_slug].setdefault("anios", {}).setdefault(cf_anio, {})[cf_distancia] = new_entry
+                registry_path.write_text(json.dumps(registry, ensure_ascii=False, indent=2), encoding="utf-8")
 
-                st.download_button(
-                    "📥 Descargar como .json",
-                    data=registry_block.encode("utf-8"),
-                    file_name=f"{cf_race_id}_checkpoints.json",
-                    mime="application/json",
-                    use_container_width=True,
+                (WEB_DATA_DIR / "gpx" / cf_carrera_slug / cf_anio).mkdir(parents=True, exist_ok=True)
+
+                gpx_loader.load_registry.cache_clear()
+
+                st.success(
+                    f"✅ Guardado: {cf_carrera_slug} / {cf_anio} / {cf_distancia}K. "
+                    f"Subí el GPX oficial a `{gpx_dir_rel}/` con el nombre `{cf_gpx_filename}` "
+                    "y ya vas a poder elegir esta carrera en '🗺️ Race Analysis'."
                 )
 
 # ---------------------------------------------
