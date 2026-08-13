@@ -2673,6 +2673,7 @@ with tab_top:
                     "Go back to the 'Race Analysis' tab and load them first."
                 )
             else:
+                total_race_gain_top = calculate_total_elevation_gain(race_data_top["df"])
                 results = {}
                 errors = {}
                 progress = st.progress(0.0, text="Fetching runners...")
@@ -2682,14 +2683,13 @@ with tab_top:
                         runner_info_bib, df_runner_bib = fetch_runner_by_tenant_and_bib_livetrail(
                             top_tenant, bib, top_race_id
                         )
-                        df_segment_degradation_bib = calculate_indices_by_segment(
-                            race_data_top["df"], race_segments_df_top, df_runner_bib
-                        )
-                        df_summary_bib = build_summary_table(
-                            race_segments_df_top, df_segment_degradation_bib, df_runner_bib
+                        analysis_bib = build_runner_analysis_bundle(
+                            race_data_top["df"], race_segments_df_top, df_runner_bib,
+                            race_data_top["total_km"], total_race_gain_top,
                         )
                         label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
-                        results[label] = df_summary_bib
+                        results[label] = analysis_bib["df_summary"]
+                        _web_export_track_result(selected_race_top, runner_info_bib, analysis_bib["indices"])
                     except Exception:
                         errors[bib] = traceback.format_exc()
                     progress.progress((i + 1) / len(bibs), text=f"Fetching runners... ({i + 1}/{len(bibs)})")
@@ -2705,7 +2705,11 @@ with tab_top:
                 if not results:
                     st.error("❌ Couldn't fetch any of the bibs entered.")
                 else:
-                    st.success(f"✅ Fetched {len(results)} of {len(bibs)} runner(s).")
+                    st.success(
+                        f"✅ Fetched {len(results)} of {len(bibs)} runner(s), all loaded into the "
+                        "export pool - go straight to '🌐 Exportar a Web' to save them, no need to "
+                        "revisit them one by one."
+                    )
 
                     for label, df_summary_bib in results.items():
                         st.markdown(f"##### {label}")
