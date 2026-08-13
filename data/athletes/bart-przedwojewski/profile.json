@@ -15,6 +15,19 @@
       "dmi": 16.21,
       "er": 78.7,
       "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/bart-przedwojewski/report.html"
+    },
+    {
+      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_name": "Lavaredo Ultra Trail by UTMB",
+      "year": 2026,
+      "distance_km": 79.28318683035891,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "7:40:30",
+      "vpi": 1225.7,
+      "dmi": 16.21,
+      "er": 78.7,
+      "report": null
     }
   ],
   "career_avg": {
