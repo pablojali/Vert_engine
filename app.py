@@ -1300,7 +1300,13 @@ def _save_publish_config(cfg: dict) -> None:
 
 
 def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
-    return subprocess.run(["git", *args], cwd=str(repo_dir), capture_output=True, text=True)
+    # -c user.name/user.email override (not depend on) any global git
+    # config, so auto-commits from the Publish button work the same on
+    # a fresh container (Streamlit Cloud, a new Codespace, a VPS...)
+    # that's never had `git config --global` run on it, without needing
+    # a terminal there to set that up by hand.
+    config_args = ["-c", "user.name=VertLabs Engine", "-c", "user.email=engine@vertlabs.run"]
+    return subprocess.run(["git", *config_args, *args], cwd=str(repo_dir), capture_output=True, text=True)
 
 
 def _sync_output_to_web_repo(web_repo_dir: Path) -> None:
