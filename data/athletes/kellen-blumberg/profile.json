@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/kellen-blumberg/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_slug": "lavaredo-ultra-trail-80k",
       "race_name": "Lavaredo Ultra Trail by UTMB",
       "year": 2026,
       "distance_km": 79.28318683035891,
@@ -14,7 +14,7 @@
       "vpi": 1118.7,
       "dmi": 15.12,
       "er": 81.2,
-      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/kellen-blumberg/report.html"
+      "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/kellen-blumberg/report.html"
     }
   ],
   "career_avg": {

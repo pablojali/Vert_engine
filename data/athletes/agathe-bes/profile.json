@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/agathe-bes/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
+      "race_slug": "lavaredo-ultra-trail-80k",
       "race_name": "Lavaredo Ultra Trail by UTMB",
       "year": 2026,
       "distance_km": 79.28318683035891,
@@ -14,7 +14,7 @@
       "vpi": 916.3,
       "dmi": 12.82,
       "er": 79.0,
-      "report": "/media/races/lavaredo-ultra-trail-by-utmb-2026/charts/runners/agathe-bes/report.html"
+      "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/agathe-bes/report.html"
     }
   ],
   "career_avg": {

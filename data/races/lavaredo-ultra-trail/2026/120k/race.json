@@ -21,7 +21,8 @@
       "pace_first_half": 3.63,
       "pace_second_half": 4.09,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/hannes-namberger/report.html",
-      "charts": []
+      "charts": [],
+      "gender_rank": 1
     },
     {
       "slug": "tobias-geiser",
@@ -35,7 +36,8 @@
       "pace_first_half": 3.63,
       "pace_second_half": 4.19,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/tobias-geiser/report.html",
-      "charts": []
+      "charts": [],
+      "gender_rank": 2
     },
     {
       "slug": "andreas-reiterer",
@@ -49,7 +51,8 @@
       "pace_first_half": 3.63,
       "pace_second_half": 4.19,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/andreas-reiterer/report.html",
-      "charts": []
+      "charts": [],
+      "gender_rank": 2
     },
     {
       "slug": "peter-frano",

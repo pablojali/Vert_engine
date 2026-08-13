@@ -14,20 +14,8 @@
       "vpi": 1005.8,
       "dmi": 14.43,
       "er": 84.6,
-      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/tobias-geiser/report.html"
-    },
-    {
-      "race_slug": "lavaredo-ultra-trail-by-utmb-2026",
-      "race_name": "Lavaredo Ultra Trail by UTMB",
-      "year": 2026,
-      "distance_km": 119.61436349178003,
-      "position": 2,
-      "gender_rank": 2,
-      "finish_time": "11:55:26",
-      "vpi": 1005.8,
-      "dmi": 14.43,
-      "er": 84.6,
-      "report": null
+      "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/tobias-geiser/report.html",
+      "gender_rank": 2
     }
   ],
   "career_avg": {
