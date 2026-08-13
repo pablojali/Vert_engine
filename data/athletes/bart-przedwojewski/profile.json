@@ -28,11 +28,24 @@
       "dmi": 16.21,
       "er": 78.7,
       "report": null
+    },
+    {
+      "race_slug": "val-d-aran-by-utmb-2026-163k",
+      "race_name": "Val d'Aran by UTMB",
+      "year": 2026,
+      "distance_km": 160.05165725143127,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "7:40:30",
+      "vpi": 1829.5,
+      "dmi": 23.25,
+      "er": 110.1,
+      "report": null
     }
   ],
   "career_avg": {
-    "vpi": 1225.7,
-    "dmi": 16.2,
-    "er": 78.7
+    "vpi": 1427.0,
+    "dmi": 18.6,
+    "er": 89.2
   }
 }
