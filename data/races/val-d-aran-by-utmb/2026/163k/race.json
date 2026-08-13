@@ -60,9 +60,12 @@
       "bib": 4,
       "finish_time": "27:33:14",
       "position": 17,
+      "gender_rank": 1,
       "vpi": 784.4,
       "dmi": 8.55,
       "er": 44.6,
+      "pace_first_half": 4.56,
+      "pace_second_half": 7.08,
       "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/katarzyna-dombrowska/report.html",
       "charts": []
     },
