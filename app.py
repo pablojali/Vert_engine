@@ -2675,6 +2675,7 @@ with tab_top:
             else:
                 total_race_gain_top = calculate_total_elevation_gain(race_data_top["df"])
                 results = {}
+                reports = {}
                 errors = {}
                 progress = st.progress(0.0, text="Fetching runners...")
 
@@ -2689,6 +2690,7 @@ with tab_top:
                         )
                         label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
                         results[label] = analysis_bib["df_summary"]
+                        reports[label] = {"runner_info": runner_info_bib, "df_runner": df_runner_bib, **analysis_bib}
                         _web_export_track_result(selected_race_top, runner_info_bib, analysis_bib["indices"])
                     except Exception:
                         errors[bib] = traceback.format_exc()
@@ -2714,6 +2716,33 @@ with tab_top:
                     for label, df_summary_bib in results.items():
                         st.markdown(f"##### {label}")
                         st.dataframe(df_summary_bib, use_container_width=True, hide_index=True)
+
+                    # --- Full Analysis Report per runner: one download button
+                    # each (not a zip) - easier to click through than to
+                    # extract a zip and clean up the folder afterward. ---
+                    st.markdown("---")
+                    st.markdown("### 📄 Full Analysis Reports")
+                    st.caption("One HTML report per runner, same as 'Download Full Analysis' in Runner Metrics.")
+                    for i, (label, report_data) in enumerate(reports.items()):
+                        report_html_bib = build_full_runner_report_html(
+                            runner_info=report_data["runner_info"],
+                            df_runner=report_data["df_runner"],
+                            indices=report_data["indices"],
+                            figures=report_data["figures"],
+                            df_segment_degradation=report_data["df_segment_degradation"],
+                            df_summary=report_data["df_summary"],
+                        )
+                        st.download_button(
+                            f"📄 {label}",
+                            data=report_html_bib,
+                            file_name=(
+                                f"{_ascii_filename(report_data['runner_info'].get('Name') or label).replace(' ', '_')}"
+                                "_livetrail_full_analysis.html"
+                            ),
+                            mime="text/html",
+                            use_container_width=True,
+                            key=f"dl_top_report_{i}",
+                        )
 
                     # --- Combined Excel download: shared geometry once, then each
                     # runner's own columns side by side (no repeated Checkpoint/
