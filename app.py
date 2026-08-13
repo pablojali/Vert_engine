@@ -1365,6 +1365,24 @@ def _backup_engine_data() -> tuple[bool, str]:
     return True, log
 
 
+def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
+    """Clones vertlabs-web into web_repo_dir if it isn't there yet.
+
+    A hand-set-up Codespace usually has both repos cloned side by side
+    already, but a fresh container (Streamlit Cloud, a brand new
+    Codespace, a VPS) only has Vert_engine - vertlabs-web simply doesn't
+    exist on disk there until something clones it. Does that once,
+    automatically, instead of failing with 'not a valid repo'."""
+    if web_repo_dir.is_dir() and (web_repo_dir / ".git").is_dir():
+        return True, ""
+    web_repo_dir.parent.mkdir(parents=True, exist_ok=True)
+    r = subprocess.run(
+        ["git", "clone", "https://github.com/pablojali/vertlabs-web.git", str(web_repo_dir)],
+        capture_output=True, text=True,
+    )
+    return r.returncode == 0, r.stdout + r.stderr
+
+
 def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> tuple[bool, str]:
     """Backs up data/ first, then builds the site (equivalent to
     `python publish.py`), mirrors output/ into the vertlabs-web checkout,
@@ -1385,8 +1403,11 @@ def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> 
     except Exception:
         return False, "Falló la generación del sitio (publish.py):\n" + traceback.format_exc()
 
-    if not web_repo_dir.is_dir() or not (web_repo_dir / ".git").is_dir():
-        return False, f"'{web_repo_dir}' no es un repo git válido de vertlabs-web."
+    clone_ok, clone_log = _ensure_web_repo(web_repo_dir)
+    if clone_log:
+        log_lines.append(f"--- Clonando vertlabs-web ---\n{clone_log}")
+    if not clone_ok:
+        return False, "No se pudo clonar vertlabs-web:\n" + "\n".join(log_lines)
 
     _sync_output_to_web_repo(web_repo_dir)
 
