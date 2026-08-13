@@ -917,112 +917,6 @@ def calculate_global_real_indices(runner_gpx_df, official_df_gpx, total_km, tota
     }
 
 
-# Automated timing-data scraping.
-# live.utmb.world is a Next.js app: the HTML returned by the server is
-# empty and the data is fetched afterwards via JS from an internal API.
-# By inspecting the browser's Network tab, we found the real endpoint
-# used by the site itself:
-#   https://utmblive-api.utmb.world/runners/<ID>?locale=en
-# A plain requests.get() is enough: no browser, no Playwright/Chromium,
-# no packages.txt needed.
-
-def extract_runner_id(url):
-    """Extracts the numeric runner ID from a URL like
-    https://live.utmb.world/aranbyutmb/2026/runners/5"""
-    match = re.search(r"/runners/(\d+)", url)
-    return match.group(1) if match else None
-
-
-def extract_tenant(url):
-    """Extracts 'race_year' from a URL like
-    https://live.utmb.world/aranbyutmb/2026/runners/5 -> 'aranbyutmb_2026'
-    Required by the API as the X-Tenant header to identify which race
-    edition the runner belongs to."""
-    match = re.search(r"live\.utmb\.world/([a-zA-Z0-9]+)/(\d{4})/runners/", url)
-    if match:
-        race, year = match.groups()
-        return f"{race}_{year}"
-    return None
-
-
-def fetch_runner_by_tenant_and_bib(tenant, bib):
-    """Calls the UTMB Live API directly given a tenant (e.g. 'aranbyutmb_2026')
-    and a bib number, without needing a full runner URL. Used both by
-    scrape_runner_splits (which derives the tenant from a URL) and by the
-    'Top Runners' tab (which reuses one known tenant for several bibs)."""
-    api_url = f"https://utmblive-api.utmb.world/runners/{bib}?locale=en"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-        "Accept": "*/*",
-        "Origin": "https://live.utmb.world",
-        "Referer": "https://live.utmb.world/",
-        "X-Tenant": tenant,
-    }
-
-    response = requests.get(api_url, headers=headers, timeout=15)
-    response.raise_for_status()
-    data = response.json()
-
-    resume = data.get("resume", {}) or {}
-    info = resume.get("info", {}) or {}
-    ranking = resume.get("ranking", {}) or {}
-    country = data.get("country", {}) or {}
-
-    runner_info = {
-        "Name": info.get("fullname"),
-        "Bib": resume.get("bib"),
-        "Age": info.get("age"),
-        "Category": info.get("category"),
-        "Club": info.get("club"),
-        "Country": country.get("name"),
-        "Finish Time": resume.get("raceTime"),
-        "Overall Rank": ranking.get("scratch"),
-        "Gender Rank": ranking.get("sex"),
-        "Category Rank": ranking.get("category"),
-        "Status": resume.get("status"),
-    }
-
-    passings = (data.get("detail", {}) or {}).get("passings", []) or []
-    df_passings = pd.DataFrame(passings)
-
-    # Keep only the useful columns (drop raw/redundant ones like
-    # timeSeconds, datetimeIn/Out, and live-prediction fields that don't
-    # apply to a finished runner) and rename them in English.
-    useful_columns = {
-        "pointId": "Point",
-        "cumulatedTime": "Accumulated Time",
-        "time": "Segment Time",
-        "speed": "Speed (km/h)",
-        "pace": "Pace (min/km)",
-        "rank": "Rank",
-        "restTime": "Rest",
-    }
-    present_columns = [c for c in useful_columns if c in df_passings.columns]
-    df_passings = df_passings[present_columns].rename(columns=useful_columns)
-
-    return runner_info, df_passings
-
-
-def scrape_runner_splits(url):
-    runner_id = extract_runner_id(url)
-    if not runner_id:
-        raise ValueError(
-            "Couldn't find the runner ID in that URL. "
-            "Make sure it has the format '.../runners/<number>' "
-            "(e.g. https://live.utmb.world/aranbyutmb/2026/runners/5)."
-        )
-
-    tenant = extract_tenant(url)
-    if not tenant:
-        raise ValueError(
-            "Couldn't identify the race/year in that URL. "
-            "Make sure it has the format "
-            "'https://live.utmb.world/<race>/<year>/runners/<number>'."
-        )
-
-    return fetch_runner_by_tenant_and_bib(tenant, runner_id)
-
-
 def _seconds_to_hms(seconds):
     """Converts a seconds count (int/float) into 'H:MM:SS'. Used by the
     Livetrail runner endpoints, which report raceTime/restTime in raw
@@ -1055,8 +949,9 @@ def extract_livetrail_runner_url_parts(url):
 
 
 def fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id):
-    """Livetrail counterpart of fetch_runner_by_tenant_and_bib. Needs TWO
-    requests (confirmed via manual endpoint discovery):
+    """Pulls one runner's info + full checkpoint passings from LiveTrail
+    given a tenant and bib. Needs TWO requests (confirmed via manual
+    endpoint discovery):
       - /api/events/runners/{bib}            -> name, category, club, status, ranking
       - /api/events/runners/{bib}/detail     -> full passings (pointId, raceTime,
         ranking per checkpoint, restTime)
@@ -1123,8 +1018,8 @@ def fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id):
 
 
 def scrape_runner_splits_livetrail(url, manual_race_id=None):
-    """Livetrail counterpart of scrape_runner_splits. Accepts a runner URL
-    like 'https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda'.
+    """Accepts a runner URL like
+    'https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda'.
     If the URL has no ?raceId= (or the person pastes a bare API-style
     link), manual_race_id is used as a fallback."""
     subdomain, year, bib, race_id_from_url = extract_livetrail_runner_url_parts(url)
@@ -2734,11 +2629,25 @@ with tab_top:
         )
 
     st.markdown("---")
-    example_url = st.text_input(
-        "Example runner URL from this race (any bib works, just to identify the race/year)",
-        placeholder="https://live.utmb.world/aranbyutmb/2026/runners/5",
-        key="top_example_url",
+
+    def _top_parse_url():
+        parsed = parse_livetrail_url(st.session_state.get("top_livetrail_url", ""))
+        if parsed.get("tenant"):
+            st.session_state["top_tenant_input"] = parsed["tenant"]
+        if parsed.get("race_id"):
+            st.session_state["top_race_id_input"] = parsed["race_id"]
+
+    st.text_input(
+        "LiveTrail link of any runner in this race (to identify tenant/race ID)",
+        key="top_livetrail_url", on_change=_top_parse_url,
+        placeholder="https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda",
     )
+    col_top_tenant, col_top_race_id = st.columns(2)
+    with col_top_tenant:
+        top_tenant = st.text_input("X-Tenant", key="top_tenant_input", help="Auto-filled from the link above.")
+    with col_top_race_id:
+        top_race_id = st.text_input("Race ID", key="top_race_id_input", help="Auto-filled from the link above.")
+
     bib_list_raw = st.text_area(
         "Bib numbers to fetch (one per line or comma-separated, e.g. the top 10)",
         placeholder="5\n12\n8\n23\n...",
@@ -2749,242 +2658,237 @@ with tab_top:
     if fetch_top_button:
         if not selected_race_top:
             st.warning("Select a race above first.")
-        elif not example_url:
-            st.warning("Paste an example runner URL first (needed to identify the race/year).")
+        elif not top_tenant or not top_race_id:
+            st.warning("Paste a LiveTrail link above first (or fill in X-Tenant/Race ID by hand).")
         elif not bib_list_raw.strip():
             st.warning("Enter at least one bib number.")
         else:
-            tenant = extract_tenant(example_url)
-            if not tenant:
-                st.error(
-                    "❌ Couldn't identify the race/year from that URL. Make sure it has the "
-                    "format 'https://live.utmb.world/<race>/<year>/runners/<number>'."
+            bibs = [b.strip() for b in re.split(r"[,\n]+", bib_list_raw) if b.strip()]
+            race_data_top = available_races_top[selected_race_top]
+            race_segments_df_top = race_data_top.get("df_segments")
+
+            if race_segments_df_top is None or race_segments_df_top.empty:
+                st.warning(
+                    "⚠️ The selected race doesn't have checkpoints with km loaded yet. "
+                    "Go back to the 'Race Analysis' tab and load them first."
                 )
             else:
-                bibs = [b.strip() for b in re.split(r"[,\n]+", bib_list_raw) if b.strip()]
-                race_data_top = available_races_top[selected_race_top]
-                race_segments_df_top = race_data_top.get("df_segments")
+                results = {}
+                errors = {}
+                progress = st.progress(0.0, text="Fetching runners...")
 
-                if race_segments_df_top is None or race_segments_df_top.empty:
-                    st.warning(
-                        "⚠️ The selected race doesn't have checkpoints with km loaded yet. "
-                        "Go back to the 'Race Analysis' tab and load them first."
-                    )
+                for i, bib in enumerate(bibs):
+                    try:
+                        runner_info_bib, df_runner_bib = fetch_runner_by_tenant_and_bib_livetrail(
+                            top_tenant, bib, top_race_id
+                        )
+                        df_segment_degradation_bib = calculate_indices_by_segment(
+                            race_data_top["df"], race_segments_df_top, df_runner_bib
+                        )
+                        df_summary_bib = build_summary_table(
+                            race_segments_df_top, df_segment_degradation_bib, df_runner_bib
+                        )
+                        label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
+                        results[label] = df_summary_bib
+                    except Exception:
+                        errors[bib] = traceback.format_exc()
+                    progress.progress((i + 1) / len(bibs), text=f"Fetching runners... ({i + 1}/{len(bibs)})")
+
+                progress.empty()
+
+                if errors:
+                    with st.expander(f"⚠️ {len(errors)} bib(s) failed"):
+                        for bib, err in errors.items():
+                            st.markdown(f"**Bib {bib}:**")
+                            st.code(err, language="python")
+
+                if not results:
+                    st.error("❌ Couldn't fetch any of the bibs entered.")
                 else:
-                    results = {}
-                    errors = {}
-                    progress = st.progress(0.0, text="Fetching runners...")
+                    st.success(f"✅ Fetched {len(results)} of {len(bibs)} runner(s).")
 
-                    for i, bib in enumerate(bibs):
-                        try:
-                            runner_info_bib, df_runner_bib = fetch_runner_by_tenant_and_bib(tenant, bib)
-                            df_segment_degradation_bib = calculate_indices_by_segment(
-                                race_data_top["df"], race_segments_df_top, df_runner_bib
-                            )
-                            df_summary_bib = build_summary_table(
-                                race_segments_df_top, df_segment_degradation_bib, df_runner_bib
-                            )
-                            label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
-                            results[label] = df_summary_bib
-                        except Exception:
-                            errors[bib] = traceback.format_exc()
-                        progress.progress((i + 1) / len(bibs), text=f"Fetching runners... ({i + 1}/{len(bibs)})")
+                    for label, df_summary_bib in results.items():
+                        st.markdown(f"##### {label}")
+                        st.dataframe(df_summary_bib, use_container_width=True, hide_index=True)
 
-                    progress.empty()
+                    # --- Combined Excel download: shared geometry once, then each
+                    # runner's own columns side by side (no repeated Checkpoint/
+                    # Segment Distance/Elevation/Slope columns per runner) ---
+                    shared_columns = [
+                        "Checkpoint", "Segment Distance (km)", "Elevation Gain (m)",
+                        "Elevation Loss (m)", "Average Slope (%)",
+                    ]
+                    runner_columns = ["Speed", "Pace", "Rank", "Rest", "Time", "VPI", "DMI"]
 
-                    if errors:
-                        with st.expander(f"⚠️ {len(errors)} bib(s) failed"):
-                            for bib, err in errors.items():
-                                st.markdown(f"**Bib {bib}:**")
-                                st.code(err, language="python")
+                    first_df_summary = next(iter(results.values()))
+                    df_shared = first_df_summary[shared_columns]
 
-                    if not results:
-                        st.error("❌ Couldn't fetch any of the bibs entered.")
-                    else:
-                        st.success(f"✅ Fetched {len(results)} of {len(bibs)} runner(s).")
+                    excel_buffer = io.BytesIO()
+                    with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
+                        sheet_name = "Top Runners"
 
+                        # Shared geometry block (once)
+                        pd.DataFrame({"Race Segment Geometry": []}).to_excel(
+                            writer, sheet_name=sheet_name, startrow=0, startcol=0, index=False
+                        )
+                        df_shared.to_excel(
+                            writer, sheet_name=sheet_name, startrow=1, startcol=0, index=False
+                        )
+
+                        # One block per runner, right after the shared columns
+                        startcol = len(shared_columns) + 1
                         for label, df_summary_bib in results.items():
-                            st.markdown(f"##### {label}")
-                            st.dataframe(df_summary_bib, use_container_width=True, hide_index=True)
-
-                        # --- Combined Excel download: shared geometry once, then each
-                        # runner's own columns side by side (no repeated Checkpoint/
-                        # Segment Distance/Elevation/Slope columns per runner) ---
-                        shared_columns = [
-                            "Checkpoint", "Segment Distance (km)", "Elevation Gain (m)",
-                            "Elevation Loss (m)", "Average Slope (%)",
-                        ]
-                        runner_columns = ["Speed", "Pace", "Rank", "Rest", "Time", "VPI", "DMI"]
-
-                        first_df_summary = next(iter(results.values()))
-                        df_shared = first_df_summary[shared_columns]
-
-                        excel_buffer = io.BytesIO()
-                        with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
-                            sheet_name = "Top Runners"
-
-                            # Shared geometry block (once)
-                            pd.DataFrame({"Race Segment Geometry": []}).to_excel(
-                                writer, sheet_name=sheet_name, startrow=0, startcol=0, index=False
+                            pd.DataFrame({label: []}).to_excel(
+                                writer, sheet_name=sheet_name, startrow=0, startcol=startcol, index=False
                             )
-                            df_shared.to_excel(
-                                writer, sheet_name=sheet_name, startrow=1, startcol=0, index=False
+                            df_summary_bib[runner_columns].to_excel(
+                                writer, sheet_name=sheet_name, startrow=1, startcol=startcol, index=False
                             )
+                            startcol += len(runner_columns) + 1
 
-                            # One block per runner, right after the shared columns
-                            startcol = len(shared_columns) + 1
-                            for label, df_summary_bib in results.items():
-                                pd.DataFrame({label: []}).to_excel(
-                                    writer, sheet_name=sheet_name, startrow=0, startcol=startcol, index=False
-                                )
-                                df_summary_bib[runner_columns].to_excel(
-                                    writer, sheet_name=sheet_name, startrow=1, startcol=startcol, index=False
-                                )
-                                startcol += len(runner_columns) + 1
+                    st.download_button(
+                        "📥 Download combined Excel (shared geometry + each runner side by side)",
+                        data=excel_buffer.getvalue(),
+                        file_name=f"{_ascii_filename(selected_race_top).replace(' ', '_')}_top_runners.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                        use_container_width=True,
+                    )
 
-                        st.download_button(
-                            "📥 Download combined Excel (shared geometry + each runner side by side)",
-                            data=excel_buffer.getvalue(),
-                            file_name=f"{_ascii_filename(selected_race_top).replace(' ', '_')}_top_runners.xlsx",
-                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                            use_container_width=True,
-                        )
+                    # --- Position progression chart ---
+                    st.markdown("---")
+                    st.markdown("### 📈 Position Progression")
+                    st.caption(
+                        "Each runner's rank at every checkpoint, connected across the race. "
+                        "The Y axis puts 1st place at the top, counting down to the largest "
+                        "(worst) position at the bottom."
+                    )
 
-                        # --- Position progression chart ---
-                        st.markdown("---")
-                        st.markdown("### 📈 Position Progression")
-                        st.caption(
-                            "Each runner's rank at every checkpoint, connected across the race. "
-                            "The Y axis puts 1st place at the top, counting down to the largest "
-                            "(worst) position at the bottom."
-                        )
+                    checkpoint_to_km = dict(zip(
+                        race_segments_df_top["End Point"], race_segments_df_top["End Km"]
+                    ))
 
-                        checkpoint_to_km = dict(zip(
-                            race_segments_df_top["End Point"], race_segments_df_top["End Km"]
+                    fig_positions = go.Figure()
+                    add_elevation_background(fig_positions, race_data_top["df"])
+
+                    worst_rank_seen = 0
+                    for label, df_summary_bib in results.items():
+                        df_plot = df_summary_bib[["Checkpoint", "Rank"]].dropna(subset=["Rank"]).copy()
+                        df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                        df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
+                        if df_plot.empty:
+                            continue
+                        worst_rank_seen = max(worst_rank_seen, df_plot["Rank"].astype(float).max())
+                        fig_positions.add_trace(go.Scatter(
+                            x=df_plot["Km"],
+                            y=df_plot["Rank"],
+                            mode="lines+markers",
+                            name=label,
+                            hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>Position: %{{y}}<extra></extra>",
                         ))
 
-                        fig_positions = go.Figure()
-                        add_elevation_background(fig_positions, race_data_top["df"])
+                    fig_positions.update_layout(
+                        template="plotly_dark",
+                        xaxis_title="Accumulated Km",
+                        yaxis_title="Position",
+                        height=480,
+                        hovermode="closest",
+                        yaxis=dict(
+                            autorange=False,
+                            range=[worst_rank_seen + 1, 0],
+                            dtick=2,
+                            showgrid=False,
+                        ),
+                    )
+                    st.plotly_chart(fig_positions, use_container_width=True)
+                    chart_download_button(fig_positions, "position_progression.html", "dl_positions")
 
-                        worst_rank_seen = 0
-                        for label, df_summary_bib in results.items():
-                            df_plot = df_summary_bib[["Checkpoint", "Rank"]].dropna(subset=["Rank"]).copy()
-                            df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
-                            df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
-                            if df_plot.empty:
-                                continue
-                            worst_rank_seen = max(worst_rank_seen, df_plot["Rank"].astype(float).max())
-                            fig_positions.add_trace(go.Scatter(
-                                x=df_plot["Km"],
-                                y=df_plot["Rank"],
-                                mode="lines+markers",
-                                name=label,
-                                hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>Position: %{{y}}<extra></extra>",
-                            ))
+                    # --- VPI progression chart ---
+                    st.markdown("---")
+                    st.markdown("### 🧗 VPI Progression")
+                    st.caption(
+                        "Each runner's VPI (m/h) at every checkpoint with steep climbing "
+                        "terrain, connected across the race. Higher is better, so the axis "
+                        "keeps the largest values at the top."
+                    )
 
-                        fig_positions.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="Position",
-                            height=480,
-                            hovermode="closest",
-                            yaxis=dict(
-                                autorange=False,
-                                range=[worst_rank_seen + 1, 0],
-                                dtick=2,
-                                showgrid=False,
-                            ),
-                        )
-                        st.plotly_chart(fig_positions, use_container_width=True)
-                        chart_download_button(fig_positions, "position_progression.html", "dl_positions")
+                    fig_vpi_top = go.Figure()
+                    add_elevation_background(fig_vpi_top, race_data_top["df"])
 
-                        # --- VPI progression chart ---
-                        st.markdown("---")
-                        st.markdown("### 🧗 VPI Progression")
-                        st.caption(
-                            "Each runner's VPI (m/h) at every checkpoint with steep climbing "
-                            "terrain, connected across the race. Higher is better, so the axis "
-                            "keeps the largest values at the top."
-                        )
+                    max_vpi_seen = 0
+                    for label, df_summary_bib in results.items():
+                        df_plot = df_summary_bib[["Checkpoint", "VPI"]].dropna(subset=["VPI"]).copy()
+                        df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                        df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
+                        if df_plot.empty:
+                            continue
+                        max_vpi_seen = max(max_vpi_seen, df_plot["VPI"].astype(float).max())
+                        fig_vpi_top.add_trace(go.Scatter(
+                            x=df_plot["Km"],
+                            y=df_plot["VPI"],
+                            mode="lines+markers",
+                            name=label,
+                            hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>VPI: %{{y:.0f}} m/h<extra></extra>",
+                        ))
 
-                        fig_vpi_top = go.Figure()
-                        add_elevation_background(fig_vpi_top, race_data_top["df"])
+                    fig_vpi_top.update_layout(
+                        template="plotly_dark",
+                        xaxis_title="Accumulated Km",
+                        yaxis_title="VPI (m/h)",
+                        height=480,
+                        hovermode="closest",
+                        yaxis=dict(
+                            autorange=False,
+                            range=[0, max_vpi_seen * 1.05 if max_vpi_seen else 1],
+                            dtick=50,
+                            showgrid=False,
+                        ),
+                    )
+                    st.plotly_chart(fig_vpi_top, use_container_width=True)
+                    chart_download_button(fig_vpi_top, "vpi_progression.html", "dl_vpi_top")
 
-                        max_vpi_seen = 0
-                        for label, df_summary_bib in results.items():
-                            df_plot = df_summary_bib[["Checkpoint", "VPI"]].dropna(subset=["VPI"]).copy()
-                            df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
-                            df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
-                            if df_plot.empty:
-                                continue
-                            max_vpi_seen = max(max_vpi_seen, df_plot["VPI"].astype(float).max())
-                            fig_vpi_top.add_trace(go.Scatter(
-                                x=df_plot["Km"],
-                                y=df_plot["VPI"],
-                                mode="lines+markers",
-                                name=label,
-                                hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>VPI: %{{y:.0f}} m/h<extra></extra>",
-                            ))
+                    # --- DMI progression chart ---
+                    st.markdown("---")
+                    st.markdown("### 📉 DMI Progression")
+                    st.caption(
+                        "Each runner's DMI (km/h) at every checkpoint with steep descending "
+                        "terrain, connected across the race. Higher is better, so the axis "
+                        "keeps the largest values at the top."
+                    )
 
-                        fig_vpi_top.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="VPI (m/h)",
-                            height=480,
-                            hovermode="closest",
-                            yaxis=dict(
-                                autorange=False,
-                                range=[0, max_vpi_seen * 1.05 if max_vpi_seen else 1],
-                                dtick=50,
-                                showgrid=False,
-                            ),
-                        )
-                        st.plotly_chart(fig_vpi_top, use_container_width=True)
-                        chart_download_button(fig_vpi_top, "vpi_progression.html", "dl_vpi_top")
+                    fig_dmi_top = go.Figure()
+                    add_elevation_background(fig_dmi_top, race_data_top["df"])
 
-                        # --- DMI progression chart ---
-                        st.markdown("---")
-                        st.markdown("### 📉 DMI Progression")
-                        st.caption(
-                            "Each runner's DMI (km/h) at every checkpoint with steep descending "
-                            "terrain, connected across the race. Higher is better, so the axis "
-                            "keeps the largest values at the top."
-                        )
+                    max_dmi_seen = 0
+                    for label, df_summary_bib in results.items():
+                        df_plot = df_summary_bib[["Checkpoint", "DMI"]].dropna(subset=["DMI"]).copy()
+                        df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                        df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
+                        if df_plot.empty:
+                            continue
+                        max_dmi_seen = max(max_dmi_seen, df_plot["DMI"].astype(float).max())
+                        fig_dmi_top.add_trace(go.Scatter(
+                            x=df_plot["Km"],
+                            y=df_plot["DMI"],
+                            mode="lines+markers",
+                            name=label,
+                            hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>DMI: %{{y:.2f}} km/h<extra></extra>",
+                        ))
 
-                        fig_dmi_top = go.Figure()
-                        add_elevation_background(fig_dmi_top, race_data_top["df"])
-
-                        max_dmi_seen = 0
-                        for label, df_summary_bib in results.items():
-                            df_plot = df_summary_bib[["Checkpoint", "DMI"]].dropna(subset=["DMI"]).copy()
-                            df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
-                            df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
-                            if df_plot.empty:
-                                continue
-                            max_dmi_seen = max(max_dmi_seen, df_plot["DMI"].astype(float).max())
-                            fig_dmi_top.add_trace(go.Scatter(
-                                x=df_plot["Km"],
-                                y=df_plot["DMI"],
-                                mode="lines+markers",
-                                name=label,
-                                hovertemplate=f"{label}<br>Km %{{x:.0f}}<br>DMI: %{{y:.2f}} km/h<extra></extra>",
-                            ))
-
-                        fig_dmi_top.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="DMI (km/h)",
-                            height=480,
-                            hovermode="closest",
-                            yaxis=dict(
-                                autorange=False,
-                                range=[0, max_dmi_seen * 1.05 if max_dmi_seen else 1],
-                                dtick=1,
-                                showgrid=False,
-                            ),
-                        )
-                        st.plotly_chart(fig_dmi_top, use_container_width=True)
-                        chart_download_button(fig_dmi_top, "dmi_progression.html", "dl_dmi_top")
+                    fig_dmi_top.update_layout(
+                        template="plotly_dark",
+                        xaxis_title="Accumulated Km",
+                        yaxis_title="DMI (km/h)",
+                        height=480,
+                        hovermode="closest",
+                        yaxis=dict(
+                            autorange=False,
+                            range=[0, max_dmi_seen * 1.05 if max_dmi_seen else 1],
+                            dtick=1,
+                            showgrid=False,
+                        ),
+                    )
+                    st.plotly_chart(fig_dmi_top, use_container_width=True)
+                    chart_download_button(fig_dmi_top, "dmi_progression.html", "dl_dmi_top")
 
 # ---------------------------------------------
 # TAB 7: Checkpoint Fetcher (Livetrail) - generates the exact block to
