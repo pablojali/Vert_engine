@@ -1299,6 +1299,41 @@ def _save_publish_config(cfg: dict) -> None:
     PUBLISH_CONFIG_PATH.write_text(json.dumps(cfg, indent=2), encoding="utf-8")
 
 
+def _github_token() -> str | None:
+    """Reads an optional GitHub Personal Access Token from Streamlit
+    secrets (Settings > Secrets in the Streamlit Cloud dashboard, key
+    GITHUB_TOKEN). Returns None (never raises) when no secrets file
+    exists at all - true on a Codespace, which doesn't need this since
+    it already has push-capable git credentials ambient in the
+    container. Only a fresh container with no such ambient credentials
+    (Streamlit Cloud, a brand new VPS) needs this configured."""
+    try:
+        return st.secrets.get("GITHUB_TOKEN")
+    except Exception:
+        return None
+
+
+def _authed_github_url(owner_repo: str) -> str:
+    """https://github.com/<owner_repo>.git, with the token from secrets
+    embedded for auth if one's configured; otherwise the plain URL,
+    relying on whatever ambient git credentials the environment has."""
+    token = _github_token()
+    if token:
+        return f"https://{token}@github.com/{owner_repo}.git"
+    return f"https://github.com/{owner_repo}.git"
+
+
+def _redact_token(text: str) -> str:
+    """Strips a configured GitHub token out of git command output
+    before it's ever written into a log shown in the UI (st.code) -
+    git error messages routinely echo back the remote URL, which would
+    otherwise leak the token straight into the page."""
+    token = _github_token()
+    if token and text:
+        return text.replace(token, "***")
+    return text
+
+
 def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
     # -c user.name/user.email override (not depend on) any global git
     # config, so auto-commits from the Publish button work the same on
@@ -1306,7 +1341,22 @@ def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
     # that's never had `git config --global` run on it, without needing
     # a terminal there to set that up by hand.
     config_args = ["-c", "user.name=VertLabs Engine", "-c", "user.email=engine@vertlabs.run"]
-    return subprocess.run(["git", *config_args, *args], cwd=str(repo_dir), capture_output=True, text=True)
+    r = subprocess.run(["git", *config_args, *args], cwd=str(repo_dir), capture_output=True, text=True)
+    r.stdout = _redact_token(r.stdout)
+    r.stderr = _redact_token(r.stderr)
+    return r
+
+
+def _configure_git_push_auth(repo_dir: Path, owner_repo: str) -> None:
+    """Points 'origin' at an authenticated URL if a GITHUB_TOKEN secret
+    is configured, so the next push doesn't need to prompt for
+    credentials. A no-op when no token is set (nothing to change; the
+    environment's ambient git credentials, if any, keep being used as
+    before)."""
+    token = _github_token()
+    if not token:
+        return
+    _run_git(repo_dir, "remote", "set-url", "origin", _authed_github_url(owner_repo))
 
 
 def _sync_output_to_web_repo(web_repo_dir: Path) -> None:
@@ -1358,6 +1408,7 @@ def _backup_engine_data() -> tuple[bool, str]:
 
     r = _run_git(ENGINE_ROOT, "rev-parse", "--abbrev-ref", "HEAD")
     current_branch = r.stdout.strip() or "HEAD"
+    _configure_git_push_auth(ENGINE_ROOT, "pablojali/Vert_engine")
     r = _run_git(ENGINE_ROOT, "push", "-u", "origin", current_branch)
     log += r.stdout + r.stderr
     if r.returncode != 0:
@@ -1377,10 +1428,10 @@ def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
         return True, ""
     web_repo_dir.parent.mkdir(parents=True, exist_ok=True)
     r = subprocess.run(
-        ["git", "clone", "https://github.com/pablojali/vertlabs-web.git", str(web_repo_dir)],
+        ["git", "clone", _authed_github_url("pablojali/vertlabs-web"), str(web_repo_dir)],
         capture_output=True, text=True,
     )
-    return r.returncode == 0, r.stdout + r.stderr
+    return r.returncode == 0, _redact_token(r.stdout) + _redact_token(r.stderr)
 
 
 def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> tuple[bool, str]:
@@ -1433,6 +1484,7 @@ def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> 
     # Push unconditionally - even with no new commit, the branch might not
     # exist on origin yet (first publish to it), and Cloudflare Pages only
     # picks up branches it can see on the remote.
+    _configure_git_push_auth(web_repo_dir, "pablojali/vertlabs-web")
     r = _run_git(web_repo_dir, "push", "-u", "origin", branch)
     log_lines.append(r.stdout + r.stderr)
     if r.returncode != 0:
