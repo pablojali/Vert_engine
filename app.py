@@ -1262,6 +1262,129 @@ def build_summary_table(race_segments_df, df_segment_degradation, df_runner):
     ]]
 
 
+def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km, total_gain):
+    """Computes every index/table/chart the 'Runner Metrics (LiveTrail)'
+    tab shows for one runner - no Streamlit calls, so the single-runner
+    tab (which renders each piece with its own markdown/metric/chart
+    widgets) and a bulk fetch (which only needs the finished figures/
+    tables to build a downloadable report, with nothing rendered on
+    screen) can share this one computation instead of two copies
+    drifting apart over time.
+
+    Raises whatever calculate_runner_indices/calculate_indices_by_segment
+    raise - callers wrap this in their own try/except to match their
+    existing error handling.
+
+    Returns a dict:
+      indices, df_crossed, df_segment_degradation (VPI/DMI/ER Index
+      columns + Effort Pace merged in, same shape the individual tab
+      already displays), df_summary, and figures - a dict of the 4
+      go.Figure objects keyed exactly as build_full_runner_report_html
+      expects for its own 'figures' param."""
+    indices, df_crossed = calculate_runner_indices(race_df, race_segments_df, df_runner, total_km, total_gain)
+    df_segment_degradation = calculate_indices_by_segment(race_df, race_segments_df, df_runner)
+
+    fig_vpi = go.Figure()
+    add_elevation_background(fig_vpi, race_df)
+    fig_vpi.add_trace(go.Scatter(
+        x=df_segment_degradation["End Km"], y=df_segment_degradation["VPI Raw (m/h)"],
+        mode="lines+markers", name="VPI (m/h)", line=dict(color="#22d3ee", width=3),
+        text=df_segment_degradation["Segment"],
+        hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h<extra></extra>",
+    ))
+    fig_vpi.update_layout(
+        template="plotly_dark", xaxis_title="Accumulated Km", yaxis_title="VPI (m/h)",
+        height=380, hovermode="x unified",
+    )
+
+    fig_dmi = go.Figure()
+    add_elevation_background(fig_dmi, race_df)
+    fig_dmi.add_trace(go.Scatter(
+        x=df_segment_degradation["End Km"], y=df_segment_degradation["DMI Raw (km/h)"],
+        mode="lines+markers", name="DMI (km/h)", line=dict(color="#ffa500", width=3),
+        text=df_segment_degradation["Segment"],
+        hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h<extra></extra>",
+    ))
+    fig_dmi.update_layout(
+        template="plotly_dark", xaxis_title="Accumulated Km", yaxis_title="DMI (km/h)",
+        height=380, hovermode="x unified",
+    )
+
+    fig_er = go.Figure()
+    add_elevation_background(fig_er, race_df)
+    fig_er.add_trace(go.Scatter(
+        x=df_crossed["End Km"], y=df_crossed["Effort Pace (min/effort-km)"],
+        mode="lines+markers", name="Effort Pace", line=dict(color="#c084fc", width=3),
+        hovertemplate="Km %{x:.0f}<br>%{y:.2f} min/effort-km<extra></extra>",
+    ))
+    if indices.get("half_effort_km") is not None:
+        reaches_half_effort = df_crossed["Effort Km Accumulated"] >= indices["half_effort_km"]
+        if reaches_half_effort.any():
+            effort_midpoint_km_display = df_crossed.loc[reaches_half_effort, "End Km"].iloc[0]
+        else:
+            effort_midpoint_km_display = total_km / 2
+        fig_er.add_vline(
+            x=effort_midpoint_km_display, line_dash="dash", line_color="#a78bfa",
+            annotation_text="50% effort", annotation_position="top",
+        )
+    fig_er.update_layout(
+        template="plotly_dark", xaxis_title="Accumulated Km", yaxis_title="Effort Pace (min/effort-km)",
+        height=380, hovermode="x unified",
+    )
+
+    df_segment_degradation = df_segment_degradation.merge(
+        df_crossed[["Start Km", "End Km", "Effort Pace (min/effort-km)"]],
+        on=["Start Km", "End Km"], how="left",
+    )
+    valid_pace = df_segment_degradation["Effort Pace (min/effort-km)"].dropna()
+    if not valid_pace.empty and valid_pace.iloc[0]:
+        pace_baseline = valid_pace.iloc[0]
+        df_segment_degradation["ER Index (0-100)"] = (
+            (pace_baseline / df_segment_degradation["Effort Pace (min/effort-km)"]) * 100
+        ).round(1)
+    else:
+        df_segment_degradation["ER Index (0-100)"] = None
+
+    fig_degradation = go.Figure()
+    add_elevation_background(fig_degradation, race_df)
+    fig_degradation.add_trace(go.Scatter(
+        x=df_segment_degradation["End Km"], y=df_segment_degradation["VPI Index (0-100)"],
+        mode="lines+markers", name="VPI (Climbing)", line=dict(color="#22d3ee", width=3),
+        text=df_segment_degradation["Segment"],
+        hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI Index: %{y:.1f}<extra></extra>",
+    ))
+    fig_degradation.add_trace(go.Scatter(
+        x=df_segment_degradation["End Km"], y=df_segment_degradation["DMI Index (0-100)"],
+        mode="lines+markers", name="DMI (Descent)", line=dict(color="#ffa500", width=3),
+        text=df_segment_degradation["Segment"],
+        hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI Index: %{y:.1f}<extra></extra>",
+    ))
+    fig_degradation.add_trace(go.Scatter(
+        x=df_segment_degradation["End Km"], y=df_segment_degradation["ER Index (0-100)"],
+        mode="lines+markers", name="ER (Endurance)", line=dict(color="#c084fc", width=3),
+        text=df_segment_degradation["Segment"],
+        hovertemplate="%{text}<br>Km %{x:.0f}<br>ER Index: %{y:.1f}<extra></extra>",
+    ))
+    fig_degradation.update_layout(
+        template="plotly_dark", xaxis_title="Accumulated Km",
+        yaxis_title="Index (0-100, Segment 1 = 100)", height=420, hovermode="x unified",
+    )
+
+    df_summary = build_summary_table(race_segments_df, df_segment_degradation, df_runner)
+
+    return {
+        "indices": indices,
+        "df_crossed": df_crossed,
+        "df_segment_degradation": df_segment_degradation,
+        "df_summary": df_summary,
+        "figures": {
+            "🧗 VPI - Vertical Power Index": fig_vpi,
+            "📉 DMI - Descent Mastery Index": fig_dmi,
+            "🏆 ER - Endurance Rating - Pacing Curve": fig_er,
+            "📉 Degradation Curve by Segment": fig_degradation,
+        },
+    }
+
 
 # ============================================================
 # 3. INTERFACE: three independent tabs
@@ -2173,19 +2296,19 @@ with tab_runner_lt:
                 else:
                     try:
                         total_race_gain_lt = calculate_total_elevation_gain(current_race_data_lt["df"])
-                        indices_lt, df_crossed_lt = calculate_runner_indices(
-                            current_race_data_lt["df"],
-                            race_segments_df_lt,
-                            df_runner_lt,
-                            current_race_data_lt["total_km"],
-                            total_race_gain_lt,
+                        analysis_lt = build_runner_analysis_bundle(
+                            current_race_data_lt["df"], race_segments_df_lt, df_runner_lt,
+                            current_race_data_lt["total_km"], total_race_gain_lt,
                         )
-                        df_segment_degradation_lt = calculate_indices_by_segment(
-                            current_race_data_lt["df"], race_segments_df_lt, df_runner_lt
-                        )
+                        indices_lt = analysis_lt["indices"]
+                        df_crossed_lt = analysis_lt["df_crossed"]
+                        df_segment_degradation_lt = analysis_lt["df_segment_degradation"]
+                        df_summary_lt = analysis_lt["df_summary"]
+                        figures_lt = analysis_lt["figures"]
                         indices_error_lt = None
                     except Exception as e:
                         indices_lt, df_crossed_lt, df_segment_degradation_lt = None, None, None
+                        df_summary_lt, figures_lt = None, None
                         indices_error_lt = str(e)
 
                     st.markdown("## 🎯 Performance Indices")
@@ -2211,6 +2334,11 @@ with tab_runner_lt:
                         st.session_state['estimated_global_indices_lt'] = indices_lt
                         _web_export_track_result(selected_race_lt, runner_info_lt, indices_lt)
 
+                        fig_vpi_lt = figures_lt["🧗 VPI - Vertical Power Index"]
+                        fig_dmi_lt = figures_lt["📉 DMI - Descent Mastery Index"]
+                        fig_er_lt = figures_lt["🏆 ER - Endurance Rating - Pacing Curve"]
+                        fig_degradation_lt = figures_lt["📉 Degradation Curve by Segment"]
+
                         # --- VPI chart ---
                         st.markdown("---")
                         st.markdown("### 🧗 VPI - Vertical Power Index")
@@ -2218,24 +2346,6 @@ with tab_runner_lt:
                             "VPI (whole race)",
                             f"{indices_lt['VPI']} m/h" if indices_lt["VPI"] is not None else "N/A",
                             help="Vertical Power Index: meters of elevation gain per hour on segments with slope ≥12%.",
-                        )
-                        fig_vpi_lt = go.Figure()
-                        add_elevation_background(fig_vpi_lt, current_race_data_lt["df"])
-                        fig_vpi_lt.add_trace(go.Scatter(
-                            x=df_segment_degradation_lt["End Km"],
-                            y=df_segment_degradation_lt["VPI Raw (m/h)"],
-                            mode="lines+markers",
-                            name="VPI (m/h)",
-                            line=dict(color="#22d3ee", width=3),
-                            text=df_segment_degradation_lt["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h<extra></extra>",
-                        ))
-                        fig_vpi_lt.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="VPI (m/h)",
-                            height=380,
-                            hovermode="x unified",
                         )
                         st.plotly_chart(fig_vpi_lt, use_container_width=True)
                         chart_download_button(fig_vpi_lt, "vpi_chart_livetrail.html", "dl_vpi_lt")
@@ -2247,24 +2357,6 @@ with tab_runner_lt:
                             "DMI (whole race)",
                             f"{indices_lt['DMI']} km/h" if indices_lt["DMI"] is not None else "N/A",
                             help="Descent Mastery Index: average speed on segments with slope ≤-12%.",
-                        )
-                        fig_dmi_lt = go.Figure()
-                        add_elevation_background(fig_dmi_lt, current_race_data_lt["df"])
-                        fig_dmi_lt.add_trace(go.Scatter(
-                            x=df_segment_degradation_lt["End Km"],
-                            y=df_segment_degradation_lt["DMI Raw (km/h)"],
-                            mode="lines+markers",
-                            name="DMI (km/h)",
-                            line=dict(color="#ffa500", width=3),
-                            text=df_segment_degradation_lt["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h<extra></extra>",
-                        ))
-                        fig_dmi_lt.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="DMI (km/h)",
-                            height=380,
-                            hovermode="x unified",
                         )
                         st.plotly_chart(fig_dmi_lt, use_container_width=True)
                         chart_download_button(fig_dmi_lt, "dmi_chart_livetrail.html", "dl_dmi_lt")
@@ -2288,104 +2380,19 @@ with tab_runner_lt:
                             f"{indices_lt['effort_pace_second_half']} min/effort-km"
                             if indices_lt.get("effort_pace_second_half") is not None else "N/A",
                         )
-
-                        fig_er_lt = go.Figure()
-                        add_elevation_background(fig_er_lt, current_race_data_lt["df"])
-                        fig_er_lt.add_trace(go.Scatter(
-                            x=df_crossed_lt["End Km"],
-                            y=df_crossed_lt["Effort Pace (min/effort-km)"],
-                            mode="lines+markers",
-                            name="Effort Pace",
-                            line=dict(color="#c084fc", width=3),
-                            hovertemplate="Km %{x:.0f}<br>%{y:.2f} min/effort-km<extra></extra>",
-                        ))
-                        if indices_lt.get("half_effort_km") is not None:
-                            reaches_half_effort_lt = df_crossed_lt["Effort Km Accumulated"] >= indices_lt["half_effort_km"]
-                            if reaches_half_effort_lt.any():
-                                effort_midpoint_km_display_lt = df_crossed_lt.loc[reaches_half_effort_lt, "End Km"].iloc[0]
-                            else:
-                                effort_midpoint_km_display_lt = current_race_data_lt["total_km"] / 2
-                            fig_er_lt.add_vline(
-                                x=effort_midpoint_km_display_lt,
-                                line_dash="dash",
-                                line_color="#a78bfa",
-                                annotation_text="50% effort",
-                                annotation_position="top",
-                            )
-                        fig_er_lt.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="Effort Pace (min/effort-km)",
-                            height=380,
-                            hovermode="x unified",
-                        )
                         st.plotly_chart(fig_er_lt, use_container_width=True)
                         chart_download_button(fig_er_lt, "er_pacing_curve_livetrail.html", "dl_er_lt")
 
                         # --- Degradation matrix by segment ---
                         st.markdown("---")
                         st.markdown("### 📉 Degradation Curve by Segment")
-
-                        df_segment_degradation_lt = df_segment_degradation_lt.merge(
-                            df_crossed_lt[["Start Km", "End Km", "Effort Pace (min/effort-km)"]],
-                            on=["Start Km", "End Km"],
-                            how="left",
-                        )
-                        valid_pace_lt = df_segment_degradation_lt["Effort Pace (min/effort-km)"].dropna()
-                        if not valid_pace_lt.empty and valid_pace_lt.iloc[0]:
-                            pace_baseline_lt = valid_pace_lt.iloc[0]
-                            df_segment_degradation_lt["ER Index (0-100)"] = (
-                                (pace_baseline_lt / df_segment_degradation_lt["Effort Pace (min/effort-km)"]) * 100
-                            ).round(1)
-                        else:
-                            df_segment_degradation_lt["ER Index (0-100)"] = None
-
                         st.dataframe(df_segment_degradation_lt, use_container_width=True)
-
-                        fig_degradation_lt = go.Figure()
-                        add_elevation_background(fig_degradation_lt, current_race_data_lt["df"])
-                        fig_degradation_lt.add_trace(go.Scatter(
-                            x=df_segment_degradation_lt["End Km"],
-                            y=df_segment_degradation_lt["VPI Index (0-100)"],
-                            mode="lines+markers",
-                            name="VPI (Climbing)",
-                            line=dict(color="#22d3ee", width=3),
-                            text=df_segment_degradation_lt["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI Index: %{y:.1f}<extra></extra>",
-                        ))
-                        fig_degradation_lt.add_trace(go.Scatter(
-                            x=df_segment_degradation_lt["End Km"],
-                            y=df_segment_degradation_lt["DMI Index (0-100)"],
-                            mode="lines+markers",
-                            name="DMI (Descent)",
-                            line=dict(color="#ffa500", width=3),
-                            text=df_segment_degradation_lt["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI Index: %{y:.1f}<extra></extra>",
-                        ))
-                        fig_degradation_lt.add_trace(go.Scatter(
-                            x=df_segment_degradation_lt["End Km"],
-                            y=df_segment_degradation_lt["ER Index (0-100)"],
-                            mode="lines+markers",
-                            name="ER (Endurance)",
-                            line=dict(color="#c084fc", width=3),
-                            text=df_segment_degradation_lt["Segment"],
-                            hovertemplate="%{text}<br>Km %{x:.0f}<br>ER Index: %{y:.1f}<extra></extra>",
-                        ))
-                        fig_degradation_lt.update_layout(
-                            template="plotly_dark",
-                            xaxis_title="Accumulated Km",
-                            yaxis_title="Index (0-100, Segment 1 = 100)",
-                            height=420,
-                            hovermode="x unified",
-                        )
                         st.plotly_chart(fig_degradation_lt, use_container_width=True)
                         chart_download_button(fig_degradation_lt, "degradation_curve_livetrail.html", "dl_degradation_lt")
 
                         # --- Full summary table ---
                         st.markdown("---")
                         st.markdown("### 📋 Full Summary Table")
-
-                        df_summary_lt = build_summary_table(race_segments_df_lt, df_segment_degradation_lt, df_runner_lt)
                         st.dataframe(df_summary_lt, use_container_width=True, hide_index=True)
 
                         # --- Full analysis report ---
@@ -2395,12 +2402,7 @@ with tab_runner_lt:
                             runner_info=runner_info_lt,
                             df_runner=df_runner_lt,
                             indices=indices_lt,
-                            figures={
-                                "🧗 VPI - Vertical Power Index": fig_vpi_lt,
-                                "📉 DMI - Descent Mastery Index": fig_dmi_lt,
-                                "🏆 ER - Endurance Rating - Pacing Curve": fig_er_lt,
-                                "📉 Degradation Curve by Segment": fig_degradation_lt,
-                            },
+                            figures=figures_lt,
                             df_segment_degradation=df_segment_degradation_lt,
                             df_summary=df_summary_lt,
                         )
