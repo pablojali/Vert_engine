@@ -7,52 +7,212 @@
           "gpx_file": "data/gpx/aran/2026/VDA_2026.gpx",
           "race_slug_api": "vda",
           "checkpoints": [
-            {"id": "0",   "nombre": "Sortida Vielha",  "km": 0.0},
-            {"id": "2",   "nombre": "Bassa d'Oles", "km": 10.5},
-            {"id": "4",   "nombre": "Artiga de Lin", "km": 24.6},
-            {"id": "6",   "nombre": "Poilaner", "km": 33.0},
-            {"id": "8",   "nombre": "Coth de Baretja", "km": 39.5},
-            {"id": "10",  "nombre": "Portilhon", "km": 42.6},
-            {"id": "20",  "nombre": "Bossòst", "km": 49.2},
-            {"id": "22",  "nombre": "Canejan", "km": 58.2},
-            {"id": "24",  "nombre": "Refugi Honeria", "km": 65.6},
-            {"id": "26",  "nombre": "Mines de Liat", "km": 75.7},
-            {"id": "28",  "nombre": "Còth de Varradòs", "km": 81.7},
-            {"id": "32",  "nombre": "Port d'Urets", "km": 90.2},
-            {"id": "34",  "nombre": "Montgarri", "km": 99.6},
-            {"id": "36",  "nombre": "Beret", "km": 104.7},
-            {"id": "38",  "nombre": "Salardú", "km": 113.6},
-            {"id": "40",  "nombre": "Banhs de Tredòs", "km": 122.4},
-            {"id": "42",  "nombre": "Estanh Obago", "km": 129.2},
-            {"id": "46",  "nombre": "Colomèrs", "km": 134.0},
-            {"id": "50",  "nombre": "Mont-Romies", "km": 144.3},
-            {"id": "56",  "nombre": "Arties", "km": 148.8},
-            {"id": "60",  "nombre": "Santet Escunhau", "km": 154.3},
-            {"id": "62",  "nombre": "Tuc Meddia", "km": 156.2},
-            {"id": "150", "nombre": "Meta",     "km": 163.0}
+            {
+              "id": "0",
+              "nombre": "Sortida Vielha",
+              "km": 0.0
+            },
+            {
+              "id": "2",
+              "nombre": "Bassa d'Oles",
+              "km": 10.5
+            },
+            {
+              "id": "4",
+              "nombre": "Artiga de Lin",
+              "km": 24.6
+            },
+            {
+              "id": "6",
+              "nombre": "Poilaner",
+              "km": 33.0
+            },
+            {
+              "id": "8",
+              "nombre": "Coth de Baretja",
+              "km": 39.5
+            },
+            {
+              "id": "10",
+              "nombre": "Portilhon",
+              "km": 42.6
+            },
+            {
+              "id": "20",
+              "nombre": "Bossòst",
+              "km": 49.2
+            },
+            {
+              "id": "22",
+              "nombre": "Canejan",
+              "km": 58.2
+            },
+            {
+              "id": "24",
+              "nombre": "Refugi Honeria",
+              "km": 65.6
+            },
+            {
+              "id": "26",
+              "nombre": "Mines de Liat",
+              "km": 75.7
+            },
+            {
+              "id": "28",
+              "nombre": "Còth de Varradòs",
+              "km": 81.7
+            },
+            {
+              "id": "32",
+              "nombre": "Port d'Urets",
+              "km": 90.2
+            },
+            {
+              "id": "34",
+              "nombre": "Montgarri",
+              "km": 99.6
+            },
+            {
+              "id": "36",
+              "nombre": "Beret",
+              "km": 104.7
+            },
+            {
+              "id": "38",
+              "nombre": "Salardú",
+              "km": 113.6
+            },
+            {
+              "id": "40",
+              "nombre": "Banhs de Tredòs",
+              "km": 122.4
+            },
+            {
+              "id": "42",
+              "nombre": "Estanh Obago",
+              "km": 129.2
+            },
+            {
+              "id": "46",
+              "nombre": "Colomèrs",
+              "km": 134.0
+            },
+            {
+              "id": "50",
+              "nombre": "Mont-Romies",
+              "km": 144.3
+            },
+            {
+              "id": "56",
+              "nombre": "Arties",
+              "km": 148.8
+            },
+            {
+              "id": "60",
+              "nombre": "Santet Escunhau",
+              "km": 154.3
+            },
+            {
+              "id": "62",
+              "nombre": "Tuc Meddia",
+              "km": 156.2
+            },
+            {
+              "id": "150",
+              "nombre": "Meta",
+              "km": 163.0
+            }
           ]
         },
         "110": {
           "gpx_file": "data/gpx/aran/2026/CDH_2026_COLOMERS_f8d40a39ba.gpx",
           "race_slug_api": "cdh",
           "checkpoints": [
-            {"id": "0",   "nombre": "Sortida Vielha",  "km": 0.0},
-            {"id": "22",  "nombre": "Canejan", "km": 5.9},
-            {"id": "24",  "nombre": "Refugi Honeria", "km": 12.9},
-            {"id": "26",  "nombre": "Mines de Liat", "km": 23.0},
-            {"id": "28",  "nombre": "Còth de Varradòs", "km": 28.9},
-            {"id": "32",  "nombre": "Port d'Urets", "km": 37.4},
-            {"id": "34",  "nombre": "Montgarri", "km": 46.8},
-            {"id": "36",  "nombre": "Beret", "km": 51.9},
-            {"id": "38",  "nombre": "Salardú", "km": 60.8},
-            {"id": "40",  "nombre": "Banhs de Tredòs", "km": 69.7},
-            {"id": "42",  "nombre": "Estanh Obago", "km": 76.4},
-            {"id": "46",  "nombre": "Colomèrs", "km": 81.3},
-            {"id": "50",  "nombre": "Mont-Romies", "km": 91.6},
-            {"id": "56",  "nombre": "Arties", "km": 96.1},
-            {"id": "60",  "nombre": "Santet Escunhau", "km": 102.0},
-            {"id": "62",  "nombre": "Tuc Meddia", "km": 103.9},
-            {"id": "150", "nombre": "Meta",     "km": 110.5}
+            {
+              "id": "0",
+              "nombre": "Sortida Vielha",
+              "km": 0.0
+            },
+            {
+              "id": "22",
+              "nombre": "Canejan",
+              "km": 5.9
+            },
+            {
+              "id": "24",
+              "nombre": "Refugi Honeria",
+              "km": 12.9
+            },
+            {
+              "id": "26",
+              "nombre": "Mines de Liat",
+              "km": 23.0
+            },
+            {
+              "id": "28",
+              "nombre": "Còth de Varradòs",
+              "km": 28.9
+            },
+            {
+              "id": "32",
+              "nombre": "Port d'Urets",
+              "km": 37.4
+            },
+            {
+              "id": "34",
+              "nombre": "Montgarri",
+              "km": 46.8
+            },
+            {
+              "id": "36",
+              "nombre": "Beret",
+              "km": 51.9
+            },
+            {
+              "id": "38",
+              "nombre": "Salardú",
+              "km": 60.8
+            },
+            {
+              "id": "40",
+              "nombre": "Banhs de Tredòs",
+              "km": 69.7
+            },
+            {
+              "id": "42",
+              "nombre": "Estanh Obago",
+              "km": 76.4
+            },
+            {
+              "id": "46",
+              "nombre": "Colomèrs",
+              "km": 81.3
+            },
+            {
+              "id": "50",
+              "nombre": "Mont-Romies",
+              "km": 91.6
+            },
+            {
+              "id": "56",
+              "nombre": "Arties",
+              "km": 96.1
+            },
+            {
+              "id": "60",
+              "nombre": "Santet Escunhau",
+              "km": 102.0
+            },
+            {
+              "id": "62",
+              "nombre": "Tuc Meddia",
+              "km": 103.9
+            },
+            {
+              "id": "150",
+              "nombre": "Meta",
+              "km": 110.5
+            }
           ]
         }
       }
@@ -66,132 +226,521 @@
           "gpx_file": "data/gpx/lavaredo/2026/LUT_20_Madre_2026_6_2025_2065s_20pul_89a81f913b.gpx",
           "race_slug_api": "120K",
           "checkpoints": [
-            {"id": "0",   "nombre": "Cortina d'Ampezzo",  "km": 0.0},
-            {"id": "2",   "nombre": "Ospitale", "km": 18.8},
-            {"id": "4",   "nombre": "Passo Tre Croci", "km": 28.1},
-            {"id": "6",   "nombre": "Federavecchia", "km": 34.1},
-            {"id": "8",   "nombre": "Misurina", "km": 42.7},
-            {"id": "10",  "nombre": "Rifugio Auronzo", "km": 49.9},
-            {"id": "16",  "nombre": "Cimabanche",         "km": 67.5},
-            {"id": "18",  "nombre": "Malga Ra Stua",      "km": 77.1},
-            {"id": "20",  "nombre": "Pian de loa",        "km": 81.7},
-            {"id": "22",  "nombre": "Val Travenanzes",    "km": 84.3},
-            {"id": "23",  "nombre": "Malga Travenanzes",  "km": 90.1},
-            {"id": "24",  "nombre": "Col Gallina",        "km": 97.7},
-            {"id": "26",  "nombre": "Rifugio Averau",     "km": 101.7},
-            {"id": "28",  "nombre": "Passo Giau",         "km": 105.1},
-            {"id": "30",  "nombre": "Mondeval",           "km": 108.9},
-            {"id": "32",  "nombre": "Rifugio Croda da Lago", "km": 112.7},
-            {"id": "34",  "nombre": "Mortisa",            "km": 120},
-            {"id": "100",  "nombre": "Cortina d'Ampezzo", "km": 121.7}
+            {
+              "id": "0",
+              "nombre": "Cortina d'Ampezzo",
+              "km": 0.0
+            },
+            {
+              "id": "2",
+              "nombre": "Ospitale",
+              "km": 18.8
+            },
+            {
+              "id": "4",
+              "nombre": "Passo Tre Croci",
+              "km": 28.1
+            },
+            {
+              "id": "6",
+              "nombre": "Federavecchia",
+              "km": 34.1
+            },
+            {
+              "id": "8",
+              "nombre": "Misurina",
+              "km": 42.7
+            },
+            {
+              "id": "10",
+              "nombre": "Rifugio Auronzo",
+              "km": 49.9
+            },
+            {
+              "id": "16",
+              "nombre": "Cimabanche",
+              "km": 67.5
+            },
+            {
+              "id": "18",
+              "nombre": "Malga Ra Stua",
+              "km": 77.1
+            },
+            {
+              "id": "20",
+              "nombre": "Pian de loa",
+              "km": 81.7
+            },
+            {
+              "id": "22",
+              "nombre": "Val Travenanzes",
+              "km": 84.3
+            },
+            {
+              "id": "23",
+              "nombre": "Malga Travenanzes",
+              "km": 90.1
+            },
+            {
+              "id": "24",
+              "nombre": "Col Gallina",
+              "km": 97.7
+            },
+            {
+              "id": "26",
+              "nombre": "Rifugio Averau",
+              "km": 101.7
+            },
+            {
+              "id": "28",
+              "nombre": "Passo Giau",
+              "km": 105.1
+            },
+            {
+              "id": "30",
+              "nombre": "Mondeval",
+              "km": 108.9
+            },
+            {
+              "id": "32",
+              "nombre": "Rifugio Croda da Lago",
+              "km": 112.7
+            },
+            {
+              "id": "34",
+              "nombre": "Mortisa",
+              "km": 120
+            },
+            {
+              "id": "100",
+              "nombre": "Cortina d'Ampezzo",
+              "km": 121.7
+            }
           ]
         },
         "80": {
-         "gpx_file": "data/gpx/lavaredo/2026/Lavaredo80_K_2025_Val_Marzon_Cortina_8000eae9e2.gpx",
-         "X-Tenant": "lavaredo_2026",
-         "race_slug_api": "80k",
-       "checkpoints": [
-        {"id": "0",    "nombre": "Val Marzon Auronzo",     "km": 0.0},
-        {"id": "12",   "nombre": "Forcella Lavaredo",      "km": 11.0},
-        {"id": "16",   "nombre": "Cimabanche",             "km": 26.0},
-        {"id": "18",   "nombre": "Malga Ra Stua",          "km": 35.6},
-        {"id": "20",   "nombre": "Pian de loa",            "km": 40.3},
-        {"id": "22",   "nombre": "Val Travenanzes",        "km": 42.9},
-        {"id": "23",   "nombre": "Malga Travenanzes",      "km": 48.6},
-        {"id": "24",   "nombre": "Col Gallina",            "km": 56.1},
-        {"id": "26",   "nombre": "Rifugio Averau",         "km": 60.2},
-        {"id": "28",   "nombre": "Passo Giau",             "km": 63.6},
-        {"id": "30",   "nombre": "Mondeval",               "km": 67.3},
-        {"id": "32",   "nombre": "Rifugio Croda da Lago",  "km": 71.2},
-        {"id": "34",   "nombre": "Mortisa",                "km": 78.4},
-        {"id": "100",  "nombre": "Cortina d'Ampezzo",      "km": 80.3}
+          "gpx_file": "data/gpx/lavaredo/2026/Lavaredo80_K_2025_Val_Marzon_Cortina_8000eae9e2.gpx",
+          "X-Tenant": "lavaredo_2026",
+          "race_slug_api": "80k",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Val Marzon Auronzo",
+              "km": 0.0
+            },
+            {
+              "id": "12",
+              "nombre": "Forcella Lavaredo",
+              "km": 11.0
+            },
+            {
+              "id": "16",
+              "nombre": "Cimabanche",
+              "km": 26.0
+            },
+            {
+              "id": "18",
+              "nombre": "Malga Ra Stua",
+              "km": 35.6
+            },
+            {
+              "id": "20",
+              "nombre": "Pian de loa",
+              "km": 40.3
+            },
+            {
+              "id": "22",
+              "nombre": "Val Travenanzes",
+              "km": 42.9
+            },
+            {
+              "id": "23",
+              "nombre": "Malga Travenanzes",
+              "km": 48.6
+            },
+            {
+              "id": "24",
+              "nombre": "Col Gallina",
+              "km": 56.1
+            },
+            {
+              "id": "26",
+              "nombre": "Rifugio Averau",
+              "km": 60.2
+            },
+            {
+              "id": "28",
+              "nombre": "Passo Giau",
+              "km": 63.6
+            },
+            {
+              "id": "30",
+              "nombre": "Mondeval",
+              "km": 67.3
+            },
+            {
+              "id": "32",
+              "nombre": "Rifugio Croda da Lago",
+              "km": 71.2
+            },
+            {
+              "id": "34",
+              "nombre": "Mortisa",
+              "km": 78.4
+            },
+            {
+              "id": "100",
+              "nombre": "Cortina d'Ampezzo",
+              "km": 80.3
+            }
           ]
         }
-
       }
     }
   },
-   "MonteRosa": {
+  "MonteRosa": {
     "nombre": "Monterosa Walserwaeg by UTMB",
     "anios": {
-      "2026": { 
+      "2026": {
         "120": {
-                  "gpx_file": "data/gpx/Monterosa/2026/100m_2026_7cfb064644.gpx",
-                  "race_slug_api": "SDV120",
-                  "checkpoints": [
-                    {"id": "0",    "nombre": "Start Aosta","km": 0.0},
-                    {"id": "4",    "nombre": "Blavy","km": 10.1},
-                    {"id": "8",    "nombre": "Col Cornet","km": 19.2},
-                    {"id": "10",   "nombre": "Saint-Barthelemy","km": 32.6},
-                    {"id": "12",   "nombre": "Torgnon","km": 39.4},
-                    {"id": "13",   "nombre": "Antey-Saint-André IN","km": 46.4},
-                    {"id": "14",   "nombre": "Antey-Saint-André OUT","km": 46.4},
-                    {"id": "16",   "nombre": "La Magdeleine","km": 51.9},
-                    {"id": "18",   "nombre": "Cheneil","km": 62.4},
-                    {"id": "19",   "nombre": "Breuil Cervinia IN","km": 75.5},
-                    {"id": "20",   "nombre": "Breuil Cervinia OUT","km": 75.5},
-                    {"id": "22",   "nombre": "Colle Cime Bianche","km": 85.7},
-                    {"id": "40",   "nombre": "Champoluc","km": 98.3},
-                    {"id": "42",   "nombre": "Sitten","km": 107.1},
-                    {"id": "50",   "nombre": "Tache (Gressoney-La-Trinité)","km": 111.9},
-                    {"id": "52",   "nombre": "Rifugie Alpenzu","km": 116.1},
-                    {"id": "100",  "nombre": "Finish Gressoney-Saint-Jean","km": 119.9}
-                  ]
-       },
+          "gpx_file": "data/gpx/Monterosa/2026/100m_2026_7cfb064644.gpx",
+          "race_slug_api": "SDV120",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Start Aosta",
+              "km": 0.0
+            },
+            {
+              "id": "4",
+              "nombre": "Blavy",
+              "km": 10.1
+            },
+            {
+              "id": "8",
+              "nombre": "Col Cornet",
+              "km": 19.2
+            },
+            {
+              "id": "10",
+              "nombre": "Saint-Barthelemy",
+              "km": 32.6
+            },
+            {
+              "id": "12",
+              "nombre": "Torgnon",
+              "km": 39.4
+            },
+            {
+              "id": "13",
+              "nombre": "Antey-Saint-André IN",
+              "km": 46.4
+            },
+            {
+              "id": "14",
+              "nombre": "Antey-Saint-André OUT",
+              "km": 46.4
+            },
+            {
+              "id": "16",
+              "nombre": "La Magdeleine",
+              "km": 51.9
+            },
+            {
+              "id": "18",
+              "nombre": "Cheneil",
+              "km": 62.4
+            },
+            {
+              "id": "19",
+              "nombre": "Breuil Cervinia IN",
+              "km": 75.5
+            },
+            {
+              "id": "20",
+              "nombre": "Breuil Cervinia OUT",
+              "km": 75.5
+            },
+            {
+              "id": "22",
+              "nombre": "Colle Cime Bianche",
+              "km": 85.7
+            },
+            {
+              "id": "40",
+              "nombre": "Champoluc",
+              "km": 98.3
+            },
+            {
+              "id": "42",
+              "nombre": "Sitten",
+              "km": 107.1
+            },
+            {
+              "id": "50",
+              "nombre": "Tache (Gressoney-La-Trinité)",
+              "km": 111.9
+            },
+            {
+              "id": "52",
+              "nombre": "Rifugie Alpenzu",
+              "km": 116.1
+            },
+            {
+              "id": "100",
+              "nombre": "Finish Gressoney-Saint-Jean",
+              "km": 119.9
+            }
+          ]
+        },
         "90": {
           "gpx_file": "data/gpx/Monterosa/2026/MRW_2026_100_K_22d59b22b6.gpx",
           "race_slug_api": "MRT90",
           "checkpoints": [
-            {"id": "0",    "nombre": "Start Pont-Saint-Martin",       "km": 0.0},
-            {"id": "24",   "nombre": "Lillianes",                     "km": 7.1},
-            {"id": "26",   "nombre": "Fontainemore",                  "km": 10.3},
-            {"id": "28",   "nombre": "Issime",                        "km": 17.2},
-            {"id": "30",   "nombre": "Gaby",                          "km": 21.6},
-            {"id": "32",   "nombre": "Laghi di Frudiere",             "km": 28.4},
-            {"id": "33",   "nombre": "Brusson IN",                    "km": 40.5},
-            {"id": "34",   "nombre": "Brusson OUT",                   "km": 40.5},
-            {"id": "38",   "nombre": "Rifugio Arp",                   "km": 48.6},
-            {"id": "40",   "nombre": "Champoluc",                     "km": 60.6},
-            {"id": "42",   "nombre": "Sitten",                        "km": 69.5},
-            {"id": "50",   "nombre": "Tache (Gressoney-La-Trinité)",  "km": 74.0},
-            {"id": "52",   "nombre": "Rifugie Alpenzu",               "km": 78.1},
-            {"id": "100",  "nombre": "Finish Gressoney-Saint-Jean",   "km": 81.9}
-            ]
-          }
-       }
-    } 
+            {
+              "id": "0",
+              "nombre": "Start Pont-Saint-Martin",
+              "km": 0.0
+            },
+            {
+              "id": "24",
+              "nombre": "Lillianes",
+              "km": 7.1
+            },
+            {
+              "id": "26",
+              "nombre": "Fontainemore",
+              "km": 10.3
+            },
+            {
+              "id": "28",
+              "nombre": "Issime",
+              "km": 17.2
+            },
+            {
+              "id": "30",
+              "nombre": "Gaby",
+              "km": 21.6
+            },
+            {
+              "id": "32",
+              "nombre": "Laghi di Frudiere",
+              "km": 28.4
+            },
+            {
+              "id": "33",
+              "nombre": "Brusson IN",
+              "km": 40.5
+            },
+            {
+              "id": "34",
+              "nombre": "Brusson OUT",
+              "km": 40.5
+            },
+            {
+              "id": "38",
+              "nombre": "Rifugio Arp",
+              "km": 48.6
+            },
+            {
+              "id": "40",
+              "nombre": "Champoluc",
+              "km": 60.6
+            },
+            {
+              "id": "42",
+              "nombre": "Sitten",
+              "km": 69.5
+            },
+            {
+              "id": "50",
+              "nombre": "Tache (Gressoney-La-Trinité)",
+              "km": 74.0
+            },
+            {
+              "id": "52",
+              "nombre": "Rifugie Alpenzu",
+              "km": 78.1
+            },
+            {
+              "id": "100",
+              "nombre": "Finish Gressoney-Saint-Jean",
+              "km": 81.9
+            }
+          ]
+        }
+      }
+    }
   },
-"SaintJacques": {
+  "SaintJacques": {
     "nombre": "Trail du Saint Jacques by UTMB",
     "anios": {
-      "2026": { 
+      "2026": {
         "139": {
-                  "gpx_file": "data/gpx/Monterosa/2026/100m_2026_7cfb064644.gpx",
-                  "race_slug_api": "SDV120",
-                  "checkpoints": [
-                    
-                  ]
-       },
+          "gpx_file": "data/gpx/Monterosa/2026/100m_2026_7cfb064644.gpx",
+          "race_slug_api": "SDV120",
+          "checkpoints": []
+        },
         "86": {
           "gpx_file": "data/gpx/SaintJacques/2026/Grand Trail de Saint Jacques 100k.gpx",
           "race_slug_api": "GTSJ",
           "checkpoints": [
-            {"id": "0",    "nombre": "Monsitrol d'Allier",             "km": 0.0},
-            {"id": "10",   "nombre": "Saint-Privat d'Allier",          "km": 11.2},
-            {"id": "12",   "nombre": "Saint Jean Lachalm",             "km": 20.2},
-            {"id": "14",   "nombre": "Alleyras",                       "km": 32.1},
-            {"id": "16",   "nombre": "Lac du Bouchet",                 "km": 48.1},
-            {"id": "18",   "nombre": "Saint-Christophe-sur-Dolaizon",  "km": 70.7},
-            {"id": "20",   "nombre": "Pont de la Roche",               "km": 74.0},
-            {"id": "26",   "nombre": "Les Chibottes",                  "km": 81.0},
-            {"id": "100",  "nombre": "Le-Puy-en-Velay",                "km": 86.6}
+            {
+              "id": "0",
+              "nombre": "Monsitrol d'Allier",
+              "km": 0.0
+            },
+            {
+              "id": "10",
+              "nombre": "Saint-Privat d'Allier",
+              "km": 11.2
+            },
+            {
+              "id": "12",
+              "nombre": "Saint Jean Lachalm",
+              "km": 20.2
+            },
+            {
+              "id": "14",
+              "nombre": "Alleyras",
+              "km": 32.1
+            },
+            {
+              "id": "16",
+              "nombre": "Lac du Bouchet",
+              "km": 48.1
+            },
+            {
+              "id": "18",
+              "nombre": "Saint-Christophe-sur-Dolaizon",
+              "km": 70.7
+            },
+            {
+              "id": "20",
+              "nombre": "Pont de la Roche",
+              "km": 74.0
+            },
+            {
+              "id": "26",
+              "nombre": "Les Chibottes",
+              "km": 81.0
+            },
+            {
+              "id": "100",
+              "nombre": "Le-Puy-en-Velay",
+              "km": 86.6
+            }
           ]
-          }
-       }
-    } 
+        }
+      }
+    }
+  },
+  "eiger-ultra-trail": {
+    "nombre": "Eiger Ultra Trail",
+    "anios": {
+      "2026": {
+        "101": {
+          "gpx_file": "data/gpx/eiger-ultra-trail/2026/E101.gpx",
+          "race_slug_api": "E101",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Grindelwald",
+              "km": 0.0
+            },
+            {
+              "id": "2",
+              "nombre": "Gr. Scheidegg",
+              "km": 8.7
+            },
+            {
+              "id": "4",
+              "nombre": "Bort",
+              "km": 18.0
+            },
+            {
+              "id": "6",
+              "nombre": "First",
+              "km": 23.6
+            },
+            {
+              "id": "8",
+              "nombre": "Feld",
+              "km": 30.0
+            },
+            {
+              "id": "10",
+              "nombre": "Faulhorn",
+              "km": 35.0
+            },
+            {
+              "id": "14",
+              "nombre": "Schwand",
+              "km": 48.3
+            },
+            {
+              "id": "18",
+              "nombre": "Burglauenen",
+              "km": 54.6
+            },
+            {
+              "id": "20",
+              "nombre": "Wengen",
+              "km": 63.5
+            },
+            {
+              "id": "22",
+              "nombre": "Mannlichen",
+              "km": 68.4
+            },
+            {
+              "id": "24",
+              "nombre": "Rotstecki",
+              "km": 72.2
+            },
+            {
+              "id": "26",
+              "nombre": "Lauberhorn",
+              "km": 73.7
+            },
+            {
+              "id": "28",
+              "nombre": "Kleine Scheidegg",
+              "km": 78.6
+            },
+            {
+              "id": "30",
+              "nombre": "Eigergletscher",
+              "km": 82.3
+            },
+            {
+              "id": "32",
+              "nombre": "Brandegg",
+              "km": 89.9
+            },
+            {
+              "id": "34",
+              "nombre": "Marmorbruch",
+              "km": 94.5
+            },
+            {
+              "id": "36",
+              "nombre": "Pfingstegg",
+              "km": 96.3
+            },
+            {
+              "id": "66",
+              "nombre": "Locherboden",
+              "km": 100.0
+            },
+            {
+              "id": "100",
+              "nombre": "Grindelwald",
+              "km": 100.7
+            }
+          ]
+        }
+      }
+    }
   }
-
-
-
-
-} 
+}
