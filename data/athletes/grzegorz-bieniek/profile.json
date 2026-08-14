@@ -1,0 +1,26 @@
+{
+  "slug": "grzegorz-bieniek",
+  "name": "Grzegorz BIENIEK",
+  "country": "PL",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "eiger-ultra-trail-2026",
+      "race_name": "Eiger Ultra Trail",
+      "year": 2026,
+      "distance_km": 99.15236209141838,
+      "position": 10,
+      "gender_rank": 9,
+      "finish_time": "14:04:40",
+      "vpi": 877.0,
+      "dmi": 10.38,
+      "er": 90.8,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 877.0,
+    "dmi": 10.4,
+    "er": 90.8
+  }
+}

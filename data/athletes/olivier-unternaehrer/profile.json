@@ -1,0 +1,26 @@
+{
+  "slug": "olivier-unternaehrer",
+  "name": "Olivier UNTERNAEHRER",
+  "country": "CH",
+  "portrait": "/media/athletes/olivier-unternaehrer/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "eiger-ultra-trail-2026",
+      "race_name": "Eiger Ultra Trail",
+      "year": 2026,
+      "distance_km": 99.15236209141838,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "13:40:45",
+      "vpi": 903.4,
+      "dmi": 10.63,
+      "er": 84.8,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 903.4,
+    "dmi": 10.6,
+    "er": 84.8
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "manuel-hartweg",
+  "name": "Manuel HARTWEG",
+  "country": "DE",
+  "portrait": "/media/athletes/manuel-hartweg/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "eiger-ultra-trail-2026",
+      "race_name": "Eiger Ultra Trail",
+      "year": 2026,
+      "distance_km": 99.15236209141838,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "11:56:18",
+      "vpi": 1037.7,
+      "dmi": 12.07,
+      "er": 86.4,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 1037.7,
+    "dmi": 12.1,
+    "er": 86.4
+  }
+}

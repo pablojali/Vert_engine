@@ -1,0 +1,26 @@
+{
+  "slug": "tobias-pfortmueller",
+  "name": "Tobias PFORTMUELLER",
+  "country": "CH",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "eiger-ultra-trail-2026",
+      "race_name": "Eiger Ultra Trail",
+      "year": 2026,
+      "distance_km": 99.15236209141838,
+      "position": 11,
+      "gender_rank": 10,
+      "finish_time": "14:05:37",
+      "vpi": 862.7,
+      "dmi": 10.65,
+      "er": 88.3,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 862.7,
+    "dmi": 10.6,
+    "er": 88.3
+  }
+}
