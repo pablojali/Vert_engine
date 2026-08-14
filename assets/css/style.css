@@ -201,8 +201,10 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 .carousel-slide {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  background-color: var(--color-bg-raised);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right center;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.5s ease;
@@ -254,10 +256,37 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 .carousel-dots { display: flex; justify-content: center; gap: 0.5rem; padding: 0.85rem; background: var(--color-bg-raised); }
 .carousel-dot { width: 8px; height: 8px; border-radius: 50%; border: none; background: var(--color-border); cursor: pointer; padding: 0; }
 .carousel-dot.active { background: var(--color-cyan); width: 22px; border-radius: 4px; transition: width 0.2s ease; }
+.carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(13, 17, 23, 0.6);
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.carousel-nav:hover { background: rgba(13, 17, 23, 0.85); }
+.carousel-nav-prev { left: 0.75rem; }
+.carousel-nav-next { right: 0.75rem; }
 
 @media (max-width: 640px) {
-  .carousel-overlay { align-items: flex-start; }
+  .carousel-overlay {
+    align-items: flex-start;
+    background: linear-gradient(180deg, rgba(13,17,23,0.55) 0%, rgba(13,17,23,0.97) 30%, rgba(13,17,23,0.97) 100%);
+  }
   .carousel-stats { align-items: flex-start; text-align: left; }
+  .carousel-slide { background-position: center top; }
+  .carousel-nav { width: 30px; height: 30px; font-size: 1.15rem; }
 }
 
 /* --- Wide "Performance Metrics" stat box --- */

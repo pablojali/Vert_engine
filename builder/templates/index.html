@@ -26,6 +26,8 @@
     {% endfor %}
   </div>
   {% if carousel_items|length > 1 %}
+  <button class="carousel-nav carousel-nav-prev" aria-label="{{ t.carousel_prev }}">‹</button>
+  <button class="carousel-nav carousel-nav-next" aria-label="{{ t.carousel_next }}">›</button>
   <div class="carousel-dots">
     {% for item in carousel_items %}
     <button class="carousel-dot{{ ' active' if loop.first else '' }}" data-index="{{ loop.index0 }}" aria-label="{{ item.title }}"></button>

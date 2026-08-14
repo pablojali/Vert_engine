@@ -5,6 +5,8 @@
   document.querySelectorAll(".featured-carousel").forEach((carousel) => {
     const slides = carousel.querySelectorAll(".carousel-slide");
     const dots = carousel.querySelectorAll(".carousel-dot");
+    const prevBtn = carousel.querySelector(".carousel-nav-prev");
+    const nextBtn = carousel.querySelector(".carousel-nav-next");
     if (slides.length <= 1) return;
 
     let current = 0;
@@ -29,6 +31,9 @@
         restart();
       });
     });
+
+    if (prevBtn) prevBtn.addEventListener("click", () => { show(current - 1); restart(); });
+    if (nextBtn) nextBtn.addEventListener("click", () => { show(current + 1); restart(); });
 
     carousel.addEventListener("mouseenter", () => clearInterval(timer));
     carousel.addEventListener("mouseleave", restart);
