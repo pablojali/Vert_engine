@@ -945,15 +945,16 @@ def _livetrail_picture_url(picture_id):
     )
 
 
-def _country_flag(iso_code):
-    """Converts a 2-letter ISO country code (e.g. 'FR') into its flag emoji,
-    via the Unicode regional-indicator-symbol trick (each letter A-Z has a
-    matching regional indicator codepoint, and pairing two of them renders
-    as that country's flag in any font with flag support). Returns the
-    input unchanged if it doesn't look like a plain 2-letter code."""
+def _country_flag_url(iso_code):
+    """Builds a small flag image URL for a 2-letter ISO country code via the
+    free flagcdn.com CDN. Used instead of the Unicode flag emoji (regional-
+    indicator-symbol pairs) because Windows browsers don't ship flag glyphs
+    by default and fall back to showing the two bare letters in little
+    boxes - which reads exactly like the country code never changed at
+    all. Returns None if the code doesn't look like a plain 2-letter code."""
     if not iso_code or len(iso_code) != 2 or not iso_code.isalpha():
-        return iso_code
-    return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in iso_code.upper())
+        return None
+    return f"https://flagcdn.com/w40/{iso_code.lower()}.png"
 
 
 def extract_livetrail_runner_url_parts(url):
@@ -2846,7 +2847,7 @@ with tab_top:
                     "Photo": report_data["runner_info"].get("Picture URL"),
                     "Runner": label,
                     "Finish Time": report_data["runner_info"].get("Finish Time"),
-                    "Country": _country_flag(report_data["runner_info"].get("Country")),
+                    "Country": _country_flag_url(report_data["runner_info"].get("Country")),
                     "VPI": report_data["indices"].get("VPI"),
                     "DMI": report_data["indices"].get("DMI"),
                     "ER": report_data["indices"].get("ER"),
@@ -2859,7 +2860,10 @@ with tab_top:
                 quick_copy_rows,
                 use_container_width=True,
                 hide_index=True,
-                column_config={"Photo": st.column_config.ImageColumn("Photo")},
+                column_config={
+                    "Photo": st.column_config.ImageColumn("Photo"),
+                    "Country": st.column_config.ImageColumn("Country"),
+                },
             )
 
             for label, df_summary_bib in results.items():
@@ -3519,6 +3523,7 @@ with tab_web_export:
                     runner_country_by_slug = {}
                     runner_picture_url_by_slug = {}
                     auto_report_paths = []
+                    auto_report_failures = []
                     for runner_key, r in runners_pool.items():
                         athlete_slug = _slugify(r["name"])
                         uploads = runner_uploads.get(runner_key, {})
@@ -3532,14 +3537,18 @@ with tab_web_export:
                         if report_ext:
                             report_path = f"/media/races/{race_slug}/charts/runners/{athlete_slug}/report{report_ext}"
                         else:
-                            report_path = existing_athlete.get("report")
-                            # No manual upload and no report already saved for this
-                            # athlete - build the same Full Analysis Report HTML the
-                            # per-runner download button generates, straight from
-                            # the data already computed when this runner was fetched
-                            # (Runner Metrics / Top Runners), no re-upload needed.
+                            # No manual upload this round - if this runner was just
+                            # (re)fetched this session, always rebuild the Full
+                            # Analysis Report HTML from that fresh data (same as the
+                            # per-runner download button), even if an older report was
+                            # already saved: a fresh fetch usually means updated
+                            # numbers, and an old report can be pointing at a stale
+                            # path from a since-renamed race slug/folder. Only when
+                            # nothing was fetched this round do we fall back to
+                            # whatever report was already on file.
                             report_kwargs = r.get("_report_kwargs")
-                            if not report_path and report_kwargs:
+                            report_path = None
+                            if report_kwargs:
                                 try:
                                     auto_report_html = build_full_runner_report_html(**report_kwargs)
                                     runner_dir.mkdir(parents=True, exist_ok=True)
@@ -3549,7 +3558,9 @@ with tab_web_export:
                                         str((runner_dir / "report.html").relative_to(WEB_DATA_DIR.parent))
                                     )
                                 except Exception:
-                                    pass  # best-effort - a manual upload always still works
+                                    auto_report_failures.append(f"{r['name']}: {traceback.format_exc(limit=1)}")
+                            if not report_path:
+                                report_path = existing_athlete.get("report")
                         report_by_slug[athlete_slug] = report_path
 
                         charts_payload = list(existing_athlete.get("charts", []))
@@ -3713,6 +3724,10 @@ with tab_web_export:
 
                     st.success(f"✅ Exportado. {len(written_paths)} archivo(s) escrito(s):")
                     st.code("\n".join(written_paths))
+                    if auto_report_failures:
+                        with st.expander(f"⚠️ {len(auto_report_failures)} informe(s) no se pudieron generar automáticamente"):
+                            for failure in auto_report_failures:
+                                st.code(failure, language="python")
                     missing = []
                     if not hero_ext:
                         missing.append("hero (images/hero.jpg)")

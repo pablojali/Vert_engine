@@ -15,7 +15,7 @@
     {% endif %}
     <div>
       <h1>{{ athlete.name }}</h1>
-      {% if athlete.country %}<p class="athlete-meta" title="{{ athlete.country }}">{{ athlete.country | country_flag }}</p>{% endif %}
+      {% if athlete.country %}<p class="athlete-meta"><img src="{{ athlete.country | country_flag_url }}" alt="{{ athlete.country }}" title="{{ athlete.country }}" class="athlete-country-flag" loading="lazy"></p>{% endif %}
     </div>
   </div>
 

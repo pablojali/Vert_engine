@@ -38,16 +38,19 @@ env.globals["locales"] = LOCALES
 env.globals["locale_url"] = locale_url
 
 
-def country_flag(iso_code: str) -> str:
-    """Converts a 2-letter ISO country code (e.g. 'FR') into its flag emoji
-    via the Unicode regional-indicator-symbol trick. Returns the input
-    unchanged if it doesn't look like a plain 2-letter code."""
+def country_flag_url(iso_code: str) -> str | None:
+    """Builds a small flag image URL for a 2-letter ISO country code via the
+    free flagcdn.com CDN. An <img> instead of the Unicode flag emoji
+    (regional-indicator-symbol pairs), because Windows browsers don't ship
+    flag glyphs by default and fall back to showing the two bare letters
+    in little boxes - which reads exactly like the country code never
+    changed at all. Returns None if the code isn't a plain 2-letter code."""
     if not iso_code or len(iso_code) != 2 or not iso_code.isalpha():
-        return iso_code
-    return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in iso_code.upper())
+        return None
+    return f"https://flagcdn.com/{iso_code.lower()}.svg"
 
 
-env.filters["country_flag"] = country_flag
+env.filters["country_flag_url"] = country_flag_url
 
 
 def write_page(relative_path: str, html: str) -> None:

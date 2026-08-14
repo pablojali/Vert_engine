@@ -612,6 +612,7 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
   border: 2px solid var(--color-border);
 }
 .athlete-meta { color: var(--color-muted); margin: 0.15rem 0 0; }
+.athlete-country-flag { width: 24px; height: 18px; object-fit: cover; border-radius: 2px; vertical-align: middle; }
 
 .career-avg-section {
   display: flex;
