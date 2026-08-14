@@ -929,6 +929,22 @@ def _seconds_to_hms(seconds):
     return f"{h}:{m:02d}:{s:02d}"
 
 
+def _livetrail_picture_url(picture_id):
+    """Builds the runner's photo URL from the opaque "picture" ID LiveTrail's
+    runner summary endpoint returns. Confirmed against a real example the
+    user pulled from the LiveTrail site itself (this sandbox has no network
+    access to LiveTrail to verify it independently): the photos are hosted
+    on UTMB World's Cloudinary account, keyed by that same ID, e.g.
+    https://res.cloudinary.com/utmb-world/image/upload/q_auto/f_auto/c_scale,w_300/c_fill,g_auto/v1/worldseries/Members/<picture_id>
+    Returns None if the runner has no picture ID (not every runner has a photo)."""
+    if not picture_id:
+        return None
+    return (
+        "https://res.cloudinary.com/utmb-world/image/upload/"
+        f"q_auto/f_auto/c_scale,w_300/c_fill,g_auto/v1/worldseries/Members/{picture_id}"
+    )
+
+
 def extract_livetrail_runner_url_parts(url):
     """Extracts (subdomain, year, bib, race_id) from a Livetrail runner
     URL like:
@@ -992,7 +1008,7 @@ def fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id):
         "Gender Rank": ranking.get("sex"),
         "Category Rank": ranking.get("category"),
         "Status": summary.get("status"),
-        "Picture": summary.get("picture"),  # opaque ID, not a URL - see usage
+        "Picture URL": _livetrail_picture_url(summary.get("picture")),
     }
 
     passings = detail.get("passings", []) or []
@@ -2783,6 +2799,7 @@ with tab_top:
             st.markdown("##### 📋 Quick Copy Table")
             quick_copy_rows = [
                 {
+                    "Photo": report_data["runner_info"].get("Picture URL"),
                     "Runner": label,
                     "Finish Time": report_data["runner_info"].get("Finish Time"),
                     "Country": report_data["runner_info"].get("Country"),
@@ -2794,7 +2811,12 @@ with tab_top:
                 }
                 for label, report_data in reports.items()
             ]
-            st.dataframe(quick_copy_rows, use_container_width=True, hide_index=True)
+            st.dataframe(
+                quick_copy_rows,
+                use_container_width=True,
+                hide_index=True,
+                column_config={"Photo": st.column_config.ImageColumn("Photo")},
+            )
 
             for label, df_summary_bib in results.items():
                 st.markdown(f"##### {label}")
