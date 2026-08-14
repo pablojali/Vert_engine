@@ -1,0 +1,26 @@
+{
+  "slug": "marie-houdusse",
+  "name": "Marie HOUDUSSE",
+  "country": "FR",
+  "portrait": "/media/athletes/marie-houdusse/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 45,
+      "gender_rank": 10,
+      "finish_time": "21:33:22",
+      "vpi": 711.0,
+      "dmi": 9.03,
+      "er": 82.4,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 711.0,
+    "dmi": 9.0,
+    "er": 82.4
+  }
+}

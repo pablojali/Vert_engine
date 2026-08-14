@@ -1,0 +1,26 @@
+{
+  "slug": "stefanie-scherer",
+  "name": "Stefanie SCHERER",
+  "country": "DE",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 33,
+      "gender_rank": 7,
+      "finish_time": "20:55:15",
+      "vpi": 732.1,
+      "dmi": 9.23,
+      "er": 72.3,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 732.1,
+    "dmi": 9.2,
+    "er": 72.3
+  }
+}

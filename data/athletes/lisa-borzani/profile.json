@@ -1,0 +1,26 @@
+{
+  "slug": "lisa-borzani",
+  "name": "Lisa BORZANI",
+  "country": "IT",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 12,
+      "gender_rank": 1,
+      "finish_time": "19:19:39",
+      "vpi": 787.2,
+      "dmi": 10.04,
+      "er": 76.5,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 787.2,
+    "dmi": 10.0,
+    "er": 76.5
+  }
+}

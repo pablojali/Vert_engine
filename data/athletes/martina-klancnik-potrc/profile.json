@@ -1,0 +1,26 @@
+{
+  "slug": "martina-klancnik-potrc",
+  "name": "Martina KLANCNIK POTRČ",
+  "country": "SI",
+  "portrait": "/media/athletes/martina-klancnik-potrc/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 15,
+      "gender_rank": 3,
+      "finish_time": "19:30:58",
+      "vpi": 795.6,
+      "dmi": 9.69,
+      "er": 68.7,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 795.6,
+    "dmi": 9.7,
+    "er": 68.7
+  }
+}

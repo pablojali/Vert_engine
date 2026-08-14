@@ -1,0 +1,26 @@
+{
+  "slug": "mathilde-dujon",
+  "name": "Mathilde DUJON",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 40,
+      "gender_rank": 8,
+      "finish_time": "21:24:34",
+      "vpi": 704.8,
+      "dmi": 9.21,
+      "er": 73.0,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 704.8,
+    "dmi": 9.2,
+    "er": 73.0
+  }
+}

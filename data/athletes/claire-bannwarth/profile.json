@@ -1,0 +1,26 @@
+{
+  "slug": "claire-bannwarth",
+  "name": "Claire BANNWARTH",
+  "country": "FR",
+  "portrait": "/media/athletes/claire-bannwarth/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 14,
+      "gender_rank": 2,
+      "finish_time": "19:25:57",
+      "vpi": 792.5,
+      "dmi": 9.71,
+      "er": 77.6,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 792.5,
+    "dmi": 9.7,
+    "er": 77.6
+  }
+}

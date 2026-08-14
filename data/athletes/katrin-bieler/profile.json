@@ -1,0 +1,26 @@
+{
+  "slug": "katrin-bieler",
+  "name": "Katrin BIELER",
+  "country": "IT",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 25,
+      "gender_rank": 5,
+      "finish_time": "20:19:29",
+      "vpi": 749.6,
+      "dmi": 9.56,
+      "er": 73.3,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 749.6,
+    "dmi": 9.6,
+    "er": 73.3
+  }
+}

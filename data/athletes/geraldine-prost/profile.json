@@ -1,0 +1,26 @@
+{
+  "slug": "geraldine-prost",
+  "name": "Geraldine PROST",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 31,
+      "gender_rank": 6,
+      "finish_time": "20:42:47",
+      "vpi": 730.1,
+      "dmi": 9.27,
+      "er": 66.3,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 730.1,
+    "dmi": 9.3,
+    "er": 66.3
+  }
+}
