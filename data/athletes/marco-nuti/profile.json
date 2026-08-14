@@ -1,0 +1,26 @@
+{
+  "slug": "marco-nuti",
+  "name": "Marco NUTI",
+  "country": "IT",
+  "portrait": "/media/athletes/marco-nuti/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "17:59:54",
+      "vpi": 849.1,
+      "dmi": 10.63,
+      "er": 72.2,
+      "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/marco-nuti/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 849.1,
+    "dmi": 10.6,
+    "er": 72.2
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "corentin-bui",
+  "name": "Corentin BUI",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "18:23:33",
+      "vpi": 820.9,
+      "dmi": 10.65,
+      "er": 73.6,
+      "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/corentin-bui/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 820.9,
+    "dmi": 10.6,
+    "er": 73.6
+  }
+}

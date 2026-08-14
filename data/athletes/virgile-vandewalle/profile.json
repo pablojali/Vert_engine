@@ -1,0 +1,26 @@
+{
+  "slug": "virgile-vandewalle",
+  "name": "Virgile VANDEWALLE",
+  "country": "BE",
+  "portrait": "/media/athletes/virgile-vandewalle/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "17:00:30",
+      "vpi": 893.7,
+      "dmi": 11.41,
+      "er": 89.1,
+      "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/virgile-vandewalle/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 893.7,
+    "dmi": 11.4,
+    "er": 89.1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "matt-palilla",
+  "name": "Matt PALILLA",
+  "country": "US",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "18:52:14",
+      "vpi": 817.9,
+      "dmi": 10.24,
+      "er": 72.4,
+      "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/matt-palilla/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 817.9,
+    "dmi": 10.2,
+    "er": 72.4
+  }
+}

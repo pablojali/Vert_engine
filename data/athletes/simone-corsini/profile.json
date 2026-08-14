@@ -1,0 +1,26 @@
+{
+  "slug": "simone-corsini",
+  "name": "Simone CORSINI",
+  "country": "IT",
+  "portrait": "/media/athletes/simone-corsini/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-120k",
+      "race_name": "Monterosa Walserwaeg  - 120k",
+      "year": 2026,
+      "distance_km": 117.99,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "16:05:01",
+      "vpi": 942.9,
+      "dmi": 12.12,
+      "er": 77.9,
+      "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/simone-corsini/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 942.9,
+    "dmi": 12.1,
+    "er": 77.9
+  }
+}
