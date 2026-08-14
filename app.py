@@ -1632,22 +1632,20 @@ def _chart_label(filename: str) -> str:
     return Path(filename).stem.replace("_", " ").replace("-", " ").title()
 
 
-def _web_export_track_result(
-    race_key, runner_info, indices,
-    df_runner=None, figures=None, df_segment_degradation=None, df_summary=None,
-):
+def _web_export_track_result(race_key, runner_info, indices, report_html=None):
     """Records one runner's already-computed VPI/DMI/ER for a given race
     into st.session_state['web_export_pool'], so the 'Exportar a Web' tab
     can pick it up later. Called right after the existing tabs finish
     calculating indices - wrapped so a bookkeeping error here can never
     break the analysis tab itself.
 
-    The four extra arguments (df_runner/figures/df_segment_degradation/
-    df_summary) are optional - when the caller has them (every tab that
-    computes a full analysis does), they're stashed as-is so 'Exportar a
-    Web' can build that runner's Full Analysis Report HTML automatically
-    at export time, the same way the per-runner download button already
-    does, without requiring it to be downloaded and re-uploaded by hand."""
+    report_html is optional - when the caller already built the runner's
+    Full Analysis Report HTML (build_full_runner_report_html's output,
+    the same string the per-runner download button hands out), it's
+    stashed here as a plain string so 'Exportar a Web' can just write it
+    to disk at export time - no manual download/re-upload needed, and no
+    need to carry heavy DataFrame/Figure objects through session_state to
+    regenerate it later."""
     try:
         if not race_key or not runner_info or not indices:
             return
@@ -1666,17 +1664,6 @@ def _web_export_track_result(
             gender_rank = int(gender_rank)
         except (TypeError, ValueError):
             pass
-        if df_runner is not None and figures is not None:
-            report_kwargs = {
-                "runner_info": runner_info,
-                "df_runner": df_runner,
-                "indices": indices,
-                "figures": figures,
-                "df_segment_degradation": df_segment_degradation,
-                "df_summary": df_summary,
-            }
-        else:
-            report_kwargs = None
         runners[runner_key] = {
             "name": name,
             "bib": bib,
@@ -1690,7 +1677,7 @@ def _web_export_track_result(
             "pace_second_half": indices.get("effort_pace_second_half"),
             "country": runner_info.get("Country"),
             "picture_url": runner_info.get("Picture URL"),
-            "_report_kwargs": report_kwargs,
+            "_report_html": report_html,
         }
     except Exception:
         pass
@@ -2300,10 +2287,21 @@ with tab_runner_lt:
                 st.session_state['estimated_degradation_df_lt'] = df_segment_degradation_lt
                 st.session_state['estimated_degradation_race_lt'] = selected_race_lt
                 st.session_state['estimated_global_indices_lt'] = indices_lt
+                try:
+                    full_report_html_lt = build_full_runner_report_html(
+                        runner_info=runner_info_lt,
+                        df_runner=df_runner_lt,
+                        indices=indices_lt,
+                        figures=figures_lt,
+                        df_segment_degradation=df_segment_degradation_lt,
+                        df_summary=df_summary_lt,
+                    )
+                except Exception:
+                    # A report-generation hiccup shouldn't hide the indices/
+                    # charts below, which already computed fine.
+                    full_report_html_lt = None
                 _web_export_track_result(
-                    selected_race_lt, runner_info_lt, indices_lt,
-                    df_runner=df_runner_lt, figures=figures_lt,
-                    df_segment_degradation=df_segment_degradation_lt, df_summary=df_summary_lt,
+                    selected_race_lt, runner_info_lt, indices_lt, report_html=full_report_html_lt,
                 )
 
                 fig_vpi_lt = figures_lt["🧗 VPI - Vertical Power Index"]
@@ -2367,26 +2365,23 @@ with tab_runner_lt:
                 st.markdown("### 📋 Full Summary Table")
                 st.dataframe(df_summary_lt, use_container_width=True, hide_index=True)
 
-                # --- Full analysis report ---
+                # --- Full analysis report (already built above, right after
+                # the export-pool bookkeeping, so it doubles as this download
+                # and as the auto-attached report 'Exportar a Web' picks up) ---
                 st.markdown("---")
                 st.markdown("### 📄 Full Analysis Report")
-                full_report_html_lt = build_full_runner_report_html(
-                    runner_info=runner_info_lt,
-                    df_runner=df_runner_lt,
-                    indices=indices_lt,
-                    figures=figures_lt,
-                    df_segment_degradation=df_segment_degradation_lt,
-                    df_summary=df_summary_lt,
-                )
-                st.download_button(
-                    "📄 Download Full Analysis (HTML for Blogger)",
-                    data=full_report_html_lt,
-                    file_name=f"{_ascii_filename(runner_info_lt.get('Name') or 'runner').replace(' ', '_')}_livetrail_full_analysis.html",
-                    mime="text/html",
-                    type="primary",
-                    use_container_width=True,
-                    key="dl_full_report_lt",
-                )
+                if full_report_html_lt is None:
+                    st.warning("⚠️ No se pudo generar el informe completo para este corredor.")
+                else:
+                    st.download_button(
+                        "📄 Download Full Analysis (HTML for Blogger)",
+                        data=full_report_html_lt,
+                        file_name=f"{_ascii_filename(runner_info_lt.get('Name') or 'runner').replace(' ', '_')}_livetrail_full_analysis.html",
+                        mime="text/html",
+                        type="primary",
+                        use_container_width=True,
+                        key="dl_full_report_lt",
+                    )
 
 # ---------------------------------------------
 # TAB 3: GPX Metrics (mirrors Runner Metrics, but measured directly
@@ -2791,12 +2786,29 @@ with tab_top:
                         )
                         label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
                         results[label] = analysis_bib["df_summary"]
-                        reports[label] = {"runner_info": runner_info_bib, "df_runner": df_runner_bib, **analysis_bib}
+                        try:
+                            report_html_bib = build_full_runner_report_html(
+                                runner_info=runner_info_bib,
+                                df_runner=df_runner_bib,
+                                indices=analysis_bib["indices"],
+                                figures=analysis_bib["figures"],
+                                df_segment_degradation=analysis_bib["df_segment_degradation"],
+                                df_summary=analysis_bib["df_summary"],
+                            )
+                        except Exception:
+                            # A report-generation hiccup for this one runner
+                            # shouldn't sink their whole fetch - they still get
+                            # their VPI/DMI/ER, just without an auto-attached
+                            # report (same as before this existed).
+                            report_html_bib = None
+                        reports[label] = {
+                            "runner_info": runner_info_bib,
+                            "indices": analysis_bib["indices"],
+                            "report_html": report_html_bib,
+                        }
                         _web_export_track_result(
                             selected_race_top, runner_info_bib, analysis_bib["indices"],
-                            df_runner=df_runner_bib, figures=analysis_bib["figures"],
-                            df_segment_degradation=analysis_bib["df_segment_degradation"],
-                            df_summary=analysis_bib["df_summary"],
+                            report_html=report_html_bib,
                         )
                     except Exception:
                         errors[bib] = traceback.format_exc()
@@ -2877,17 +2889,12 @@ with tab_top:
             st.markdown("### 📄 Full Analysis Reports")
             st.caption("One HTML report per runner, same as 'Download Full Analysis' in Runner Metrics.")
             for i, (label, report_data) in enumerate(reports.items()):
-                report_html_bib = build_full_runner_report_html(
-                    runner_info=report_data["runner_info"],
-                    df_runner=report_data["df_runner"],
-                    indices=report_data["indices"],
-                    figures=report_data["figures"],
-                    df_segment_degradation=report_data["df_segment_degradation"],
-                    df_summary=report_data["df_summary"],
-                )
+                if not report_data.get("report_html"):
+                    st.caption(f"⚠️ {label}: no se pudo generar su informe.")
+                    continue
                 st.download_button(
                     f"📄 {label}",
-                    data=report_html_bib,
+                    data=report_data["report_html"],
                     file_name=(
                         f"{_ascii_filename(report_data['runner_info'].get('Name') or label).replace(' ', '_')}"
                         "_livetrail_full_analysis.html"
@@ -3280,10 +3287,14 @@ with tab_web_export:
         st.dataframe(
             [
                 {"Bib": r.get("bib"), "Nombre": r.get("name"), "Pos": r.get("position"),
-                 "Tiempo": r.get("finish_time"), "VPI": r.get("vpi"), "DMI": r.get("dmi"), "ER": r.get("er")}
+                 "Tiempo": r.get("finish_time"), "VPI": r.get("vpi"), "DMI": r.get("dmi"), "ER": r.get("er"),
+                 "Informe": "✅" if r.get("_report_html") else "—"}
                 for r in runners_pool.values()
             ],
             use_container_width=True, hide_index=True,
+        )
+        st.caption(
+            "Informe ✅ = se va a adjuntar automáticamente al exportar, sin necesidad de subirlo a mano."
         )
 
         # --- Best-effort defaults parsed from "{name} {year} - {distance}K" ---
@@ -3538,21 +3549,20 @@ with tab_web_export:
                             report_path = f"/media/races/{race_slug}/charts/runners/{athlete_slug}/report{report_ext}"
                         else:
                             # No manual upload this round - if this runner was just
-                            # (re)fetched this session, always rebuild the Full
-                            # Analysis Report HTML from that fresh data (same as the
-                            # per-runner download button), even if an older report was
-                            # already saved: a fresh fetch usually means updated
-                            # numbers, and an old report can be pointing at a stale
-                            # path from a since-renamed race slug/folder. Only when
-                            # nothing was fetched this round do we fall back to
-                            # whatever report was already on file.
-                            report_kwargs = r.get("_report_kwargs")
+                            # (re)fetched this session, its Full Analysis Report HTML
+                            # was already built then (same string the per-runner
+                            # download button hands out) - just write it to disk, no
+                            # regeneration needed. Always prefer it over an older saved
+                            # report: a fresh fetch usually means updated numbers, and
+                            # an old report can be pointing at a stale path from a
+                            # since-renamed race slug/folder. Only when nothing was
+                            # fetched this round do we fall back to whatever was saved.
+                            report_html = r.get("_report_html")
                             report_path = None
-                            if report_kwargs:
+                            if report_html:
                                 try:
-                                    auto_report_html = build_full_runner_report_html(**report_kwargs)
                                     runner_dir.mkdir(parents=True, exist_ok=True)
-                                    (runner_dir / "report.html").write_text(auto_report_html, encoding="utf-8")
+                                    (runner_dir / "report.html").write_text(report_html, encoding="utf-8")
                                     report_path = f"/media/races/{race_slug}/charts/runners/{athlete_slug}/report.html"
                                     auto_report_paths.append(
                                         str((runner_dir / "report.html").relative_to(WEB_DATA_DIR.parent))
