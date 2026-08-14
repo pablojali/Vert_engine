@@ -3140,13 +3140,51 @@ with tab_web_export:
             default_name, default_year, default_distance = m.group(1), m.group(2), m.group(3)
         default_total_km = race_lib_data.get("total_km")
 
+        # --- Find an already-published race folder for this same (year,
+        # distance), regardless of what its top-level folder is named. The
+        # race's freeform "name" (used to slugify a folder guess) can vary
+        # slightly between sessions - e.g. "Lavaredo Ultra Trail by UTMB"
+        # vs "Lavaredo Ultra Trail" - and re-slugifying it then silently
+        # creates a second top-level folder for the same real-world event.
+        # (year, distance) is a far more stable match key than the name. ---
+        def _find_existing_race_folder(year: str, distance_folder: str, distance_km) -> str | None:
+            if not year:
+                return None
+            for f in sorted((WEB_DATA_DIR / "races").glob(f"*/{year}/*/race.json")):
+                try:
+                    existing = json.loads(f.read_text(encoding="utf-8"))
+                except Exception:
+                    continue
+                same_distance_folder = distance_folder and f.parent.name == distance_folder
+                same_distance_km = (
+                    distance_km and existing.get("distance_km")
+                    and abs(float(existing["distance_km"]) - float(distance_km)) < 1.0
+                )
+                if same_distance_folder or same_distance_km:
+                    return f.parent.parent.parent.name
+            return None
+
+        _slugified_name_guess = _slugify(default_name) or "carrera"
+        _existing_folder_match = _find_existing_race_folder(
+            default_year, f"{default_distance}k" if default_distance else "", default_total_km,
+        )
+        default_race_folder = _existing_folder_match or _slugified_name_guess
+        if _existing_folder_match and _existing_folder_match != _slugified_name_guess:
+            st.warning(
+                f"⚠️ Ya existe una carrera publicada para {default_year} · "
+                f"{default_distance}K en la carpeta `data/races/{_existing_folder_match}/` "
+                f"(el nombre de esta sesión hubiera sugerido `{_slugified_name_guess}`, una carpeta "
+                "distinta). Precargué la carpeta existente abajo para no duplicar el evento - "
+                "no la cambies salvo que sepas que es una carrera realmente nueva."
+            )
+
         # --- If this same race was already exported before (same guessed
         # folder/year/distance), pre-fill the metadata fields from the
         # existing race.json instead of blanking them out. Re-exporting an
         # already-published race (e.g. with more runners) shouldn't require
         # retyping location/date/etc. every time. ---
         guessed_race_dir = (
-            WEB_DATA_DIR / "races" / (_slugify(default_name) or "carrera")
+            WEB_DATA_DIR / "races" / default_race_folder
             / (default_year or "") / (f"{default_distance}k" if default_distance else "distancia")
         )
         guessed_race_path = guessed_race_dir / "race.json"
@@ -3181,7 +3219,7 @@ with tab_web_export:
                 race_location = st.text_input("Ubicación", value=existing_race_for_prefill.get("location") or "")
                 race_folder = st.text_input(
                     "Carpeta (data/races/<esto>/...)",
-                    value=_slugify(default_name) or "carrera",
+                    value=default_race_folder,
                     help="Elegí el nombre que quieras: solo define dónde vive el JSON en el repo, no la URL pública.",
                 )
                 race_distance_folder = st.text_input(
