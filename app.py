@@ -992,6 +992,7 @@ def fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id):
         "Gender Rank": ranking.get("sex"),
         "Category Rank": ranking.get("category"),
         "Status": summary.get("status"),
+        "Picture": summary.get("picture"),  # opaque ID, not a URL - see usage
     }
 
     passings = detail.get("passings", []) or []
@@ -2783,6 +2784,8 @@ with tab_top:
             quick_copy_rows = [
                 {
                     "Runner": label,
+                    "Finish Time": report_data["runner_info"].get("Finish Time"),
+                    "Country": report_data["runner_info"].get("Country"),
                     "VPI": report_data["indices"].get("VPI"),
                     "DMI": report_data["indices"].get("DMI"),
                     "ER": report_data["indices"].get("ER"),
