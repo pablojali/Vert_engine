@@ -18,8 +18,11 @@
       "vpi": 1225.7,
       "dmi": 16.21,
       "er": 78.7,
-      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/bart-przedwojewski/report.html",
-      "charts": []
+      "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/bart-przedwojewski/report.html",
+      "charts": [],
+      "gender_rank": 1,
+      "pace_first_half": 3.19,
+      "pace_second_half": 3.87
     },
     {
       "slug": "robin-juillaguet",
@@ -30,7 +33,7 @@
       "vpi": 1191.3,
       "dmi": 16.2,
       "er": 78.7,
-      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/robin-juillaguet/report.html",
+      "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/robin-juillaguet/report.html",
       "charts": []
     },
     {
@@ -42,7 +45,7 @@
       "vpi": 1171.5,
       "dmi": 15.98,
       "er": 80.8,
-      "report": "/media/races/lavaredo-ultra-trail-2026-80k/charts/runners/marcin-rzeszotko/report.html",
+      "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/marcin-rzeszotko/report.html",
       "charts": []
     },
     {
