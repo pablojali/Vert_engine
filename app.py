@@ -3290,14 +3290,26 @@ with tab_web_export:
         default_total_km = race_lib_data.get("total_km")
 
         # --- Find an already-published race folder for this same (year,
-        # distance), regardless of what its top-level folder is named. The
-        # race's freeform "name" (used to slugify a folder guess) can vary
-        # slightly between sessions - e.g. "Lavaredo Ultra Trail by UTMB"
-        # vs "Lavaredo Ultra Trail" - and re-slugifying it then silently
-        # creates a second top-level folder for the same real-world event.
-        # (year, distance) is a far more stable match key than the name. ---
-        def _find_existing_race_folder(year: str, distance_folder: str, distance_km) -> str | None:
+        # distance) AND a recognizably similar name, regardless of what its
+        # top-level folder is named. The race's freeform "name" (used to
+        # slugify a folder guess) can vary slightly between sessions - e.g.
+        # "Lavaredo Ultra Trail by UTMB" vs "Lavaredo Ultra Trail" - and
+        # re-slugifying it then silently creates a second top-level folder
+        # for the same real-world event. Matching on (year, distance) ALONE
+        # is not enough - unrelated races routinely share a round distance
+        # (e.g. two different events both having a "120k"), so the name
+        # must also share at least one non-generic word before two folders
+        # are treated as the same event. ---
+        _GENERIC_RACE_WORDS = {"by", "utmb", "ultra", "trail", "race", "the", "of"}
+
+        def _name_tokens(text: str) -> set:
+            return set(_slugify(text or "").split("-")) - _GENERIC_RACE_WORDS
+
+        def _find_existing_race_folder(year: str, distance_folder: str, distance_km, race_name: str) -> str | None:
             if not year:
+                return None
+            name_tokens = _name_tokens(race_name)
+            if not name_tokens:
                 return None
             for f in sorted((WEB_DATA_DIR / "races").glob(f"*/{year}/*/race.json")):
                 try:
@@ -3309,13 +3321,15 @@ with tab_web_export:
                     distance_km and existing.get("distance_km")
                     and abs(float(existing["distance_km"]) - float(distance_km)) < 1.0
                 )
-                if same_distance_folder or same_distance_km:
+                if not (same_distance_folder or same_distance_km):
+                    continue
+                if name_tokens & _name_tokens(existing.get("name")):
                     return f.parent.parent.parent.name
             return None
 
         _slugified_name_guess = _slugify(default_name) or "carrera"
         _existing_folder_match = _find_existing_race_folder(
-            default_year, f"{default_distance}k" if default_distance else "", default_total_km,
+            default_year, f"{default_distance}k" if default_distance else "", default_total_km, default_name,
         )
         default_race_folder = _existing_folder_match or _slugified_name_guess
         if _existing_folder_match and _existing_folder_match != _slugified_name_guess:
