@@ -2776,6 +2776,23 @@ with tab_top:
                 "revisit them one by one."
             )
 
+            # --- Quick copy/paste table: one row per runner, just the
+            # global numbers (no per-checkpoint breakdown) - select the
+            # cells and Ctrl+C straight into Excel, no download needed. ---
+            st.markdown("##### 📋 Quick Copy Table")
+            quick_copy_rows = [
+                {
+                    "Runner": label,
+                    "VPI": report_data["indices"].get("VPI"),
+                    "DMI": report_data["indices"].get("DMI"),
+                    "ER": report_data["indices"].get("ER"),
+                    "Pace 1st Half (min/effort-km)": report_data["indices"].get("effort_pace_first_half"),
+                    "Pace 2nd Half (min/effort-km)": report_data["indices"].get("effort_pace_second_half"),
+                }
+                for label, report_data in reports.items()
+            ]
+            st.dataframe(quick_copy_rows, use_container_width=True, hide_index=True)
+
             for label, df_summary_bib in results.items():
                 st.markdown(f"##### {label}")
                 st.dataframe(df_summary_bib, use_container_width=True, hide_index=True)
