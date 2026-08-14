@@ -1655,6 +1655,8 @@ def _web_export_track_result(race_key, runner_info, indices):
             "er": indices.get("ER"),
             "pace_first_half": indices.get("effort_pace_first_half"),
             "pace_second_half": indices.get("effort_pace_second_half"),
+            "country": runner_info.get("Country"),
+            "picture_url": runner_info.get("Picture URL"),
         }
     except Exception:
         pass
@@ -3458,10 +3460,14 @@ with tab_web_export:
                     portrait_uploads_by_slug = {}
                     report_by_slug = {}
                     athletes_payload = []
+                    runner_country_by_slug = {}
+                    runner_picture_url_by_slug = {}
                     for runner_key, r in runners_pool.items():
                         athlete_slug = _slugify(r["name"])
                         uploads = runner_uploads.get(runner_key, {})
                         portrait_uploads_by_slug[athlete_slug] = uploads.get("portrait")
+                        runner_country_by_slug[athlete_slug] = r.get("country")
+                        runner_picture_url_by_slug[athlete_slug] = r.get("picture_url")
                         existing_athlete = existing_athletes_by_slug.get(athlete_slug, {})
                         runner_dir = race_dir / "charts" / "runners" / athlete_slug
 
@@ -3565,6 +3571,10 @@ with tab_web_export:
                                 "races": [],
                             }
 
+                        fetched_country = runner_country_by_slug.get(athlete["slug"])
+                        if fetched_country:
+                            profile["country"] = fetched_country
+
                         portrait_ext = _save_upload(
                             portrait_uploads_by_slug.get(athlete["slug"]), athlete_dir / "images", "portrait"
                         )
@@ -3573,6 +3583,24 @@ with tab_web_export:
                             written_paths.append(
                                 str((athlete_dir / "images" / f"portrait{portrait_ext}").relative_to(WEB_DATA_DIR.parent))
                             )
+                        elif not profile.get("portrait"):
+                            # No manual upload this round and no existing portrait -
+                            # auto-fetch the photo LiveTrail already has for this bib,
+                            # so most runners never need a manual photo upload at all.
+                            picture_url = runner_picture_url_by_slug.get(athlete["slug"])
+                            if picture_url:
+                                try:
+                                    picture_resp = requests.get(picture_url, timeout=15)
+                                    picture_resp.raise_for_status()
+                                    portrait_dir = athlete_dir / "images"
+                                    portrait_dir.mkdir(parents=True, exist_ok=True)
+                                    (portrait_dir / "portrait.jpg").write_bytes(picture_resp.content)
+                                    profile["portrait"] = f"/media/athletes/{athlete['slug']}/images/portrait.jpg"
+                                    written_paths.append(
+                                        str((portrait_dir / "portrait.jpg").relative_to(WEB_DATA_DIR.parent))
+                                    )
+                                except Exception:
+                                    pass  # best-effort - a manual upload always still works
 
                         profile["races"] = [
                             race_entry for race_entry in profile.get("races", [])
