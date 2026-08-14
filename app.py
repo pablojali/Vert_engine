@@ -945,6 +945,17 @@ def _livetrail_picture_url(picture_id):
     )
 
 
+def _country_flag(iso_code):
+    """Converts a 2-letter ISO country code (e.g. 'FR') into its flag emoji,
+    via the Unicode regional-indicator-symbol trick (each letter A-Z has a
+    matching regional indicator codepoint, and pairing two of them renders
+    as that country's flag in any font with flag support). Returns the
+    input unchanged if it doesn't look like a plain 2-letter code."""
+    if not iso_code or len(iso_code) != 2 or not iso_code.isalpha():
+        return iso_code
+    return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in iso_code.upper())
+
+
 def extract_livetrail_runner_url_parts(url):
     """Extracts (subdomain, year, bib, race_id) from a Livetrail runner
     URL like:
@@ -1620,12 +1631,22 @@ def _chart_label(filename: str) -> str:
     return Path(filename).stem.replace("_", " ").replace("-", " ").title()
 
 
-def _web_export_track_result(race_key, runner_info, indices):
+def _web_export_track_result(
+    race_key, runner_info, indices,
+    df_runner=None, figures=None, df_segment_degradation=None, df_summary=None,
+):
     """Records one runner's already-computed VPI/DMI/ER for a given race
     into st.session_state['web_export_pool'], so the 'Exportar a Web' tab
     can pick it up later. Called right after the existing tabs finish
     calculating indices - wrapped so a bookkeeping error here can never
-    break the analysis tab itself."""
+    break the analysis tab itself.
+
+    The four extra arguments (df_runner/figures/df_segment_degradation/
+    df_summary) are optional - when the caller has them (every tab that
+    computes a full analysis does), they're stashed as-is so 'Exportar a
+    Web' can build that runner's Full Analysis Report HTML automatically
+    at export time, the same way the per-runner download button already
+    does, without requiring it to be downloaded and re-uploaded by hand."""
     try:
         if not race_key or not runner_info or not indices:
             return
@@ -1644,6 +1665,17 @@ def _web_export_track_result(race_key, runner_info, indices):
             gender_rank = int(gender_rank)
         except (TypeError, ValueError):
             pass
+        if df_runner is not None and figures is not None:
+            report_kwargs = {
+                "runner_info": runner_info,
+                "df_runner": df_runner,
+                "indices": indices,
+                "figures": figures,
+                "df_segment_degradation": df_segment_degradation,
+                "df_summary": df_summary,
+            }
+        else:
+            report_kwargs = None
         runners[runner_key] = {
             "name": name,
             "bib": bib,
@@ -1657,6 +1689,7 @@ def _web_export_track_result(race_key, runner_info, indices):
             "pace_second_half": indices.get("effort_pace_second_half"),
             "country": runner_info.get("Country"),
             "picture_url": runner_info.get("Picture URL"),
+            "_report_kwargs": report_kwargs,
         }
     except Exception:
         pass
@@ -2266,7 +2299,11 @@ with tab_runner_lt:
                 st.session_state['estimated_degradation_df_lt'] = df_segment_degradation_lt
                 st.session_state['estimated_degradation_race_lt'] = selected_race_lt
                 st.session_state['estimated_global_indices_lt'] = indices_lt
-                _web_export_track_result(selected_race_lt, runner_info_lt, indices_lt)
+                _web_export_track_result(
+                    selected_race_lt, runner_info_lt, indices_lt,
+                    df_runner=df_runner_lt, figures=figures_lt,
+                    df_segment_degradation=df_segment_degradation_lt, df_summary=df_summary_lt,
+                )
 
                 fig_vpi_lt = figures_lt["🧗 VPI - Vertical Power Index"]
                 fig_dmi_lt = figures_lt["📉 DMI - Descent Mastery Index"]
@@ -2754,7 +2791,12 @@ with tab_top:
                         label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
                         results[label] = analysis_bib["df_summary"]
                         reports[label] = {"runner_info": runner_info_bib, "df_runner": df_runner_bib, **analysis_bib}
-                        _web_export_track_result(selected_race_top, runner_info_bib, analysis_bib["indices"])
+                        _web_export_track_result(
+                            selected_race_top, runner_info_bib, analysis_bib["indices"],
+                            df_runner=df_runner_bib, figures=analysis_bib["figures"],
+                            df_segment_degradation=analysis_bib["df_segment_degradation"],
+                            df_summary=analysis_bib["df_summary"],
+                        )
                     except Exception:
                         errors[bib] = traceback.format_exc()
                     progress.progress((i + 1) / len(bibs), text=f"Fetching runners... ({i + 1}/{len(bibs)})")
@@ -2804,7 +2846,7 @@ with tab_top:
                     "Photo": report_data["runner_info"].get("Picture URL"),
                     "Runner": label,
                     "Finish Time": report_data["runner_info"].get("Finish Time"),
-                    "Country": report_data["runner_info"].get("Country"),
+                    "Country": _country_flag(report_data["runner_info"].get("Country")),
                     "VPI": report_data["indices"].get("VPI"),
                     "DMI": report_data["indices"].get("DMI"),
                     "ER": report_data["indices"].get("ER"),
@@ -3462,6 +3504,7 @@ with tab_web_export:
                     athletes_payload = []
                     runner_country_by_slug = {}
                     runner_picture_url_by_slug = {}
+                    auto_report_paths = []
                     for runner_key, r in runners_pool.items():
                         athlete_slug = _slugify(r["name"])
                         uploads = runner_uploads.get(runner_key, {})
@@ -3476,6 +3519,23 @@ with tab_web_export:
                             report_path = f"/media/races/{race_slug}/charts/runners/{athlete_slug}/report{report_ext}"
                         else:
                             report_path = existing_athlete.get("report")
+                            # No manual upload and no report already saved for this
+                            # athlete - build the same Full Analysis Report HTML the
+                            # per-runner download button generates, straight from
+                            # the data already computed when this runner was fetched
+                            # (Runner Metrics / Top Runners), no re-upload needed.
+                            report_kwargs = r.get("_report_kwargs")
+                            if not report_path and report_kwargs:
+                                try:
+                                    auto_report_html = build_full_runner_report_html(**report_kwargs)
+                                    runner_dir.mkdir(parents=True, exist_ok=True)
+                                    (runner_dir / "report.html").write_text(auto_report_html, encoding="utf-8")
+                                    report_path = f"/media/races/{race_slug}/charts/runners/{athlete_slug}/report.html"
+                                    auto_report_paths.append(
+                                        str((runner_dir / "report.html").relative_to(WEB_DATA_DIR.parent))
+                                    )
+                                except Exception:
+                                    pass  # best-effort - a manual upload always still works
                         report_by_slug[athlete_slug] = report_path
 
                         charts_payload = list(existing_athlete.get("charts", []))
@@ -3547,6 +3607,8 @@ with tab_web_export:
                     n_reports_uploaded = sum(1 for u in runner_uploads.values() if u.get("report") is not None)
                     if n_reports_uploaded:
                         written_paths.append(f"({n_reports_uploaded} informe(s) completo(s) de corredor)")
+                    if auto_report_paths:
+                        written_paths.append(f"({len(auto_report_paths)} informe(s) generado(s) automáticamente)")
 
                     # --- One profile.json per athlete, merged with whatever
                     # already exists on disk so career history accumulates

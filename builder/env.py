@@ -38,6 +38,18 @@ env.globals["locales"] = LOCALES
 env.globals["locale_url"] = locale_url
 
 
+def country_flag(iso_code: str) -> str:
+    """Converts a 2-letter ISO country code (e.g. 'FR') into its flag emoji
+    via the Unicode regional-indicator-symbol trick. Returns the input
+    unchanged if it doesn't look like a plain 2-letter code."""
+    if not iso_code or len(iso_code) != 2 or not iso_code.isalpha():
+        return iso_code
+    return "".join(chr(0x1F1E6 + ord(c) - ord("A")) for c in iso_code.upper())
+
+
+env.filters["country_flag"] = country_flag
+
+
 def write_page(relative_path: str, html: str) -> None:
     """Writes an HTML page inside output/, creating folders as needed.
     relative_path example: 'es/races/aran-2026/index.html'"""
