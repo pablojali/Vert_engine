@@ -263,21 +263,6 @@
       "er": 71.4,
       "report": "/media/races/val-d-aran-by-utmb-2026-163k/charts/runners/josu-azkune-cordon/report.html",
       "charts": []
-    },
-    {
-      "slug": "bart-przedwojewski",
-      "name": "Bart PRZEDWOJEWSKI",
-      "bib": 2002,
-      "finish_time": "7:40:30",
-      "position": 1,
-      "gender_rank": 1,
-      "vpi": 1829.5,
-      "dmi": 23.25,
-      "er": 110.1,
-      "pace_first_half": 2.57,
-      "pace_second_half": 2.31,
-      "report": null,
-      "charts": []
     }
   ]
 }

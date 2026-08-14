@@ -5,19 +5,6 @@
   "portrait": "/media/athletes/bart-przedwojewski/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "val-d-aran-by-utmb-2026-163k",
-      "race_name": "Val d'Aran by UTMB",
-      "year": 2026,
-      "distance_km": 160.05165725143127,
-      "position": 1,
-      "gender_rank": 1,
-      "finish_time": "7:40:30",
-      "vpi": 1829.5,
-      "dmi": 23.25,
-      "er": 110.1,
-      "report": null
-    },
-    {
       "race_slug": "lavaredo-ultra-trail-80k",
       "race_name": "Lavaredo Ultra Trail by UTMB",
       "year": 2026,
