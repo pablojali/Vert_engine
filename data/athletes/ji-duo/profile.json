@@ -1,0 +1,26 @@
+{
+  "slug": "ji-duo",
+  "name": "Ji DUO",
+  "country": "CN",
+  "portrait": "/media/athletes/ji-duo/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "20:15:05",
+      "vpi": 974.4,
+      "dmi": 12.66,
+      "er": 81.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/ji-duo/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 974.4,
+    "dmi": 12.7,
+    "er": 81.0
+  }
+}

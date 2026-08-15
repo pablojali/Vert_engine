@@ -1,0 +1,26 @@
+{
+  "slug": "rod-farvard",
+  "name": "Rod FARVARD",
+  "country": "US",
+  "portrait": "/media/athletes/rod-farvard/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "21:18:24",
+      "vpi": 918.7,
+      "dmi": 12.24,
+      "er": 82.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/rod-farvard/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 918.7,
+    "dmi": 12.2,
+    "er": 82.6
+  }
+}

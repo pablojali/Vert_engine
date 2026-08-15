@@ -1,0 +1,26 @@
+{
+  "slug": "jiasheng-shen",
+  "name": "Jiasheng SHEN",
+  "country": "CN",
+  "portrait": "/media/athletes/jiasheng-shen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "21:11:59",
+      "vpi": 923.8,
+      "dmi": 12.36,
+      "er": 77.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/jiasheng-shen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 923.8,
+    "dmi": 12.4,
+    "er": 77.6
+  }
+}

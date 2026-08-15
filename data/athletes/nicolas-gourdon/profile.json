@@ -1,0 +1,26 @@
+{
+  "slug": "nicolas-gourdon",
+  "name": "Nicolas GOURDON",
+  "country": "FR",
+  "portrait": "/media/athletes/nicolas-gourdon/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 19,
+      "gender_rank": 19,
+      "finish_time": "22:43:34",
+      "vpi": 864.6,
+      "dmi": 11.31,
+      "er": 65.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/nicolas-gourdon/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 864.6,
+    "dmi": 11.3,
+    "er": 65.6
+  }
+}

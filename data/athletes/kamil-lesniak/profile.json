@@ -1,0 +1,26 @@
+{
+  "slug": "kamil-lesniak",
+  "name": "Kamil LEŚNIAK",
+  "country": "PL",
+  "portrait": "/media/athletes/kamil-lesniak/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 14,
+      "gender_rank": 14,
+      "finish_time": "22:08:47",
+      "vpi": 893.6,
+      "dmi": 11.74,
+      "er": 82.2,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/kamil-lesniak/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 893.6,
+    "dmi": 11.7,
+    "er": 82.2
+  }
+}

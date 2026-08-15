@@ -1,0 +1,26 @@
+{
+  "slug": "ludovic-pommeret",
+  "name": "Ludovic POMMERET",
+  "country": "FR",
+  "portrait": "/media/athletes/ludovic-pommeret/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "20:40:34",
+      "vpi": 942.8,
+      "dmi": 12.84,
+      "er": 80.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/ludovic-pommeret/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 942.8,
+    "dmi": 12.8,
+    "er": 80.9
+  }
+}

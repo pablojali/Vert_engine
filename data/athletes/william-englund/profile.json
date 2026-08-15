@@ -1,0 +1,26 @@
+{
+  "slug": "william-englund",
+  "name": "William ENGLUND",
+  "country": "SE",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 18,
+      "gender_rank": 18,
+      "finish_time": "22:24:03",
+      "vpi": 872.5,
+      "dmi": 11.67,
+      "er": 80.4,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/william-englund/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 872.5,
+    "dmi": 11.7,
+    "er": 80.4
+  }
+}

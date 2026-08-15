@@ -1,0 +1,26 @@
+{
+  "slug": "canyon-woodward",
+  "name": "Canyon WOODWARD",
+  "country": "US",
+  "portrait": "/media/athletes/canyon-woodward/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 13,
+      "gender_rank": 13,
+      "finish_time": "22:03:39",
+      "vpi": 882.6,
+      "dmi": 11.89,
+      "er": 83.1,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/canyon-woodward/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 882.6,
+    "dmi": 11.9,
+    "er": 83.1
+  }
+}

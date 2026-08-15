@@ -1,0 +1,26 @@
+{
+  "slug": "ben-dhiman",
+  "name": "Ben DHIMAN",
+  "country": "US",
+  "portrait": "/media/athletes/ben-dhiman/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "19:51:37",
+      "vpi": 989.3,
+      "dmi": 12.93,
+      "er": 80.3,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/ben-dhiman/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 989.3,
+    "dmi": 12.9,
+    "er": 80.3
+  }
+}
