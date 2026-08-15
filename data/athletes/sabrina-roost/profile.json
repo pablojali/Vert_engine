@@ -1,0 +1,26 @@
+{
+  "slug": "sabrina-roost",
+  "name": "Sabrina ROOST",
+  "country": "CH",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "eiger-ultra-trail-2026",
+      "race_name": "Eiger Ultra Trail",
+      "year": 2026,
+      "distance_km": 99.15236209141838,
+      "position": 44,
+      "gender_rank": 7,
+      "finish_time": "15:55:03",
+      "vpi": 800.2,
+      "dmi": 8.67,
+      "er": 88.6,
+      "report": null
+    }
+  ],
+  "career_avg": {
+    "vpi": 800.2,
+    "dmi": 8.7,
+    "er": 88.6
+  }
+}
