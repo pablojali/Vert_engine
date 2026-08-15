@@ -742,5 +742,158 @@
         }
       }
     }
+  },
+  "utmb-mont-blanc": {
+    "nombre": "UTMB - Mont Blanc",
+    "anios": {
+      "2025": {
+        "174": {
+          "gpx_file": "data/gpx/utmb-mont-blanc/2025/utmb.gpx",
+          "race_slug_api": "utmb",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Chamonix",
+              "km": 0.0
+            },
+            {
+              "id": "1",
+              "nombre": "Les Houches",
+              "km": 9.2
+            },
+            {
+              "id": "2",
+              "nombre": "Col de Voza",
+              "km": 14.6
+            },
+            {
+              "id": "3",
+              "nombre": "Saint-Gervais",
+              "km": 23.1
+            },
+            {
+              "id": "4",
+              "nombre": "Les Contamines Montjoie",
+              "km": 32.7
+            },
+            {
+              "id": "6",
+              "nombre": "La Balme",
+              "km": 41.3
+            },
+            {
+              "id": "7",
+              "nombre": "Refuge de la Croix du Bonhomme",
+              "km": 47.2
+            },
+            {
+              "id": "8",
+              "nombre": "Les Chapieux",
+              "km": 52.5
+            },
+            {
+              "id": "9",
+              "nombre": "Col de la Seigne",
+              "km": 63.2
+            },
+            {
+              "id": "11",
+              "nombre": "Lac Combal",
+              "km": 68.1
+            },
+            {
+              "id": "12",
+              "nombre": "Arête du Mont-Favre",
+              "km": 72.1
+            },
+            {
+              "id": "13",
+              "nombre": "Checrouit - Maison Vieille",
+              "km": 76.7
+            },
+            {
+              "id": "14",
+              "nombre": "Courmayeur - Mountain Sport Center Entrée",
+              "km": 81.6
+            },
+            {
+              "id": "15",
+              "nombre": "Courmayeur - Mountain Sport Center Sortie",
+              "km": 81.6
+            },
+            {
+              "id": "18",
+              "nombre": "Refuge Bertone",
+              "km": 87.0
+            },
+            {
+              "id": "19",
+              "nombre": "Refuge Bonatti",
+              "km": 94.6
+            },
+            {
+              "id": "20",
+              "nombre": "Arnouvaz",
+              "km": 99.9
+            },
+            {
+              "id": "22",
+              "nombre": "Grand Col Ferret",
+              "km": 104.5
+            },
+            {
+              "id": "24",
+              "nombre": "La Fouly",
+              "km": 114.5
+            },
+            {
+              "id": "27",
+              "nombre": "Champex-Lac",
+              "km": 128.3
+            },
+            {
+              "id": "29",
+              "nombre": "Plan de l'Au",
+              "km": 133.2
+            },
+            {
+              "id": "30",
+              "nombre": "La Giète",
+              "km": 139.8
+            },
+            {
+              "id": "31",
+              "nombre": "Trient",
+              "km": 144.9
+            },
+            {
+              "id": "33",
+              "nombre": "Les Tseppes",
+              "km": 148.9
+            },
+            {
+              "id": "34",
+              "nombre": "Vallorcine Entrée",
+              "km": 157.0
+            },
+            {
+              "id": "35",
+              "nombre": "Vallorcine Sortie",
+              "km": 157.0
+            },
+            {
+              "id": "44",
+              "nombre": "La Flégère",
+              "km": 168.3
+            },
+            {
+              "id": "144",
+              "nombre": "Chamonix",
+              "km": 175.4
+            }
+          ]
+        }
+      }
+    }
   }
 }
