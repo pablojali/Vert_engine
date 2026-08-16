@@ -1,0 +1,26 @@
+{
+  "slug": "allison-baca",
+  "name": "Allison BACA",
+  "country": "US",
+  "portrait": "/media/athletes/allison-baca/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 57,
+      "gender_rank": 10,
+      "finish_time": "12:44:05",
+      "vpi": 904.6,
+      "dmi": 11.89,
+      "er": 85.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/allison-baca/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 904.6,
+    "dmi": 11.9,
+    "er": 85.0
+  }
+}

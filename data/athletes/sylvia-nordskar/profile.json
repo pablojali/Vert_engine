@@ -1,0 +1,26 @@
+{
+  "slug": "sylvia-nordskar",
+  "name": "Sylvia NORDSKAR",
+  "country": "NO",
+  "portrait": "/media/athletes/sylvia-nordskar/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 29,
+      "gender_rank": 2,
+      "finish_time": "11:42:13",
+      "vpi": 1012.0,
+      "dmi": 12.46,
+      "er": 87.4,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/sylvia-nordskar/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1012.0,
+    "dmi": 12.5,
+    "er": 87.4
+  }
+}

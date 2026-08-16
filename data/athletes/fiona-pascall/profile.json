@@ -1,0 +1,26 @@
+{
+  "slug": "fiona-pascall",
+  "name": "Fiona PASCALL",
+  "country": "GB",
+  "portrait": "/media/athletes/fiona-pascall/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 67,
+      "gender_rank": 15,
+      "finish_time": "13:01:10",
+      "vpi": 896.6,
+      "dmi": 11.42,
+      "er": 93.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/fiona-pascall/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 896.6,
+    "dmi": 11.4,
+    "er": 93.6
+  }
+}

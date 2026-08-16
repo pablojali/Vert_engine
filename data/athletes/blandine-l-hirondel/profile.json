@@ -1,0 +1,26 @@
+{
+  "slug": "blandine-l-hirondel",
+  "name": "Blandine L HIRONDEL",
+  "country": "FR",
+  "portrait": "/media/athletes/blandine-l-hirondel/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 35,
+      "gender_rank": 4,
+      "finish_time": "11:53:31",
+      "vpi": 992.6,
+      "dmi": 12.34,
+      "er": 81.1,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/blandine-l-hirondel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 992.6,
+    "dmi": 12.3,
+    "er": 81.1
+  }
+}

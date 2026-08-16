@@ -1,0 +1,26 @@
+{
+  "slug": "eleanor-davis",
+  "name": "Eleanor DAVIS",
+  "country": "GB",
+  "portrait": "/media/athletes/eleanor-davis/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 63,
+      "gender_rank": 12,
+      "finish_time": "12:49:56",
+      "vpi": 921.9,
+      "dmi": 11.32,
+      "er": 79.8,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/eleanor-davis/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 921.9,
+    "dmi": 11.3,
+    "er": 79.8
+  }
+}

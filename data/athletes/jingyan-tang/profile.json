@@ -1,0 +1,26 @@
+{
+  "slug": "jingyan-tang",
+  "name": "Jingyan TANG",
+  "country": "CN",
+  "portrait": "/media/athletes/jingyan-tang/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 56,
+      "gender_rank": 9,
+      "finish_time": "12:42:54",
+      "vpi": 920.1,
+      "dmi": 11.72,
+      "er": 89.1,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/jingyan-tang/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 920.1,
+    "dmi": 11.7,
+    "er": 89.1
+  }
+}

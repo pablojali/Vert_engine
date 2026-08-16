@@ -1,0 +1,26 @@
+{
+  "slug": "lea-duhet",
+  "name": "Léa DUHET",
+  "country": "FR",
+  "portrait": "/media/athletes/lea-duhet/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 65,
+      "gender_rank": 14,
+      "finish_time": "12:54:01",
+      "vpi": 914.9,
+      "dmi": 11.45,
+      "er": 83.3,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/lea-duhet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 914.9,
+    "dmi": 11.4,
+    "er": 83.3
+  }
+}

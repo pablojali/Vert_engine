@@ -1,0 +1,26 @@
+{
+  "slug": "martyna-mlynarczyk",
+  "name": "Martyna MLYNARCZYK",
+  "country": "PL",
+  "portrait": "/media/athletes/martyna-mlynarczyk/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 28,
+      "gender_rank": 1,
+      "finish_time": "11:41:55",
+      "vpi": 1000.7,
+      "dmi": 12.72,
+      "er": 84.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/martyna-mlynarczyk/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1000.7,
+    "dmi": 12.7,
+    "er": 84.9
+  }
+}

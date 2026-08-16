@@ -1,0 +1,26 @@
+{
+  "slug": "julie-roux",
+  "name": "Julie ROUX",
+  "country": "FR",
+  "portrait": "/media/athletes/julie-roux/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 49,
+      "gender_rank": 8,
+      "finish_time": "12:24:18",
+      "vpi": 966.0,
+      "dmi": 11.48,
+      "er": 81.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/julie-roux/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 966.0,
+    "dmi": 11.5,
+    "er": 81.0
+  }
+}

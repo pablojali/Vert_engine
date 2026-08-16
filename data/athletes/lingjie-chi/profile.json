@@ -1,0 +1,26 @@
+{
+  "slug": "lingjie-chi",
+  "name": "Lingjie CHI",
+  "country": "CN",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 77,
+      "gender_rank": 18,
+      "finish_time": "13:14:34",
+      "vpi": 888.6,
+      "dmi": 11.05,
+      "er": 82.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/lingjie-chi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 888.6,
+    "dmi": 11.0,
+    "er": 82.9
+  }
+}

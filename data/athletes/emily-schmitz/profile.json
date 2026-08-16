@@ -1,0 +1,26 @@
+{
+  "slug": "emily-schmitz",
+  "name": "Emily SCHMITZ",
+  "country": "US",
+  "portrait": "/media/athletes/emily-schmitz/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 81,
+      "gender_rank": 20,
+      "finish_time": "13:19:08",
+      "vpi": 888.6,
+      "dmi": 11.1,
+      "er": 84.7,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/emily-schmitz/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 888.6,
+    "dmi": 11.1,
+    "er": 84.7
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "giuditta-turini",
+  "name": "Giuditta TURINI",
+  "country": "IT",
+  "portrait": "/media/athletes/giuditta-turini/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 61,
+      "gender_rank": 11,
+      "finish_time": "12:46:07",
+      "vpi": 914.4,
+      "dmi": 11.77,
+      "er": 88.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/giuditta-turini/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 914.4,
+    "dmi": 11.8,
+    "er": 88.6
+  }
+}

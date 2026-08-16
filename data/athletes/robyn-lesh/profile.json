@@ -1,0 +1,26 @@
+{
+  "slug": "robyn-lesh",
+  "name": "Robyn LESH",
+  "country": "US",
+  "portrait": "/media/athletes/robyn-lesh/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 47,
+      "gender_rank": 7,
+      "finish_time": "12:16:10",
+      "vpi": 962.9,
+      "dmi": 11.93,
+      "er": 88.1,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/robyn-lesh/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 962.9,
+    "dmi": 11.9,
+    "er": 88.1
+  }
+}

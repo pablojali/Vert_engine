@@ -1,0 +1,26 @@
+{
+  "slug": "fuzhao-xiang",
+  "name": "Fuzhao XIANG",
+  "country": "CN",
+  "portrait": "/media/athletes/fuzhao-xiang/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 64,
+      "gender_rank": 13,
+      "finish_time": "12:53:01",
+      "vpi": 907.7,
+      "dmi": 11.52,
+      "er": 89.4,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/fuzhao-xiang/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 907.7,
+    "dmi": 11.5,
+    "er": 89.4
+  }
+}

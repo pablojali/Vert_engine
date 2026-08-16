@@ -1,0 +1,26 @@
+{
+  "slug": "anna-tarasova",
+  "name": "Anna TARASOVA",
+  "country": "ES",
+  "portrait": "/media/athletes/anna-tarasova/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 30,
+      "gender_rank": 3,
+      "finish_time": "11:44:18",
+      "vpi": 1007.3,
+      "dmi": 12.49,
+      "er": 86.8,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/anna-tarasova/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1007.3,
+    "dmi": 12.5,
+    "er": 86.8
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "veronika-leng",
+  "name": "Veronika LENG",
+  "country": "SK",
+  "portrait": "/media/athletes/veronika-leng/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 39,
+      "gender_rank": 5,
+      "finish_time": "12:00:27",
+      "vpi": 988.1,
+      "dmi": 12.17,
+      "er": 85.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/veronika-leng/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 988.1,
+    "dmi": 12.2,
+    "er": 85.0
+  }
+}

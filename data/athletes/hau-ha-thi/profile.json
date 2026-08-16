@@ -1,0 +1,26 @@
+{
+  "slug": "hau-ha-thi",
+  "name": "Hau HA THI",
+  "country": "VN",
+  "portrait": "/media/athletes/hau-ha-thi/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 70,
+      "gender_rank": 16,
+      "finish_time": "13:03:15",
+      "vpi": 898.6,
+      "dmi": 11.43,
+      "er": 78.2,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/hau-ha-thi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 898.6,
+    "dmi": 11.4,
+    "er": 78.2
+  }
+}
