@@ -1,0 +1,26 @@
+{
+  "slug": "jeshurun-small",
+  "name": "Jeshurun SMALL",
+  "country": "US",
+  "portrait": "/media/athletes/jeshurun-small/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "10:28:57",
+      "vpi": 1142.1,
+      "dmi": 13.69,
+      "er": 86.3,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/jeshurun-small/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1142.1,
+    "dmi": 13.7,
+    "er": 86.3
+  }
+}

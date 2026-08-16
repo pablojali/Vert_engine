@@ -1,0 +1,26 @@
+{
+  "slug": "mario-olmedo-sancha",
+  "name": "Mario OLMEDO SANCHA",
+  "country": "ES",
+  "portrait": "/media/athletes/mario-olmedo-sancha/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "10:40:19",
+      "vpi": 1119.3,
+      "dmi": 13.42,
+      "er": 87.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/mario-olmedo-sancha/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1119.3,
+    "dmi": 13.4,
+    "er": 87.6
+  }
+}

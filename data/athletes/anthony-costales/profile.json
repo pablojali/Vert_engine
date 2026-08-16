@@ -1,0 +1,26 @@
+{
+  "slug": "anthony-costales",
+  "name": "Anthony COSTALES",
+  "country": "US",
+  "portrait": "/media/athletes/anthony-costales/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 15,
+      "gender_rank": 15,
+      "finish_time": "11:01:36",
+      "vpi": 1087.8,
+      "dmi": 12.98,
+      "er": 75.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/anthony-costales/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1087.8,
+    "dmi": 13.0,
+    "er": 75.9
+  }
+}

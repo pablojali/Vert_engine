@@ -1,0 +1,26 @@
+{
+  "slug": "guangfu-meng",
+  "name": "Guangfu MENG",
+  "country": "CN",
+  "portrait": "/media/athletes/guangfu-meng/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "10:31:36",
+      "vpi": 1131.7,
+      "dmi": 13.76,
+      "er": 83.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/guangfu-meng/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1131.7,
+    "dmi": 13.8,
+    "er": 83.9
+  }
+}

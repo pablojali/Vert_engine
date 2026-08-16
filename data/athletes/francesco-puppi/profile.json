@@ -1,0 +1,26 @@
+{
+  "slug": "francesco-puppi",
+  "name": "Francesco PUPPI",
+  "country": "IT",
+  "portrait": "/media/athletes/francesco-puppi/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "10:06:02",
+      "vpi": 1196.0,
+      "dmi": 13.9,
+      "er": 90.8,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/francesco-puppi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1196.0,
+    "dmi": 13.9,
+    "er": 90.8
+  }
+}

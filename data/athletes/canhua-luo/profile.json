@@ -1,0 +1,26 @@
+{
+  "slug": "canhua-luo",
+  "name": "Canhua LUO",
+  "country": "CN",
+  "portrait": "/media/athletes/canhua-luo/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 12,
+      "gender_rank": 12,
+      "finish_time": "10:56:26",
+      "vpi": 1073.3,
+      "dmi": 13.56,
+      "er": 90.4,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/canhua-luo/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1073.3,
+    "dmi": 13.6,
+    "er": 90.4
+  }
+}

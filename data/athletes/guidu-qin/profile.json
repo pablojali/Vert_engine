@@ -1,0 +1,26 @@
+{
+  "slug": "guidu-qin",
+  "name": "Guidu QIN",
+  "country": "CN",
+  "portrait": "/media/athletes/guidu-qin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "10:43:24",
+      "vpi": 1108.9,
+      "dmi": 13.46,
+      "er": 87.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/guidu-qin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1108.9,
+    "dmi": 13.5,
+    "er": 87.0
+  }
+}

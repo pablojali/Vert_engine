@@ -1,0 +1,26 @@
+{
+  "slug": "eli-hemming",
+  "name": "Eli HEMMING",
+  "country": "US",
+  "portrait": "/media/athletes/eli-hemming/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "10:34:36",
+      "vpi": 1133.3,
+      "dmi": 13.58,
+      "er": 82.4,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/eli-hemming/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1133.3,
+    "dmi": 13.6,
+    "er": 82.4
+  }
+}

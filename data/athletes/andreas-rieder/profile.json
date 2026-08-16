@@ -1,7 +1,7 @@
 {
   "slug": "andreas-rieder",
   "name": "Andreas RIEDER",
-  "country": null,
+  "country": "AT",
   "portrait": "/media/athletes/andreas-rieder/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 13.51,
       "er": 79.5,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/andreas-rieder/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 16,
+      "gender_rank": 16,
+      "finish_time": "11:03:16",
+      "vpi": 1070.1,
+      "dmi": 13.22,
+      "er": 85.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreas-rieder/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 940.9,
-    "dmi": 13.5,
-    "er": 79.5
+    "vpi": 1005.5,
+    "dmi": 13.4,
+    "er": 82.7
   }
 }

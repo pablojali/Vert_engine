@@ -16,11 +16,24 @@
       "dmi": 12.36,
       "er": 89.2,
       "report": "/media/races/eiger-ultra-trail-2026/charts/runners/stian-dahl-sommerseth/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 18,
+      "gender_rank": 18,
+      "finish_time": "11:09:13",
+      "vpi": 1078.1,
+      "dmi": 12.76,
+      "er": 86.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/stian-dahl-sommerseth/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1058.9,
-    "dmi": 12.4,
-    "er": 89.2
+    "vpi": 1068.5,
+    "dmi": 12.6,
+    "er": 87.6
   }
 }

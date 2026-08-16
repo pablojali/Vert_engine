@@ -1,0 +1,26 @@
+{
+  "slug": "drew-holmen",
+  "name": "Drew HOLMEN",
+  "country": "US",
+  "portrait": "/media/athletes/drew-holmen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "10:16:15",
+      "vpi": 1156.2,
+      "dmi": 14.21,
+      "er": 88.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/drew-holmen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1156.2,
+    "dmi": 14.2,
+    "er": 88.0
+  }
+}

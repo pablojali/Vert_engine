@@ -1,0 +1,26 @@
+{
+  "slug": "arnaud-bonin",
+  "name": "Arnaud BONIN",
+  "country": "FR",
+  "portrait": "/media/athletes/arnaud-bonin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "10:26:03",
+      "vpi": 1138.4,
+      "dmi": 13.93,
+      "er": 90.1,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/arnaud-bonin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1138.4,
+    "dmi": 13.9,
+    "er": 90.1
+  }
+}

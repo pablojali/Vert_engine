@@ -1,7 +1,7 @@
 {
   "slug": "andreas-reiterer",
   "name": "Andreas REITERER",
-  "country": null,
+  "country": "IT",
   "portrait": "/media/athletes/andreas-reiterer/images/portrait.jpg",
   "races": [
     {
@@ -16,11 +16,24 @@
       "er": 84.6,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/andreas-reiterer/report.html",
       "gender_rank": 2
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 11,
+      "gender_rank": 11,
+      "finish_time": "10:51:24",
+      "vpi": 1092.6,
+      "dmi": 13.31,
+      "er": 79.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreas-reiterer/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1006.6,
-    "dmi": 14.4,
-    "er": 84.6
+    "vpi": 1049.6,
+    "dmi": 13.9,
+    "er": 81.8
   }
 }

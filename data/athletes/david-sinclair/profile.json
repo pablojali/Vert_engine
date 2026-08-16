@@ -1,0 +1,26 @@
+{
+  "slug": "david-sinclair",
+  "name": "David SINCLAIR",
+  "country": "US",
+  "portrait": "/media/athletes/david-sinclair/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "10:13:42",
+      "vpi": 1166.1,
+      "dmi": 14.01,
+      "er": 88.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/david-sinclair/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1166.1,
+    "dmi": 14.0,
+    "er": 88.6
+  }
+}

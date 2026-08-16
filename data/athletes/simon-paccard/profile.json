@@ -1,0 +1,26 @@
+{
+  "slug": "simon-paccard",
+  "name": "Simon PACCARD",
+  "country": "FR",
+  "portrait": "/media/athletes/simon-paccard/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 19,
+      "gender_rank": 19,
+      "finish_time": "11:11:49",
+      "vpi": 1090.9,
+      "dmi": 12.26,
+      "er": 73.6,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/simon-paccard/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1090.9,
+    "dmi": 12.3,
+    "er": 73.6
+  }
+}

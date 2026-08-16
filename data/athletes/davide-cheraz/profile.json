@@ -1,0 +1,26 @@
+{
+  "slug": "davide-cheraz",
+  "name": "Davide CHERAZ",
+  "country": "IT",
+  "portrait": "/media/athletes/davide-cheraz/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 17,
+      "gender_rank": 17,
+      "finish_time": "11:08:13",
+      "vpi": 1065.2,
+      "dmi": 13.08,
+      "er": 82.7,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/davide-cheraz/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1065.2,
+    "dmi": 13.1,
+    "er": 82.7
+  }
+}

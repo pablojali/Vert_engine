@@ -1,0 +1,26 @@
+{
+  "slug": "nicholas-handel",
+  "name": "Nicholas HANDEL",
+  "country": "US",
+  "portrait": "/media/athletes/nicholas-handel/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 99.41021421194841,
+      "position": 13,
+      "gender_rank": 13,
+      "finish_time": "10:57:06",
+      "vpi": 1103.2,
+      "dmi": 13.02,
+      "er": 81.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/nicholas-handel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1103.2,
+    "dmi": 13.0,
+    "er": 81.9
+  }
+}
