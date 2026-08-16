@@ -1,0 +1,26 @@
+{
+  "slug": "heather-jackson",
+  "name": "Heather JACKSON",
+  "country": "US",
+  "portrait": "/media/athletes/heather-jackson/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 148,
+      "gender_rank": 19,
+      "finish_time": "29:33:00",
+      "vpi": 691.4,
+      "dmi": 8.35,
+      "er": 49.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/heather-jackson/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 691.4,
+    "dmi": 8.4,
+    "er": 49.0
+  }
+}

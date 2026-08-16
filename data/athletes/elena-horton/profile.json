@@ -1,0 +1,26 @@
+{
+  "slug": "elena-horton",
+  "name": "Elena HORTON",
+  "country": "US",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 146,
+      "gender_rank": 18,
+      "finish_time": "29:23:30",
+      "vpi": 677.0,
+      "dmi": 8.7,
+      "er": 74.3,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/elena-horton/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 677.0,
+    "dmi": 8.7,
+    "er": 74.3
+  }
+}

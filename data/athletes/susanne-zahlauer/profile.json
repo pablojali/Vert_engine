@@ -1,7 +1,7 @@
 {
   "slug": "susanne-zahlauer",
   "name": "Susanne ZAHLAUER",
-  "country": null,
+  "country": "DE",
   "portrait": "/media/athletes/susanne-zahlauer/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 10.52,
       "er": 77.1,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/susanne-zahlauer/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 74,
+      "gender_rank": 12,
+      "finish_time": "26:19:45",
+      "vpi": 769.6,
+      "dmi": 9.32,
+      "er": 69.7,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/susanne-zahlauer/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 734.2,
-    "dmi": 10.5,
-    "er": 77.1
+    "vpi": 751.9,
+    "dmi": 9.9,
+    "er": 73.4
   }
 }

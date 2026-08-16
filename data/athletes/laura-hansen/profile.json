@@ -1,0 +1,26 @@
+{
+  "slug": "laura-hansen",
+  "name": "Laura HANSEN",
+  "country": "US",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 97,
+      "gender_rank": 14,
+      "finish_time": "27:43:53",
+      "vpi": 723.2,
+      "dmi": 9.1,
+      "er": 87.0,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/laura-hansen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 723.2,
+    "dmi": 9.1,
+    "er": 87.0
+  }
+}

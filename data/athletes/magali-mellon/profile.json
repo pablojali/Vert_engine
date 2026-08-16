@@ -1,0 +1,26 @@
+{
+  "slug": "magali-mellon",
+  "name": "Magali MELLON",
+  "country": "FR",
+  "portrait": "/media/athletes/magali-mellon/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 43,
+      "gender_rank": 6,
+      "finish_time": "24:48:12",
+      "vpi": 784.2,
+      "dmi": 10.57,
+      "er": 84.5,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/magali-mellon/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 784.2,
+    "dmi": 10.6,
+    "er": 84.5
+  }
+}

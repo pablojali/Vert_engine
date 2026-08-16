@@ -1,7 +1,7 @@
 {
   "slug": "claudia-tremps",
   "name": "Claudia TREMPS",
-  "country": null,
+  "country": "ES",
   "portrait": "/media/athletes/claudia-tremps/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 9.82,
       "er": 72.3,
       "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/claudia-tremps/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 51,
+      "gender_rank": 9,
+      "finish_time": "25:05:07",
+      "vpi": 799.4,
+      "dmi": 10.11,
+      "er": 76.7,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/claudia-tremps/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 947.2,
-    "dmi": 9.8,
-    "er": 72.3
+    "vpi": 873.3,
+    "dmi": 10.0,
+    "er": 74.5
   }
 }

@@ -1,7 +1,7 @@
 {
   "slug": "lucy-bartholomew",
   "name": "Lucy BARTHOLOMEW",
-  "country": null,
+  "country": "AU",
   "portrait": "/media/athletes/lucy-bartholomew/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 12.71,
       "er": 81.6,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/lucy-bartholomew/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 45,
+      "gender_rank": 7,
+      "finish_time": "24:51:32",
+      "vpi": 794.2,
+      "dmi": 10.39,
+      "er": 69.1,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/lucy-bartholomew/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 874.8,
-    "dmi": 12.7,
-    "er": 81.6
+    "vpi": 834.5,
+    "dmi": 11.6,
+    "er": 75.4
   }
 }

@@ -1,0 +1,26 @@
+{
+  "slug": "courtney-dauwalter",
+  "name": "Courtney DAUWALTER",
+  "country": "US",
+  "portrait": "/media/athletes/courtney-dauwalter/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2025",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2025,
+      "distance_km": 172.88251977594712,
+      "position": 64,
+      "gender_rank": 10,
+      "finish_time": "25:50:38",
+      "vpi": 784.0,
+      "dmi": 9.39,
+      "er": 50.9,
+      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/courtney-dauwalter/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 784.0,
+    "dmi": 9.4,
+    "er": 50.9
+  }
+}
