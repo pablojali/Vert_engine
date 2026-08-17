@@ -1,0 +1,26 @@
+{
+  "slug": "angelique-carminati",
+  "name": "Angélique CARMINATI",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 44,
+      "gender_rank": 3,
+      "finish_time": "10:12:46",
+      "vpi": 858.9,
+      "dmi": 11.6,
+      "er": 77.9,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/angelique-carminati/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 858.9,
+    "dmi": 11.6,
+    "er": 77.9
+  }
+}

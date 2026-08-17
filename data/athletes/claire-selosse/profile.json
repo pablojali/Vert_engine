@@ -1,0 +1,26 @@
+{
+  "slug": "claire-selosse",
+  "name": "Claire SELOSSE",
+  "country": "FR",
+  "portrait": "/media/athletes/claire-selosse/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 81,
+      "gender_rank": 4,
+      "finish_time": "10:52:49",
+      "vpi": 790.3,
+      "dmi": 10.9,
+      "er": 86.7,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/claire-selosse/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 790.3,
+    "dmi": 10.9,
+    "er": 86.7
+  }
+}

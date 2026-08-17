@@ -1,0 +1,26 @@
+{
+  "slug": "simon-mettetal",
+  "name": "Simon METTETAL",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "8:30:53",
+      "vpi": 1039.4,
+      "dmi": 14.04,
+      "er": 70.6,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/simon-mettetal/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1039.4,
+    "dmi": 14.0,
+    "er": 70.6
+  }
+}

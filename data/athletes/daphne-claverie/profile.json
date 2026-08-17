@@ -1,0 +1,26 @@
+{
+  "slug": "daphne-claverie",
+  "name": "Daphné CLAVERIE",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 129,
+      "gender_rank": 7,
+      "finish_time": "11:29:44",
+      "vpi": 755.0,
+      "dmi": 10.31,
+      "er": 83.2,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/daphne-claverie/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 755.0,
+    "dmi": 10.3,
+    "er": 83.2
+  }
+}

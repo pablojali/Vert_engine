@@ -1,0 +1,26 @@
+{
+  "slug": "laure-paradan",
+  "name": "Laure PARADAN",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 17,
+      "gender_rank": 2,
+      "finish_time": "9:12:50",
+      "vpi": 947.0,
+      "dmi": 12.76,
+      "er": 81.3,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/laure-paradan/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 947.0,
+    "dmi": 12.8,
+    "er": 81.3
+  }
+}

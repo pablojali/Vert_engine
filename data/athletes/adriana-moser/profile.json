@@ -1,0 +1,26 @@
+{
+  "slug": "adriana-moser",
+  "name": "Adriana MOSER",
+  "country": "NL",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 130,
+      "gender_rank": 8,
+      "finish_time": "11:30:15",
+      "vpi": 749.9,
+      "dmi": 10.2,
+      "er": 86.3,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/adriana-moser/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 749.9,
+    "dmi": 10.2,
+    "er": 86.3
+  }
+}

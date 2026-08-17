@@ -1,0 +1,26 @@
+{
+  "slug": "clement-christen",
+  "name": "Clément CHRISTEN",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "8:05:39",
+      "vpi": 1085.6,
+      "dmi": 14.7,
+      "er": 75.5,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/clement-christen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1085.6,
+    "dmi": 14.7,
+    "er": 75.5
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "pierrick-paillot",
+  "name": "Pierrick PAILLOT",
+  "country": "FR",
+  "portrait": "/media/athletes/pierrick-paillot/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "8:53:20",
+      "vpi": 1000.0,
+      "dmi": 13.35,
+      "er": 70.1,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/pierrick-paillot/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1000.0,
+    "dmi": 13.4,
+    "er": 70.1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "clement-durance",
+  "name": "Clement DURANCE",
+  "country": "FR",
+  "portrait": "/media/athletes/clement-durance/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "8:03:45",
+      "vpi": 1091.5,
+      "dmi": 14.7,
+      "er": 78.3,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/clement-durance/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1091.5,
+    "dmi": 14.7,
+    "er": 78.3
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "slug": "charlotte-gouteyron",
+  "name": "Charlotte GOUTEYRON",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 126,
+      "gender_rank": 6,
+      "finish_time": "11:28:12",
+      "vpi": 766.7,
+      "dmi": 10.31,
+      "er": 75.6,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/charlotte-gouteyron/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 766.7,
+    "dmi": 10.3,
+    "er": 75.6
+  }
+}

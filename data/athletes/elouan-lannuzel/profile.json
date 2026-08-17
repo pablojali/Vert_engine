@@ -1,0 +1,26 @@
+{
+  "slug": "elouan-lannuzel",
+  "name": "Elouan LANNUZEL",
+  "country": "FR",
+  "portrait": "/media/athletes/elouan-lannuzel/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "8:25:20",
+      "vpi": 1023.1,
+      "dmi": 14.11,
+      "er": 84.9,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/elouan-lannuzel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1023.1,
+    "dmi": 14.1,
+    "er": 84.9
+  }
+}

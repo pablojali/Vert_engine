@@ -1,0 +1,26 @@
+{
+  "slug": "anne-franchet",
+  "name": "Anne FRANCHET",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 189,
+      "gender_rank": 10,
+      "finish_time": "12:04:30",
+      "vpi": 728.7,
+      "dmi": 9.71,
+      "er": 76.5,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/anne-franchet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 728.7,
+    "dmi": 9.7,
+    "er": 76.5
+  }
+}

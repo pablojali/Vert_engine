@@ -1,0 +1,26 @@
+{
+  "slug": "marine-flouret",
+  "name": "Marine FLOURET",
+  "country": "FR",
+  "portrait": "/media/athletes/marine-flouret/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 180,
+      "gender_rank": 9,
+      "finish_time": "11:59:24",
+      "vpi": 734.2,
+      "dmi": 9.82,
+      "er": 75.4,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/marine-flouret/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 734.2,
+    "dmi": 9.8,
+    "er": 75.4
+  }
+}

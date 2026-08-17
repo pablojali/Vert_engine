@@ -1,0 +1,26 @@
+{
+  "slug": "baptiste-bourdeille",
+  "name": "Baptiste BOURDEILLE",
+  "country": "FR",
+  "portrait": "/media/athletes/baptiste-bourdeille/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_name": "Trail du Saint Jacques by UTMB",
+      "year": 2026,
+      "distance_km": 85.94466007919439,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "8:54:57",
+      "vpi": 986.4,
+      "dmi": 13.41,
+      "er": 71.6,
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/baptiste-bourdeille/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 986.4,
+    "dmi": 13.4,
+    "er": 71.6
+  }
+}
