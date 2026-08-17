@@ -522,6 +522,9 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 }
 .athlete-row-name { font-weight: 600; }
 .athlete-row-meta { color: var(--color-muted); font-size: 0.85rem; margin-left: auto; }
+.athlete-row img.athlete-row-flag {
+  width: 22px; height: 16px; border-radius: 2px; object-fit: cover; margin-left: auto;
+}
 
 /* --- Race / athlete detail pages --- */
 .race-hero, .elevation-profile {
