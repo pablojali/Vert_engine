@@ -12,6 +12,7 @@ import requests
 import uuid
 import shutil
 import subprocess
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import redirect_stdout
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
@@ -3194,6 +3195,43 @@ with tab_top:
 # podium (a runner's own dedicated analysis already lives in Athletes),
 # not replace the manually-curated Top 10.
 # ---------------------------------------------
+ENGINE_LIVE_MAX_WORKERS = 10
+
+
+def _fetch_and_score_engine_live_bib(bib, tenant, race_id, full_df_gpx, df_segments, total_km, total_gain):
+    """One bib's worth of work for Engine Live's bulk scan: both LiveTrail
+    requests (summary + detail - both are needed, see
+    fetch_runner_by_tenant_and_bib_livetrail's docstring: Status/Overall
+    Rank only exist on the summary endpoint, the per-checkpoint
+    Point/Rank/Accumulated Time only on the detail one) plus the index
+    calculation. Runs inside a thread pool since this is I/O-bound
+    (network round-trips dominate, not the pandas math), so a wide bib
+    range fetches in parallel instead of one bib at a time."""
+    runner_info_bib, df_runner_bib = fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id)
+    indices_bib, _ = calculate_runner_indices(full_df_gpx, df_segments, df_runner_bib, total_km, total_gain)
+    ranks_bib = df_runner_bib["Rank"].dropna() if "Rank" in df_runner_bib.columns else None
+    first_rank = int(ranks_bib.iloc[0]) if ranks_bib is not None and not ranks_bib.empty else None
+    try:
+        final_rank = int(runner_info_bib.get("Overall Rank"))
+    except (TypeError, ValueError):
+        final_rank = None
+    positions_change = (
+        first_rank - final_rank if first_rank is not None and final_rank is not None else None
+    )
+    return {
+        "Bib": runner_info_bib.get("Bib") or bib,
+        "Runner": runner_info_bib.get("Name") or f"Bib {bib}",
+        "Status": runner_info_bib.get("Status"),
+        "Finish Time": runner_info_bib.get("Finish Time"),
+        "First CP Rank": first_rank,
+        "Final Rank": final_rank,
+        "Positions +/-": positions_change,
+        "VPI": indices_bib.get("VPI"),
+        "DMI": indices_bib.get("DMI"),
+        "ER": indices_bib.get("ER"),
+    }
+
+
 with tab_engine_live:
     st.header("📡 Engine Live")
     st.caption(
@@ -3282,65 +3320,49 @@ with tab_engine_live:
                 live_rows = []
                 live_not_found = 0
                 progress = st.progress(0.0, text="Analizando...")
+                completed_live = 0
 
-                for i, bib in enumerate(bibs_live):
-                    try:
-                        runner_info_bib, df_runner_bib = fetch_runner_by_tenant_and_bib_livetrail(
-                            live_tenant, bib, live_race_id
-                        )
-                        # Lightweight on purpose: just the indices, no
-                        # figures/df_summary/report HTML - this can run
-                        # over hundreds of bibs, not a handful.
-                        indices_bib, _ = calculate_runner_indices(
-                            race_data_live["df"], race_segments_df_live, df_runner_bib,
+                # Parallel fetch: each bib is 2 sequential LiveTrail
+                # requests (summary + detail, both required - see
+                # _fetch_and_score_engine_live_bib's docstring), but bibs
+                # are independent of each other, so a wide range fetches
+                # ENGINE_LIVE_MAX_WORKERS bibs at a time instead of one by
+                # one. This is the actual lever for a faster scan, not
+                # cutting either request - both feed fields this tab uses.
+                with ThreadPoolExecutor(max_workers=ENGINE_LIVE_MAX_WORKERS) as executor:
+                    futures = {
+                        executor.submit(
+                            _fetch_and_score_engine_live_bib, bib, live_tenant, live_race_id,
+                            race_data_live["df"], race_segments_df_live,
                             race_data_live["total_km"], total_race_gain_live,
-                        )
-                        # df_runner_bib is already chronologically sorted
-                        # (fetch_runner_by_tenant_and_bib_livetrail sorts
-                        # passings by raceTime), so the first non-null Rank
-                        # is this runner's rank at their first recorded
-                        # checkpoint - no need to map back to km here.
-                        ranks_bib = df_runner_bib["Rank"].dropna() if "Rank" in df_runner_bib.columns else None
-                        first_rank = int(ranks_bib.iloc[0]) if ranks_bib is not None and not ranks_bib.empty else None
+                        ): bib
+                        for bib in bibs_live
+                    }
+                    for future in as_completed(futures):
+                        completed_live += 1
                         try:
-                            final_rank = int(runner_info_bib.get("Overall Rank"))
-                        except (TypeError, ValueError):
-                            final_rank = None
-                        positions_change = (
-                            first_rank - final_rank
-                            if first_rank is not None and final_rank is not None else None
+                            live_rows.append(future.result())
+                        except Exception:
+                            # Most misses in a wide bib range are simply
+                            # bibs nobody registered under, not real
+                            # errors - no per-bib traceback log here
+                            # (would just be noise for a 1000-bib scan),
+                            # just a running count.
+                            live_not_found += 1
+                        progress.progress(
+                            completed_live / len(bibs_live),
+                            text=f"Analizando... ({completed_live}/{len(bibs_live)})",
                         )
-                        live_rows.append({
-                            "Bib": runner_info_bib.get("Bib") or bib,
-                            "Runner": runner_info_bib.get("Name") or f"Bib {bib}",
-                            "Status": runner_info_bib.get("Status"),
-                            "Finish Time": runner_info_bib.get("Finish Time"),
-                            "First CP Rank": first_rank,
-                            "Final Rank": final_rank,
-                            "Positions +/-": positions_change,
-                            "VPI": indices_bib.get("VPI"),
-                            "DMI": indices_bib.get("DMI"),
-                            "ER": indices_bib.get("ER"),
-                        })
-                    except Exception:
-                        # Most misses in a wide bib range are simply bibs
-                        # nobody registered under, not real errors - no
-                        # per-bib traceback log here (would just be noise
-                        # for a 1000-bib scan), just a running count.
-                        live_not_found += 1
-                    progress.progress((i + 1) / len(bibs_live), text=f"Analizando... ({i + 1}/{len(bibs_live)})")
 
                 progress.empty()
                 st.session_state['live_rows'] = live_rows or None
                 st.session_state['live_not_found'] = live_not_found
                 st.session_state['live_bibs_requested'] = len(bibs_live)
-                st.session_state['live_race_used'] = selected_race_live
 
     live_warning = st.session_state.get('live_warning')
     live_rows = st.session_state.get('live_rows')
     live_not_found = st.session_state.get('live_not_found') or 0
     live_bibs_requested = st.session_state.get('live_bibs_requested') or 0
-    live_race_used = st.session_state.get('live_race_used')
 
     if live_warning:
         st.warning(live_warning)
@@ -3418,23 +3440,6 @@ with tab_engine_live:
                     st.caption("Sin datos de DMI entre los abandonos.")
         else:
             st.caption("No hay abandonos (WITHDRAWN) en este rango.")
-
-        st.markdown("---")
-        st.markdown("### 📋 Tabla completa")
-        st.dataframe(
-            sorted(live_rows, key=lambda r: r["Final Rank"] if r["Final Rank"] is not None else 10**9),
-            use_container_width=True, hide_index=True,
-        )
-
-        live_excel_buffer = io.BytesIO()
-        pd.DataFrame(live_rows).to_excel(live_excel_buffer, index=False)
-        st.download_button(
-            "📥 Descargar tabla completa (Excel)",
-            data=live_excel_buffer.getvalue(),
-            file_name=f"{_ascii_filename(live_race_used or 'race').replace(' ', '_')}_engine_live.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True,
-        )
     elif live_rows is None and live_bibs_requested:
         st.error("❌ Ningún dorsal del rango devolvió datos.")
 
