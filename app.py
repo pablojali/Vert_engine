@@ -2736,12 +2736,25 @@ with tab_top:
     with col_top_race_id:
         top_race_id = st.text_input("Race ID", key="top_race_id_input", help="Auto-filled from the link above.")
 
+    st.markdown("**Quick fill: bib range**")
+    col_bib_from, col_bib_to = st.columns(2)
+    with col_bib_from:
+        top_bib_range_start = st.number_input(
+            "Bib from", min_value=0, step=1, value=0, key="top_bib_range_start"
+        )
+    with col_bib_to:
+        top_bib_range_end = st.number_input(
+            "Bib to", min_value=0, step=1, value=0, key="top_bib_range_end"
+        )
+
     bib_list_raw = st.text_area(
-        "Bib numbers to fetch (one per line or comma-separated, e.g. the top 10)",
+        "Bib numbers to fetch (one per line or comma-separated) - combined with the range above",
         placeholder="5\n12\n8\n23\n...",
         key="top_bib_list",
     )
     fetch_top_button = st.button("🏆 Fetch all bibs", type="primary", use_container_width=True)
+
+    MAX_BIBS_PER_FETCH = 200
 
     # --- Fetch happens only on the button click, but everything it produces
     # (results/reports/the race snapshot used) is stashed in session_state
@@ -2751,15 +2764,31 @@ with tab_top:
     # vanish on that rerun - forcing all bibs to be re-fetched from
     # scratch just to click a second download. ---
     if fetch_top_button:
+        # Range bibs first (in order), then any manually-listed bib not
+        # already covered by the range - lets someone fetch "1 to 20 plus
+        # bib 105 as a wildcard" in one go instead of two separate fetches.
+        range_bibs = (
+            [str(b) for b in range(int(top_bib_range_start), int(top_bib_range_end) + 1)]
+            if top_bib_range_end and top_bib_range_end >= top_bib_range_start > 0
+            else []
+        )
+        manual_bibs = [b.strip() for b in re.split(r"[,\n]+", bib_list_raw) if b.strip()]
+        seen_bibs = set(range_bibs)
+        bibs = range_bibs + [b for b in manual_bibs if b not in seen_bibs and not seen_bibs.add(b)]
+
         if not selected_race_top:
             st.session_state['top_warning'] = "Select a race above first."
         elif not top_tenant or not top_race_id:
             st.session_state['top_warning'] = "Paste a LiveTrail link above first (or fill in X-Tenant/Race ID by hand)."
-        elif not bib_list_raw.strip():
-            st.session_state['top_warning'] = "Enter at least one bib number."
+        elif not bibs:
+            st.session_state['top_warning'] = "Enter at least one bib number, or a bib range."
+        elif len(bibs) > MAX_BIBS_PER_FETCH:
+            st.session_state['top_warning'] = (
+                f"⚠️ That's {len(bibs)} bibs - narrow the range to {MAX_BIBS_PER_FETCH} or fewer per fetch "
+                "(likely a typo in the range, e.g. a year instead of a bib number)."
+            )
         else:
             st.session_state['top_warning'] = None
-            bibs = [b.strip() for b in re.split(r"[,\n]+", bib_list_raw) if b.strip()]
             race_data_top = available_races_top[selected_race_top]
             race_segments_df_top = race_data_top.get("df_segments")
 
@@ -2878,6 +2907,58 @@ with tab_top:
                 },
             )
 
+            # --- Race Movers: who gained/lost the most positions between
+            # their first recorded checkpoint and the finish, and who
+            # posted the highest ER - straight from data already fetched
+            # above, no extra requests. ---
+            checkpoint_to_km_top = dict(zip(
+                race_segments_df_top["End Point"], race_segments_df_top["End Km"]
+            ))
+            movers_rows = []
+            for label, report_data in reports.items():
+                df_ranked = results[label][["Checkpoint", "Rank"]].dropna(subset=["Rank"]).copy()
+                df_ranked["Km"] = df_ranked["Checkpoint"].map(checkpoint_to_km_top)
+                df_ranked = df_ranked.dropna(subset=["Km"]).sort_values("Km")
+                first_rank = int(df_ranked["Rank"].iloc[0]) if not df_ranked.empty else None
+                try:
+                    final_rank = int(report_data["runner_info"].get("Overall Rank"))
+                except (TypeError, ValueError):
+                    final_rank = None
+                positions_change = (
+                    first_rank - final_rank if first_rank is not None and final_rank is not None else None
+                )
+                movers_rows.append({
+                    "Runner": label,
+                    "First CP Rank": first_rank,
+                    "Final Rank": final_rank,
+                    "Positions +/-": positions_change,
+                    "ER": report_data["indices"].get("ER"),
+                })
+
+            valid_change = [r for r in movers_rows if r["Positions +/-"] is not None]
+            valid_er = [r for r in movers_rows if r["ER"] is not None]
+            if valid_change or valid_er:
+                st.markdown("---")
+                st.markdown("### 🏅 Race Movers")
+                st.caption(
+                    "Positions +/- = rank at the first recorded checkpoint minus the final rank. "
+                    "Positive = moved up, negative = moved down."
+                )
+                m1, m2, m3 = st.columns(3)
+                if valid_change:
+                    top_gainer = max(valid_change, key=lambda r: r["Positions +/-"])
+                    m1.metric("🚀 Biggest gainer", top_gainer["Runner"], f"+{top_gainer['Positions +/-']}")
+                    top_loser = min(valid_change, key=lambda r: r["Positions +/-"])
+                    m2.metric("📉 Biggest drop", top_loser["Runner"], f"{top_loser['Positions +/-']}")
+                if valid_er:
+                    top_er = max(valid_er, key=lambda r: r["ER"])
+                    m3.metric("🏆 Highest ER", top_er["Runner"], f"{top_er['ER']}")
+
+                st.dataframe(
+                    sorted(movers_rows, key=lambda r: (r["Positions +/-"] is None, -(r["Positions +/-"] or 0))),
+                    use_container_width=True, hide_index=True,
+                )
+
             for label, df_summary_bib in results.items():
                 st.markdown(f"##### {label}")
                 st.dataframe(df_summary_bib, use_container_width=True, hide_index=True)
@@ -2956,17 +3037,13 @@ with tab_top:
                 "(worst) position at the bottom."
             )
 
-            checkpoint_to_km = dict(zip(
-                race_segments_df_top["End Point"], race_segments_df_top["End Km"]
-            ))
-
             fig_positions = go.Figure()
             add_elevation_background(fig_positions, race_data_top["df"])
 
             worst_rank_seen = 0
             for label, df_summary_bib in results.items():
                 df_plot = df_summary_bib[["Checkpoint", "Rank"]].dropna(subset=["Rank"]).copy()
-                df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km_top)
                 df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
                 if df_plot.empty:
                     continue
@@ -3010,7 +3087,7 @@ with tab_top:
             max_vpi_seen = 0
             for label, df_summary_bib in results.items():
                 df_plot = df_summary_bib[["Checkpoint", "VPI"]].dropna(subset=["VPI"]).copy()
-                df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km_top)
                 df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
                 if df_plot.empty:
                     continue
@@ -3054,7 +3131,7 @@ with tab_top:
             max_dmi_seen = 0
             for label, df_summary_bib in results.items():
                 df_plot = df_summary_bib[["Checkpoint", "DMI"]].dropna(subset=["DMI"]).copy()
-                df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km)
+                df_plot["Km"] = df_plot["Checkpoint"].map(checkpoint_to_km_top)
                 df_plot = df_plot.dropna(subset=["Km"]).sort_values("Km")
                 if df_plot.empty:
                     continue
