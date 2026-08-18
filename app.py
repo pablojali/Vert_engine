@@ -1831,9 +1831,9 @@ def _collect_blocks_from_state(
     return blocks
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_engine_live, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
-     "⚖️ UTMB vs GPX", "🏆 Top Runners", "🧩 Checkpoint Fetcher",
+     "⚖️ UTMB vs GPX", "🏆 Top Runners", "📡 Engine Live", "🧩 Checkpoint Fetcher",
      "🌐 Exportar a Web", "📰 Posts"]
 )
 
@@ -3183,6 +3183,260 @@ with tab_top:
             )
             st.plotly_chart(fig_dmi_top, use_container_width=True)
             chart_download_button(fig_dmi_top, "dmi_progression.html", "dl_dmi_top")
+
+# ---------------------------------------------
+# TAB 6: Engine Live - race-wide analysis across a wide bib range (up to
+# 1000), separate from the hand-curated Top Runners flow. Doesn't feed
+# the web export pool and doesn't build per-runner reports/charts - just
+# the indices needed for aggregate leaderboards, so a big range fetches
+# as fast as it can and doesn't clutter Exportar a Web with hundreds of
+# runners nobody asked to publish. Goal: surface performances outside the
+# podium (a runner's own dedicated analysis already lives in Athletes),
+# not replace the manually-curated Top 10.
+# ---------------------------------------------
+with tab_engine_live:
+    st.header("📡 Engine Live")
+    st.caption(
+        "Análisis del campo completo de una carrera: le pasás un rango amplio de dorsales "
+        "y te trae quién subió/bajó más puestos, los mejores VPI/DMI/ER, y quién tuvo un "
+        "gran rendimiento pero abandonó - pensado para encontrar historias fuera del podio, "
+        "no para reemplazar el Top 10 curado a mano (eso sigue en '🏆 Top Runners')."
+    )
+
+    MAX_LIVE_BIBS = 1000
+
+    available_races_live = st.session_state.get('saved_races', {})
+    if not available_races_live:
+        st.warning(
+            "⚠️ You haven't loaded any race yet. Go to the "
+            "**'🗺️ Race Analysis'** tab, select and analyze a race, and it "
+            "will show up here automatically."
+        )
+        selected_race_live = None
+    else:
+        selected_race_live = st.selectbox(
+            "Which race?", options=list(available_races_live.keys()), key="live_race_selector",
+        )
+
+    st.markdown("---")
+
+    def _live_parse_url():
+        parsed = parse_livetrail_url(st.session_state.get("live_livetrail_url", ""))
+        if parsed.get("tenant"):
+            st.session_state["live_tenant_input"] = parsed["tenant"]
+        if parsed.get("race_id"):
+            st.session_state["live_race_id_input"] = parsed["race_id"]
+
+    st.text_input(
+        "LiveTrail link of any runner in this race (to identify tenant/race ID)",
+        key="live_livetrail_url", on_change=_live_parse_url,
+        placeholder="https://aranbyutmb.v3.livetrail.net/en/2026/runners/5?raceId=vda",
+    )
+    col_live_tenant, col_live_race_id = st.columns(2)
+    with col_live_tenant:
+        live_tenant = st.text_input("X-Tenant", key="live_tenant_input", help="Auto-filled from the link above.")
+    with col_live_race_id:
+        live_race_id = st.text_input("Race ID", key="live_race_id_input", help="Auto-filled from the link above.")
+
+    col_live_from, col_live_to = st.columns(2)
+    with col_live_from:
+        live_bib_from = st.number_input("Bib from", min_value=1, step=1, value=1, key="live_bib_from")
+    with col_live_to:
+        live_bib_to = st.number_input("Bib to", min_value=1, step=1, value=100, key="live_bib_to")
+
+    st.caption(
+        f"Hasta {MAX_LIVE_BIBS} dorsales por corrida. Un rango grande puede tardar varios "
+        "minutos - se hacen 2 pedidos a LiveTrail por corredor, y no todo dorsal en el rango "
+        "va a estar asignado (es normal, no es un error)."
+    )
+
+    fetch_live_button = st.button("📡 Analizar carrera", type="primary", use_container_width=True)
+
+    # --- Same session_state-driven rendering as every other bulk-fetch tab
+    # in this app: the Excel download button below triggers a Streamlit
+    # rerun like any other, and results kept only inside
+    # "if fetch_live_button:" would vanish on that rerun. ---
+    if fetch_live_button:
+        bib_count = int(live_bib_to) - int(live_bib_from) + 1 if live_bib_to >= live_bib_from else 0
+        if not selected_race_live:
+            st.session_state['live_warning'] = "Select a race above first."
+        elif not live_tenant or not live_race_id:
+            st.session_state['live_warning'] = "Paste a LiveTrail link above first (or fill in X-Tenant/Race ID by hand)."
+        elif bib_count <= 0:
+            st.session_state['live_warning'] = "'Bib to' debe ser mayor o igual a 'Bib from'."
+        elif bib_count > MAX_LIVE_BIBS:
+            st.session_state['live_warning'] = f"Ese rango tiene {bib_count} dorsales - achicalo a {MAX_LIVE_BIBS} o menos."
+        else:
+            st.session_state['live_warning'] = None
+            race_data_live = available_races_live[selected_race_live]
+            race_segments_df_live = race_data_live.get("df_segments")
+
+            if race_segments_df_live is None or race_segments_df_live.empty:
+                st.session_state['live_warning'] = (
+                    "⚠️ The selected race doesn't have checkpoints with km loaded yet. "
+                    "Go back to the 'Race Analysis' tab and load them first."
+                )
+            else:
+                total_race_gain_live = calculate_total_elevation_gain(race_data_live["df"])
+                bibs_live = [str(b) for b in range(int(live_bib_from), int(live_bib_to) + 1)]
+                live_rows = []
+                live_not_found = 0
+                progress = st.progress(0.0, text="Analizando...")
+
+                for i, bib in enumerate(bibs_live):
+                    try:
+                        runner_info_bib, df_runner_bib = fetch_runner_by_tenant_and_bib_livetrail(
+                            live_tenant, bib, live_race_id
+                        )
+                        # Lightweight on purpose: just the indices, no
+                        # figures/df_summary/report HTML - this can run
+                        # over hundreds of bibs, not a handful.
+                        indices_bib, _ = calculate_runner_indices(
+                            race_data_live["df"], race_segments_df_live, df_runner_bib,
+                            race_data_live["total_km"], total_race_gain_live,
+                        )
+                        # df_runner_bib is already chronologically sorted
+                        # (fetch_runner_by_tenant_and_bib_livetrail sorts
+                        # passings by raceTime), so the first non-null Rank
+                        # is this runner's rank at their first recorded
+                        # checkpoint - no need to map back to km here.
+                        ranks_bib = df_runner_bib["Rank"].dropna() if "Rank" in df_runner_bib.columns else None
+                        first_rank = int(ranks_bib.iloc[0]) if ranks_bib is not None and not ranks_bib.empty else None
+                        try:
+                            final_rank = int(runner_info_bib.get("Overall Rank"))
+                        except (TypeError, ValueError):
+                            final_rank = None
+                        positions_change = (
+                            first_rank - final_rank
+                            if first_rank is not None and final_rank is not None else None
+                        )
+                        live_rows.append({
+                            "Bib": runner_info_bib.get("Bib") or bib,
+                            "Runner": runner_info_bib.get("Name") or f"Bib {bib}",
+                            "Status": runner_info_bib.get("Status"),
+                            "Finish Time": runner_info_bib.get("Finish Time"),
+                            "First CP Rank": first_rank,
+                            "Final Rank": final_rank,
+                            "Positions +/-": positions_change,
+                            "VPI": indices_bib.get("VPI"),
+                            "DMI": indices_bib.get("DMI"),
+                            "ER": indices_bib.get("ER"),
+                        })
+                    except Exception:
+                        # Most misses in a wide bib range are simply bibs
+                        # nobody registered under, not real errors - no
+                        # per-bib traceback log here (would just be noise
+                        # for a 1000-bib scan), just a running count.
+                        live_not_found += 1
+                    progress.progress((i + 1) / len(bibs_live), text=f"Analizando... ({i + 1}/{len(bibs_live)})")
+
+                progress.empty()
+                st.session_state['live_rows'] = live_rows or None
+                st.session_state['live_not_found'] = live_not_found
+                st.session_state['live_bibs_requested'] = len(bibs_live)
+                st.session_state['live_race_used'] = selected_race_live
+
+    live_warning = st.session_state.get('live_warning')
+    live_rows = st.session_state.get('live_rows')
+    live_not_found = st.session_state.get('live_not_found') or 0
+    live_bibs_requested = st.session_state.get('live_bibs_requested') or 0
+    live_race_used = st.session_state.get('live_race_used')
+
+    if live_warning:
+        st.warning(live_warning)
+    elif live_rows:
+        st.success(
+            f"✅ {len(live_rows)} de {live_bibs_requested} dorsales con datos "
+            f"({live_not_found} sin datos - normal en un rango amplio)."
+        )
+
+        withdrawn_live = [
+            r for r in live_rows if str(r.get("Status") or "").strip().upper() == "WITHDRAWN"
+        ]
+        if withdrawn_live:
+            st.error(f"🚩 {len(withdrawn_live)} abandono(s) (WITHDRAWN) en este rango.")
+
+        def _leaderboard(rows, key, reverse, n):
+            return sorted((r for r in rows if r.get(key) is not None), key=lambda r: r[key], reverse=reverse)[:n]
+
+        st.markdown("### 🚀📉 Movers")
+        col_gain, col_loss = st.columns(2)
+        with col_gain:
+            st.markdown("**Top 3 - subieron más puestos**")
+            top_gainers_live = _leaderboard(live_rows, "Positions +/-", True, 3)
+            if top_gainers_live:
+                for r in top_gainers_live:
+                    st.markdown(f"- **{r['Runner']}** (Bib {r['Bib']}) — +{r['Positions +/-']} puestos")
+            else:
+                st.caption("Sin datos suficientes.")
+        with col_loss:
+            st.markdown("**Top 3 - bajaron más puestos**")
+            top_losers_live = _leaderboard(live_rows, "Positions +/-", False, 3)
+            if top_losers_live:
+                for r in top_losers_live:
+                    st.markdown(f"- **{r['Runner']}** (Bib {r['Bib']}) — {r['Positions +/-']} puestos")
+            else:
+                st.caption("Sin datos suficientes.")
+
+        st.markdown("### 🏆 Mejores índices del rango")
+        col_vpi, col_dmi, col_er = st.columns(3)
+        with col_vpi:
+            st.markdown("**Top 5 VPI**")
+            for r in _leaderboard(live_rows, "VPI", True, 5):
+                st.markdown(f"- **{r['Runner']}** — {r['VPI']} m/h")
+        with col_dmi:
+            st.markdown("**Top 5 DMI**")
+            for r in _leaderboard(live_rows, "DMI", True, 5):
+                st.markdown(f"- **{r['Runner']}** — {r['DMI']} km/h")
+        with col_er:
+            st.markdown("**Top 5 ER**")
+            for r in _leaderboard(live_rows, "ER", True, 5):
+                st.markdown(f"- **{r['Runner']}** — {r['ER']}")
+
+        st.markdown("### 💎 Gran motor, no llegó")
+        st.caption(
+            "Mejor VPI y DMI entre quienes abandonaron (WITHDRAWN) - candidatos a mirar de cerca "
+            "aunque no hayan terminado."
+        )
+        if withdrawn_live:
+            col_wvpi, col_wdmi = st.columns(2)
+            with col_wvpi:
+                st.markdown("**Mejor VPI entre abandonos**")
+                wd_vpi_top = _leaderboard(withdrawn_live, "VPI", True, 3)
+                if wd_vpi_top:
+                    for r in wd_vpi_top:
+                        st.markdown(f"- **{r['Runner']}** (Bib {r['Bib']}) — {r['VPI']} m/h")
+                else:
+                    st.caption("Sin datos de VPI entre los abandonos.")
+            with col_wdmi:
+                st.markdown("**Mejor DMI entre abandonos**")
+                wd_dmi_top = _leaderboard(withdrawn_live, "DMI", True, 3)
+                if wd_dmi_top:
+                    for r in wd_dmi_top:
+                        st.markdown(f"- **{r['Runner']}** (Bib {r['Bib']}) — {r['DMI']} km/h")
+                else:
+                    st.caption("Sin datos de DMI entre los abandonos.")
+        else:
+            st.caption("No hay abandonos (WITHDRAWN) en este rango.")
+
+        st.markdown("---")
+        st.markdown("### 📋 Tabla completa")
+        st.dataframe(
+            sorted(live_rows, key=lambda r: r["Final Rank"] if r["Final Rank"] is not None else 10**9),
+            use_container_width=True, hide_index=True,
+        )
+
+        live_excel_buffer = io.BytesIO()
+        pd.DataFrame(live_rows).to_excel(live_excel_buffer, index=False)
+        st.download_button(
+            "📥 Descargar tabla completa (Excel)",
+            data=live_excel_buffer.getvalue(),
+            file_name=f"{_ascii_filename(live_race_used or 'race').replace(' ', '_')}_engine_live.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            use_container_width=True,
+        )
+    elif live_rows is None and live_bibs_requested:
+        st.error("❌ Ningún dorsal del rango devolvió datos.")
 
 # ---------------------------------------------
 # TAB 7: Checkpoint Fetcher (Livetrail) - generates the exact block to
