@@ -2887,6 +2887,7 @@ with tab_top:
                 {
                     "Photo": report_data["runner_info"].get("Picture URL"),
                     "Runner": label,
+                    "Status": report_data["runner_info"].get("Status"),
                     "Finish Time": report_data["runner_info"].get("Finish Time"),
                     "Country": _country_flag_url(report_data["runner_info"].get("Country")),
                     "VPI": report_data["indices"].get("VPI"),
@@ -2906,6 +2907,24 @@ with tab_top:
                     "Country": st.column_config.ImageColumn("Country"),
                 },
             )
+
+            # --- Abandonments: LiveTrail's own "status" field would be the
+            # precise signal (DNF/DNS/etc.), but its exact wording hasn't
+            # been confirmed against a real DNF yet - shown as-is in the
+            # "Status" column above for that. In the meantime, "no Finish
+            # Time recorded" is a value we've already verified comes back
+            # None for anyone who didn't cross the line, so it's a safe
+            # (if blunter) way to flag likely abandonments without
+            # guessing at LiveTrail's vocabulary. ---
+            no_finish = [
+                label for label, report_data in reports.items()
+                if not report_data["runner_info"].get("Finish Time")
+            ]
+            if no_finish:
+                st.warning(
+                    f"🚩 {len(no_finish)} corredor(es) sin tiempo de llegada registrado "
+                    "(posible abandono, o la carrera sigue en curso): " + ", ".join(no_finish)
+                )
 
             # --- Race Movers: who gained/lost the most positions between
             # their first recorded checkpoint and the finish, and who
