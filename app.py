@@ -2908,22 +2908,27 @@ with tab_top:
                 },
             )
 
-            # --- Abandonments: LiveTrail's own "status" field would be the
-            # precise signal (DNF/DNS/etc.), but its exact wording hasn't
-            # been confirmed against a real DNF yet - shown as-is in the
-            # "Status" column above for that. In the meantime, "no Finish
-            # Time recorded" is a value we've already verified comes back
-            # None for anyone who didn't cross the line, so it's a safe
-            # (if blunter) way to flag likely abandonments without
-            # guessing at LiveTrail's vocabulary. ---
-            no_finish = [
+            # --- Abandonments: LiveTrail reports "WITHDRAWN" in the
+            # runner's own status field for a confirmed DNF (confirmed
+            # against a real case) - checked case-insensitively since
+            # other statuses (RUNNING, FINISHER, etc.) haven't all been
+            # seen yet and casing isn't guaranteed. Anyone else with no
+            # Finish Time is flagged separately as "sin confirmar" (could
+            # be a live race still in progress, not necessarily a DNF). ---
+            withdrawn = [
                 label for label, report_data in reports.items()
-                if not report_data["runner_info"].get("Finish Time")
+                if str(report_data["runner_info"].get("Status") or "").strip().upper() == "WITHDRAWN"
             ]
-            if no_finish:
+            no_finish_unconfirmed = [
+                label for label, report_data in reports.items()
+                if label not in withdrawn and not report_data["runner_info"].get("Finish Time")
+            ]
+            if withdrawn:
+                st.error(f"🚩 {len(withdrawn)} abandono(s) (WITHDRAWN): " + ", ".join(withdrawn))
+            if no_finish_unconfirmed:
                 st.warning(
-                    f"🚩 {len(no_finish)} corredor(es) sin tiempo de llegada registrado "
-                    "(posible abandono, o la carrera sigue en curso): " + ", ".join(no_finish)
+                    f"⚠️ {len(no_finish_unconfirmed)} corredor(es) sin tiempo de llegada y sin status "
+                    "WITHDRAWN (puede seguir en carrera): " + ", ".join(no_finish_unconfirmed)
                 )
 
             # --- Race Movers: who gained/lost the most positions between
