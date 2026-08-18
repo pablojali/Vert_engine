@@ -55,6 +55,42 @@ en el momento exacto de hacer submit del formulario de export.
 
 ---
 
+## ER da valores inflados (>100) en carreras con perfil "subida concentrada + tramo fácil"
+**Estado:** causa identificada, sin corregir (decisión del usuario: dejarlo así por ahora)
+
+**Descripción:** el índice ER (`calculate_runner_indices` en `app.py`) parte
+la carrera en "primera mitad" y "segunda mitad" por **km de esfuerzo**
+(distancia + desnivel/100), no por tiempo transcurrido. En un perfil de
+carrera típico de trail (una subida fuerte concentrada en una parte del
+recorrido, tramo llano/fácil en otra), esa conversión fija de "100m de
+desnivel = 1km extra de esfuerzo" subestima el costo real de subir (en la
+práctica el ritmo real en subida puede ser 3-4x más lento que en llano, no
+2x). El resultado: la "segunda mitad" calculada cae en el tramo fácil del
+recorrido aunque el corredor no haya cambiado su rendimiento real, e
+infla el ER por encima de 100 - y esto le pasa a **cualquier** corredor en
+una carrera con ese tipo de perfil, no solo a quienes de verdad hicieron
+negative split.
+
+Confirmado offline (sin acceso a LiveTrail desde este entorno)
+reconstruyendo `calculate_runner_indices` verbatim y alimentándola con un
+corredor inventado de ritmo real CONSTANTE (20 min/km en subida, 6 min/km
+en llano - sin fatiga ni mejora real): dio ER=123.5.
+
+**Impacto:** el ER es potencialmente engañoso en cualquier carrera con
+este tipo de perfil (subida concentrada + tramo fácil hacia el final),
+no solo en "Engine Live" - ahí se notó primero porque muestra el campo
+completo a la vez (100+ corredores) en vez de un puñado en Top Runners.
+
+**Próximos pasos (cuando se retome):** la opción evaluada y recomendada es
+cambiar el corte de "primera/segunda mitad" para que sea por TIEMPO
+transcurrido del corredor en vez de por km de esfuerzo del recorrido, así
+el ER mide fatiga real del corredor sin que el perfil de la carrera meta
+ruido. Alternativa: recalibrar el factor de conversión de desnivel (hoy
+100m = 1km extra) - afecta también VPI/DMI, que usan la misma noción de
+"km de esfuerzo".
+
+---
+
 ## Colisión de slug/carpeta entre distintas carreras del mismo año
 **Estado:** resuelto (patrón recurrente, mitigado — no eliminado
 estructuralmente)

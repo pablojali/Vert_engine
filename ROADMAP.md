@@ -1,6 +1,6 @@
 # VertLabs — Roadmap
 
-Última actualización: 2026-08-17
+Última actualización: 2026-08-18
 
 ## 🔥 En progreso
 - [ ] Auto-adjuntado del informe HTML al exportar corredores (tab "Exportar
@@ -8,6 +8,9 @@
       no (detalle en `docs/05-known-issues.md`)
 
 ## 🐛 Bugs conocidos
+- [ ] ER inflado (>100) en carreras con subida concentrada + tramo fácil —
+      causa identificada, corrección pendiente (decisión: dejarlo por
+      ahora), ver `docs/05-known-issues.md`
 - [ ] Auto-adjuntado del informe HTML — ver arriba y
       `docs/05-known-issues.md`
 - [ ] Lavaredo 80K — posible checkpoint inicial sin datos (sin confirmar
@@ -34,6 +37,9 @@
 - [x] Automatización de "Top Runners": fetch masivo de dorsales con VPI/DMI/ER,
       foto (Cloudinary/LiveTrail) y país (bandera) auto-adjuntados,
       tabla de copiar/pegar lista para Excel
+- [x] Tab "Engine Live": análisis de campo completo (rango de bib, hasta
+      1000) con Movers, top VPI/DMI/ER y abandonos con buen rendimiento;
+      fetch paralelizado (10 bibs a la vez) en vez de secuencial
 - [x] i18n EN/ES/FR en todo el sitio público
 - [x] Rediseño visual: header centrado, paleta cyan/verde/naranja,
       carrusel de posts con ajuste de imagen por altura + navegación
