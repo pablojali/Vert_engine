@@ -2911,57 +2911,11 @@ with tab_top:
                     "WITHDRAWN (puede seguir en carrera): " + ", ".join(no_finish_unconfirmed)
                 )
 
-            # --- Race Movers: who gained/lost the most positions between
-            # their first recorded checkpoint and the finish, and who
-            # posted the highest ER - straight from data already fetched
-            # above, no extra requests. ---
+            # checkpoint_to_km_top: used below by the position-progression
+            # charts to map a checkpoint number back to its accumulated km.
             checkpoint_to_km_top = dict(zip(
                 race_segments_df_top["End Point"], race_segments_df_top["End Km"]
             ))
-            movers_rows = []
-            for label, report_data in reports.items():
-                df_ranked = results[label][["Checkpoint", "Rank"]].dropna(subset=["Rank"]).copy()
-                df_ranked["Km"] = df_ranked["Checkpoint"].map(checkpoint_to_km_top)
-                df_ranked = df_ranked.dropna(subset=["Km"]).sort_values("Km")
-                first_rank = int(df_ranked["Rank"].iloc[0]) if not df_ranked.empty else None
-                try:
-                    final_rank = int(report_data["runner_info"].get("Overall Rank"))
-                except (TypeError, ValueError):
-                    final_rank = None
-                positions_change = (
-                    first_rank - final_rank if first_rank is not None and final_rank is not None else None
-                )
-                movers_rows.append({
-                    "Runner": label,
-                    "First CP Rank": first_rank,
-                    "Final Rank": final_rank,
-                    "Positions +/-": positions_change,
-                    "ER": report_data["indices"].get("ER"),
-                })
-
-            valid_change = [r for r in movers_rows if r["Positions +/-"] is not None]
-            valid_er = [r for r in movers_rows if r["ER"] is not None]
-            if valid_change or valid_er:
-                st.markdown("---")
-                st.markdown("### 🏅 Race Movers")
-                st.caption(
-                    "Positions +/- = rank at the first recorded checkpoint minus the final rank. "
-                    "Positive = moved up, negative = moved down."
-                )
-                m1, m2, m3 = st.columns(3)
-                if valid_change:
-                    top_gainer = max(valid_change, key=lambda r: r["Positions +/-"])
-                    m1.metric("🚀 Biggest gainer", top_gainer["Runner"], f"+{top_gainer['Positions +/-']}")
-                    top_loser = min(valid_change, key=lambda r: r["Positions +/-"])
-                    m2.metric("📉 Biggest drop", top_loser["Runner"], f"{top_loser['Positions +/-']}")
-                if valid_er:
-                    top_er = max(valid_er, key=lambda r: r["ER"])
-                    m3.metric("🏆 Highest ER", top_er["Runner"], f"{top_er['ER']}")
-
-                st.dataframe(
-                    sorted(movers_rows, key=lambda r: (r["Positions +/-"] is None, -(r["Positions +/-"] or 0))),
-                    use_container_width=True, hide_index=True,
-                )
 
             for label, df_summary_bib in results.items():
                 st.markdown(f"##### {label}")
