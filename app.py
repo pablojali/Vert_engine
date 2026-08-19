@@ -3395,14 +3395,45 @@ with tab_checkpoints:
         if parsed.get("race_id"):
             st.session_state["cf_race_id_input"] = parsed["race_id"]
 
+    CF_NEW_RACE_OPTION = "+ Carrera nueva"
+
     def _cf_sync_slug_from_nombre():
-        st.session_state["cf_carrera_slug_input"] = _slugify(st.session_state.get("cf_carrera_nombre_input", ""))
+        # Only auto-slugify while creating a brand new race - once an
+        # existing one is picked below, the slug is locked to that race's
+        # real key so editing the display name can't quietly re-derive a
+        # DIFFERENT slug and fork off a duplicate top-level entry (this is
+        # exactly how the Monterosa duplicate happened: two slightly
+        # different slugs for the same event, "MonteRosa" vs
+        # "monterosa-walserwaeg-by-utmb", each keeping its own checkpoints).
+        if st.session_state.get("cf_existing_race_select", CF_NEW_RACE_OPTION) == CF_NEW_RACE_OPTION:
+            st.session_state["cf_carrera_slug_input"] = _slugify(st.session_state.get("cf_carrera_nombre_input", ""))
 
     st.text_input(
         "Link de Livetrail (resultados en vivo)", key="cf_url_input", on_change=_cf_parse_url,
         placeholder="https://aranbyutmb.v3.livetrail.net/?e=aranbyutmb_2026&c=vda",
         help="El link que abrís normalmente para ver resultados en vivo de esta carrera.",
     )
+
+    existing_carreras_cf = get_carreras()  # [(slug, nombre_visible), ...]
+    carrera_nombre_by_slug_cf = dict(existing_carreras_cf)
+    carrera_options_cf = [CF_NEW_RACE_OPTION] + [slug for slug, _ in existing_carreras_cf]
+
+    def _cf_apply_existing_race():
+        picked = st.session_state.get("cf_existing_race_select")
+        if picked and picked != CF_NEW_RACE_OPTION:
+            st.session_state["cf_carrera_nombre_input"] = carrera_nombre_by_slug_cf[picked]
+            st.session_state["cf_carrera_slug_input"] = picked
+
+    st.selectbox(
+        "¿Sumás una distancia o actualizás el GPX de una carrera que ya existe, o es una carrera nueva?",
+        options=carrera_options_cf,
+        format_func=lambda s: s if s == CF_NEW_RACE_OPTION else f"{carrera_nombre_by_slug_cf[s]} ({s})",
+        key="cf_existing_race_select",
+        on_change=_cf_apply_existing_race,
+        help="Elegí la carrera existente para completar el nombre y el slug automáticamente - evita crear "
+             "una entrada duplicada en el registry por escribir el slug distinto a como ya estaba guardado.",
+    )
+    cf_using_existing_race = st.session_state.get("cf_existing_race_select", CF_NEW_RACE_OPTION) != CF_NEW_RACE_OPTION
 
     col1, col2 = st.columns(2)
     with col1:
@@ -3430,6 +3461,7 @@ with tab_checkpoints:
         cf_carrera_slug = st.text_input(
             "Slug interno (clave del registry)", key="cf_carrera_slug_input",
             help="Se sugiere solo del nombre. Ej: 'aran', 'lavaredo'.",
+            disabled=cf_using_existing_race,
         )
         cf_anio = st.text_input("Año", key="cf_anio_input", help="Ej: 2026")
         cf_distancia = st.text_input(

@@ -116,6 +116,30 @@ libre comparado por heurística, no un identificador único de evento. Ver
 `docs/03-web-builder/data-schema.md` para el porqué estructural (slug como
 clave de unión textual).
 
+**Caso real confirmado (2026-08-19) — mismo patrón, en `races_registry.json`
+en vez de en el export al sitio:** el registry tenía dos entradas de nivel
+superior para el mismo evento, `"MonteRosa"` (correcta, checkpoints y GPX
+reales tanto para 90K como 120K) y `"monterosa-walserwaeg-by-utmb"`
+(duplicada por typo de slug al cargar/actualizar la carrera una segunda
+vez - probablemente al sumar una distancia o reemplazar el GPX). La
+duplicada tenía **ambas** distancias (90 y 120) apuntando por error al GPX
+y a los checkpoints del 90K. Como las dos entradas comparten el mismo
+"nombre visible", en los desplegables aparecían dos opciones idénticas sin
+forma de distinguirlas - cuando el motor cargó la de 120K desde la entrada
+duplicada, usó los checkpoints de otra distancia, y eso rompió VPI/DMI/ER
+para cualquier corredor analizado desde ahí (síntoma reportado: casi todos
+los checkpoints de un corredor sin "Time" - no eran datos faltantes de
+LiveTrail, eran los IDs de checkpoint equivocados).
+
+Entrada duplicada + su carpeta GPX huérfana (`data/gpx/monterosa-walserwaeg-by-utmb/`)
+eliminadas. Mitigación estructural agregada en el "🧩 Checkpoint Fetcher"
+(`app.py`): un desplegable para elegir una carrera YA EXISTENTE (en vez de
+volver a tipear nombre/slug de memoria) que autocompleta nombre y slug y
+bloquea el campo de slug para edición manual mientras esa carrera esté
+seleccionada - así sumar una distancia nueva o actualizar el GPX de un
+evento existente no puede volver a crear una entrada duplicada por un
+slug ligeramente distinto.
+
 ---
 
 <!-- Agregar nuevos issues debajo, con el mismo formato: título, Estado,

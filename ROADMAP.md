@@ -1,6 +1,6 @@
 # VertLabs — Roadmap
 
-Última actualización: 2026-08-18
+Última actualización: 2026-08-19
 
 ## 🔥 En progreso
 - [ ] Auto-adjuntado del informe HTML al exportar corredores (tab "Exportar
@@ -15,6 +15,14 @@
       `docs/05-known-issues.md`
 - [ ] Lavaredo 80K — posible checkpoint inicial sin datos (sin confirmar
       contra el estado actual del repo, ver `docs/05-known-issues.md`)
+
+## ✅ Resueltos recientemente (bugs)
+- [x] Entrada duplicada de Monterosa en `races_registry.json` (dos slugs
+      para el mismo evento, uno con checkpoints del 90K pisando al 120K) —
+      causaba VPI/DMI/ER rotos para corredores de esa carrera; entrada mala
+      + GPX huérfano eliminados, y el Checkpoint Fetcher ahora tiene un
+      desplegable de "carrera existente" para que esto no se repita por
+      typo de slug (ver `docs/05-known-issues.md`)
 
 ## 📋 Próximo (backlog priorizado)
 - [ ] Filtrado de atletas por nacionalidad en `/athletes/` (la data
@@ -40,6 +48,9 @@
 - [x] Tab "Engine Live": análisis de campo completo (rango de bib, hasta
       1000) con Movers, top VPI/DMI/ER y abandonos con buen rendimiento;
       fetch paralelizado (10 bibs a la vez) en vez de secuencial
+- [x] Checkpoint Fetcher: desplegable de carrera existente (autocompleta
+      nombre/slug y bloquea el slug para edición manual) para sumar una
+      distancia o actualizar el GPX sin arriesgar una entrada duplicada
 - [x] i18n EN/ES/FR en todo el sitio público
 - [x] Rediseño visual: header centrado, paleta cyan/verde/naranja,
       carrusel de posts con ajuste de imagen por altura + navegación
