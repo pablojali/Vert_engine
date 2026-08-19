@@ -2737,19 +2737,8 @@ with tab_top:
     with col_top_race_id:
         top_race_id = st.text_input("Race ID", key="top_race_id_input", help="Auto-filled from the link above.")
 
-    st.markdown("**Quick fill: bib range**")
-    col_bib_from, col_bib_to = st.columns(2)
-    with col_bib_from:
-        top_bib_range_start = st.number_input(
-            "Bib from", min_value=0, step=1, value=0, key="top_bib_range_start"
-        )
-    with col_bib_to:
-        top_bib_range_end = st.number_input(
-            "Bib to", min_value=0, step=1, value=0, key="top_bib_range_end"
-        )
-
     bib_list_raw = st.text_area(
-        "Bib numbers to fetch (one per line or comma-separated) - combined with the range above",
+        "Bib numbers to fetch (one per line or comma-separated)",
         placeholder="5\n12\n8\n23\n...",
         key="top_bib_list",
     )
@@ -2765,28 +2754,18 @@ with tab_top:
     # vanish on that rerun - forcing all bibs to be re-fetched from
     # scratch just to click a second download. ---
     if fetch_top_button:
-        # Range bibs first (in order), then any manually-listed bib not
-        # already covered by the range - lets someone fetch "1 to 20 plus
-        # bib 105 as a wildcard" in one go instead of two separate fetches.
-        range_bibs = (
-            [str(b) for b in range(int(top_bib_range_start), int(top_bib_range_end) + 1)]
-            if top_bib_range_end and top_bib_range_end >= top_bib_range_start > 0
-            else []
-        )
-        manual_bibs = [b.strip() for b in re.split(r"[,\n]+", bib_list_raw) if b.strip()]
-        seen_bibs = set(range_bibs)
-        bibs = range_bibs + [b for b in manual_bibs if b not in seen_bibs and not seen_bibs.add(b)]
+        bibs = [b.strip() for b in re.split(r"[,\n]+", bib_list_raw) if b.strip()]
 
         if not selected_race_top:
             st.session_state['top_warning'] = "Select a race above first."
         elif not top_tenant or not top_race_id:
             st.session_state['top_warning'] = "Paste a LiveTrail link above first (or fill in X-Tenant/Race ID by hand)."
         elif not bibs:
-            st.session_state['top_warning'] = "Enter at least one bib number, or a bib range."
+            st.session_state['top_warning'] = "Enter at least one bib number."
         elif len(bibs) > MAX_BIBS_PER_FETCH:
             st.session_state['top_warning'] = (
-                f"⚠️ That's {len(bibs)} bibs - narrow the range to {MAX_BIBS_PER_FETCH} or fewer per fetch "
-                "(likely a typo in the range, e.g. a year instead of a bib number)."
+                f"⚠️ That's {len(bibs)} bibs - narrow it down to {MAX_BIBS_PER_FETCH} or fewer per fetch "
+                "(likely a typo, e.g. a year instead of a bib number)."
             )
         else:
             st.session_state['top_warning'] = None
