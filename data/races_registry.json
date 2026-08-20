@@ -1081,6 +1081,57 @@
               "km": 88.3
             }
           ]
+        },
+        "42": {
+          "gpx_file": "data/gpx/marathon-du-mont-blanc/2026/marathonmontblanc_42k.gpx",
+          "race_slug_api": "42km",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Place du triangle de l'amitié",
+              "km": 0.0
+            },
+            {
+              "id": "42",
+              "nombre": "Argentière",
+              "km": 9.6
+            },
+            {
+              "id": "46",
+              "nombre": "Le Tour 42 entrée ",
+              "km": 13.7
+            },
+            {
+              "id": "48",
+              "nombre": "Aiguillette des posettes",
+              "km": 18.9
+            },
+            {
+              "id": "50",
+              "nombre": "Vallorcine",
+              "km": 23.6
+            },
+            {
+              "id": "64",
+              "nombre": "Bois plagnolet",
+              "km": 31.8
+            },
+            {
+              "id": "66",
+              "nombre": "Flégère ravito",
+              "km": 35.6
+            },
+            {
+              "id": "72",
+              "nombre": "Charlanon",
+              "km": 38.2
+            },
+            {
+              "id": "100",
+              "nombre": "Arrivée Place du triangle de l'amitié",
+              "km": 44.3
+            }
+          ]
         }
       }
     }
