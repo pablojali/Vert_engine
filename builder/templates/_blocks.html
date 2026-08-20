@@ -1,4 +1,4 @@
-{% macro render_blocks(blocks, t, fallback_alt='') %}
+{% macro render_blocks(blocks, t, fallback_alt='', race=none) %}
   {% for block in blocks %}
     {% if block.type == 'text' %}
     <div class="race-analysis-content race-analysis-text">
@@ -47,6 +47,11 @@
           </tbody>
         </table>
       </div>
+      {% if race and race.athletes %}
+      <p class="post-race-cta">
+        <a href="{{ race.url }}">{{ t.post_see_all_prefix }}{{ race.athletes|length }}{{ t.post_see_all_suffix }}</a>
+      </p>
+      {% endif %}
     </div>
     {% endif %}
   {% endfor %}

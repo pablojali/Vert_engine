@@ -599,6 +599,7 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 
 .top10-block { margin: 1.5rem 0 2.5rem; }
 .top10-block h3 { margin: 0 0 0.75rem; }
+.post-race-cta { margin-top: 0.75rem; font-weight: 600; }
 
 .report-page .race-meta { margin-top: 0; margin-bottom: 1.5rem; }
 .report-frame {

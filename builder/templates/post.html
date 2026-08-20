@@ -23,6 +23,6 @@
     {%- if post.date %} · {{ post.date }}{% endif -%}
   </p>
 
-  {{ render_blocks(post.blocks, t, post.title) }}
+  {{ render_blocks(post.blocks, t, post.title, post.race) }}
 </article>
 {% endblock %}
