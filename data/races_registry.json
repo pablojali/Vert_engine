@@ -981,5 +981,159 @@
         }
       }
     }
+  },
+  "marathon-du-mont-blanc": {
+    "nombre": "Marathon du Mont Blanc",
+    "anios": {
+      "2026": {
+        "90": {
+          "gpx_file": "data/gpx/marathon-du-mont-blanc/2026/marathonmontblanc_90.gpx",
+          "race_slug_api": "90km",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Place du triangle de l'amitié",
+              "km": 0.0
+            },
+            {
+              "id": "2",
+              "nombre": "Brévent",
+              "km": 10.0
+            },
+            {
+              "id": "4",
+              "nombre": "Planpraz",
+              "km": 12.6
+            },
+            {
+              "id": "6",
+              "nombre": "Flégère",
+              "km": 17.9
+            },
+            {
+              "id": "8",
+              "nombre": "Tete aux vents",
+              "km": 21.5
+            },
+            {
+              "id": "10",
+              "nombre": "Buet",
+              "km": 28.3
+            },
+            {
+              "id": "14",
+              "nombre": "La villaz",
+              "km": 35.0
+            },
+            {
+              "id": "16",
+              "nombre": "Emosson",
+              "km": 40.5
+            },
+            {
+              "id": "18",
+              "nombre": "Le Chatelard",
+              "km": 44.5
+            },
+            {
+              "id": "19",
+              "nombre": "Les Esserts",
+              "km": 47.0
+            },
+            {
+              "id": "20",
+              "nombre": "Catogne",
+              "km": 50.6
+            },
+            {
+              "id": "22",
+              "nombre": "Col des Posettes",
+              "km": 54.8
+            },
+            {
+              "id": "24",
+              "nombre": "Le Tour 90",
+              "km": 59.8
+            },
+            {
+              "id": "28",
+              "nombre": "Les Bois",
+              "km": 69.6
+            },
+            {
+              "id": "30",
+              "nombre": "Montenvers 90/duo",
+              "km": 74.0
+            },
+            {
+              "id": "32",
+              "nombre": "Le Signal 90km/duo",
+              "km": 76.5
+            },
+            {
+              "id": "36",
+              "nombre": "Plan de l'Aiguille",
+              "km": 80.9
+            },
+            {
+              "id": "100",
+              "nombre": "Arrivée Place du triangle de l'amitié",
+              "km": 88.3
+            }
+          ]
+        },
+        "42": {
+          "gpx_file": "data/gpx/marathon-du-mont-blanc/2026/marathonmontblanc_42k.gpx",
+          "race_slug_api": "42km",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Place du triangle de l'amitié",
+              "km": 0.0
+            },
+            {
+              "id": "42",
+              "nombre": "Argentière",
+              "km": 9.6
+            },
+            {
+              "id": "46",
+              "nombre": "Le Tour 42 entrée ",
+              "km": 13.7
+            },
+            {
+              "id": "48",
+              "nombre": "Aiguillette des posettes",
+              "km": 18.9
+            },
+            {
+              "id": "50",
+              "nombre": "Vallorcine",
+              "km": 23.6
+            },
+            {
+              "id": "64",
+              "nombre": "Bois plagnolet",
+              "km": 31.8
+            },
+            {
+              "id": "66",
+              "nombre": "Flégère ravito",
+              "km": 35.6
+            },
+            {
+              "id": "72",
+              "nombre": "Charlanon",
+              "km": 38.2
+            },
+            {
+              "id": "100",
+              "nombre": "Arrivée Place du triangle de l'amitié",
+              "km": 44.3
+            }
+          ]
+        }
+      }
+    }
   }
 }
