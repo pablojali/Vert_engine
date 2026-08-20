@@ -28,6 +28,25 @@
     <a href="{{ locale_url(locale, 'about/') }}">{{ t.race_how_calculated }}</a>
   </p>
 
+  {% if race.posts %}
+  <div class="race-posts">
+    <h2>{{ t.race_latest_posts }}</h2>
+    <ul class="post-row-list">
+      {% for p in race.posts %}
+      <li class="post-row">
+        <a href="{{ p.url }}">
+          {% if p.cover_image %}<img src="{{ p.cover_image }}" alt="" loading="lazy">{% else %}<span class="post-row-placeholder"></span>{% endif %}
+          <span class="post-row-text">
+            <span class="post-row-title">{{ p.title }}</span>
+            <span class="post-row-meta">{{ p.category }}{% if p.date %} · {{ p.date }}{% endif %}</span>
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
   {% if race.athletes %}
   <div class="top10-block">
     <h3>{{ t.race_performance_title }}</h3>
@@ -59,25 +78,6 @@
         </tbody>
       </table>
     </div>
-  </div>
-  {% endif %}
-
-  {% if race.posts %}
-  <div class="race-posts">
-    <h2>{{ t.race_latest_posts }}</h2>
-    <ul class="post-row-list">
-      {% for p in race.posts %}
-      <li class="post-row">
-        <a href="{{ p.url }}">
-          {% if p.cover_image %}<img src="{{ p.cover_image }}" alt="" loading="lazy">{% else %}<span class="post-row-placeholder"></span>{% endif %}
-          <span class="post-row-text">
-            <span class="post-row-title">{{ p.title }}</span>
-            <span class="post-row-meta">{{ p.category }}{% if p.date %} · {{ p.date }}{% endif %}</span>
-          </span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
   </div>
   {% endif %}
 </article>
