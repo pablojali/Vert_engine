@@ -1,6 +1,6 @@
 # VertLabs — Roadmap
 
-Última actualización: 2026-08-19
+Última actualización: 2026-08-20
 
 ## 🔥 En progreso
 - [ ] Auto-adjuntado del informe HTML al exportar corredores (tab "Exportar
@@ -15,6 +15,8 @@
       `docs/05-known-issues.md`
 - [ ] Lavaredo 80K — posible checkpoint inicial sin datos (sin confirmar
       contra el estado actual del repo, ver `docs/05-known-issues.md`)
+- [ ] Schema de `race.json` sin campo `gender` confiable (`gender_rank`
+      viene incompleto de LiveTrail) — bloquea separar tablas por sexo
 
 ## ✅ Resueltos recientemente (bugs)
 - [x] Entrada duplicada de Monterosa en `races_registry.json` (dos slugs
@@ -54,6 +56,16 @@
 - [x] Checkpoint Fetcher: desplegable de carrera existente (autocompleta
       nombre/slug y bloquea el slug para edición manual) para sumar una
       distancia o actualizar el GPX sin arriesgar una entrada duplicada
+- [x] Cross-linking carrera↔atleta (5 pasos, validado en staging antes de
+      producción): tabla completa de corredores en la página de carrera Y
+      en la de evento (Pos/Bib/Athlete/Time/VPI/DMI/ER, reusando estilos
+      del Top 10); ordenamiento por click (vanilla JS, sin dependencias);
+      CTA dinámico al final de cada Top 10 en los posts ("Ver los N
+      corredores analizados en esta carrera →"); conteo de corredores
+      analizados en las tarjetas de `/races/`. 0 links rotos verificados
+      sobre 261 referencias corredor↔carrera en las 3 locales. De paso,
+      arreglado un "None · None" preexistente en el header de carrera/
+      evento cuando falta location/date.
 - [x] i18n EN/ES/FR en todo el sitio público
 - [x] Rediseño visual: header centrado, paleta cyan/verde/naranja,
       carrusel de posts con ajuste de imagen por altura + navegación
