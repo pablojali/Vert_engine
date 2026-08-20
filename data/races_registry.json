@@ -1235,6 +1235,67 @@
               "km": 140.2
             }
           ]
+        },
+        "77": {
+          "gpx_file": "data/gpx/trail-verbier-st-bernard/2026/X-TRaverse.gpx",
+          "race_slug_api": "XT",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "La Fouly départ",
+              "km": 0.0
+            },
+            {
+              "id": "18",
+              "nombre": "Col Fenêtre",
+              "km": 9.4
+            },
+            {
+              "id": "20",
+              "nombre": "Grd St-Bernard",
+              "km": 12.7
+            },
+            {
+              "id": "22",
+              "nombre": "Bourg St Pierre",
+              "km": 27.0
+            },
+            {
+              "id": "24",
+              "nombre": "Mille",
+              "km": 38.8
+            },
+            {
+              "id": "30",
+              "nombre": "Brunet",
+              "km": 46.4
+            },
+            {
+              "id": "32",
+              "nombre": "C Panossière",
+              "km": 53.2
+            },
+            {
+              "id": "34",
+              "nombre": "Lourtier entrée",
+              "km": 64.4
+            },
+            {
+              "id": "36",
+              "nombre": "Lourtier sortie",
+              "km": 64.4
+            },
+            {
+              "id": "38",
+              "nombre": "La Chaux",
+              "km": 70.4
+            },
+            {
+              "id": "100",
+              "nombre": "Verbier",
+              "km": 76.9
+            }
+          ]
         }
       }
     }
