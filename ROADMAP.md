@@ -15,8 +15,11 @@
       `docs/05-known-issues.md`
 - [ ] Lavaredo 80K — posible checkpoint inicial sin datos (sin confirmar
       contra el estado actual del repo, ver `docs/05-known-issues.md`)
-- [ ] Schema de `race.json` sin campo `gender` confiable (`gender_rank`
-      viene incompleto de LiveTrail) — bloquea separar tablas por sexo
+- [ ] Backfill de género: el pipeline ya captura `gender` (parseado de
+      `Category`, ej. "SE H"/"SE F") para exports NUEVOS, pero los 246
+      atletas ya publicados no lo tienen — necesitan reexportarse desde
+      Top Runners/Runner Metrics para que el filtro Men/Women en
+      `/athletes/` los incluya
 
 ## ✅ Resueltos recientemente (bugs)
 - [x] Entrada duplicada de Monterosa en `races_registry.json` (dos slugs
@@ -33,9 +36,9 @@
       (ver `docs/05-known-issues.md`)
 
 ## 📋 Próximo (backlog priorizado)
-- [ ] Filtrado de atletas por nacionalidad en `/athletes/` (la data
-      — código de país por atleta — ya está disponible desde el export
-      automático; falta la UI/lógica de filtro en el Builder)
+- [ ] Filtrado de atletas por nacionalidad en `/athletes/` (la data ya
+      está disponible - mismo patrón que género/carrera/año, que ya
+      tienen su filtro)
 - [ ] Decidir uso del Hetzner VPS: cron scraping de LiveTrail/UTMB o baja
       del servicio (ver `docs/04-infra/hetzner-vps.md`)
 
@@ -43,6 +46,17 @@
 - [ ] (añadir según surjan)
 
 ## ✅ Completado recientemente
+- [x] Búsqueda + filtros + paginación en `/athletes/` (vanilla JS, sin
+      dependencias nuevas): búsqueda en vivo por nombre (con fold de
+      acentos), filtro por evento (agrupado como `/races/`, no por
+      distancia - 1 sola entrada para Val d'Aran, 1 sola para Lavaredo),
+      por año, y por género (Men/Women). Género es dato nuevo: se parsea
+      de `Category` de LiveTrail ("SE H"/"SE F" confirmado real) y se
+      guarda igual que `country` - los 246 atletas ya publicados no lo
+      tienen todavía, van completándose a medida que se reexportan.
+      Paginación de 100 + "Load more"; los filtros muestran todos los
+      resultados directo (el conjunto más grande filtrado, por evento o
+      año, está bien por debajo de 100).
 - [x] Pipeline completo del Static Site Builder (Python → JSON → Jinja2 →
       HTML → Cloudflare Pages), en uso diario
 - [x] Migración completa de UTMB Live a LiveTrail como única fuente de
