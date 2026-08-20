@@ -3640,7 +3640,18 @@ with tab_web_export:
         # (e.g. two different events both having a "120k"), so the name
         # must also share at least one non-generic word before two folders
         # are treated as the same event. ---
-        _GENERIC_RACE_WORDS = {"by", "utmb", "ultra", "trail", "race", "the", "of"}
+        # English generic words, plus grammatical connectors from the
+        # languages these races are actually named in (French/Italian/
+        # Spanish/German) - e.g. "du" alone matched "Marathon DU Mont
+        # Blanc" against "Trail DU Saint-Jacques by UTMB", two unrelated
+        # races that only shared that one French preposition.
+        _GENERIC_RACE_WORDS = {
+            "by", "utmb", "ultra", "trail", "race", "the", "of",
+            "du", "de", "des", "la", "le", "les", "et", "l",  # French
+            "di", "del", "della", "dei", "delle", "e", "il", "lo", "i", "gli",  # Italian
+            "y", "el", "los", "las",  # Spanish
+            "und", "der", "die", "das", "von", "im", "am",  # German
+        }
 
         def _name_tokens(text: str) -> set:
             return set(_slugify(text or "").split("-")) - _GENERIC_RACE_WORDS

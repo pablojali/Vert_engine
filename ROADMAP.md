@@ -23,6 +23,12 @@
       + GPX huérfano eliminados, y el Checkpoint Fetcher ahora tiene un
       desplegable de "carrera existente" para que esto no se repita por
       typo de slug (ver `docs/05-known-issues.md`)
+- [x] Falso positivo en "Exportar a Web": "Marathon du Mont Blanc" se
+      emparejaba con la carpeta ya publicada de "Trail du Saint-Jacques"
+      porque solo compartían la preposición francesa "du" - la lista de
+      palabras genéricas de `_find_existing_race_folder` solo cubría
+      inglés. Ahora incluye conectores de francés/italiano/español/alemán
+      (ver `docs/05-known-issues.md`)
 
 ## 📋 Próximo (backlog priorizado)
 - [ ] Filtrado de atletas por nacionalidad en `/athletes/` (la data
@@ -30,9 +36,6 @@
       automático; falta la UI/lógica de filtro en el Builder)
 - [ ] Decidir uso del Hetzner VPS: cron scraping de LiveTrail/UTMB o baja
       del servicio (ver `docs/04-infra/hetzner-vps.md`)
-- [ ] Endurecer el emparejamiento de carpeta/slug al exportar una carrera,
-      para reducir aún más el riesgo de colisión entre eventos distintos
-      (ver "Colisión de slug/carpeta" en `docs/05-known-issues.md`)
 
 ## 💡 Ideas / mejoras futuras (sin priorizar)
 - [ ] (añadir según surjan)

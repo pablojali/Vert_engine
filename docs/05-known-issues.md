@@ -140,6 +140,25 @@ seleccionada - así sumar una distancia nueva o actualizar el GPX de un
 evento existente no puede volver a crear una entrada duplicada por un
 slug ligeramente distinto.
 
+**Segundo caso real confirmado (2026-08-19) — mismo patrón, pero en la
+dirección opuesta (falso positivo, no duplicado):** al exportar "Marathon
+du Mont Blanc" en "Exportar a Web", el guard de `_find_existing_race_folder`
+la emparejó con la carpeta ya publicada `trail-du-saint-jacques-by-utmb`
+- dos eventos completamente distintos. Causa: `_GENERIC_RACE_WORDS` (las
+palabras que se descartan antes de comparar nombres) solo tenía palabras
+genéricas en inglés (`by, utmb, ultra, trail, race, the, of`); "du"
+(preposición francesa) no estaba filtrada, y era la ÚNICA palabra que
+"Marathon **du** Mont Blanc" y "Trail **du** Saint-Jacques" tenían en
+común. Con la mayoría de las carreras del catálogo nombradas en francés/
+italiano, cualquier par de nombres que solo compartiera un conector así
+(du, de, la, el, di, und, etc.) se emparejaba por error.
+
+**Corregido:** `_GENERIC_RACE_WORDS` ahora incluye conectores gramaticales
+de francés, italiano, español y alemán además de los de inglés. Verificado
+offline que el par Marathon/Saint-Jacques ya no comparte tokens, y que el
+caso real que motivó el guard original (Lavaredo Ultra Trail vs. Lavaredo
+Ultra Trail by UTMB) sigue emparejando correctamente.
+
 ---
 
 <!-- Agregar nuevos issues debajo, con el mismo formato: título, Estado,
