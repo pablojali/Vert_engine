@@ -70,6 +70,7 @@ def _build_events(races: list[dict], loc: dict) -> list[dict]:
             "date": next((r.get("date") for r in distances if r.get("date")), None),
             "hero_image": icon or next((r.get("hero_image") for r in distances if r.get("hero_image")), None),
             "distances": distances,
+            "athlete_count": sum(len(r.get("athletes", [])) for r in distances),
             "url": locale_url(loc["code"], f"races/{slug}/"),
             "_source_dir": year_dir,
         })
