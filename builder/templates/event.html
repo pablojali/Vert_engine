@@ -41,6 +41,40 @@
       {% else %}
       <p class="event-post-empty">{{ t.event_no_posts }}</p>
       {% endif %}
+
+      {% if d.athletes %}
+      <div class="top10-block">
+        <h3>{{ t.race_performance_title }}</h3>
+        <div class="table-scroll">
+          <table class="athlete-table">
+            <thead>
+              <tr>
+                <th>{{ t.race_pos }}</th>
+                <th>{{ t.race_bib }}</th>
+                <th>{{ t.race_athlete }}</th>
+                <th>{{ t.race_time }}</th>
+                <th class="metric-vpi">VPI</th>
+                <th class="metric-dmi">DMI</th>
+                <th class="metric-er">ER</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in d.athletes %}
+              <tr>
+                <td>{{ a.position if a.position is not none else '—' }}</td>
+                <td>{{ a.bib if a.bib is not none else '—' }}</td>
+                <td><a href="{{ a.url }}">{{ a.name }}</a></td>
+                <td>{{ a.finish_time if a.finish_time is not none else '—' }}</td>
+                <td class="metric-vpi">{{ a.vpi if a.vpi is not none else '—' }}</td>
+                <td class="metric-dmi">{{ a.dmi if a.dmi is not none else '—' }}</td>
+                <td class="metric-er">{{ a.er if a.er is not none else '—' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
     </div>
     {% endfor %}
   </div>
