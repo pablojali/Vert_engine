@@ -2,17 +2,10 @@
 
 Última actualización: 2026-08-20
 
-## 🔥 En progreso
-- [ ] Auto-adjuntado del informe HTML al exportar corredores (tab "Exportar
-      a Web") — la foto y el país ya se auto-adjuntan, el informe todavía
-      no (detalle en `docs/05-known-issues.md`)
-
 ## 🐛 Bugs conocidos
 - [ ] ER inflado (>100) en carreras con subida concentrada + tramo fácil —
       causa identificada, corrección pendiente (decisión: dejarlo por
       ahora), ver `docs/05-known-issues.md`
-- [ ] Auto-adjuntado del informe HTML — ver arriba y
-      `docs/05-known-issues.md`
 - [ ] Lavaredo 80K — posible checkpoint inicial sin datos (sin confirmar
       contra el estado actual del repo, ver `docs/05-known-issues.md`)
 - [ ] Backfill de género: el pipeline ya captura `gender` (parseado de
@@ -22,6 +15,14 @@
       `/athletes/` los incluya
 
 ## ✅ Resueltos recientemente (bugs)
+- [x] Auto-adjuntado del informe HTML en "Exportar a Web" — causa real:
+      `build_full_runner_report_html` devolvía `bytes`, pero el
+      auto-adjuntado escribe con `Path.write_text()` (exige `str`) - cada
+      intento tiraba `TypeError` en silencio. Los botones de descarga
+      manual nunca lo sufrieron (aceptan bytes o str igual), por eso el
+      workaround de subir a mano siempre tapó el bug. Reproducido offline
+      y confirmado el fix (ver `docs/05-known-issues.md`) - falta
+      reconfirmar en vivo con un export real.
 - [x] Entrada duplicada de Monterosa en `races_registry.json` (dos slugs
       para el mismo evento, uno con checkpoints del 90K pisando al 120K) —
       causaba VPI/DMI/ER rotos para corredores de esa carrera; entrada mala

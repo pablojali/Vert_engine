@@ -27,31 +27,40 @@ investigar la causa.
 ---
 
 ## Auto-adjuntado del informe HTML en "Exportar a Web" no funciona
-**Estado:** sin resolver
+**Estado:** resuelto (2026-08-20)
 
 **Descripción:** el informe de análisis completo por corredor (HTML) se
-genera correctamente en el momento del fetch (tabs "Runner Metrics" /
+generaba correctamente en el momento del fetch (tabs "Runner Metrics" /
 "Top Runners" — confirmado visible como ✅ en la columna "Informe" de la
-vista previa de "Exportar a Web"), pero no queda adjuntado al exportar: el
-`race.json` resultante sigue con `"report": null` para esos corredores, y
-el archivo no aparece en el sitio publicado, aunque la foto y el país sí
-se auto-adjuntan correctamente en el mismo export. Requiere subir el
-informe a mano (mismo archivo, por el `file_uploader` de cada corredor)
-como workaround.
+vista previa de "Exportar a Web"), pero no quedaba adjuntado al exportar:
+el `race.json` resultante seguía con `"report": null` para esos
+corredores, aunque la foto y el país sí se auto-adjuntaban correctamente
+en el mismo export. Requería subir el informe a mano (mismo archivo, por
+el `file_uploader` de cada corredor) como workaround.
+
+**Causa real:** `build_full_runner_report_html` (`app.py`) devolvía
+`bytes` (`.encode("utf-8")` al final), pero el código de auto-adjuntado en
+"Exportar a Web" llama a `Path.write_text(report_html, ...)`, que exige
+`str` - cada intento lanzaba `TypeError: data must be str, not bytes`,
+atrapado en silencio por el `try/except` alrededor (el conteo de fallos SÍ
+se mostraba, pero dentro de un `st.expander` colapsado, fácil de pasar por
+alto) y `report_path` quedaba en `None` siempre. La columna "Informe ✅"
+solo revisa que el valor sea truthy - bytes también lo es, por eso el
+diagnóstico "parecía" confirmar que todo estaba listo. Los botones de
+descarga manual (`st.download_button`) nunca pisaron este bug porque
+aceptan bytes o str indistinto - por eso el workaround de subir el archivo
+a mano siempre funcionó, y por eso costó tanto encontrarlo.
+
+**Fix:** se sacó el `.encode("utf-8")` - la función devuelve `str` ahora.
+Reproducido el `TypeError` exacto offline (bytes vs. str a `write_text`) y
+confirmado que con `str` escribe bien. Ningún otro call site necesitó
+cambios (los dos usos de `download_button(data=...)` ya funcionaban igual
+con str).
 
 **Impacto:** el flujo de "cargar 10 corredores de una sola vez" (tab "Top
-Runners") sigue requiriendo un paso manual por corredor para el informe,
-aunque el resto del proceso (foto, país, VPI/DMI/ER) ya es 100%
-automático.
-
-**Próximos pasos:** con el string del HTML ya construido en el momento del
-fetch y viajando como tal (no como los objetos DataFrame/Figure crudos que
-se usaban en un intento anterior) hasta `session_state`, la causa restante
-no está identificada. Como no hay acceso de red a LiveTrail desde el
-entorno donde se desarrolló este fix, no pudo reproducirse en vivo — el
-próximo intento debería arrancar confirmando en la propia sesión de
-Streamlit si `runners_pool[...]["_report_html"]` realmente tiene contenido
-en el momento exacto de hacer submit del formulario de export.
+Runners") ahora debería adjuntar el informe automáticamente en el próximo
+export - falta reconfirmar en vivo con la app real (no hay acceso de red a
+LiveTrail desde este entorno para probarlo end-to-end).
 
 ---
 
