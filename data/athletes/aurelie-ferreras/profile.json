@@ -1,0 +1,27 @@
+{
+  "slug": "aurelie-ferreras",
+  "name": "Aurelie FERRERAS",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/aurelie-ferreras/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 81,
+      "gender_rank": 10,
+      "finish_time": "32:02:22",
+      "vpi": 541.5,
+      "dmi": 6.96,
+      "er": 54.0,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/aurelie-ferreras/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 541.5,
+    "dmi": 7.0,
+    "er": 54.0
+  }
+}

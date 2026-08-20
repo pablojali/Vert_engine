@@ -1,0 +1,27 @@
+{
+  "slug": "amy-hume",
+  "name": "Amy HUME",
+  "country": "US",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 69,
+      "gender_rank": 8,
+      "finish_time": "31:24:00",
+      "vpi": 557.2,
+      "dmi": 6.96,
+      "er": 65.6,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/amy-hume/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 557.2,
+    "dmi": 7.0,
+    "er": 65.6
+  }
+}

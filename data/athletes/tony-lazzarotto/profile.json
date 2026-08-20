@@ -1,0 +1,27 @@
+{
+  "slug": "tony-lazzarotto",
+  "name": "Tony LAZZAROTTO",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/tony-lazzarotto/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "22:27:57",
+      "vpi": 762.6,
+      "dmi": 9.97,
+      "er": 80.7,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/tony-lazzarotto/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 762.6,
+    "dmi": 10.0,
+    "er": 80.7
+  }
+}

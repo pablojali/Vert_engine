@@ -1,0 +1,27 @@
+{
+  "slug": "florian-petit",
+  "name": "Florian PETIT",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "20:32:15",
+      "vpi": 833.0,
+      "dmi": 10.7,
+      "er": 83.9,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/florian-petit/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 833.0,
+    "dmi": 10.7,
+    "er": 83.9
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "lenka-polackova",
+  "name": "Lenka POLACKOVA",
+  "country": "SK",
+  "gender": null,
+  "portrait": "/media/athletes/lenka-polackova/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 27,
+      "gender_rank": 3,
+      "finish_time": "26:13:45",
+      "vpi": 646.5,
+      "dmi": 8.69,
+      "er": 72.6,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/lenka-polackova/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 646.5,
+    "dmi": 8.7,
+    "er": 72.6
+  }
+}

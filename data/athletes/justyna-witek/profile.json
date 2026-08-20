@@ -1,0 +1,27 @@
+{
+  "slug": "justyna-witek",
+  "name": "Justyna WITEK",
+  "country": "PL",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 78,
+      "gender_rank": 9,
+      "finish_time": "31:49:38",
+      "vpi": 543.2,
+      "dmi": 6.84,
+      "er": 73.1,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/justyna-witek/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 543.2,
+    "dmi": 6.8,
+    "er": 73.1
+  }
+}
