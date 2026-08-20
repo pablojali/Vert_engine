@@ -10,6 +10,7 @@ import unicodedata
 import traceback
 import requests
 import uuid
+import os
 import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -1382,6 +1383,18 @@ def _redact_token(text: str) -> str:
     return text
 
 
+GIT_SUBPROCESS_TIMEOUT_S = 120
+
+
+def _git_env() -> dict:
+    """GIT_TERMINAL_PROMPT=0 makes git fail immediately ('terminal
+    prompts disabled') instead of blocking forever on a username/password
+    prompt that can never be answered in this headless context - the
+    failure mode when GITHUB_TOKEN isn't configured (or has expired) and
+    the fallback plain HTTPS remote needs credentials nobody can type."""
+    return {**os.environ, "GIT_TERMINAL_PROMPT": "0"}
+
+
 def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
     # -c user.name/user.email override (not depend on) any global git
     # config, so auto-commits from the Publish button work the same on
@@ -1389,7 +1402,20 @@ def _run_git(repo_dir: Path, *args: str) -> subprocess.CompletedProcess:
     # that's never had `git config --global` run on it, without needing
     # a terminal there to set that up by hand.
     config_args = ["-c", "user.name=VertLabs Engine", "-c", "user.email=engine@vertlabs.run"]
-    r = subprocess.run(["git", *config_args, *args], cwd=str(repo_dir), capture_output=True, text=True)
+    try:
+        r = subprocess.run(
+            ["git", *config_args, *args], cwd=str(repo_dir), capture_output=True, text=True,
+            timeout=GIT_SUBPROCESS_TIMEOUT_S, env=_git_env(),
+        )
+    except subprocess.TimeoutExpired:
+        return subprocess.CompletedProcess(
+            args=["git", *args], returncode=1, stdout="",
+            stderr=(
+                f"git {' '.join(args)} no respondió en {GIT_SUBPROCESS_TIMEOUT_S}s - "
+                "probablemente credenciales (GITHUB_TOKEN) faltantes/vencidas o un problema de red. "
+                "Se abortó en vez de quedar colgado indefinidamente."
+            ),
+        )
     r.stdout = _redact_token(r.stdout)
     r.stderr = _redact_token(r.stderr)
     return r
@@ -1475,10 +1501,16 @@ def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
     if web_repo_dir.is_dir() and (web_repo_dir / ".git").is_dir():
         return True, ""
     web_repo_dir.parent.mkdir(parents=True, exist_ok=True)
-    r = subprocess.run(
-        ["git", "clone", _authed_github_url("pablojali/vertlabs-web"), str(web_repo_dir)],
-        capture_output=True, text=True,
-    )
+    try:
+        r = subprocess.run(
+            ["git", "clone", _authed_github_url("pablojali/vertlabs-web"), str(web_repo_dir)],
+            capture_output=True, text=True, timeout=GIT_SUBPROCESS_TIMEOUT_S, env=_git_env(),
+        )
+    except subprocess.TimeoutExpired:
+        return False, (
+            f"git clone no respondió en {GIT_SUBPROCESS_TIMEOUT_S}s - "
+            "probablemente credenciales (GITHUB_TOKEN) faltantes/vencidas o un problema de red."
+        )
     return r.returncode == 0, _redact_token(r.stdout) + _redact_token(r.stderr)
 
 
