@@ -270,7 +270,7 @@ def build_full_runner_report_html(runner_info, df_runner, indices, figures, df_s
     parts.append(_table_html(df_summary))
     parts.append("</div>")
 
-    return "\n".join(parts).encode("utf-8")
+    return "\n".join(parts)
 
 
 
