@@ -105,6 +105,10 @@ def generate(loc: dict, t: dict, posts_by_race_slug: dict | None = None) -> tupl
         race["event_url"] = event["url"] if event else None
         for a in race.get("athletes", []):
             a["url"] = locale_url(loc["code"], f"athletes/{a['slug']}/")
+        # Full-field roster on the race page, ordered by real finish
+        # position (not the curated Top 10 order) - unranked/DNF entries
+        # (no position yet) sort to the end instead of erroring.
+        race["athletes"] = sorted(race.get("athletes", []), key=lambda a: a.get("position") if a.get("position") is not None else float("inf"))
 
         html = template.render(race=race, t=t, locale=loc["code"], page_path=f"races/{race['slug']}/")
         write_page(out_path(loc["prefix"], f"races/{race['slug']}/index.html"), html)
