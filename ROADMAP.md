@@ -20,9 +20,15 @@
       auto-adjuntado escribe con `Path.write_text()` (exige `str`) - cada
       intento tiraba `TypeError` en silencio. Los botones de descarga
       manual nunca lo sufrieron (aceptan bytes o str igual), por eso el
-      workaround de subir a mano siempre tapó el bug. Reproducido offline
-      y confirmado el fix (ver `docs/05-known-issues.md`) - falta
-      reconfirmar en vivo con un export real.
+      workaround de subir a mano siempre tapó el bug. **Confirmado en
+      producción**: el export real de "Trail Verbier St-Bernard 140K"
+      llegó con los 20 informes adjuntados solos (ver
+      `docs/05-known-issues.md`).
+- [x] "Promover a Producción" sin feedback de progreso, indistinguible de
+      un cuelgue real - ninguna llamada a `git` tenía timeout. Agregado
+      `GIT_TERMINAL_PROMPT=0` + timeout de 5min como red de seguridad
+      (ver `docs/05-known-issues.md`). Pendiente de menor prioridad:
+      feedback de progreso paso a paso durante la publicación.
 - [x] Entrada duplicada de Monterosa en `races_registry.json` (dos slugs
       para el mismo evento, uno con checkpoints del 90K pisando al 120K) —
       causaba VPI/DMI/ER rotos para corredores de esa carrera; entrada mala

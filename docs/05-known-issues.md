@@ -58,9 +58,43 @@ cambios (los dos usos de `download_button(data=...)` ya funcionaban igual
 con str).
 
 **Impacto:** el flujo de "cargar 10 corredores de una sola vez" (tab "Top
-Runners") ahora debería adjuntar el informe automáticamente en el próximo
-export - falta reconfirmar en vivo con la app real (no hay acceso de red a
-LiveTrail desde este entorno para probarlo end-to-end).
+Runners") ahora adjunta el informe automáticamente.
+
+**Confirmado en producción (2026-08-20):** el primer export real después
+del fix (carrera "Trail Verbier St-Bernard 140K", 20 corredores) llegó con
+los 20 `report.html` escritos en disco y linkeados correctamente en
+`race.json` - visto directo en los datos que el botón "Publicar" subió al
+repo, sin necesidad de acceso a LiveTrail desde este entorno.
+
+---
+
+## "Promover a Producción" parecía colgarse sin feedback
+**Estado:** mitigado (2026-08-20)
+
+**Descripción:** después de un export grande, el botón "✅ Promover a
+Producción" se quedaba con la pantalla oscurecida (comportamiento normal
+de `st.spinner` de Streamlit durante un script largo) sin ningún mensaje
+de progreso intermedio durante varios minutos, indistinguible de un
+cuelgue real.
+
+**Causa de fondo (robustez, no de este caso puntual):** ninguna llamada a
+`git` en `app.py` (`_run_git`, `_ensure_web_repo`) tenía timeout. Si
+`GITHUB_TOKEN` faltara/venciera, el remoto cae a una URL HTTPS sin
+credenciales embebidas, que en un contexto sin terminal puede bloquearse
+esperando un prompt que nunca llega - sin timeout, esto colgaría la app
+entera indefinidamente.
+
+**Verificado en este caso puntual:** comparando el build regenerado
+contra lo que ya estaba en `main` de `vertlabs-web`, el export SÍ se había
+publicado correctamente - no era un cuelgue real, sino un push de ~1600
+archivos sin ninguna señal de progreso intermedia.
+
+**Fix:** `GIT_TERMINAL_PROMPT=0` (falla al toque en vez de bloquear
+esperando un prompt) + timeout de 5 minutos en cada llamada a `git`,
+como red de seguridad ante un cuelgue real futuro (no como límite de
+rendimiento - un push grande y lento pero funcionando tiene margen de
+sobra). Queda pendiente, de menor prioridad, agregar feedback de progreso
+paso a paso durante la publicación.
 
 ---
 
