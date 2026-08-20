@@ -57,7 +57,7 @@ def load_athletes() -> list[dict]:
     return athletes
 
 
-def generate(loc: dict, t: dict) -> list[dict]:
+def generate(loc: dict, t: dict, events: list[dict]) -> list[dict]:
     template = env.get_template("athlete.html")
     report_template = env.get_template("report.html")
     index_template = env.get_template("athletes_index.html")
@@ -90,25 +90,29 @@ def generate(loc: dict, t: dict) -> list[dict]:
         (letter, list(group)) for letter, group in groupby(ordered, key=lambda a: _index_letter(a.get("name", "")))
     ]
 
-    # Race/year options for the /athletes/ filters - derived from the
-    # same race history every athlete already carries, not a separate
-    # source, so a filter option always corresponds to races that
-    # actually have at least one analyzed athlete. Keyed by slug (not by
-    # (slug, name) pair): race_name has been saved slightly differently
-    # across export sessions for the same race in some cases (e.g. "Val
-    # d'Aran by UTMB" vs "Val d'Aran by UTMB - CDH 110k" for the same
-    # slug) - deduping by slug keeps one option per real race instead of
-    # showing near-duplicates that filter identically.
-    race_name_by_slug = {}
-    for a in athletes:
-        for r in a.get("races", []):
-            slug = r.get("race_slug")
-            if slug and slug not in race_name_by_slug:
-                race_name_by_slug[slug] = r.get("race_name") or slug
-    race_options = [
-        {"slug": slug, "name": race_name_by_slug[slug]}
-        for slug in sorted(race_name_by_slug, key=lambda s: race_name_by_slug[s])
-    ]
+    # Event/year options for the /athletes/ filters, grouped like the
+    # /races/ hub pages (one event per real shared folder - e.g. Val
+    # d'Aran's 110k and 163k are one "Val d'Aran by UTMB" event, not two
+    # entries), not by race_slug or by race_name text (both would show
+    # Val d'Aran / Lavaredo twice, once per distance).
+    event_by_race_slug = {}
+    for event in events:
+        label = f"{event['name']} {event['year']}" if event.get("year") else event["name"]
+        for d in event["distances"]:
+            event_by_race_slug[d["slug"]] = {"slug": event["slug"], "name": label}
+
+    for athlete in athletes:
+        athlete["_event_slugs"] = sorted({
+            event_by_race_slug[r["race_slug"]]["slug"]
+            for r in athlete.get("races", [])
+            if r.get("race_slug") in event_by_race_slug
+        })
+
+    race_options = sorted(
+        {(info["slug"], info["name"]) for info in event_by_race_slug.values()},
+        key=lambda pair: pair[1],
+    )
+    race_options = [{"slug": slug, "name": name} for slug, name in race_options]
     year_options = sorted(
         {r["year"] for a in athletes for r in a.get("races", []) if r.get("year")},
         reverse=True,
@@ -127,4 +131,4 @@ def generate(loc: dict, t: dict) -> list[dict]:
 
 if __name__ == "__main__":
     from builder.i18n import LOCALES, TRANSLATIONS
-    generate(LOCALES[0], TRANSLATIONS["en"])
+    generate(LOCALES[0], TRANSLATIONS["en"], [])

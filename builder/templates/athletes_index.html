@@ -43,7 +43,7 @@
       <li class="athlete-row"
           data-name="{{ a.search_name }}"
           data-gender="{{ a.gender or '' }}"
-          data-races="{{ a.races|map(attribute='race_slug')|join(',') }}"
+          data-races="{{ a._event_slugs|join(',') }}"
           data-years="{{ a.races|map(attribute='year')|join(',') }}">
         <a href="{{ a.url }}">
           {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% else %}<span class="athlete-row-avatar-placeholder"></span>{% endif %}

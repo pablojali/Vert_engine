@@ -119,7 +119,7 @@ def main() -> None:
         races_by_slug = {r["slug"]: r for r in races}
 
         print("3/8 Generando páginas de atleta...")
-        athletes = athlete_generator.generate(loc, t)
+        athletes = athlete_generator.generate(loc, t, events)
 
         print("4/8 Generando páginas de posts...")
         posts = post_generator.generate(loc, t, races_by_slug, posts)
