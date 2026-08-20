@@ -1633,6 +1633,26 @@ def _chart_label(filename: str) -> str:
     return Path(filename).stem.replace("_", " ").replace("-", " ").title()
 
 
+def _parse_gender_from_category(category):
+    """LiveTrail's category code ends in an age-group + gender suffix
+    (French convention, confirmed against real data for this project:
+    'SE H' = Senior Homme, 'SE F' = Senior Femme). Only trusts that exact
+    confirmed suffix ('H'/'F' as the last whitespace-separated token) -
+    anything else (different race software, unexpected format) is left
+    as unknown rather than guessed."""
+    if not category:
+        return None
+    tokens = str(category).strip().split()
+    if not tokens:
+        return None
+    last = tokens[-1].upper()
+    if last == "H":
+        return "M"
+    if last == "F":
+        return "F"
+    return None
+
+
 def _web_export_track_result(race_key, runner_info, indices, report_html=None):
     """Records one runner's already-computed VPI/DMI/ER for a given race
     into st.session_state['web_export_pool'], so the 'Exportar a Web' tab
@@ -1677,6 +1697,7 @@ def _web_export_track_result(race_key, runner_info, indices, report_html=None):
             "pace_first_half": indices.get("effort_pace_first_half"),
             "pace_second_half": indices.get("effort_pace_second_half"),
             "country": runner_info.get("Country"),
+            "gender": _parse_gender_from_category(runner_info.get("Category")),
             "picture_url": runner_info.get("Picture URL"),
             "_report_html": report_html,
         }
@@ -3868,6 +3889,7 @@ with tab_web_export:
                     report_by_slug = {}
                     athletes_payload = []
                     runner_country_by_slug = {}
+                    runner_gender_by_slug = {}
                     runner_picture_url_by_slug = {}
                     auto_report_paths = []
                     auto_report_failures = []
@@ -3876,6 +3898,7 @@ with tab_web_export:
                         uploads = runner_uploads.get(runner_key, {})
                         portrait_uploads_by_slug[athlete_slug] = uploads.get("portrait")
                         runner_country_by_slug[athlete_slug] = r.get("country")
+                        runner_gender_by_slug[athlete_slug] = r.get("gender")
                         runner_picture_url_by_slug[athlete_slug] = r.get("picture_url")
                         existing_athlete = existing_athletes_by_slug.get(athlete_slug, {})
                         runner_dir = race_dir / "charts" / "runners" / athlete_slug
@@ -3930,6 +3953,7 @@ with tab_web_export:
                             "finish_time": r.get("finish_time"),
                             "position": r.get("position"),
                             "gender_rank": r.get("gender_rank"),
+                            "gender": r.get("gender"),
                             "vpi": r.get("vpi"),
                             "dmi": r.get("dmi"),
                             "er": r.get("er"),
@@ -3997,6 +4021,7 @@ with tab_web_export:
                                 "slug": athlete["slug"],
                                 "name": athlete["name"],
                                 "country": None,
+                                "gender": None,
                                 "portrait": (
                                     f"/media/athletes/{athlete['slug']}/images/{existing_portrait_path.name}"
                                     if existing_portrait_path else None
@@ -4007,6 +4032,10 @@ with tab_web_export:
                         fetched_country = runner_country_by_slug.get(athlete["slug"])
                         if fetched_country:
                             profile["country"] = fetched_country
+
+                        fetched_gender = runner_gender_by_slug.get(athlete["slug"])
+                        if fetched_gender:
+                            profile["gender"] = fetched_gender
 
                         portrait_ext = _save_upload(
                             portrait_uploads_by_slug.get(athlete["slug"]), athlete_dir / "images", "portrait"

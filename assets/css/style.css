@@ -455,6 +455,55 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 .post-row-meta { color: var(--color-muted); font-size: 0.85rem; }
 
 /* --- Athletes directory: alphabetical, for scaling past 100+ profiles --- */
+.athlete-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+.athlete-filters input[type="search"] {
+  flex: 1 1 220px;
+  font-size: 1rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-text);
+}
+.athlete-filters select {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+.filter-pills { display: flex; gap: 0.4rem; }
+.filter-pills button {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.filter-pills button.active { background: var(--color-cyan); color: #0d1117; border-color: var(--color-cyan); }
+.load-more-btn {
+  display: block;
+  margin: 1.5rem auto;
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.load-more-btn:hover { border-color: var(--color-cyan); color: var(--color-cyan); }
+
 .alpha-jump {
   display: flex;
   flex-wrap: wrap;

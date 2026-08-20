@@ -3,8 +3,29 @@
 {% block title %}{{ t.athletes_title }} — Vertical Trail Labs{% endblock %}
 
 {% block content %}
-<section class="homepage-section">
+<section class="homepage-section athletes-index" data-page-size="100">
   <h1>{{ t.athletes_title }}</h1>
+
+  <div class="athlete-filters">
+    <input type="search" id="athlete-search" placeholder="{{ t.athletes_search_placeholder }}">
+    <div class="filter-pills" role="group" aria-label="{{ t.athletes_filter_all }}">
+      <button type="button" class="active" data-gender-filter="">{{ t.athletes_filter_all }}</button>
+      <button type="button" data-gender-filter="M">{{ t.athletes_filter_men }}</button>
+      <button type="button" data-gender-filter="F">{{ t.athletes_filter_women }}</button>
+    </div>
+    <select id="athlete-race-filter">
+      <option value="">{{ t.athletes_all_races }}</option>
+      {% for r in race_options %}
+      <option value="{{ r.slug }}">{{ r.name }}</option>
+      {% endfor %}
+    </select>
+    <select id="athlete-year-filter">
+      <option value="">{{ t.athletes_all_years }}</option>
+      {% for y in year_options %}
+      <option value="{{ y }}">{{ y }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
   {% if groups %}
   <nav class="alpha-jump" aria-label="{{ t.athletes_jump_label }}">
@@ -15,18 +36,27 @@
   {% endif %}
 
   {% for letter, group in groups %}
-  <h2 id="letter-{{ letter }}" class="alpha-heading">{{ letter }}</h2>
-  <ul class="athlete-list">
-    {% for a in group %}
-    <li class="athlete-row">
-      <a href="{{ a.url }}">
-        {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% else %}<span class="athlete-row-avatar-placeholder"></span>{% endif %}
-        <span class="athlete-row-name">{{ a.name }}</span>
-        {% if a.country %}<img src="{{ a.country | country_flag_url }}" alt="{{ a.country }}" title="{{ a.country }}" class="athlete-row-flag" loading="lazy">{% endif %}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+  <div class="athlete-group">
+    <h2 id="letter-{{ letter }}" class="alpha-heading">{{ letter }}</h2>
+    <ul class="athlete-list">
+      {% for a in group %}
+      <li class="athlete-row"
+          data-name="{{ a.search_name }}"
+          data-gender="{{ a.gender or '' }}"
+          data-races="{{ a.races|map(attribute='race_slug')|join(',') }}"
+          data-years="{{ a.races|map(attribute='year')|join(',') }}">
+        <a href="{{ a.url }}">
+          {% if a.portrait %}<img src="{{ a.portrait }}" alt="" loading="lazy">{% else %}<span class="athlete-row-avatar-placeholder"></span>{% endif %}
+          <span class="athlete-row-name">{{ a.name }}</span>
+          {% if a.country %}<img src="{{ a.country | country_flag_url }}" alt="{{ a.country }}" title="{{ a.country }}" class="athlete-row-flag" loading="lazy">{% endif %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
   {% endfor %}
+
+  <button type="button" id="athlete-load-more" class="load-more-btn" hidden>{{ t.athletes_load_more }}</button>
+  <p id="athlete-no-results" class="event-post-empty" hidden>{{ t.athletes_no_results }}</p>
 </section>
 {% endblock %}

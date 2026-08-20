@@ -47,6 +47,14 @@ TRANSLATIONS = {
         "races_title": "Races",
         "athletes_title": "Athletes",
         "athletes_jump_label": "Jump to letter",
+        "athletes_search_placeholder": "Search athlete...",
+        "athletes_filter_all": "All",
+        "athletes_filter_men": "Men",
+        "athletes_filter_women": "Women",
+        "athletes_all_races": "All races",
+        "athletes_all_years": "All years",
+        "athletes_load_more": "Load more",
+        "athletes_no_results": "No athletes found",
         "rankings_title": "Rankings",
         "rankings_subtitle": (
             "Career average per athlete. Only athletes with at least one "
@@ -150,6 +158,14 @@ TRANSLATIONS = {
         "races_title": "Carreras",
         "athletes_title": "Atletas",
         "athletes_jump_label": "Saltar a letra",
+        "athletes_search_placeholder": "Buscar atleta...",
+        "athletes_filter_all": "Todos",
+        "athletes_filter_men": "Hombres",
+        "athletes_filter_women": "Mujeres",
+        "athletes_all_races": "Todas las carreras",
+        "athletes_all_years": "Todos los años",
+        "athletes_load_more": "Cargar más",
+        "athletes_no_results": "No se encontraron atletas",
         "rankings_title": "Rankings",
         "rankings_subtitle": (
             "Promedio de carrera por atleta. Solo se incluyen atletas con al "
@@ -256,6 +272,14 @@ TRANSLATIONS = {
         "races_title": "Courses",
         "athletes_title": "Athlètes",
         "athletes_jump_label": "Aller à la lettre",
+        "athletes_search_placeholder": "Rechercher un athlète...",
+        "athletes_filter_all": "Tous",
+        "athletes_filter_men": "Hommes",
+        "athletes_filter_women": "Femmes",
+        "athletes_all_races": "Toutes les courses",
+        "athletes_all_years": "Toutes les années",
+        "athletes_load_more": "Charger plus",
+        "athletes_no_results": "Aucun athlète trouvé",
         "rankings_title": "Classements",
         "rankings_subtitle": (
             "Moyenne de carrière par athlète. Seuls les athlètes avec au "

@@ -23,16 +23,27 @@ def _surname_sort_key(name: str) -> str:
     return (surname or name or "").lower()
 
 
+def _fold_ascii(text: str) -> str:
+    """Strips accents (Étienne -> Etienne) so they don't get their own
+    one-off bucket/miss in the index or the live search below."""
+    return unicodedata.normalize("NFKD", text or "").encode("ascii", "ignore").decode("ascii")
+
+
 def _index_letter(name: str) -> str:
     """A-Z bucket for the alphabetical athlete directory, based on the
-    first character of the surname sort key. Accents are folded (Étienne
-    -> E) so they land in the expected letter instead of getting their
-    own one-off bucket; anything left non-alphabetic goes to '#'."""
+    first character of the surname sort key. Accents are folded so they
+    land in the expected letter; anything left non-alphabetic goes to '#'."""
     key = _surname_sort_key(name)
     if not key:
         return "#"
-    ascii_char = unicodedata.normalize("NFKD", key[0]).encode("ascii", "ignore").decode("ascii")
+    ascii_char = _fold_ascii(key[0])
     return ascii_char.upper() if ascii_char.isalpha() else "#"
+
+
+def _search_name(name: str) -> str:
+    """Accent-folded, lowercased name used for the live search on
+    /athletes/ - so 'esteban' still matches 'Estéban' etc."""
+    return _fold_ascii(name or "").lower()
 
 
 def load_athletes() -> list[dict]:
@@ -71,13 +82,44 @@ def generate(loc: dict, t: dict) -> list[dict]:
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 
+    for athlete in athletes:
+        athlete["search_name"] = _search_name(athlete.get("name", ""))
+
     ordered = sorted(athletes, key=lambda a: _surname_sort_key(a.get("name", "")))
     groups = [
         (letter, list(group)) for letter, group in groupby(ordered, key=lambda a: _index_letter(a.get("name", "")))
     ]
+
+    # Race/year options for the /athletes/ filters - derived from the
+    # same race history every athlete already carries, not a separate
+    # source, so a filter option always corresponds to races that
+    # actually have at least one analyzed athlete. Keyed by slug (not by
+    # (slug, name) pair): race_name has been saved slightly differently
+    # across export sessions for the same race in some cases (e.g. "Val
+    # d'Aran by UTMB" vs "Val d'Aran by UTMB - CDH 110k" for the same
+    # slug) - deduping by slug keeps one option per real race instead of
+    # showing near-duplicates that filter identically.
+    race_name_by_slug = {}
+    for a in athletes:
+        for r in a.get("races", []):
+            slug = r.get("race_slug")
+            if slug and slug not in race_name_by_slug:
+                race_name_by_slug[slug] = r.get("race_name") or slug
+    race_options = [
+        {"slug": slug, "name": race_name_by_slug[slug]}
+        for slug in sorted(race_name_by_slug, key=lambda s: race_name_by_slug[s])
+    ]
+    year_options = sorted(
+        {r["year"] for a in athletes for r in a.get("races", []) if r.get("year")},
+        reverse=True,
+    )
+
     write_page(
         out_path(loc["prefix"], "athletes/index.html"),
-        index_template.render(groups=groups, t=t, locale=loc["code"], page_path="athletes/"),
+        index_template.render(
+            groups=groups, race_options=race_options, year_options=year_options,
+            t=t, locale=loc["code"], page_path="athletes/",
+        ),
     )
 
     return athletes
