@@ -1,0 +1,26 @@
+{
+  "slug": "bianca-tarboton",
+  "name": "Bianca TARBOTON",
+  "country": "ZA",
+  "portrait": "/media/athletes/bianca-tarboton/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 40,
+      "gender_rank": 5,
+      "finish_time": "4:43:35",
+      "vpi": 1081.3,
+      "dmi": 13.61,
+      "er": 77.8,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/bianca-tarboton/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1081.3,
+    "dmi": 13.6,
+    "er": 77.8
+  }
+}

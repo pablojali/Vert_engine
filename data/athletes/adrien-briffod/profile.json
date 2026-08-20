@@ -1,0 +1,26 @@
+{
+  "slug": "adrien-briffod",
+  "name": "Adrien BRIFFOD",
+  "country": "CH",
+  "portrait": "/media/athletes/adrien-briffod/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "3:46:20",
+      "vpi": 1402.9,
+      "dmi": 16.39,
+      "er": 77.3,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/adrien-briffod/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1402.9,
+    "dmi": 16.4,
+    "er": 77.3
+  }
+}

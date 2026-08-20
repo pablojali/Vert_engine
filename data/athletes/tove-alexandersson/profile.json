@@ -1,0 +1,26 @@
+{
+  "slug": "tove-alexandersson",
+  "name": "Tove ALEXANDERSSON",
+  "country": "SE",
+  "portrait": "/media/athletes/tove-alexandersson/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 11,
+      "gender_rank": 1,
+      "finish_time": "3:55:07",
+      "vpi": 1321.4,
+      "dmi": 16.57,
+      "er": 87.3,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/tove-alexandersson/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1321.4,
+    "dmi": 16.6,
+    "er": 87.3
+  }
+}

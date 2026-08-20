@@ -1,0 +1,26 @@
+{
+  "slug": "kevin-kibet",
+  "name": "Kevin KIBET",
+  "country": "KE",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "3:46:42",
+      "vpi": 1389.9,
+      "dmi": 16.68,
+      "er": 72.2,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/kevin-kibet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1389.9,
+    "dmi": 16.7,
+    "er": 72.2
+  }
+}

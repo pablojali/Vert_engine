@@ -1,0 +1,26 @@
+{
+  "slug": "antonio-martinez-perez",
+  "name": "Antonio MARTINEZ PEREZ",
+  "country": "ES",
+  "portrait": "/media/athletes/antonio-martinez-perez/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "3:51:16",
+      "vpi": 1365.0,
+      "dmi": 16.16,
+      "er": 80.2,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/antonio-martinez-perez/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1365.0,
+    "dmi": 16.2,
+    "er": 80.2
+  }
+}

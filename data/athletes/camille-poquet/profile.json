@@ -1,0 +1,26 @@
+{
+  "slug": "camille-poquet",
+  "name": "Camille POQUET",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 53,
+      "gender_rank": 10,
+      "finish_time": "4:54:25",
+      "vpi": 1051.9,
+      "dmi": 12.93,
+      "er": 80.5,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/camille-poquet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1051.9,
+    "dmi": 12.9,
+    "er": 80.5
+  }
+}

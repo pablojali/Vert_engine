@@ -1,0 +1,26 @@
+{
+  "slug": "corbera-rubio-miquel",
+  "name": "Corbera Rubio MIQUEL",
+  "country": "ES",
+  "portrait": "/media/athletes/corbera-rubio-miquel/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "3:53:35",
+      "vpi": 1339.1,
+      "dmi": 16.32,
+      "er": 75.4,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/corbera-rubio-miquel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1339.1,
+    "dmi": 16.3,
+    "er": 75.4
+  }
+}

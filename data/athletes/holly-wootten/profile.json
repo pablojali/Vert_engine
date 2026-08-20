@@ -1,0 +1,26 @@
+{
+  "slug": "holly-wootten",
+  "name": "Holly WOOTTEN",
+  "country": "GB",
+  "portrait": "/media/athletes/holly-wootten/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 50,
+      "gender_rank": 9,
+      "finish_time": "4:53:04",
+      "vpi": 1035.7,
+      "dmi": 13.56,
+      "er": 78.0,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/holly-wootten/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1035.7,
+    "dmi": 13.6,
+    "er": 78.0
+  }
+}

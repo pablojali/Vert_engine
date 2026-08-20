@@ -1,0 +1,26 @@
+{
+  "slug": "remi-bonnet",
+  "name": "Rémi BONNET",
+  "country": "CH",
+  "portrait": "/media/athletes/remi-bonnet/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "3:33:14",
+      "vpi": 1489.0,
+      "dmi": 17.73,
+      "er": 84.8,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/remi-bonnet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1489.0,
+    "dmi": 17.7,
+    "er": 84.8
+  }
+}

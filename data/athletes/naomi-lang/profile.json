@@ -1,0 +1,26 @@
+{
+  "slug": "naomi-lang",
+  "name": "Naomi LANG",
+  "country": "GB",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 30,
+      "gender_rank": 3,
+      "finish_time": "4:21:23",
+      "vpi": 1173.7,
+      "dmi": 14.97,
+      "er": 84.9,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/naomi-lang/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1173.7,
+    "dmi": 15.0,
+    "er": 84.9
+  }
+}

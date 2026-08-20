@@ -1,0 +1,26 @@
+{
+  "slug": "manuel-merillas-moledo",
+  "name": "Manuel MERILLAS MOLEDO",
+  "country": "ES",
+  "portrait": "/media/athletes/manuel-merillas-moledo/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "3:41:43",
+      "vpi": 1410.4,
+      "dmi": 17.31,
+      "er": 85.7,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/manuel-merillas-moledo/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1410.4,
+    "dmi": 17.3,
+    "er": 85.7
+  }
+}

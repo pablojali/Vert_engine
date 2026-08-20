@@ -1,0 +1,26 @@
+{
+  "slug": "pierre-galbourdin",
+  "name": "Pierre GALBOURDIN",
+  "country": "FR",
+  "portrait": "/media/athletes/pierre-galbourdin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "3:54:54",
+      "vpi": 1326.8,
+      "dmi": 16.3,
+      "er": 75.5,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/pierre-galbourdin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1326.8,
+    "dmi": 16.3,
+    "er": 75.5
+  }
+}

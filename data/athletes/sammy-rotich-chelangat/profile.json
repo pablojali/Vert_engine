@@ -1,0 +1,26 @@
+{
+  "slug": "sammy-rotich-chelangat",
+  "name": "Sammy Rotich CHELANGAT",
+  "country": "KE",
+  "portrait": "/media/athletes/sammy-rotich-chelangat/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "3:54:00",
+      "vpi": 1329.3,
+      "dmi": 16.33,
+      "er": 72.7,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/sammy-rotich-chelangat/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1329.3,
+    "dmi": 16.3,
+    "er": 72.7
+  }
+}

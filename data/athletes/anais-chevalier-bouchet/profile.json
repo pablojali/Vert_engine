@@ -1,0 +1,26 @@
+{
+  "slug": "anais-chevalier-bouchet",
+  "name": "Anais CHEVALIER-BOUCHET",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 48,
+      "gender_rank": 8,
+      "finish_time": "4:49:58",
+      "vpi": 1069.7,
+      "dmi": 13.13,
+      "er": 77.8,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/anais-chevalier-bouchet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1069.7,
+    "dmi": 13.1,
+    "er": 77.8
+  }
+}

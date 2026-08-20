@@ -1,0 +1,26 @@
+{
+  "slug": "emilie-bulle",
+  "name": "Emilie BULLE",
+  "country": "FR",
+  "portrait": "/media/athletes/emilie-bulle/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 36,
+      "gender_rank": 4,
+      "finish_time": "4:35:58",
+      "vpi": 1115.1,
+      "dmi": 14.04,
+      "er": 83.4,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/emilie-bulle/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1115.1,
+    "dmi": 14.0,
+    "er": 83.4
+  }
+}

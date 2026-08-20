@@ -1,0 +1,26 @@
+{
+  "slug": "frederic-tranchand",
+  "name": "Frédéric TRANCHAND",
+  "country": "FR",
+  "portrait": "/media/athletes/frederic-tranchand/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "3:35:46",
+      "vpi": 1459.7,
+      "dmi": 17.71,
+      "er": 83.2,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/frederic-tranchand/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1459.7,
+    "dmi": 17.7,
+    "er": 83.2
+  }
+}

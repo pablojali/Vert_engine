@@ -1,0 +1,26 @@
+{
+  "slug": "kirsten-de-baey-ruszin",
+  "name": "Kirsten DE BAEY-RUSZIN",
+  "country": "DE",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 43.69851227375547,
+      "position": 46,
+      "gender_rank": 7,
+      "finish_time": "4:47:48",
+      "vpi": 1095.0,
+      "dmi": 12.9,
+      "er": 68.2,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/kirsten-de-baey-ruszin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1095.0,
+    "dmi": 12.9,
+    "er": 68.2
+  }
+}
