@@ -13,9 +13,10 @@
     {% if event.hero_image %}<img src="{{ event.hero_image }}" alt="" class="event-icon" loading="lazy">{% endif %}
     <div>
       <h1>{{ event.name }} {{ event.year }}</h1>
-      <p class="race-meta">
-        {{ event.location }}{% if event.date %} · {{ event.date }}{% endif %}
-      </p>
+      {%- set event_meta_parts = [] -%}
+      {%- if event.location %}{% set _ = event_meta_parts.append(event.location) %}{% endif -%}
+      {%- if event.date %}{% set _ = event_meta_parts.append(event.date) %}{% endif -%}
+      <p class="race-meta">{{ event_meta_parts|join(' · ') }}</p>
     </div>
   </div>
 
