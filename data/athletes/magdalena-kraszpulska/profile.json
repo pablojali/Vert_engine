@@ -1,7 +1,7 @@
 {
   "slug": "magdalena-kraszpulska",
   "name": "Magdalena KRASZPULSKA",
-  "country": null,
+  "country": "PL",
   "portrait": "/media/athletes/magdalena-kraszpulska/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 11.92,
       "er": 84.2,
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/magdalena-kraszpulska/report.html"
+    },
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 50,
+      "gender_rank": 6,
+      "finish_time": "29:08:44",
+      "vpi": 586.6,
+      "dmi": 7.51,
+      "er": 40.2,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/magdalena-kraszpulska/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 889.5,
-    "dmi": 11.9,
-    "er": 84.2
+    "vpi": 738.0,
+    "dmi": 9.7,
+    "er": 62.2
   }
 }

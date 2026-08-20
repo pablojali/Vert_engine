@@ -1,0 +1,27 @@
+{
+  "slug": "quentin-betrisey",
+  "name": "Quentin BÉTRISEY",
+  "country": "CH",
+  "gender": null,
+  "portrait": "/media/athletes/quentin-betrisey/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "21:18:08",
+      "vpi": 803.6,
+      "dmi": 10.5,
+      "er": 76.2,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/quentin-betrisey/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 803.6,
+    "dmi": 10.5,
+    "er": 76.2
+  }
+}

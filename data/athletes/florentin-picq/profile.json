@@ -1,0 +1,27 @@
+{
+  "slug": "florentin-picq",
+  "name": "Florentin PICQ",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "23:15:18",
+      "vpi": 744.1,
+      "dmi": 9.71,
+      "er": 74.7,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/florentin-picq/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 744.1,
+    "dmi": 9.7,
+    "er": 74.7
+  }
+}

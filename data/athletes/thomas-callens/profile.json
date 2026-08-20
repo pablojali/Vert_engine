@@ -1,0 +1,27 @@
+{
+  "slug": "thomas-callens",
+  "name": "Thomas CALLENS",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "23:15:18",
+      "vpi": 743.6,
+      "dmi": 9.74,
+      "er": 75.2,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/thomas-callens/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 743.6,
+    "dmi": 9.7,
+    "er": 75.2
+  }
+}

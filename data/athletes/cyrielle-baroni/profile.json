@@ -1,0 +1,27 @@
+{
+  "slug": "cyrielle-baroni",
+  "name": "Cyrielle BARONI",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/cyrielle-baroni/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 40,
+      "gender_rank": 4,
+      "finish_time": "28:13:29",
+      "vpi": 615.5,
+      "dmi": 7.53,
+      "er": 58.3,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/cyrielle-baroni/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 615.5,
+    "dmi": 7.5,
+    "er": 58.3
+  }
+}

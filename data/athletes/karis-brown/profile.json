@@ -1,0 +1,27 @@
+{
+  "slug": "karis-brown",
+  "name": "Karis BROWN",
+  "country": "AU",
+  "gender": null,
+  "portrait": "/media/athletes/karis-brown/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 64,
+      "gender_rank": 7,
+      "finish_time": "30:44:59",
+      "vpi": 579.3,
+      "dmi": 7.03,
+      "er": 69.5,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/karis-brown/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 579.3,
+    "dmi": 7.0,
+    "er": 69.5
+  }
+}

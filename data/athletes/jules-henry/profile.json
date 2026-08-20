@@ -1,0 +1,27 @@
+{
+  "slug": "jules-henry",
+  "name": "Jules HENRY",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/jules-henry/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "22:49:55",
+      "vpi": 749.4,
+      "dmi": 9.88,
+      "er": 76.5,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/jules-henry/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 749.4,
+    "dmi": 9.9,
+    "er": 76.5
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "bastien-fleury",
+  "name": "Bastien FLEURY",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/bastien-fleury/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "19:42:29",
+      "vpi": 876.4,
+      "dmi": 11.16,
+      "er": 87.5,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/bastien-fleury/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 876.4,
+    "dmi": 11.2,
+    "er": 87.5
+  }
+}

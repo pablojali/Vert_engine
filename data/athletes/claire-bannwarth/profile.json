@@ -16,11 +16,24 @@
       "dmi": 9.71,
       "er": 77.6,
       "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/claire-bannwarth/report.html"
+    },
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 20,
+      "gender_rank": 2,
+      "finish_time": "25:27:57",
+      "vpi": 678.6,
+      "dmi": 8.51,
+      "er": 72.3,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/claire-bannwarth/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 792.5,
-    "dmi": 9.7,
-    "er": 77.6
+    "vpi": 735.6,
+    "dmi": 9.1,
+    "er": 74.9
   }
 }

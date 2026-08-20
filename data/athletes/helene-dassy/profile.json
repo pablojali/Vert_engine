@@ -1,0 +1,27 @@
+{
+  "slug": "helene-dassy",
+  "name": "Hélène DASSY",
+  "country": "BE",
+  "gender": null,
+  "portrait": "/media/athletes/helene-dassy/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 10,
+      "gender_rank": 1,
+      "finish_time": "23:17:31",
+      "vpi": 731.3,
+      "dmi": 9.47,
+      "er": 80.1,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/helene-dassy/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 731.3,
+    "dmi": 9.5,
+    "er": 80.1
+  }
+}

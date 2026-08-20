@@ -1,0 +1,27 @@
+{
+  "slug": "nicolas-dauvergne",
+  "name": "Nicolas DAUVERGNE",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "20:35:54",
+      "vpi": 828.7,
+      "dmi": 10.67,
+      "er": 84.2,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/nicolas-dauvergne/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 828.7,
+    "dmi": 10.7,
+    "er": 84.2
+  }
+}

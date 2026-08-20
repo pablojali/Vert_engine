@@ -1,0 +1,27 @@
+{
+  "slug": "anonymous",
+  "name": "Anonymous",
+  "country": null,
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "22:53:18",
+      "vpi": 762.7,
+      "dmi": 9.54,
+      "er": 76.5,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/anonymous/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 762.7,
+    "dmi": 9.5,
+    "er": 76.5
+  }
+}

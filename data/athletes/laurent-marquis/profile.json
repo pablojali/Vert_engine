@@ -1,0 +1,27 @@
+{
+  "slug": "laurent-marquis",
+  "name": "Laurent MARQUIS",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 137.9857218827645,
+      "position": 11,
+      "gender_rank": 10,
+      "finish_time": "24:15:38",
+      "vpi": 704.8,
+      "dmi": 9.27,
+      "er": 74.3,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/laurent-marquis/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 704.8,
+    "dmi": 9.3,
+    "er": 74.3
+  }
+}
