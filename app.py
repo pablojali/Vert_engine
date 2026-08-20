@@ -1383,7 +1383,12 @@ def _redact_token(text: str) -> str:
     return text
 
 
-GIT_SUBPROCESS_TIMEOUT_S = 120
+# A full site push (~1600 files) can legitimately take a couple of
+# minutes with no progress feedback in between - generous on purpose, so
+# this is a safety net against a genuine hang (bad/expired credentials,
+# a stalled connection), not a performance limit on a real slow-but-
+# working push.
+GIT_SUBPROCESS_TIMEOUT_S = 300
 
 
 def _git_env() -> dict:
