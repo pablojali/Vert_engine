@@ -16,11 +16,24 @@
       "dmi": 10.63,
       "er": 78.3,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/katharina-hartmuth/report.html"
+    },
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 33,
+      "gender_rank": 4,
+      "finish_time": "12:21:05",
+      "vpi": 927.5,
+      "dmi": 10.33,
+      "er": 87.1,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/katharina-hartmuth/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 812.7,
-    "dmi": 10.6,
-    "er": 78.3
+    "vpi": 870.1,
+    "dmi": 10.5,
+    "er": 82.7
   }
 }

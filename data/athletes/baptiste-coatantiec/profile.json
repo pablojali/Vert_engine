@@ -16,11 +16,24 @@
       "dmi": 11.75,
       "er": 76.9,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/baptiste-coatantiec/report.html"
+    },
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "10:20:50",
+      "vpi": 1119.4,
+      "dmi": 12.12,
+      "er": 74.7,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/baptiste-coatantiec/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 912.9,
-    "dmi": 11.8,
-    "er": 76.9
+    "vpi": 1016.2,
+    "dmi": 11.9,
+    "er": 75.8
   }
 }

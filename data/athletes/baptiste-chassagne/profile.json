@@ -1,0 +1,26 @@
+{
+  "slug": "baptiste-chassagne",
+  "name": "Baptiste CHASSAGNE",
+  "country": "FR",
+  "portrait": "/media/athletes/baptiste-chassagne/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "10:02:39",
+      "vpi": 1142.6,
+      "dmi": 12.64,
+      "er": 81.8,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/baptiste-chassagne/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1142.6,
+    "dmi": 12.6,
+    "er": 81.8
+  }
+}

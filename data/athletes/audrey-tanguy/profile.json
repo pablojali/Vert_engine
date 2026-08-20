@@ -1,0 +1,26 @@
+{
+  "slug": "audrey-tanguy",
+  "name": "Audrey TANGUY",
+  "country": "FR",
+  "portrait": "/media/athletes/audrey-tanguy/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 28,
+      "gender_rank": 2,
+      "finish_time": "12:12:31",
+      "vpi": 948.5,
+      "dmi": 10.19,
+      "er": 76.9,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/audrey-tanguy/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 948.5,
+    "dmi": 10.2,
+    "er": 76.9
+  }
+}

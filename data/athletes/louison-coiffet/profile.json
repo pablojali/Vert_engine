@@ -1,0 +1,26 @@
+{
+  "slug": "louison-coiffet",
+  "name": "Louison COIFFET",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "9:37:22",
+      "vpi": 1190.8,
+      "dmi": 13.3,
+      "er": 89.6,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/louison-coiffet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1190.8,
+    "dmi": 13.3,
+    "er": 89.6
+  }
+}

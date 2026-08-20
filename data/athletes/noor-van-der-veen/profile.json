@@ -1,0 +1,26 @@
+{
+  "slug": "noor-van-der-veen",
+  "name": "Noor VAN DER VEEN",
+  "country": "NL",
+  "portrait": "/media/athletes/noor-van-der-veen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 71,
+      "gender_rank": 9,
+      "finish_time": "14:02:06",
+      "vpi": 830.3,
+      "dmi": 8.77,
+      "er": 78.0,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/noor-van-der-veen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 830.3,
+    "dmi": 8.8,
+    "er": 78.0
+  }
+}

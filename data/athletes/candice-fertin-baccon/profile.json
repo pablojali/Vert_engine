@@ -1,0 +1,26 @@
+{
+  "slug": "candice-fertin-baccon",
+  "name": "Candice FERTIN BACCON",
+  "country": "FR",
+  "portrait": "/media/athletes/candice-fertin-baccon/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 23,
+      "gender_rank": 1,
+      "finish_time": "11:53:31",
+      "vpi": 965.9,
+      "dmi": 10.73,
+      "er": 82.4,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/candice-fertin-baccon/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 965.9,
+    "dmi": 10.7,
+    "er": 82.4
+  }
+}

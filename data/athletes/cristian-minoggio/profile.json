@@ -1,0 +1,26 @@
+{
+  "slug": "cristian-minoggio",
+  "name": "Cristian MINOGGIO",
+  "country": "IT",
+  "portrait": "/media/athletes/cristian-minoggio/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "9:41:54",
+      "vpi": 1180.0,
+      "dmi": 13.18,
+      "er": 87.6,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/cristian-minoggio/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1180.0,
+    "dmi": 13.2,
+    "er": 87.6
+  }
+}

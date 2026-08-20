@@ -1,0 +1,26 @@
+{
+  "slug": "elea-kopf",
+  "name": "Elea KOPF",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 44,
+      "gender_rank": 5,
+      "finish_time": "13:01:43",
+      "vpi": 892.3,
+      "dmi": 9.54,
+      "er": 84.0,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/elea-kopf/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 892.3,
+    "dmi": 9.5,
+    "er": 84.0
+  }
+}

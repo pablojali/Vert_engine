@@ -1,0 +1,26 @@
+{
+  "slug": "luisa-dematteis",
+  "name": "Luisa DEMATTEIS",
+  "country": "IT",
+  "portrait": "/media/athletes/luisa-dematteis/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 73,
+      "gender_rank": 10,
+      "finish_time": "14:04:50",
+      "vpi": 811.5,
+      "dmi": 9.05,
+      "er": 80.7,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/luisa-dematteis/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 811.5,
+    "dmi": 9.0,
+    "er": 80.7
+  }
+}

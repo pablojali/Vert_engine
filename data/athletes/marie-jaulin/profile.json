@@ -1,0 +1,26 @@
+{
+  "slug": "marie-jaulin",
+  "name": "Marie JAULIN",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 63,
+      "gender_rank": 8,
+      "finish_time": "13:46:53",
+      "vpi": 828.4,
+      "dmi": 9.16,
+      "er": 81.7,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/marie-jaulin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 828.4,
+    "dmi": 9.2,
+    "er": 81.7
+  }
+}

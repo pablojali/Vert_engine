@@ -1,0 +1,26 @@
+{
+  "slug": "marcela-vasinova",
+  "name": "Marcela VASINOVA",
+  "country": "CZ",
+  "portrait": "/media/athletes/marcela-vasinova/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 57,
+      "gender_rank": 7,
+      "finish_time": "13:29:15",
+      "vpi": 860.2,
+      "dmi": 9.2,
+      "er": 79.4,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/marcela-vasinova/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 860.2,
+    "dmi": 9.2,
+    "er": 79.4
+  }
+}

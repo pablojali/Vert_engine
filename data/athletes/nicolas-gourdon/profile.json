@@ -16,11 +16,24 @@
       "dmi": 11.31,
       "er": 65.6,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/nicolas-gourdon/report.html"
+    },
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "10:33:52",
+      "vpi": 1067.4,
+      "dmi": 12.32,
+      "er": 79.8,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/nicolas-gourdon/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 864.6,
-    "dmi": 11.3,
-    "er": 65.6
+    "vpi": 966.0,
+    "dmi": 11.8,
+    "er": 72.7
   }
 }

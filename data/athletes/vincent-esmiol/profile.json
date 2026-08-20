@@ -1,0 +1,26 @@
+{
+  "slug": "vincent-esmiol",
+  "name": "Vincent ESMIOL",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "10:52:07",
+      "vpi": 1048.3,
+      "dmi": 11.86,
+      "er": 76.9,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/vincent-esmiol/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1048.3,
+    "dmi": 11.9,
+    "er": 76.9
+  }
+}

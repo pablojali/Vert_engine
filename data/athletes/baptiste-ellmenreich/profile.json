@@ -1,0 +1,26 @@
+{
+  "slug": "baptiste-ellmenreich",
+  "name": "Baptiste ELLMENREICH",
+  "country": "FR",
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "10:32:43",
+      "vpi": 1077.6,
+      "dmi": 12.11,
+      "er": 78.8,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/baptiste-ellmenreich/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1077.6,
+    "dmi": 12.1,
+    "er": 78.8
+  }
+}

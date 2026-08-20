@@ -16,11 +16,24 @@
       "dmi": 13.38,
       "er": 82.2,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/morten-antonsen/report.html"
+    },
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "10:46:33",
+      "vpi": 1063.3,
+      "dmi": 11.8,
+      "er": 86.1,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/morten-antonsen/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1073.1,
-    "dmi": 13.4,
-    "er": 82.2
+    "vpi": 1068.2,
+    "dmi": 12.6,
+    "er": 84.2
   }
 }

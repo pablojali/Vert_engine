@@ -1,0 +1,26 @@
+{
+  "slug": "ekaterina-mityaeva",
+  "name": "Ekaterina MITYAEVA",
+  "country": "AN",
+  "portrait": "/media/athletes/ekaterina-mityaeva/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 29,
+      "gender_rank": 3,
+      "finish_time": "12:15:12",
+      "vpi": 929.5,
+      "dmi": 10.45,
+      "er": 85.7,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/ekaterina-mityaeva/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 929.5,
+    "dmi": 10.4,
+    "er": 85.7
+  }
+}

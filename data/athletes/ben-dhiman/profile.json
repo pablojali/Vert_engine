@@ -16,11 +16,24 @@
       "dmi": 12.93,
       "er": 80.3,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/ben-dhiman/report.html"
+    },
+    {
+      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_name": "Marathon du Mont Blanc",
+      "year": 2026,
+      "distance_km": 86.90286418650041,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "9:38:02",
+      "vpi": 1174.4,
+      "dmi": 13.59,
+      "er": 90.3,
+      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/ben-dhiman/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 989.3,
-    "dmi": 12.9,
-    "er": 80.3
+    "vpi": 1081.8,
+    "dmi": 13.3,
+    "er": 85.3
   }
 }
