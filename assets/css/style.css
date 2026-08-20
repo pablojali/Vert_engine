@@ -660,6 +660,13 @@ th { color: var(--color-muted); font-weight: 600; font-size: 0.8rem; text-transf
 th.metric-vpi, th.metric-dmi, th.metric-er { font-weight: 700; }
 tbody tr:hover { background: var(--color-bg-raised); }
 
+/* Sortable roster-table headers (assets/js/roster-table.js) */
+.roster-table th.sortable { cursor: pointer; user-select: none; }
+.roster-table th.sortable:hover { color: var(--color-text); }
+.roster-table th.sortable::after { content: "↕"; opacity: 0.4; margin-left: 0.3em; font-size: 0.75em; }
+.roster-table th.sort-asc::after { content: "↑"; opacity: 1; }
+.roster-table th.sort-desc::after { content: "↓"; opacity: 1; }
+
 /* --- Rankings --- */
 .rankings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; margin-top: 1.5rem; }
 .rankings-grid h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; }

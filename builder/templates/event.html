@@ -46,16 +46,16 @@
       <div class="top10-block">
         <h3>{{ t.race_performance_title }}</h3>
         <div class="table-scroll">
-          <table class="athlete-table">
+          <table class="athlete-table roster-table">
             <thead>
               <tr>
-                <th>{{ t.race_pos }}</th>
+                <th data-sort-key="pos">{{ t.race_pos }}</th>
                 <th>{{ t.race_bib }}</th>
                 <th>{{ t.race_athlete }}</th>
                 <th>{{ t.race_time }}</th>
-                <th class="metric-vpi">VPI</th>
-                <th class="metric-dmi">DMI</th>
-                <th class="metric-er">ER</th>
+                <th class="metric-vpi" data-sort-key="vpi">VPI</th>
+                <th class="metric-dmi" data-sort-key="dmi">DMI</th>
+                <th class="metric-er" data-sort-key="er">ER</th>
               </tr>
             </thead>
             <tbody>
