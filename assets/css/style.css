@@ -1006,3 +1006,19 @@ tbody tr:hover { background: var(--color-bg-raised); }
   border-radius: 8px;
   display: block;
 }
+
+/* --- 404 --- */
+.notfound-page { text-align: center; padding: 3rem 0; }
+.notfound-page h1 { margin: 0 0 0.75rem; }
+.notfound-page .hero-sub { margin: 0 auto 2rem; }
+.notfound-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.75rem; }
+.notfound-btn {
+  background: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.notfound-btn:hover { border-color: var(--color-cyan); color: var(--color-cyan); text-decoration: none; }

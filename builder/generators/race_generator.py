@@ -91,6 +91,25 @@ def generate(loc: dict, t: dict, posts_by_race_slug: dict | None = None) -> tupl
     # Events are grouped up front (before rendering distance pages) so
     # each distance page's breadcrumb can link back through its event.
     events = _build_events(races, loc)
+
+    # race["slug"] comes straight from the exported race.json and isn't
+    # guaranteed unique across sibling distances (or against the event
+    # hub's own slug) - when it collides, one page silently overwrites
+    # another at the same URL instead of failing loudly. Not fixed here
+    # (the athlete side already embeds the original race_slug, so
+    # rewriting it here would desync athlete -> race links); just warned
+    # about once, at data-authoring time, so it gets caught immediately
+    # instead of showing up later as a duplicate sitemap URL.
+    if loc["code"] == "en":
+        route_owners: dict[str, list[str]] = {}
+        for r in races:
+            route_owners.setdefault(r["slug"], []).append(f"race distance {r['_source_dir'].name}")
+        for e in events:
+            route_owners.setdefault(e["slug"], []).append("event hub")
+        for slug, owners in route_owners.items():
+            if len(owners) > 1:
+                print(f"  ⚠ WARNING: /races/{slug}/ is claimed by {len(owners)} pages ({', '.join(owners)}) - only the last one written will be reachable. Fix by giving race.json a distance-specific slug (e.g. '{slug}-<distance>').")
+
     event_by_race_slug = {}
     for event in events:
         for d in event["distances"]:

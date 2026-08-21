@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.notfound_title }} — Vertical Trail Labs{% endblock %}
+{% block description %}{{ t.notfound_body }}{% endblock %}
+{% block extra_head %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block content %}
+<article class="notfound-page">
+  <h1>{{ t.notfound_title }}</h1>
+  <p class="hero-sub">{{ t.notfound_body }}</p>
+  <div class="notfound-actions">
+    <a href="{{ locale_url(locale, 'athletes/') }}" class="notfound-btn">{{ t.notfound_cta_athletes }}</a>
+    <a href="{{ locale_url(locale, 'races/') }}" class="notfound-btn">{{ t.notfound_cta_races }}</a>
+    <a href="{{ locale_url(locale, '') }}" class="notfound-btn">{{ t.notfound_cta_home }}</a>
+  </div>
+</article>
+{% endblock %}

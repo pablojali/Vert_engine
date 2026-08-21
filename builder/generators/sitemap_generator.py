@@ -25,6 +25,20 @@ def generate(
     page_paths += [f"races/{r['slug']}/" for r in en_races]
     page_paths += [f"athletes/{a['slug']}/" for a in en_athletes]
     page_paths += [f"posts/{p['slug']}/" for p in en_posts]
+    # Per-athlete race report pages (the embedded full-analysis report at
+    # /athletes/<slug>/<race-slug>/) - same "has a report" condition
+    # athlete_generator.py uses to decide whether to render one.
+    page_paths += [
+        f"athletes/{a['slug']}/{r['race_slug']}/"
+        for a in en_athletes
+        for r in a.get("races", [])
+        if r.get("report")
+    ]
+    # A handful of races currently share a slug with a sibling distance or
+    # their own event hub (a data-authoring issue flagged by
+    # race_generator.py's build warning) - dedupe here so the sitemap
+    # never lists the same URL twice regardless.
+    page_paths = list(dict.fromkeys(page_paths))
 
     entries = []
     for page_path in page_paths:

@@ -181,6 +181,14 @@ TRANSLATIONS = {
         "breadcrumb_races": "Races",
         "breadcrumb_athletes": "Athletes",
         "footer_tagline": "Trail running performance engine.",
+        "notfound_title": "Page not found.",
+        "notfound_body": (
+            "The athlete, race or analysis you're looking for may not "
+            "exist or may have moved."
+        ),
+        "notfound_cta_athletes": "Back to Athletes",
+        "notfound_cta_races": "Explore Races",
+        "notfound_cta_home": "Home",
     },
     "es": {
         "nav_races": "Carreras",
@@ -356,6 +364,14 @@ TRANSLATIONS = {
         "breadcrumb_races": "Carreras",
         "breadcrumb_athletes": "Atletas",
         "footer_tagline": "Motor de análisis de rendimiento en trail running.",
+        "notfound_title": "Página no encontrada.",
+        "notfound_body": (
+            "El atleta, la carrera o el análisis que buscás puede no "
+            "existir o haberse movido."
+        ),
+        "notfound_cta_athletes": "Volver a Atletas",
+        "notfound_cta_races": "Explorar Carreras",
+        "notfound_cta_home": "Inicio",
     },
     "fr": {
         "nav_races": "Courses",
@@ -533,5 +549,13 @@ TRANSLATIONS = {
         "breadcrumb_races": "Courses",
         "breadcrumb_athletes": "Athlètes",
         "footer_tagline": "Moteur d'analyse de performance en trail running.",
+        "notfound_title": "Page introuvable.",
+        "notfound_body": (
+            "L'athlète, la course ou l'analyse que vous cherchez n'existe "
+            "peut-être plus ou a été déplacé(e)."
+        ),
+        "notfound_cta_athletes": "Retour aux Athlètes",
+        "notfound_cta_races": "Explorer les Courses",
+        "notfound_cta_home": "Accueil",
     },
 }

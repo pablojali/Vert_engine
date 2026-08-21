@@ -204,5 +204,56 @@ Ultra Trail by UTMB) sigue emparejando correctamente.
 
 ---
 
+## Slug de `race.json` sin distancia colisiona con otra distancia o con el event hub
+**Estado:** detectado y advertido en build (2026-08-21), sin corregir — pendiente para más adelante (decisión del usuario)
+
+**Descripción:** distinto del issue de "Colisión de slug/carpeta" de arriba
+(ese es sobre el emparejamiento de carpeta en "Exportar a Web"/el registry;
+este es sobre el campo `"slug"` que ya quedó grabado dentro de un
+`race.json` publicado). `race_generator.py` arma la URL de cada página de
+carrera directamente desde `race["slug"]` tal como viene en el JSON, sin
+verificar que sea único. Cuando dos distancias del mismo evento (o una
+distancia y el "event hub" que las agrupa, cuyo slug se calcula como
+`nombre-año`) terminan con el mismo slug, la página que se escribe último
+pisa a la anterior en el mismo path de salida — sin error, sin warning
+(hasta este fix), simplemente la primera queda inalcanzable.
+
+**Detectado auditando el sitemap de producción** (ver
+`docs/03-web-builder/` para el generador): de 22 páginas candidatas de
+carrera/evento, solo 13 URLs únicas sobreviven — **9 quedan pisadas**.
+Afecta a 6 carreras: Eiger Ultra Trail 2026 (101k pisado por su propio
+event hub, un solo-distancia), Marathon du Mont Blanc 2026 (42k y 90k
+comparten slug entre sí Y con el event hub — 3 páginas, 1 sobrevive),
+Monterosa Walserwaeg 90k (pisado por el event hub — el 120k está bien,
+tiene slug distinto), Trail du Saint-Jacques 2026 (86k pisado por su
+propio event hub), Trail Verbier St-Bernard (77k y 140k comparten el
+mismo slug entre sí y con el event hub), UTMB Mont Blanc 2025 (100k y
+174k). Confirmado en el HTML real: `/races/eiger-ultra-trail-2026/`
+sirve el event hub, no el análisis del 101k.
+
+**Por qué no se corrige acá:** las páginas de atleta ya tienen embebido
+ese mismo `race_slug` (colisionado) desde el export — reescribir el slug
+solo en `race_generator.py` rompería los links atleta → carrera en vez de
+arreglarlos (apuntarían a la URL equivocada). El fix real es en el paso
+de exportación del Engine: darle a cada distancia un slug que incluya la
+distancia, como ya hacen bien las carreras que sí están OK (ej. Val
+d'Aran: `val-d-aran-by-utmb-2026-110k` / `-163k`, Monterosa 120k:
+`monterosa-walserwaeg-120k`).
+
+**Mitigación agregada mientras tanto:** `race_generator.generate()` ahora
+imprime un `⚠ WARNING` en consola durante `python3 publish.py` cada vez
+que detecta que dos rutas van a pisarse, nombrando el slug y las páginas
+en conflicto — para que una colisión nueva se note al toque en vez de
+descubrirse después como una URL "perdida". `sitemap_generator.py`
+tampoco lista una URL dos veces aunque haya colisión (dedupe defensivo,
+no arregla el contenido pisado).
+
+**Próximos pasos (cuando se retome, según el usuario):** revisar el paso
+de exportación en `app.py`/Engine para que el slug sugerido por distancia
+incluya siempre la distancia, y re-exportar (o corregir a mano) las 6
+carreras afectadas para recuperar las 9 páginas perdidas.
+
+---
+
 <!-- Agregar nuevos issues debajo, con el mismo formato: título, Estado,
      Descripción, Impacto, Próximos pasos. -->
