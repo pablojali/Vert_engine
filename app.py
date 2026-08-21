@@ -13,6 +13,7 @@ import uuid
 import os
 import shutil
 import subprocess
+import zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -177,6 +178,19 @@ def _ascii_filename(text: str) -> str:
     header isn't plain ASCII, so this only touches the filename, never
     the runner's name as shown inside the report itself."""
     return unicodedata.normalize("NFKD", str(text)).encode("ascii", "ignore").decode("ascii")
+
+
+def _build_reports_zip(html_by_filename: dict) -> bytes:
+    """Zips a batch of already-built report HTML strings into one
+    in-memory .zip (filename -> HTML content), so a bulk fetch (Top
+    Runners, Engine Live) can offer a single-click download of everything
+    that worked, alongside the existing one-by-one buttons for anyone who
+    only wants a couple."""
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for filename, html in html_by_filename.items():
+            zf.writestr(filename, html)
+    return buf.getvalue()
 
 
 def chart_download_button(fig, filename, key):
@@ -1519,17 +1533,29 @@ def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
     return r.returncode == 0, _redact_token(r.stdout) + _redact_token(r.stderr)
 
 
-def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> tuple[bool, str]:
+def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str, status=None) -> tuple[bool, str]:
     """Backs up data/ first, then builds the site (equivalent to
     `python publish.py`), mirrors output/ into the vertlabs-web checkout,
     and pushes it to the given branch. Returns (ok, log) - never raises,
     so the caller can show the failure in the UI instead of crashing the
-    Streamlit app."""
+    Streamlit app.
+
+    status: an optional st.status() context (or anything with a
+    .write(str) method) - when given, each real step writes a line to it
+    as it happens, so a slow publish (a full site push is ~1600 files)
+    shows live progress instead of one static spinner for several
+    minutes straight, which reads as a hang even when it's working."""
+    def _step(msg: str) -> None:
+        if status is not None:
+            status.write(msg)
+
+    _step("📦 Respaldando `data/`...")
     backup_ok, backup_log = _backup_engine_data()
     log_lines = [f"--- Respaldo de data/ ---\n{backup_log}"]
     if not backup_ok:
         return False, "\n".join(log_lines)
 
+    _step("🏗️ Generando el sitio (HTML/CSS/JS desde `data/`)...")
     try:
         import publish as publish_module
         buf = io.StringIO()
@@ -1539,14 +1565,17 @@ def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> 
     except Exception:
         return False, "Falló la generación del sitio (publish.py):\n" + traceback.format_exc()
 
+    _step("📂 Preparando el checkout local de `vertlabs-web`...")
     clone_ok, clone_log = _ensure_web_repo(web_repo_dir)
     if clone_log:
         log_lines.append(f"--- Clonando vertlabs-web ---\n{clone_log}")
     if not clone_ok:
         return False, "No se pudo clonar vertlabs-web:\n" + "\n".join(log_lines)
 
+    _step("🔄 Copiando el sitio generado al checkout...")
     _sync_output_to_web_repo(web_repo_dir)
 
+    _step(f"🌿 Cambiando a la rama '{branch}'...")
     r = _run_git(web_repo_dir, "fetch", "origin", branch)
     log_lines.append(r.stdout + r.stderr)
     r = _run_git(web_repo_dir, "checkout", "-B", branch, f"origin/{branch}")
@@ -1561,6 +1590,7 @@ def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> 
     if r.returncode == 0:
         log_lines.append("Sin cambios respecto al último publish - nada para commitear.")
     else:
+        _step("📝 Armando el commit...")
         r = _run_git(web_repo_dir, "commit", "-m", commit_message)
         log_lines.append(r.stdout + r.stderr)
         if r.returncode != 0:
@@ -1569,12 +1599,14 @@ def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str) -> 
     # Push unconditionally - even with no new commit, the branch might not
     # exist on origin yet (first publish to it), and Cloudflare Pages only
     # picks up branches it can see on the remote.
+    _step("☁️ Subiendo a GitHub (un push grande puede tardar varios minutos)...")
     _configure_git_push_auth(web_repo_dir, "pablojali/vertlabs-web")
     r = _run_git(web_repo_dir, "push", "-u", "origin", branch)
     log_lines.append(r.stdout + r.stderr)
     if r.returncode != 0:
         return False, "Falló el push:\n" + "\n".join(log_lines)
 
+    _step("✅ Listo.")
     return True, "\n".join(log_lines)
 
 
@@ -1596,14 +1628,15 @@ with st.sidebar:
     st.caption("Cloudflare Pages genera una URL de preview para la rama 'staging' automáticamente.")
     if st.button("📤 Publicar a Staging", use_container_width=True, key="publish_staging_btn"):
         _save_publish_config({"vertlabs_web_dir": web_repo_dir_str})
-        with st.spinner("Generando sitio y subiendo a 'staging'..."):
+        with st.status("Publicando a 'staging'...", expanded=True) as status:
             ok, log = _publish_to_branch(
-                Path(web_repo_dir_str).expanduser(), "staging", "Publish desde el Engine (staging)"
+                Path(web_repo_dir_str).expanduser(), "staging", "Publish desde el Engine (staging)",
+                status=status,
             )
-        if ok:
-            st.success("✅ Publicado en 'staging'.")
-        else:
-            st.error("❌ Falló la publicación a staging.")
+            status.update(
+                label="✅ Publicado en 'staging'." if ok else "❌ Falló la publicación a staging.",
+                state="complete" if ok else "error",
+            )
         with st.expander("Ver detalle"):
             st.code(log or "(sin salida)")
 
@@ -1613,14 +1646,15 @@ with st.sidebar:
         "✅ Promover a Producción", use_container_width=True, disabled=not confirm_prod, key="publish_prod_btn"
     ):
         _save_publish_config({"vertlabs_web_dir": web_repo_dir_str})
-        with st.spinner("Generando sitio y subiendo a 'main'..."):
+        with st.status("Publicando a producción...", expanded=True) as status:
             ok, log = _publish_to_branch(
-                Path(web_repo_dir_str).expanduser(), "main", "Publish desde el Engine (producción)"
+                Path(web_repo_dir_str).expanduser(), "main", "Publish desde el Engine (producción)",
+                status=status,
             )
-        if ok:
-            st.success("✅ Publicado en 'main'.")
-        else:
-            st.error("❌ Falló la publicación a producción.")
+            status.update(
+                label="✅ Publicado en 'main'." if ok else "❌ Falló la publicación a producción.",
+                state="complete" if ok else "error",
+            )
         with st.expander("Ver detalle"):
             st.code(log or "(sin salida)")
 
@@ -2979,12 +3013,32 @@ with tab_top:
                 st.markdown(f"##### {label}")
                 st.dataframe(df_summary_bib, use_container_width=True, hide_index=True)
 
-            # --- Full Analysis Report per runner: one download button
-            # each (not a zip) - easier to click through than to
-            # extract a zip and clean up the folder afterward. ---
+            # --- Full Analysis Report per runner: a single ZIP with
+            # everything that worked, plus one download button each for
+            # anyone who only wants a couple - not either/or. ---
             st.markdown("---")
             st.markdown("### 📄 Full Analysis Reports")
             st.caption("One HTML report per runner, same as 'Download Full Analysis' in Runner Metrics.")
+
+            reports_ready = {
+                label: report_data for label, report_data in reports.items() if report_data.get("report_html")
+            }
+            if reports_ready:
+                zip_html_by_filename = {
+                    f"{_ascii_filename(report_data['runner_info'].get('Name') or label).replace(' ', '_')}"
+                    "_livetrail_full_analysis.html": report_data["report_html"]
+                    for label, report_data in reports_ready.items()
+                }
+                st.download_button(
+                    f"📦 Descargar los {len(reports_ready)} informes (ZIP)",
+                    data=_build_reports_zip(zip_html_by_filename),
+                    file_name=f"{_ascii_filename(selected_race_top_used or 'race').replace(' ', '_')}_full_analysis_reports.zip",
+                    mime="application/zip",
+                    type="primary",
+                    use_container_width=True,
+                    key="dl_top_reports_zip",
+                )
+
             for i, (label, report_data) in enumerate(reports.items()):
                 if not report_data.get("report_html"):
                     st.caption(f"⚠️ {label}: no se pudo generar su informe.")
