@@ -16,7 +16,7 @@ TRANSLATIONS = {
         "nav_races": "Races",
         "nav_athletes": "Athletes",
         "nav_rankings": "Rankings",
-        "nav_about": "About",
+        "nav_about": "About VTL",
         "nav_search": "Search",
         "site_tagline": "Performance Intelligence for Trail Running",
         "site_hero_sub": (
@@ -134,7 +134,7 @@ TRANSLATIONS = {
         "nav_races": "Carreras",
         "nav_athletes": "Atletas",
         "nav_rankings": "Rankings",
-        "nav_about": "Acerca de",
+        "nav_about": "Acerca de VTL",
         "nav_search": "Buscar",
         "site_tagline": "Inteligencia de rendimiento para el trail running",
         "site_hero_sub": (
@@ -254,7 +254,7 @@ TRANSLATIONS = {
         "nav_races": "Courses",
         "nav_athletes": "Athlètes",
         "nav_rankings": "Classements",
-        "nav_about": "À propos",
+        "nav_about": "À propos de VTL",
         "nav_search": "Rechercher",
         "site_tagline": "Intelligence de performance pour le trail running",
         "site_hero_sub": (

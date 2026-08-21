@@ -1,13 +1,31 @@
 {% extends "base.html" %}
 
-{% block title %}{{ athlete.name }} — {{ race_entry.race_name }} — Vertical Trail Labs{% endblock %}
-{% block description %}{{ athlete.name }} — {{ race_entry.race_name }} {{ race_entry.year }}.{% endblock %}
-{% block og_title %}{{ athlete.name }} — {{ race_entry.race_name }} — Vertical Trail Labs{% endblock %}
+{# Same single-source-of-truth pattern as athlete.html: the page metadata
+   and the Share button use the exact same text, built only from data
+   already on this page (athlete + this specific race), nothing invented. #}
+{% set share_summary = athlete.name ~ ' — ' ~ race_entry.race_name ~ ' ' ~ race_entry.year ~ ' | Vertical Trail Labs' %}
+{% set share_title = athlete.name ~ ' — ' ~ race_entry.race_name ~ ' — Vertical Trail Labs' %}
+{% set share_url = 'https://' ~ site_domain ~ locale_url(locale, page_path) %}
+
+{% block title %}{{ share_title }}{% endblock %}
+{% block description %}{{ share_summary }}{% endblock %}
+{% block og_title %}{{ share_title }}{% endblock %}
+{% block og_image %}{% if athlete.portrait %}https://{{ site_domain }}{{ athlete.portrait }}{% else %}{{ super() }}{% endif %}{% endblock %}
 
 {% block content %}
 <article class="report-page">
   <p class="breadcrumb"><a href="{{ athlete.url }}">← {{ t.report_back }}</a></p>
-  <h1>{{ athlete.name }}</h1>
+  <div class="athlete-name-row">
+    <h1>{{ athlete.name }}</h1>
+    <button
+      type="button" class="share-button" data-share
+      data-share-title="{{ share_title }}" data-share-text="{{ share_summary }}" data-share-url="{{ share_url }}"
+      data-share-copy-label="{{ t.share_copy_link }}" data-share-copied-label="{{ t.share_link_copied }}"
+    >
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+      <span data-share-label>{{ t.share_button_label }}</span>
+    </button>
+  </div>
   <p class="race-meta">{{ race_entry.race_name }} {{ race_entry.year }}</p>
   <iframe src="{{ race_entry.report }}" class="report-frame" title="{{ athlete.name }} — {{ race_entry.race_name }}" scrolling="no"></iframe>
 </article>
