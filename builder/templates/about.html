@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}{{ t.about_title }} — Vertical Trail Labs{% endblock %}
-{% block description %}{{ t.about_intro_p1 }}{% endblock %}
+{% block title %}{{ t.about_meta_title }}{% endblock %}
+{% block description %}{{ t.about_meta_description }}{% endblock %}
 
 {% block content %}
 <article class="about-page">
   <h1>{{ t.about_title }}</h1>
   <p class="about-eyebrow">Terrain Intelligence Engine™ v1.0.</p>
+  <p class="about-tagline">{{ t.about_tagline }}</p>
   <p class="hero-sub">{{ t.about_intro_p1 }}</p>
   <p class="hero-sub about-emphasis">{{ t.about_intro_p2 }}</p>
+  <p class="hero-sub">{{ t.about_core_p1 }}</p>
+  <p class="hero-sub">{{ t.about_core_p2 }}</p>
+  <p class="hero-sub">{{ t.about_core_p3 }}</p>
 
   <details class="metric-accordion metric-vpi" id="vpi" open>
     <summary>
@@ -38,6 +42,29 @@
       <p class="formula">{{ t.about_er_formula }}</p>
     </div>
   </details>
+
+  <section class="founder-section" id="founder">
+    <h2>{{ t.founder_title }}</h2>
+    <div class="founder-block">
+      <div class="founder-photo-wrap">
+        {% if founder_photo %}
+        <img src="{{ founder_photo }}" alt="{{ t.founder_photo_alt }}" class="founder-photo" loading="lazy">
+        {% else %}
+        <div class="founder-photo-placeholder" aria-hidden="true">PJ</div>
+        {% endif %}
+      </div>
+      <div class="founder-bio">
+        <p class="founder-name">{{ t.founder_name }}</p>
+        <p class="founder-role">{{ t.founder_role }}</p>
+        <p>{{ t.founder_bio_p1 }}</p>
+        <p>{{ t.founder_bio_p2 }}</p>
+        <p>{{ t.founder_bio_p3 }}</p>
+        <p>{{ t.founder_bio_p4 }}</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="independent-note"><strong>{{ t.independent_title }}.</strong> {{ t.independent_statement }}</p>
 
   <section class="contact-section" id="contact">
     <h2>{{ t.about_contact_title }}</h2>
