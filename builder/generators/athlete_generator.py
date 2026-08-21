@@ -79,6 +79,12 @@ def generate(loc: dict, t: dict, events: list[dict]) -> list[dict]:
                 write_page(out_path(loc["prefix"], f"{report_page_path}index.html"), report_html)
             else:
                 r["url"] = locale_url(loc["code"], f"races/{r['race_slug']}/")
+        # Most recent race by year, used for the share text/OG description
+        # ("Name - Race Year | VTL") - None for an athlete with no races
+        # yet, handled in the template (name-only share text).
+        athlete["primary_race"] = max(
+            athlete.get("races", []), key=lambda r: r.get("year") or 0, default=None
+        )
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 

@@ -667,6 +667,25 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 .athlete-meta { color: var(--color-muted); margin: 0.15rem 0 0; }
 .athlete-country-flag { width: 24px; height: 18px; object-fit: cover; border-radius: 2px; vertical-align: middle; }
 
+.athlete-name-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.6rem 0.9rem; }
+.athlete-name-row h1 { margin: 0; }
+
+.share-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.share-button:hover, .share-button:focus-visible { color: var(--color-cyan); border-color: var(--color-cyan); }
+
 .career-avg-section {
   display: flex;
   flex-wrap: wrap;
@@ -786,6 +805,16 @@ tbody tr:hover { background: var(--color-bg-raised); }
 .metric-accordion[open] summary::after { content: "−"; }
 .metric-accordion-body { padding: 0 1.25rem 1.25rem; }
 .metric-accordion-body p { margin: 0 0 0.75rem; }
+
+.contact-section {
+  margin: 2.5rem 0 0;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--color-border);
+}
+.contact-section h2 { margin: 0 0 0.5rem; }
+.contact-section p { margin: 0 0 0.4rem; color: var(--color-muted); }
+.contact-cta { font-weight: 600; }
+.contact-cta a { color: var(--color-cyan); }
 
 .runner-charts-accordion {
   border: 1px solid var(--color-border);
