@@ -1,0 +1,27 @@
+{
+  "slug": "carolyn-schaltegger",
+  "name": "Carolyn SCHALTEGGER",
+  "country": "CH",
+  "gender": null,
+  "portrait": "/media/athletes/carolyn-schaltegger/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 64,
+      "gender_rank": 8,
+      "finish_time": "11:51:25",
+      "vpi": 779.6,
+      "dmi": 9.92,
+      "er": 97.9,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/carolyn-schaltegger/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 779.6,
+    "dmi": 9.9,
+    "er": 97.9
+  }
+}

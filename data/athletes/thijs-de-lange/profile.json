@@ -1,0 +1,27 @@
+{
+  "slug": "thijs-de-lange",
+  "name": "Thijs DE LANGE",
+  "country": "NL",
+  "gender": null,
+  "portrait": "/media/athletes/thijs-de-lange/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "9:23:24",
+      "vpi": 987.7,
+      "dmi": 12.23,
+      "er": 86.6,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/thijs-de-lange/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 987.7,
+    "dmi": 12.2,
+    "er": 86.6
+  }
+}

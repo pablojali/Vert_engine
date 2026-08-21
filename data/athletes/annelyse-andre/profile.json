@@ -1,0 +1,27 @@
+{
+  "slug": "annelyse-andre",
+  "name": "Annelyse ANDRÉ",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 87,
+      "gender_rank": 10,
+      "finish_time": "12:13:19",
+      "vpi": 761.8,
+      "dmi": 9.28,
+      "er": 76.7,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/annelyse-andre/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 761.8,
+    "dmi": 9.3,
+    "er": 76.7
+  }
+}

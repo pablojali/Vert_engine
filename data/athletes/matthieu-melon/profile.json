@@ -1,0 +1,27 @@
+{
+  "slug": "matthieu-melon",
+  "name": "Matthieu MELON",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "9:34:55",
+      "vpi": 977.7,
+      "dmi": 11.8,
+      "er": 84.8,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/matthieu-melon/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 977.7,
+    "dmi": 11.8,
+    "er": 84.8
+  }
+}

@@ -1,0 +1,466 @@
+<script src='https://cdn.plot.ly/plotly-2.32.0.min.js'></script>
+
+    <style>
+      .vl-report { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; color: #e2e8f0; }
+      .vl-report h2 { color: #22d3ee; margin-bottom: 4px; }
+      .vl-report h3 { color: #22d3ee; margin-top: 32px; margin-bottom: 8px;
+                       border-bottom: 1px solid #334155; padding-bottom: 6px; }
+      .vl-metric { display: inline-block; margin: 0 24px 12px 0; }
+      .vl-metric-label { font-size: 13px; color: #94a3b8; }
+      .vl-metric-value { font-size: 22px; font-weight: 600; color: #f1f5f9; }
+      table.vl-table { border-collapse: collapse; width: 100%; margin-bottom: 8px;
+                        font-size: 13px; background-color: #0f172a; }
+      table.vl-table th { background-color: #1e293b; color: #22d3ee; text-align: left;
+                           padding: 8px 12px; border-bottom: 2px solid #22d3ee;
+                           white-space: nowrap; }
+      table.vl-table td { padding: 6px 12px; border-bottom: 1px solid #1e293b; color: #e2e8f0; }
+      table.vl-table tr:nth-child(even) td { background-color: #16213a; }
+      table.vl-table tr:hover td { background-color: #22314f; }
+    </style>
+    
+<div class='vl-report'>
+<h2>Thijs DE LANGE</h2>
+<div>
+<div class='vl-metric'><div class='vl-metric-label'>Finish Time</div><div class='vl-metric-value'>9:23:24</div></div>
+<div class='vl-metric'><div class='vl-metric-label'>Overall Rank</div><div class='vl-metric-value'>5</div></div>
+<div class='vl-metric'><div class='vl-metric-label'>Category</div><div class='vl-metric-value'>20-34M</div></div>
+</div>
+<h3>Checkpoints / Split Times</h3>
+<table class="dataframe vl-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Point</th>
+      <th>Accumulated Time</th>
+      <th>Segment Time</th>
+      <th>Speed (km/h)</th>
+      <th>Pace (min/km)</th>
+      <th>Rank</th>
+      <th>Rest</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>0:00:00</td>
+      <td>0:00:00</td>
+      <td>None</td>
+      <td>None</td>
+      <td></td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>18</td>
+      <td>1:08:47</td>
+      <td>1:08:47</td>
+      <td>None</td>
+      <td>None</td>
+      <td>17.0</td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>1:34:38</td>
+      <td>0:25:51</td>
+      <td>None</td>
+      <td>None</td>
+      <td>6.0</td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>2:57:54</td>
+      <td>1:23:16</td>
+      <td>None</td>
+      <td>None</td>
+      <td>10.0</td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>5:22:05</td>
+      <td>2:24:11</td>
+      <td>None</td>
+      <td>None</td>
+      <td>6.0</td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>6:27:17</td>
+      <td>1:05:12</td>
+      <td>None</td>
+      <td>None</td>
+      <td>6.0</td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>7:27:26</td>
+      <td>1:00:09</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:55</td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>7:28:14</td>
+      <td>0:00:48</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:00</td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>8:46:08</td>
+      <td>1:17:54</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:41</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>9:23:24</td>
+      <td>0:37:16</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:00</td>
+    </tr>
+  </tbody>
+</table>
+<h3>🎯 Performance Indices</h3>
+<div>
+<div class='vl-metric'><div class='vl-metric-label'>VPI</div><div class='vl-metric-value'>987.7 m/h</div></div>
+<div class='vl-metric'><div class='vl-metric-label'>DMI</div><div class='vl-metric-value'>12.23 km/h</div></div>
+<div class='vl-metric'><div class='vl-metric-label'>ER</div><div class='vl-metric-value'>86.6</div></div>
+</div>
+<h3>🧗 VPI - Vertical Power Index</h3>
+<div style="height:380px; width:100%;">                            <div id="5d05ca7f-d3e0-4a8a-acf3-afd8fb65ecf1" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("5d05ca7f-d3e0-4a8a-acf3-afd8fb65ecf1")) {                    Plotly.newPlot(                        "5d05ca7f-d3e0-4a8a-acf3-afd8fb65ecf1",                        [{"fill":"tozeroy","fillcolor":"rgba(90,90,90,0.18)","hoverinfo":"skip","line":{"color":"rgba(160,160,160,0.5)","width":1},"mode":"lines","name":"Elevation Profile","showlegend":false,"x":{"dtype":"f8","bdata":"ufF1YmOruz8phaTofiPTPzirV5zwPOA\u002fXLPJoXY15j9ddt0U0F3sP\u002f7Hg7tIbfE\u002f4LS7jqb29D\u002fmDdmIhP73PwOX7ROKLPs\u002f0ClNLJZj\u002fj+1TZ2C3twAQPJ82l2OawJAmp0ZTsgDBECEp8SIZKYFQHoO9tfXRgdAkIda4qDKCEC\u002fggdTgFwKQA1CeHaBCAxAbkwu9mKUDUDl8S4O9R0PQFhJLH1aXRBAOZzfzXg3EUAKJLjHg\u002fkRQLs3NL5KxRJARGbu\u002fjmYE0C98mUQBVgUQONGLup2NRVAdAlYNCIGFkC8pRToxscWQLStC+uroBdAI+ppYXZrGEAF5unT+TUZQOXpMkhs+xlAfRRRdoW+GkAPZFZ9v5sbQFSJ6lyZXhxAIew9LA49HUAlc2Iz3QYeQOSfqeiM3B5AFkamq2KfH0DE8eDgEzkgQEY4ZYRwmCBA5yUh++wDIUCMUYPAQ2ghQChGsDqG1iFAXvMROUk2IkDyRGytKJYiQOWGfAYk\u002fiJAHywpDY9pI0AhSQWzS8gjQEQWUSvVMyRA2w91Oj+UJED1riUvAgIlQC\u002fORZB7ZiVAFXTzHz3PJUBMgI32cTImQICku8TAmyZAF4XlUcH\u002fJkAY47cGlGYnQOapqwoZxydAkhVBXOI0KECpp3DWnZwoQNX3VqLg\u002fyhAVC0hHN9lKUBCp5PW48YpQO8HJJT4NipAzOlxAJKeKkDDwhvjFvoqQFohC6ZDaytAHSTfS6\u002fQK0AoAAyCcTIsQJx+y6XInixAFk\u002f2vGIKLUBnR6pitWctQHwLtY+PzC1AKeU5ZAY2LkCCRO7bAJouQH\u002fs8vbZBy9AIWSGX0duL0DfmAh\u002fqNUvQLhz9RvhGDBAHLfENYpLMECDAck6uIAwQBn1qDHjtDBA6MyiKMnjMECw5ZOOjx0xQGBUG13wTjFAQ6kJ+qCAMUB+r9Kbw7ExQJCodNYq5jFATz8EOOkcMkCi1kg9bE8yQGRNPwXofzJAblfh87uvMkD7PZDWf+cyQNjUXkWqGTNAhXplWQxMM0DQmiq+BYIzQCzw91sPszNA8jwNrf7nM0D8\u002fBltAhs0QB2xzEC7TjRAGoTevcR\u002fNEDEbUfl+LM0QPExifnr5jRAlpihV4AWNUC8u6i46Es1QDuYkBeKfTVADEf5HpqzNUBJEhd7ceg1QFnnoFJWGzZA0KDBH15NNkAbXpOxT3o2QGztcHUpsjZAFjFaLPriNkAWayfrHBo3QCCElnvPTjdAwqtCZul\u002fN0BfVeTPYLQ3QIAxTdJE5jdA5iEML1YbOEAtRkXkrEk4QD0GpPWSgjhASQ\u002fOOGazOEDvbckC7Oc4QIKqCI6EHTlAAHs68MFIOUBXGn4P6YI5QIOXJMjBszlAMATInO\u002fmOUCcsWp4Ahk6QEqxNb7RSjpArJZId8p\u002fOkAthVI3w686QPlN2uVG5zpArOvqajQaO0A\u002fW1tq3Ew7QAS3MMPagTtAPzT79eKvO0A0eYDQ1+c7QNmhWWlBGTxAnCdnW75LPEAvHIwd+H88QEm0IjaPsjxAVGFHSHfoPEAhUZj82xo9QKoSD27oTT1A3cUZelx+PUCA7roYY7U9QA5mB5Ok6T1Ar\u002fTrVeEbPkCimgLvWks+QOOe5r\u002flgD5AXvBMbEeyPkBFWGFNd+c+QMUWIYhbHD9AT8V1xpVNP0DGRhvgUH4\u002fQMnCqk7Nsj9AHSabMPblP0BGIXs7XQxAQJNtJ\u002f6\u002fJUBAv21yR3Y\u002fQECFQtnjeFhAQJHO+MEGc0BA9O0kJFqNQEAUcEY6PadAQEFWYN6PwkBAaKFDI5\u002fYQEDQM0aIn\u002fFAQAmAgtdXDkFA9f2spCsoQUCtIGdhREFBQOYoroYvWkFAchvE9CNzQUDUraRvtIxBQIA4WV\u002ffp0FAs9neoue+QUDZhgctTthBQAR+XpKM8kFAxgujPxsPQkApJWY9AidCQGcxAj9kQUJAfHCt3EFZQkD6kPYb5HJCQHtNWBovjEJA9PMrCXGlQkB38903zcBCQAaNi1xJ2UJAxuqPCU\u002f1QkBv5QwvRwxDQLgqej+SJUNAtEo68XNBQ0CCiup3GFpDQGmzO9U\u002fdkNAhTk3W\u002fKMQ0DRWIOeF6ZDQH9VhILGvUNA5bkyCuXaQ0CHyNWsEPNDQDNA0zGNDURAz1ar+wUnREBGN5VIqkFEQAQjnarWWkRAc28QDq5yREA3MxIDgItEQEyZNDmCp0RA8UhzL3XAREAxYJcbfNlEQEQwzIGU80RAjX7rML4NRUDJkMY98CVFQLwAes7yPkVAVnX3laNZRUC4AfrZ+3FFQPBnvFbzjEVAgk+5lk+mRUBRPQfw2r9FQGJYMOfh10VAGaQcIivyRUAzklwEhwtGQAAqZu3RJkZAziSLwRc\u002fRkADcjgxk1lGQNDIG96Pc0ZABXSg0GqMRkCGk5fgD6ZGQF01IoOTwEZAVonDcjbYRkDBXN9z3PJGQFMM9mpxC0dA1SaOfZElR0DN1eLOvz9HQBNhLeiLWUdAl1Xt51dzR0DggfgVwoxHQFvt\u002fAHlpkdAGTv8Y\u002fO9R0C4gRM6Y9xHQGEkJNAA8kdAuyFp9RoMSED+lcLXuSRIQK\u002f3sqpiPUhA4BfszNVYSEBgJ0JNYXRIQFeOoNR1i0hAySUIIHKmSEBHaZtd\u002fMBIQFAbShHf2UhA2TnGHWXzSEA1Wx3u9gtJQOeVU7N3JElAbzy2fNpASUA14iGQXFdJQNH8n3X5dElA2ELPnQ+NSUCi6hKDs6RJQAyVHf4FwUlAtMMTopbZSUAV80TAa\u002fNJQBe0IpZLDEpATsBNodonSkBr4nB3dD9KQNo80YI+WEpA4EL5O0lySkDAplrE4o5KQEA5j67LpUpAqX7qT3C+SkAzKr9uBthKQJu5ZPv18EpAR9DbQnsMS0CgrRgfCidLQMIsQruwP0tAC1VRI+hYS0Bx6ZfE63VLQKN\u002fHd7Ai0tAfJxaKRunS0AwCR+8hMFLQCV79xId2ktAMw7gEIfyS0BM75u\u002fmQxMQMsWMZpdJ0xA7et6SnJATEBTnUcphlhMQFHg5U5MckxAl75lEayMTEBzoW1fOaVMQDrA2ZlJwExA89RclXPZTEAsNNSO\u002fPJMQI4fTGrrC01A2QGbEh4lTUBTyRxJGEFNQEJU9PITWE1AWDukMVpyTUAAzUcSa4xNQI\u002fdxx0rpk1AsG35rQ\u002fATUD9d4afRNlNQOcurDSf8U1AsNKeHJwMTkCJUEMJkyZOQBqn6QULQE5AhQ64wrxYTkCcXpTfkXJOQINQN+mqjE5A9DnZgiymTkDFpkeSrsBOQBZ+bDCM2U5AI0JjM1zyTkAdCkjvuwtPQJj6K\u002f9dJk9AV2\u002fxh8FCT0DZ+sSVVVhPQHbwdfhwc09AIldsMSGLT0CGOXBZTKZPQNA1Xs\u002fvv09AWMMGOS3ZT0C7DyGvXfNPQDfyEHR0BlBAiICx8pcTUEDVHZTO9B9QQHdmRklTLFBAoFlWdoE5UEBpAK0A70ZQQMWUDN9jUlBAaWA0cGpfUEAbj9FBnGxQQP5aUmsMeVBAwXGRx26GUEC99E7zHpNQQGvRURSTn1BALNVebuasUEB+4ElU7rpQQPQNAb3JxlBAuEReo9\u002fSUEBPN5tnDuBQQKKkJlnb7VBAEW57lkb5UEB4c1u9LgZRQMVo0p0DE1FAfmCdvWAfUUAb4yPvhixRQAjN9dE6OVFAeLp9i5xGUUBlP8HONFNRQHwuZxBiX1FA1YyAbAFtUUBgkdk+mXlRQCCCmFlUhlFAZN6FeOSSUUCk\u002f2p3FZ9RQEzxHhKxrFFAxv\u002fWKJG5UUAvLO0fzMVRQHO93bE80lFAGck8j8LfUUARDgxT3exRQNltBHt9+VFAHejrRWwGUkCt5Y7RJRNSQDl9z5vlIFJAshidwGctUkDV68ieKjpSQHERXgtNRlJAIGbKpIxTUkCyiRZvgmBSQON4Z4lJbFJAJ3AdWDR6UkBxK4p3Z4ZSQI4n+R+lk1JAFp9749+fUkBz0duiaq1SQNROeX45uVJAL4gu3gzGUkCKHMdesNNSQNSEO6tF3VJA"},"y":{"dtype":"f8","bdata":"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"},"yaxis":"y2","type":"scatter"},{"hovertemplate":"%{text}\u003cbr\u003eKm %{x:.0f}\u003cbr\u003eVPI: %{y:.0f} m\u002fh\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#22d3ee","width":3},"mode":"lines+markers","name":"VPI (m\u002fh)","text":["P0.0\u2192P18.0","P18.0\u2192P20.0","P20.0\u2192P22.0","P22.0\u2192P30.0","P30.0\u2192P32.0","P32.0\u2192P34.0","P34.0\u2192P36.0","P36.0\u2192P38.0","P38.0\u2192P100.0"],"x":{"dtype":"f8","bdata":"zczMzMzMIkBmZmZmZmYpQAAAAAAAADtAMzMzMzMzR0CamZmZmZlKQJqZmZmZGVBAmpmZmZkZUECamZmZmZlRQJqZmZmZOVNA"},"y":{"dtype":"f8","bdata":"AAAAAADCk0CamZmZmfmHQM3MzMzMTIxAmpmZmZl9jkBmZmZmZsaKQJqZmZmZDY1AAAAAAAAA+H+amZmZmZGOQDMzMzMzu4RA"},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"yaxis2":{"title":{"text":"Elevation (m)"},"overlaying":"y","side":"right","showgrid":false},"xaxis":{"title":{"text":"Accumulated Km"}},"yaxis":{"title":{"text":"VPI (m\u002fh)"}},"height":380,"hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+<h3>📉 DMI - Descent Mastery Index</h3>
+<div style="height:380px; width:100%;">                            <div id="1bddfbfa-5326-43ee-86f2-46410e06b4e6" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("1bddfbfa-5326-43ee-86f2-46410e06b4e6")) {                    Plotly.newPlot(                        "1bddfbfa-5326-43ee-86f2-46410e06b4e6",                        [{"fill":"tozeroy","fillcolor":"rgba(90,90,90,0.18)","hoverinfo":"skip","line":{"color":"rgba(160,160,160,0.5)","width":1},"mode":"lines","name":"Elevation Profile","showlegend":false,"x":{"dtype":"f8","bdata":"ufF1YmOruz8phaTofiPTPzirV5zwPOA\u002fXLPJoXY15j9ddt0U0F3sP\u002f7Hg7tIbfE\u002f4LS7jqb29D\u002fmDdmIhP73PwOX7ROKLPs\u002f0ClNLJZj\u002fj+1TZ2C3twAQPJ82l2OawJAmp0ZTsgDBECEp8SIZKYFQHoO9tfXRgdAkIda4qDKCEC\u002fggdTgFwKQA1CeHaBCAxAbkwu9mKUDUDl8S4O9R0PQFhJLH1aXRBAOZzfzXg3EUAKJLjHg\u002fkRQLs3NL5KxRJARGbu\u002fjmYE0C98mUQBVgUQONGLup2NRVAdAlYNCIGFkC8pRToxscWQLStC+uroBdAI+ppYXZrGEAF5unT+TUZQOXpMkhs+xlAfRRRdoW+GkAPZFZ9v5sbQFSJ6lyZXhxAIew9LA49HUAlc2Iz3QYeQOSfqeiM3B5AFkamq2KfH0DE8eDgEzkgQEY4ZYRwmCBA5yUh++wDIUCMUYPAQ2ghQChGsDqG1iFAXvMROUk2IkDyRGytKJYiQOWGfAYk\u002fiJAHywpDY9pI0AhSQWzS8gjQEQWUSvVMyRA2w91Oj+UJED1riUvAgIlQC\u002fORZB7ZiVAFXTzHz3PJUBMgI32cTImQICku8TAmyZAF4XlUcH\u002fJkAY47cGlGYnQOapqwoZxydAkhVBXOI0KECpp3DWnZwoQNX3VqLg\u002fyhAVC0hHN9lKUBCp5PW48YpQO8HJJT4NipAzOlxAJKeKkDDwhvjFvoqQFohC6ZDaytAHSTfS6\u002fQK0AoAAyCcTIsQJx+y6XInixAFk\u002f2vGIKLUBnR6pitWctQHwLtY+PzC1AKeU5ZAY2LkCCRO7bAJouQH\u002fs8vbZBy9AIWSGX0duL0DfmAh\u002fqNUvQLhz9RvhGDBAHLfENYpLMECDAck6uIAwQBn1qDHjtDBA6MyiKMnjMECw5ZOOjx0xQGBUG13wTjFAQ6kJ+qCAMUB+r9Kbw7ExQJCodNYq5jFATz8EOOkcMkCi1kg9bE8yQGRNPwXofzJAblfh87uvMkD7PZDWf+cyQNjUXkWqGTNAhXplWQxMM0DQmiq+BYIzQCzw91sPszNA8jwNrf7nM0D8\u002fBltAhs0QB2xzEC7TjRAGoTevcR\u002fNEDEbUfl+LM0QPExifnr5jRAlpihV4AWNUC8u6i46Es1QDuYkBeKfTVADEf5HpqzNUBJEhd7ceg1QFnnoFJWGzZA0KDBH15NNkAbXpOxT3o2QGztcHUpsjZAFjFaLPriNkAWayfrHBo3QCCElnvPTjdAwqtCZul\u002fN0BfVeTPYLQ3QIAxTdJE5jdA5iEML1YbOEAtRkXkrEk4QD0GpPWSgjhASQ\u002fOOGazOEDvbckC7Oc4QIKqCI6EHTlAAHs68MFIOUBXGn4P6YI5QIOXJMjBszlAMATInO\u002fmOUCcsWp4Ahk6QEqxNb7RSjpArJZId8p\u002fOkAthVI3w686QPlN2uVG5zpArOvqajQaO0A\u002fW1tq3Ew7QAS3MMPagTtAPzT79eKvO0A0eYDQ1+c7QNmhWWlBGTxAnCdnW75LPEAvHIwd+H88QEm0IjaPsjxAVGFHSHfoPEAhUZj82xo9QKoSD27oTT1A3cUZelx+PUCA7roYY7U9QA5mB5Ok6T1Ar\u002fTrVeEbPkCimgLvWks+QOOe5r\u002flgD5AXvBMbEeyPkBFWGFNd+c+QMUWIYhbHD9AT8V1xpVNP0DGRhvgUH4\u002fQMnCqk7Nsj9AHSabMPblP0BGIXs7XQxAQJNtJ\u002f6\u002fJUBAv21yR3Y\u002fQECFQtnjeFhAQJHO+MEGc0BA9O0kJFqNQEAUcEY6PadAQEFWYN6PwkBAaKFDI5\u002fYQEDQM0aIn\u002fFAQAmAgtdXDkFA9f2spCsoQUCtIGdhREFBQOYoroYvWkFAchvE9CNzQUDUraRvtIxBQIA4WV\u002ffp0FAs9neoue+QUDZhgctTthBQAR+XpKM8kFAxgujPxsPQkApJWY9AidCQGcxAj9kQUJAfHCt3EFZQkD6kPYb5HJCQHtNWBovjEJA9PMrCXGlQkB38903zcBCQAaNi1xJ2UJAxuqPCU\u002f1QkBv5QwvRwxDQLgqej+SJUNAtEo68XNBQ0CCiup3GFpDQGmzO9U\u002fdkNAhTk3W\u002fKMQ0DRWIOeF6ZDQH9VhILGvUNA5bkyCuXaQ0CHyNWsEPNDQDNA0zGNDURAz1ar+wUnREBGN5VIqkFEQAQjnarWWkRAc28QDq5yREA3MxIDgItEQEyZNDmCp0RA8UhzL3XAREAxYJcbfNlEQEQwzIGU80RAjX7rML4NRUDJkMY98CVFQLwAes7yPkVAVnX3laNZRUC4AfrZ+3FFQPBnvFbzjEVAgk+5lk+mRUBRPQfw2r9FQGJYMOfh10VAGaQcIivyRUAzklwEhwtGQAAqZu3RJkZAziSLwRc\u002fRkADcjgxk1lGQNDIG96Pc0ZABXSg0GqMRkCGk5fgD6ZGQF01IoOTwEZAVonDcjbYRkDBXN9z3PJGQFMM9mpxC0dA1SaOfZElR0DN1eLOvz9HQBNhLeiLWUdAl1Xt51dzR0DggfgVwoxHQFvt\u002fAHlpkdAGTv8Y\u002fO9R0C4gRM6Y9xHQGEkJNAA8kdAuyFp9RoMSED+lcLXuSRIQK\u002f3sqpiPUhA4BfszNVYSEBgJ0JNYXRIQFeOoNR1i0hAySUIIHKmSEBHaZtd\u002fMBIQFAbShHf2UhA2TnGHWXzSEA1Wx3u9gtJQOeVU7N3JElAbzy2fNpASUA14iGQXFdJQNH8n3X5dElA2ELPnQ+NSUCi6hKDs6RJQAyVHf4FwUlAtMMTopbZSUAV80TAa\u002fNJQBe0IpZLDEpATsBNodonSkBr4nB3dD9KQNo80YI+WEpA4EL5O0lySkDAplrE4o5KQEA5j67LpUpAqX7qT3C+SkAzKr9uBthKQJu5ZPv18EpAR9DbQnsMS0CgrRgfCidLQMIsQruwP0tAC1VRI+hYS0Bx6ZfE63VLQKN\u002fHd7Ai0tAfJxaKRunS0AwCR+8hMFLQCV79xId2ktAMw7gEIfyS0BM75u\u002fmQxMQMsWMZpdJ0xA7et6SnJATEBTnUcphlhMQFHg5U5MckxAl75lEayMTEBzoW1fOaVMQDrA2ZlJwExA89RclXPZTEAsNNSO\u002fPJMQI4fTGrrC01A2QGbEh4lTUBTyRxJGEFNQEJU9PITWE1AWDukMVpyTUAAzUcSa4xNQI\u002fdxx0rpk1AsG35rQ\u002fATUD9d4afRNlNQOcurDSf8U1AsNKeHJwMTkCJUEMJkyZOQBqn6QULQE5AhQ64wrxYTkCcXpTfkXJOQINQN+mqjE5A9DnZgiymTkDFpkeSrsBOQBZ+bDCM2U5AI0JjM1zyTkAdCkjvuwtPQJj6K\u002f9dJk9AV2\u002fxh8FCT0DZ+sSVVVhPQHbwdfhwc09AIldsMSGLT0CGOXBZTKZPQNA1Xs\u002fvv09AWMMGOS3ZT0C7DyGvXfNPQDfyEHR0BlBAiICx8pcTUEDVHZTO9B9QQHdmRklTLFBAoFlWdoE5UEBpAK0A70ZQQMWUDN9jUlBAaWA0cGpfUEAbj9FBnGxQQP5aUmsMeVBAwXGRx26GUEC99E7zHpNQQGvRURSTn1BALNVebuasUEB+4ElU7rpQQPQNAb3JxlBAuEReo9\u002fSUEBPN5tnDuBQQKKkJlnb7VBAEW57lkb5UEB4c1u9LgZRQMVo0p0DE1FAfmCdvWAfUUAb4yPvhixRQAjN9dE6OVFAeLp9i5xGUUBlP8HONFNRQHwuZxBiX1FA1YyAbAFtUUBgkdk+mXlRQCCCmFlUhlFAZN6FeOSSUUCk\u002f2p3FZ9RQEzxHhKxrFFAxv\u002fWKJG5UUAvLO0fzMVRQHO93bE80lFAGck8j8LfUUARDgxT3exRQNltBHt9+VFAHejrRWwGUkCt5Y7RJRNSQDl9z5vlIFJAshidwGctUkDV68ieKjpSQHERXgtNRlJAIGbKpIxTUkCyiRZvgmBSQON4Z4lJbFJAJ3AdWDR6UkBxK4p3Z4ZSQI4n+R+lk1JAFp9749+fUkBz0duiaq1SQNROeX45uVJAL4gu3gzGUkCKHMdesNNSQNSEO6tF3VJA"},"y":{"dtype":"f8","bdata":"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"},"yaxis":"y2","type":"scatter"},{"hovertemplate":"%{text}\u003cbr\u003eKm %{x:.0f}\u003cbr\u003eDMI: %{y:.2f} km\u002fh\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#ffa500","width":3},"mode":"lines+markers","name":"DMI (km\u002fh)","text":["P0.0\u2192P18.0","P18.0\u2192P20.0","P20.0\u2192P22.0","P22.0\u2192P30.0","P30.0\u2192P32.0","P32.0\u2192P34.0","P34.0\u2192P36.0","P36.0\u2192P38.0","P38.0\u2192P100.0"],"x":{"dtype":"f8","bdata":"zczMzMzMIkBmZmZmZmYpQAAAAAAAADtAMzMzMzMzR0CamZmZmZlKQJqZmZmZGVBAmpmZmZkZUECamZmZmZlRQJqZmZmZOVNA"},"y":{"dtype":"f8","bdata":"w\u002fUoXI\u002fCMUAUrkfhepQkQEjhehSuRypAUrgehetRK0C4HoXrUbgnQDMzMzMzMypAAAAAAAAA+H\u002fNzMzMzEwpQPYoXI\u002fCdSJA"},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"yaxis2":{"title":{"text":"Elevation (m)"},"overlaying":"y","side":"right","showgrid":false},"xaxis":{"title":{"text":"Accumulated Km"}},"yaxis":{"title":{"text":"DMI (km\u002fh)"}},"height":380,"hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+<h3>🏆 ER - Endurance Rating - Pacing Curve</h3>
+<div style="height:380px; width:100%;">                            <div id="ffeb5c5b-3bb6-47c6-8710-154f5b70d678" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("ffeb5c5b-3bb6-47c6-8710-154f5b70d678")) {                    Plotly.newPlot(                        "ffeb5c5b-3bb6-47c6-8710-154f5b70d678",                        [{"fill":"tozeroy","fillcolor":"rgba(90,90,90,0.18)","hoverinfo":"skip","line":{"color":"rgba(160,160,160,0.5)","width":1},"mode":"lines","name":"Elevation Profile","showlegend":false,"x":{"dtype":"f8","bdata":"ufF1YmOruz8phaTofiPTPzirV5zwPOA\u002fXLPJoXY15j9ddt0U0F3sP\u002f7Hg7tIbfE\u002f4LS7jqb29D\u002fmDdmIhP73PwOX7ROKLPs\u002f0ClNLJZj\u002fj+1TZ2C3twAQPJ82l2OawJAmp0ZTsgDBECEp8SIZKYFQHoO9tfXRgdAkIda4qDKCEC\u002fggdTgFwKQA1CeHaBCAxAbkwu9mKUDUDl8S4O9R0PQFhJLH1aXRBAOZzfzXg3EUAKJLjHg\u002fkRQLs3NL5KxRJARGbu\u002fjmYE0C98mUQBVgUQONGLup2NRVAdAlYNCIGFkC8pRToxscWQLStC+uroBdAI+ppYXZrGEAF5unT+TUZQOXpMkhs+xlAfRRRdoW+GkAPZFZ9v5sbQFSJ6lyZXhxAIew9LA49HUAlc2Iz3QYeQOSfqeiM3B5AFkamq2KfH0DE8eDgEzkgQEY4ZYRwmCBA5yUh++wDIUCMUYPAQ2ghQChGsDqG1iFAXvMROUk2IkDyRGytKJYiQOWGfAYk\u002fiJAHywpDY9pI0AhSQWzS8gjQEQWUSvVMyRA2w91Oj+UJED1riUvAgIlQC\u002fORZB7ZiVAFXTzHz3PJUBMgI32cTImQICku8TAmyZAF4XlUcH\u002fJkAY47cGlGYnQOapqwoZxydAkhVBXOI0KECpp3DWnZwoQNX3VqLg\u002fyhAVC0hHN9lKUBCp5PW48YpQO8HJJT4NipAzOlxAJKeKkDDwhvjFvoqQFohC6ZDaytAHSTfS6\u002fQK0AoAAyCcTIsQJx+y6XInixAFk\u002f2vGIKLUBnR6pitWctQHwLtY+PzC1AKeU5ZAY2LkCCRO7bAJouQH\u002fs8vbZBy9AIWSGX0duL0DfmAh\u002fqNUvQLhz9RvhGDBAHLfENYpLMECDAck6uIAwQBn1qDHjtDBA6MyiKMnjMECw5ZOOjx0xQGBUG13wTjFAQ6kJ+qCAMUB+r9Kbw7ExQJCodNYq5jFATz8EOOkcMkCi1kg9bE8yQGRNPwXofzJAblfh87uvMkD7PZDWf+cyQNjUXkWqGTNAhXplWQxMM0DQmiq+BYIzQCzw91sPszNA8jwNrf7nM0D8\u002fBltAhs0QB2xzEC7TjRAGoTevcR\u002fNEDEbUfl+LM0QPExifnr5jRAlpihV4AWNUC8u6i46Es1QDuYkBeKfTVADEf5HpqzNUBJEhd7ceg1QFnnoFJWGzZA0KDBH15NNkAbXpOxT3o2QGztcHUpsjZAFjFaLPriNkAWayfrHBo3QCCElnvPTjdAwqtCZul\u002fN0BfVeTPYLQ3QIAxTdJE5jdA5iEML1YbOEAtRkXkrEk4QD0GpPWSgjhASQ\u002fOOGazOEDvbckC7Oc4QIKqCI6EHTlAAHs68MFIOUBXGn4P6YI5QIOXJMjBszlAMATInO\u002fmOUCcsWp4Ahk6QEqxNb7RSjpArJZId8p\u002fOkAthVI3w686QPlN2uVG5zpArOvqajQaO0A\u002fW1tq3Ew7QAS3MMPagTtAPzT79eKvO0A0eYDQ1+c7QNmhWWlBGTxAnCdnW75LPEAvHIwd+H88QEm0IjaPsjxAVGFHSHfoPEAhUZj82xo9QKoSD27oTT1A3cUZelx+PUCA7roYY7U9QA5mB5Ok6T1Ar\u002fTrVeEbPkCimgLvWks+QOOe5r\u002flgD5AXvBMbEeyPkBFWGFNd+c+QMUWIYhbHD9AT8V1xpVNP0DGRhvgUH4\u002fQMnCqk7Nsj9AHSabMPblP0BGIXs7XQxAQJNtJ\u002f6\u002fJUBAv21yR3Y\u002fQECFQtnjeFhAQJHO+MEGc0BA9O0kJFqNQEAUcEY6PadAQEFWYN6PwkBAaKFDI5\u002fYQEDQM0aIn\u002fFAQAmAgtdXDkFA9f2spCsoQUCtIGdhREFBQOYoroYvWkFAchvE9CNzQUDUraRvtIxBQIA4WV\u002ffp0FAs9neoue+QUDZhgctTthBQAR+XpKM8kFAxgujPxsPQkApJWY9AidCQGcxAj9kQUJAfHCt3EFZQkD6kPYb5HJCQHtNWBovjEJA9PMrCXGlQkB38903zcBCQAaNi1xJ2UJAxuqPCU\u002f1QkBv5QwvRwxDQLgqej+SJUNAtEo68XNBQ0CCiup3GFpDQGmzO9U\u002fdkNAhTk3W\u002fKMQ0DRWIOeF6ZDQH9VhILGvUNA5bkyCuXaQ0CHyNWsEPNDQDNA0zGNDURAz1ar+wUnREBGN5VIqkFEQAQjnarWWkRAc28QDq5yREA3MxIDgItEQEyZNDmCp0RA8UhzL3XAREAxYJcbfNlEQEQwzIGU80RAjX7rML4NRUDJkMY98CVFQLwAes7yPkVAVnX3laNZRUC4AfrZ+3FFQPBnvFbzjEVAgk+5lk+mRUBRPQfw2r9FQGJYMOfh10VAGaQcIivyRUAzklwEhwtGQAAqZu3RJkZAziSLwRc\u002fRkADcjgxk1lGQNDIG96Pc0ZABXSg0GqMRkCGk5fgD6ZGQF01IoOTwEZAVonDcjbYRkDBXN9z3PJGQFMM9mpxC0dA1SaOfZElR0DN1eLOvz9HQBNhLeiLWUdAl1Xt51dzR0DggfgVwoxHQFvt\u002fAHlpkdAGTv8Y\u002fO9R0C4gRM6Y9xHQGEkJNAA8kdAuyFp9RoMSED+lcLXuSRIQK\u002f3sqpiPUhA4BfszNVYSEBgJ0JNYXRIQFeOoNR1i0hAySUIIHKmSEBHaZtd\u002fMBIQFAbShHf2UhA2TnGHWXzSEA1Wx3u9gtJQOeVU7N3JElAbzy2fNpASUA14iGQXFdJQNH8n3X5dElA2ELPnQ+NSUCi6hKDs6RJQAyVHf4FwUlAtMMTopbZSUAV80TAa\u002fNJQBe0IpZLDEpATsBNodonSkBr4nB3dD9KQNo80YI+WEpA4EL5O0lySkDAplrE4o5KQEA5j67LpUpAqX7qT3C+SkAzKr9uBthKQJu5ZPv18EpAR9DbQnsMS0CgrRgfCidLQMIsQruwP0tAC1VRI+hYS0Bx6ZfE63VLQKN\u002fHd7Ai0tAfJxaKRunS0AwCR+8hMFLQCV79xId2ktAMw7gEIfyS0BM75u\u002fmQxMQMsWMZpdJ0xA7et6SnJATEBTnUcphlhMQFHg5U5MckxAl75lEayMTEBzoW1fOaVMQDrA2ZlJwExA89RclXPZTEAsNNSO\u002fPJMQI4fTGrrC01A2QGbEh4lTUBTyRxJGEFNQEJU9PITWE1AWDukMVpyTUAAzUcSa4xNQI\u002fdxx0rpk1AsG35rQ\u002fATUD9d4afRNlNQOcurDSf8U1AsNKeHJwMTkCJUEMJkyZOQBqn6QULQE5AhQ64wrxYTkCcXpTfkXJOQINQN+mqjE5A9DnZgiymTkDFpkeSrsBOQBZ+bDCM2U5AI0JjM1zyTkAdCkjvuwtPQJj6K\u002f9dJk9AV2\u002fxh8FCT0DZ+sSVVVhPQHbwdfhwc09AIldsMSGLT0CGOXBZTKZPQNA1Xs\u002fvv09AWMMGOS3ZT0C7DyGvXfNPQDfyEHR0BlBAiICx8pcTUEDVHZTO9B9QQHdmRklTLFBAoFlWdoE5UEBpAK0A70ZQQMWUDN9jUlBAaWA0cGpfUEAbj9FBnGxQQP5aUmsMeVBAwXGRx26GUEC99E7zHpNQQGvRURSTn1BALNVebuasUEB+4ElU7rpQQPQNAb3JxlBAuEReo9\u002fSUEBPN5tnDuBQQKKkJlnb7VBAEW57lkb5UEB4c1u9LgZRQMVo0p0DE1FAfmCdvWAfUUAb4yPvhixRQAjN9dE6OVFAeLp9i5xGUUBlP8HONFNRQHwuZxBiX1FA1YyAbAFtUUBgkdk+mXlRQCCCmFlUhlFAZN6FeOSSUUCk\u002f2p3FZ9RQEzxHhKxrFFAxv\u002fWKJG5UUAvLO0fzMVRQHO93bE80lFAGck8j8LfUUARDgxT3exRQNltBHt9+VFAHejrRWwGUkCt5Y7RJRNSQDl9z5vlIFJAshidwGctUkDV68ieKjpSQHERXgtNRlJAIGbKpIxTUkCyiRZvgmBSQON4Z4lJbFJAJ3AdWDR6UkBxK4p3Z4ZSQI4n+R+lk1JAFp9749+fUkBz0duiaq1SQNROeX45uVJAL4gu3gzGUkCKHMdesNNSQNSEO6tF3VJA"},"y":{"dtype":"f8","bdata":"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"},"yaxis":"y2","type":"scatter"},{"hovertemplate":"Km %{x:.0f}\u003cbr\u003e%{y:.2f} min\u002feffort-km\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#c084fc","width":3},"mode":"lines+markers","name":"Effort Pace","x":{"dtype":"f8","bdata":"zczMzMzMIkBmZmZmZmYpQAAAAAAAADtAMzMzMzMzR0CamZmZmZlKQJqZmZmZGVBAmpmZmZkZUECamZmZmZlRQJqZmZmZOVNA"},"y":{"dtype":"f8","bdata":"9ihcj8L1CkBcj8L1KFwXQEjhehSuRxJAj8L1KFyPEUA9CtejcD0UQFK4HoXrURJAAAAAAAAA8H8fhetRuB4TQPYoXI\u002fC9RRA"},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"yaxis2":{"title":{"text":"Elevation (m)"},"overlaying":"y","side":"right","showgrid":false},"shapes":[{"line":{"color":"#a78bfa","dash":"dash"},"type":"line","x0":46.4,"x1":46.4,"xref":"x","y0":0,"y1":1,"yref":"y domain"}],"annotations":[{"showarrow":false,"text":"50% effort","x":46.4,"xanchor":"center","xref":"x","y":1,"yanchor":"bottom","yref":"y domain"}],"xaxis":{"title":{"text":"Accumulated Km"}},"yaxis":{"title":{"text":"Effort Pace (min\u002feffort-km)"}},"height":380,"hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+<h3>📉 Degradation Curve by Segment</h3>
+<div style="height:420px; width:100%;">                            <div id="aa247edc-0821-4732-9e8e-97a3e205818f" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script>                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("aa247edc-0821-4732-9e8e-97a3e205818f")) {                    Plotly.newPlot(                        "aa247edc-0821-4732-9e8e-97a3e205818f",                        [{"fill":"tozeroy","fillcolor":"rgba(90,90,90,0.18)","hoverinfo":"skip","line":{"color":"rgba(160,160,160,0.5)","width":1},"mode":"lines","name":"Elevation Profile","showlegend":false,"x":{"dtype":"f8","bdata":"ufF1YmOruz8phaTofiPTPzirV5zwPOA\u002fXLPJoXY15j9ddt0U0F3sP\u002f7Hg7tIbfE\u002f4LS7jqb29D\u002fmDdmIhP73PwOX7ROKLPs\u002f0ClNLJZj\u002fj+1TZ2C3twAQPJ82l2OawJAmp0ZTsgDBECEp8SIZKYFQHoO9tfXRgdAkIda4qDKCEC\u002fggdTgFwKQA1CeHaBCAxAbkwu9mKUDUDl8S4O9R0PQFhJLH1aXRBAOZzfzXg3EUAKJLjHg\u002fkRQLs3NL5KxRJARGbu\u002fjmYE0C98mUQBVgUQONGLup2NRVAdAlYNCIGFkC8pRToxscWQLStC+uroBdAI+ppYXZrGEAF5unT+TUZQOXpMkhs+xlAfRRRdoW+GkAPZFZ9v5sbQFSJ6lyZXhxAIew9LA49HUAlc2Iz3QYeQOSfqeiM3B5AFkamq2KfH0DE8eDgEzkgQEY4ZYRwmCBA5yUh++wDIUCMUYPAQ2ghQChGsDqG1iFAXvMROUk2IkDyRGytKJYiQOWGfAYk\u002fiJAHywpDY9pI0AhSQWzS8gjQEQWUSvVMyRA2w91Oj+UJED1riUvAgIlQC\u002fORZB7ZiVAFXTzHz3PJUBMgI32cTImQICku8TAmyZAF4XlUcH\u002fJkAY47cGlGYnQOapqwoZxydAkhVBXOI0KECpp3DWnZwoQNX3VqLg\u002fyhAVC0hHN9lKUBCp5PW48YpQO8HJJT4NipAzOlxAJKeKkDDwhvjFvoqQFohC6ZDaytAHSTfS6\u002fQK0AoAAyCcTIsQJx+y6XInixAFk\u002f2vGIKLUBnR6pitWctQHwLtY+PzC1AKeU5ZAY2LkCCRO7bAJouQH\u002fs8vbZBy9AIWSGX0duL0DfmAh\u002fqNUvQLhz9RvhGDBAHLfENYpLMECDAck6uIAwQBn1qDHjtDBA6MyiKMnjMECw5ZOOjx0xQGBUG13wTjFAQ6kJ+qCAMUB+r9Kbw7ExQJCodNYq5jFATz8EOOkcMkCi1kg9bE8yQGRNPwXofzJAblfh87uvMkD7PZDWf+cyQNjUXkWqGTNAhXplWQxMM0DQmiq+BYIzQCzw91sPszNA8jwNrf7nM0D8\u002fBltAhs0QB2xzEC7TjRAGoTevcR\u002fNEDEbUfl+LM0QPExifnr5jRAlpihV4AWNUC8u6i46Es1QDuYkBeKfTVADEf5HpqzNUBJEhd7ceg1QFnnoFJWGzZA0KDBH15NNkAbXpOxT3o2QGztcHUpsjZAFjFaLPriNkAWayfrHBo3QCCElnvPTjdAwqtCZul\u002fN0BfVeTPYLQ3QIAxTdJE5jdA5iEML1YbOEAtRkXkrEk4QD0GpPWSgjhASQ\u002fOOGazOEDvbckC7Oc4QIKqCI6EHTlAAHs68MFIOUBXGn4P6YI5QIOXJMjBszlAMATInO\u002fmOUCcsWp4Ahk6QEqxNb7RSjpArJZId8p\u002fOkAthVI3w686QPlN2uVG5zpArOvqajQaO0A\u002fW1tq3Ew7QAS3MMPagTtAPzT79eKvO0A0eYDQ1+c7QNmhWWlBGTxAnCdnW75LPEAvHIwd+H88QEm0IjaPsjxAVGFHSHfoPEAhUZj82xo9QKoSD27oTT1A3cUZelx+PUCA7roYY7U9QA5mB5Ok6T1Ar\u002fTrVeEbPkCimgLvWks+QOOe5r\u002flgD5AXvBMbEeyPkBFWGFNd+c+QMUWIYhbHD9AT8V1xpVNP0DGRhvgUH4\u002fQMnCqk7Nsj9AHSabMPblP0BGIXs7XQxAQJNtJ\u002f6\u002fJUBAv21yR3Y\u002fQECFQtnjeFhAQJHO+MEGc0BA9O0kJFqNQEAUcEY6PadAQEFWYN6PwkBAaKFDI5\u002fYQEDQM0aIn\u002fFAQAmAgtdXDkFA9f2spCsoQUCtIGdhREFBQOYoroYvWkFAchvE9CNzQUDUraRvtIxBQIA4WV\u002ffp0FAs9neoue+QUDZhgctTthBQAR+XpKM8kFAxgujPxsPQkApJWY9AidCQGcxAj9kQUJAfHCt3EFZQkD6kPYb5HJCQHtNWBovjEJA9PMrCXGlQkB38903zcBCQAaNi1xJ2UJAxuqPCU\u002f1QkBv5QwvRwxDQLgqej+SJUNAtEo68XNBQ0CCiup3GFpDQGmzO9U\u002fdkNAhTk3W\u002fKMQ0DRWIOeF6ZDQH9VhILGvUNA5bkyCuXaQ0CHyNWsEPNDQDNA0zGNDURAz1ar+wUnREBGN5VIqkFEQAQjnarWWkRAc28QDq5yREA3MxIDgItEQEyZNDmCp0RA8UhzL3XAREAxYJcbfNlEQEQwzIGU80RAjX7rML4NRUDJkMY98CVFQLwAes7yPkVAVnX3laNZRUC4AfrZ+3FFQPBnvFbzjEVAgk+5lk+mRUBRPQfw2r9FQGJYMOfh10VAGaQcIivyRUAzklwEhwtGQAAqZu3RJkZAziSLwRc\u002fRkADcjgxk1lGQNDIG96Pc0ZABXSg0GqMRkCGk5fgD6ZGQF01IoOTwEZAVonDcjbYRkDBXN9z3PJGQFMM9mpxC0dA1SaOfZElR0DN1eLOvz9HQBNhLeiLWUdAl1Xt51dzR0DggfgVwoxHQFvt\u002fAHlpkdAGTv8Y\u002fO9R0C4gRM6Y9xHQGEkJNAA8kdAuyFp9RoMSED+lcLXuSRIQK\u002f3sqpiPUhA4BfszNVYSEBgJ0JNYXRIQFeOoNR1i0hAySUIIHKmSEBHaZtd\u002fMBIQFAbShHf2UhA2TnGHWXzSEA1Wx3u9gtJQOeVU7N3JElAbzy2fNpASUA14iGQXFdJQNH8n3X5dElA2ELPnQ+NSUCi6hKDs6RJQAyVHf4FwUlAtMMTopbZSUAV80TAa\u002fNJQBe0IpZLDEpATsBNodonSkBr4nB3dD9KQNo80YI+WEpA4EL5O0lySkDAplrE4o5KQEA5j67LpUpAqX7qT3C+SkAzKr9uBthKQJu5ZPv18EpAR9DbQnsMS0CgrRgfCidLQMIsQruwP0tAC1VRI+hYS0Bx6ZfE63VLQKN\u002fHd7Ai0tAfJxaKRunS0AwCR+8hMFLQCV79xId2ktAMw7gEIfyS0BM75u\u002fmQxMQMsWMZpdJ0xA7et6SnJATEBTnUcphlhMQFHg5U5MckxAl75lEayMTEBzoW1fOaVMQDrA2ZlJwExA89RclXPZTEAsNNSO\u002fPJMQI4fTGrrC01A2QGbEh4lTUBTyRxJGEFNQEJU9PITWE1AWDukMVpyTUAAzUcSa4xNQI\u002fdxx0rpk1AsG35rQ\u002fATUD9d4afRNlNQOcurDSf8U1AsNKeHJwMTkCJUEMJkyZOQBqn6QULQE5AhQ64wrxYTkCcXpTfkXJOQINQN+mqjE5A9DnZgiymTkDFpkeSrsBOQBZ+bDCM2U5AI0JjM1zyTkAdCkjvuwtPQJj6K\u002f9dJk9AV2\u002fxh8FCT0DZ+sSVVVhPQHbwdfhwc09AIldsMSGLT0CGOXBZTKZPQNA1Xs\u002fvv09AWMMGOS3ZT0C7DyGvXfNPQDfyEHR0BlBAiICx8pcTUEDVHZTO9B9QQHdmRklTLFBAoFlWdoE5UEBpAK0A70ZQQMWUDN9jUlBAaWA0cGpfUEAbj9FBnGxQQP5aUmsMeVBAwXGRx26GUEC99E7zHpNQQGvRURSTn1BALNVebuasUEB+4ElU7rpQQPQNAb3JxlBAuEReo9\u002fSUEBPN5tnDuBQQKKkJlnb7VBAEW57lkb5UEB4c1u9LgZRQMVo0p0DE1FAfmCdvWAfUUAb4yPvhixRQAjN9dE6OVFAeLp9i5xGUUBlP8HONFNRQHwuZxBiX1FA1YyAbAFtUUBgkdk+mXlRQCCCmFlUhlFAZN6FeOSSUUCk\u002f2p3FZ9RQEzxHhKxrFFAxv\u002fWKJG5UUAvLO0fzMVRQHO93bE80lFAGck8j8LfUUARDgxT3exRQNltBHt9+VFAHejrRWwGUkCt5Y7RJRNSQDl9z5vlIFJAshidwGctUkDV68ieKjpSQHERXgtNRlJAIGbKpIxTUkCyiRZvgmBSQON4Z4lJbFJAJ3AdWDR6UkBxK4p3Z4ZSQI4n+R+lk1JAFp9749+fUkBz0duiaq1SQNROeX45uVJAL4gu3gzGUkCKHMdesNNSQNSEO6tF3VJA"},"y":{"dtype":"f8","bdata":"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"},"yaxis":"y2","type":"scatter"},{"hovertemplate":"%{text}\u003cbr\u003eKm %{x:.0f}\u003cbr\u003eVPI Index: %{y:.1f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#22d3ee","width":3},"mode":"lines+markers","name":"VPI (Climbing)","text":["P0.0\u2192P18.0","P18.0\u2192P20.0","P20.0\u2192P22.0","P22.0\u2192P30.0","P30.0\u2192P32.0","P32.0\u2192P34.0","P34.0\u2192P36.0","P36.0\u2192P38.0","P38.0\u2192P100.0"],"x":{"dtype":"f8","bdata":"zczMzMzMIkBmZmZmZmYpQAAAAAAAADtAMzMzMzMzR0CamZmZmZlKQJqZmZmZGVBAmpmZmZkZUECamZmZmZlRQJqZmZmZOVNA"},"y":{"dtype":"f8","bdata":"AAAAAAAAWUCamZmZmVlOQGZmZmZm5lFAzczMzMxMU0AzMzMzM\u002fNQQAAAAAAAYFJAAAAAAAAA+H+amZmZmVlTQAAAAAAAQEpA"},"type":"scatter"},{"hovertemplate":"%{text}\u003cbr\u003eKm %{x:.0f}\u003cbr\u003eDMI Index: %{y:.1f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#ffa500","width":3},"mode":"lines+markers","name":"DMI (Descent)","text":["P0.0\u2192P18.0","P18.0\u2192P20.0","P20.0\u2192P22.0","P22.0\u2192P30.0","P30.0\u2192P32.0","P32.0\u2192P34.0","P34.0\u2192P36.0","P36.0\u2192P38.0","P38.0\u2192P100.0"],"x":{"dtype":"f8","bdata":"zczMzMzMIkBmZmZmZmYpQAAAAAAAADtAMzMzMzMzR0CamZmZmZlKQJqZmZmZGVBAmpmZmZkZUECamZmZmZlRQJqZmZmZOVNA"},"y":{"dtype":"f8","bdata":"AAAAAAAAWUAzMzMzM\u002fNMQAAAAAAAgFJAmpmZmZk5U0AzMzMzM7NQQDMzMzMzc1JAAAAAAAAA+H\u002fNzMzMzMxRQAAAAAAAAEpA"},"type":"scatter"},{"hovertemplate":"%{text}\u003cbr\u003eKm %{x:.0f}\u003cbr\u003eER Index: %{y:.1f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#c084fc","width":3},"mode":"lines+markers","name":"ER (Endurance)","text":["P0.0\u2192P18.0","P18.0\u2192P20.0","P20.0\u2192P22.0","P22.0\u2192P30.0","P30.0\u2192P32.0","P32.0\u2192P34.0","P34.0\u2192P36.0","P36.0\u2192P38.0","P38.0\u2192P100.0"],"x":{"dtype":"f8","bdata":"zczMzMzMIkBmZmZmZmYpQAAAAAAAADtAMzMzMzMzR0CamZmZmZlKQJqZmZmZGVBAmpmZmZkZUECamZmZmZlRQJqZmZmZOVNA"},"y":{"dtype":"f8","bdata":"AAAAAAAAWUCamZmZmdlMQM3MzMzMbFJAMzMzMzMzU0BmZmZmZqZQQGZmZmZmZlJAAAAAAAAAAAAAAAAAAKBRQDMzMzMzE1BA"},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#f2f5fa"},"error_y":{"color":"#f2f5fa"},"marker":{"line":{"color":"rgb(17,17,17)","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"baxis":{"endlinecolor":"#A2B1C6","gridcolor":"#506784","linecolor":"#506784","minorgridcolor":"#506784","startlinecolor":"#A2B1C6"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"line":{"color":"#283442"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"marker":{"line":{"color":"#283442"}},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#506784"},"line":{"color":"rgb(17,17,17)"}},"header":{"fill":{"color":"#2a3f5f"},"line":{"color":"rgb(17,17,17)"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#f2f5fa","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#f2f5fa"},"geo":{"bgcolor":"rgb(17,17,17)","lakecolor":"rgb(17,17,17)","landcolor":"rgb(17,17,17)","showlakes":true,"showland":true,"subunitcolor":"#506784"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"dark"},"paper_bgcolor":"rgb(17,17,17)","plot_bgcolor":"rgb(17,17,17)","polar":{"angularaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","radialaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"yaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"},"zaxis":{"backgroundcolor":"rgb(17,17,17)","gridcolor":"#506784","gridwidth":2,"linecolor":"#506784","showbackground":true,"ticks":"","zerolinecolor":"#C8D4E3"}},"shapedefaults":{"line":{"color":"#f2f5fa"}},"sliderdefaults":{"bgcolor":"#C8D4E3","bordercolor":"rgb(17,17,17)","borderwidth":1,"tickwidth":0},"ternary":{"aaxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"baxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""},"bgcolor":"rgb(17,17,17)","caxis":{"gridcolor":"#506784","linecolor":"#506784","ticks":""}},"title":{"x":0.05},"updatemenudefaults":{"bgcolor":"#506784","borderwidth":0},"xaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#283442","linecolor":"#506784","ticks":"","title":{"standoff":15},"zerolinecolor":"#283442","zerolinewidth":2}}},"yaxis2":{"title":{"text":"Elevation (m)"},"overlaying":"y","side":"right","showgrid":false},"xaxis":{"title":{"text":"Accumulated Km"}},"yaxis":{"title":{"text":"Index (0-100, Segment 1 = 100)"}},"height":420,"hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+<h3>📉 Degradation Curve by Segment</h3>
+<table class="dataframe vl-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Segment</th>
+      <th>Start Km</th>
+      <th>End Km</th>
+      <th>Average Slope (%)</th>
+      <th>Runner Time (h)</th>
+      <th>Climb Effort Share (%)</th>
+      <th>VPI Raw (m/h)</th>
+      <th>Descent Effort Share (%)</th>
+      <th>DMI Raw (km/h)</th>
+      <th>VPI Index (0-100)</th>
+      <th>DMI Index (0-100)</th>
+      <th>Effort Pace (min/effort-km)</th>
+      <th>ER Index (0-100)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>P0.0→P18.0</td>
+      <td>0.0</td>
+      <td>9.4</td>
+      <td>12.11</td>
+      <td>1.15</td>
+      <td>57.9</td>
+      <td>1264.5</td>
+      <td>0.5</td>
+      <td>17.76</td>
+      <td>100.0</td>
+      <td>100.0</td>
+      <td>3.37</td>
+      <td>100.0</td>
+    </tr>
+    <tr>
+      <td>P18.0→P20.0</td>
+      <td>9.4</td>
+      <td>12.7</td>
+      <td>-4.71</td>
+      <td>0.43</td>
+      <td>27.8</td>
+      <td>767.2</td>
+      <td>23.1</td>
+      <td>10.29</td>
+      <td>60.7</td>
+      <td>57.9</td>
+      <td>5.84</td>
+      <td>57.7</td>
+    </tr>
+    <tr>
+      <td>P20.0→P22.0</td>
+      <td>12.7</td>
+      <td>27.0</td>
+      <td>-6.02</td>
+      <td>1.39</td>
+      <td>22.1</td>
+      <td>905.6</td>
+      <td>25.4</td>
+      <td>13.14</td>
+      <td>71.6</td>
+      <td>74.0</td>
+      <td>4.57</td>
+      <td>73.7</td>
+    </tr>
+    <tr>
+      <td>P22.0→P30.0</td>
+      <td>27.0</td>
+      <td>46.4</td>
+      <td>2.56</td>
+      <td>2.40</td>
+      <td>46.3</td>
+      <td>975.7</td>
+      <td>8.4</td>
+      <td>13.66</td>
+      <td>77.2</td>
+      <td>76.9</td>
+      <td>4.39</td>
+      <td>76.8</td>
+    </tr>
+    <tr>
+      <td>P30.0→P32.0</td>
+      <td>46.4</td>
+      <td>53.2</td>
+      <td>6.91</td>
+      <td>1.09</td>
+      <td>54.9</td>
+      <td>856.8</td>
+      <td>5.8</td>
+      <td>11.86</td>
+      <td>67.8</td>
+      <td>66.8</td>
+      <td>5.06</td>
+      <td>66.6</td>
+    </tr>
+    <tr>
+      <td>P32.0→P34.0</td>
+      <td>53.2</td>
+      <td>64.4</td>
+      <td>-13.54</td>
+      <td>1.00</td>
+      <td>17.8</td>
+      <td>929.7</td>
+      <td>36.9</td>
+      <td>13.10</td>
+      <td>73.5</td>
+      <td>73.8</td>
+      <td>4.58</td>
+      <td>73.6</td>
+    </tr>
+    <tr>
+      <td>P34.0→P36.0</td>
+      <td>64.4</td>
+      <td>64.4</td>
+      <td></td>
+      <td>0.01</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>inf</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <td>P36.0→P38.0</td>
+      <td>64.4</td>
+      <td>70.4</td>
+      <td>17.38</td>
+      <td>1.30</td>
+      <td>78.7</td>
+      <td>978.2</td>
+      <td>2.6</td>
+      <td>12.65</td>
+      <td>77.4</td>
+      <td>71.2</td>
+      <td>4.78</td>
+      <td>70.5</td>
+    </tr>
+    <tr>
+      <td>P38.0→P100.0</td>
+      <td>70.4</td>
+      <td>76.9</td>
+      <td>-13.71</td>
+      <td>0.62</td>
+      <td>10.4</td>
+      <td>663.4</td>
+      <td>41.0</td>
+      <td>9.23</td>
+      <td>52.5</td>
+      <td>52.0</td>
+      <td>5.24</td>
+      <td>64.3</td>
+    </tr>
+  </tbody>
+</table>
+<h3>📋 Full Summary Table</h3>
+<table class="dataframe vl-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Checkpoint</th>
+      <th>Segment Distance (km)</th>
+      <th>Elevation Gain (m)</th>
+      <th>Elevation Loss (m)</th>
+      <th>Average Slope (%)</th>
+      <th>Speed</th>
+      <th>Pace</th>
+      <th>Rank</th>
+      <th>Rest</th>
+      <th>Time</th>
+      <th>VPI</th>
+      <th>DMI</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>18</td>
+      <td>9.4</td>
+      <td>1099.0</td>
+      <td>-36.0</td>
+      <td>12.11</td>
+      <td>None</td>
+      <td>None</td>
+      <td>17.0</td>
+      <td>0:00:00</td>
+      <td>1:08:47</td>
+      <td>1264.5</td>
+      <td>17.76</td>
+    </tr>
+    <tr>
+      <td>20</td>
+      <td>3.3</td>
+      <td>113.0</td>
+      <td>-308.0</td>
+      <td>-4.71</td>
+      <td>None</td>
+      <td>None</td>
+      <td>6.0</td>
+      <td>0:00:00</td>
+      <td>0:25:51</td>
+      <td>767.2</td>
+      <td>10.29</td>
+    </tr>
+    <tr>
+      <td>22</td>
+      <td>14.3</td>
+      <td>392.0</td>
+      <td>-1229.0</td>
+      <td>-6.02</td>
+      <td>None</td>
+      <td>None</td>
+      <td>10.0</td>
+      <td>0:00:00</td>
+      <td>1:23:16</td>
+      <td>905.6</td>
+      <td>13.14</td>
+    </tr>
+    <tr>
+      <td>24</td>
+      <td>11.8</td>
+      <td>1104.0</td>
+      <td>-334.0</td>
+      <td>6.81</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>30</td>
+      <td>7.6</td>
+      <td>239.0</td>
+      <td>-512.0</td>
+      <td>-4.05</td>
+      <td>None</td>
+      <td>None</td>
+      <td>6.0</td>
+      <td>0:00:00</td>
+      <td>2:24:11</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>32</td>
+      <td>6.8</td>
+      <td>608.5</td>
+      <td>-204.5</td>
+      <td>6.91</td>
+      <td>None</td>
+      <td>None</td>
+      <td>6.0</td>
+      <td>0:00:00</td>
+      <td>1:05:12</td>
+      <td>856.8</td>
+      <td>11.86</td>
+    </tr>
+    <tr>
+      <td>34</td>
+      <td>11.2</td>
+      <td>194.5</td>
+      <td>-1480.5</td>
+      <td>-13.54</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:55</td>
+      <td>1:00:09</td>
+      <td>929.7</td>
+      <td>13.10</td>
+    </tr>
+    <tr>
+      <td>36</td>
+      <td>0.0</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:00</td>
+      <td>0:00:48</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>38</td>
+      <td>6.0</td>
+      <td>1031.0</td>
+      <td>-123.0</td>
+      <td>17.38</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:41</td>
+      <td>1:17:54</td>
+      <td>978.2</td>
+      <td>12.65</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>6.5</td>
+      <td>61.0</td>
+      <td>-721.5</td>
+      <td>-13.71</td>
+      <td>None</td>
+      <td>None</td>
+      <td>5.0</td>
+      <td>0:00:00</td>
+      <td>0:37:16</td>
+      <td>663.4</td>
+      <td>9.23</td>
+    </tr>
+  </tbody>
+</table>
+</div>

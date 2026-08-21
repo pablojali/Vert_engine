@@ -16,11 +16,24 @@
       "dmi": 9.16,
       "er": 67.8,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/melanie-delasoie/report.html"
+    },
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 26,
+      "gender_rank": 3,
+      "finish_time": "10:43:20",
+      "vpi": 888.4,
+      "dmi": 10.09,
+      "er": 85.9,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/melanie-delasoie/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 714.1,
-    "dmi": 9.2,
-    "er": 67.8
+    "vpi": 801.2,
+    "dmi": 9.6,
+    "er": 76.8
   }
 }

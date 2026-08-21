@@ -1,0 +1,27 @@
+{
+  "slug": "benjamin-levieux",
+  "name": "Benjamin LEVIEUX",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/benjamin-levieux/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "9:21:36",
+      "vpi": 1005.9,
+      "dmi": 11.95,
+      "er": 88.0,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/benjamin-levieux/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1005.9,
+    "dmi": 12.0,
+    "er": 88.0
+  }
+}

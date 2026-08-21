@@ -1,0 +1,27 @@
+{
+  "slug": "clovis-chaverot",
+  "name": "Clovis CHAVEROT",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/clovis-chaverot/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "8:39:17",
+      "vpi": 1062.4,
+      "dmi": 13.52,
+      "er": 78.3,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/clovis-chaverot/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1062.4,
+    "dmi": 13.5,
+    "er": 78.3
+  }
+}
