@@ -26,9 +26,10 @@
       `docs/05-known-issues.md`).
 - [x] "Promover a Producción" sin feedback de progreso, indistinguible de
       un cuelgue real - ninguna llamada a `git` tenía timeout. Agregado
-      `GIT_TERMINAL_PROMPT=0` + timeout de 5min como red de seguridad
-      (ver `docs/05-known-issues.md`). Pendiente de menor prioridad:
-      feedback de progreso paso a paso durante la publicación.
+      `GIT_TERMINAL_PROMPT=0` + timeout de 5min como red de seguridad, y
+      `st.status()` con progreso paso a paso (respaldo → build → clone →
+      copia → branch → commit → push) en vez de un spinner estático fijo
+      (ver `docs/05-known-issues.md`).
 - [x] Entrada duplicada de Monterosa en `races_registry.json` (dos slugs
       para el mismo evento, uno con checkpoints del 90K pisando al 120K) —
       causaba VPI/DMI/ER rotos para corredores de esa carrera; entrada mala
@@ -53,6 +54,10 @@
 - [ ] (añadir según surjan)
 
 ## ✅ Completado recientemente
+- [x] Descarga masiva de informes: en "Top Runners", botón "📦 Descargar
+      los N informes (ZIP)" además de los botones 1x1 existentes (no los
+      reemplaza) - un click baja todos los análisis HTML que se hayan
+      podido generar en el fetch.
 - [x] Búsqueda + filtros + paginación en `/athletes/` (vanilla JS, sin
       dependencias nuevas): búsqueda en vivo por nombre (con fold de
       acentos), filtro por evento (agrupado como `/races/`, no por
