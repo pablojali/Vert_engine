@@ -29,3 +29,11 @@ def generate(loc: dict, t: dict) -> None:
         out_path(loc["prefix"], "search/index.html"),
         env.get_template("search.html").render(t=t, locale=loc["code"], page_path="search/"),
     )
+    # Bare "404.html" (not a folder/index.html) so Cloudflare Pages picks it
+    # up as this locale's not-found page - it walks up from the missing
+    # path looking for one, so /es/404.html covers /es/*, /fr/404.html
+    # covers /fr/*, and this root one covers everything else.
+    write_page(
+        out_path(loc["prefix"], "404.html"),
+        env.get_template("404.html").render(t=t, locale=loc["code"], page_path="404.html"),
+    )
