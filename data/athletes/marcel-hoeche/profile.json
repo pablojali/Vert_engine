@@ -1,0 +1,27 @@
+{
+  "slug": "marcel-hoeche",
+  "name": "Marcel HOECHE",
+  "country": "DE",
+  "gender": null,
+  "portrait": "/media/athletes/marcel-hoeche/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "10:28:37",
+      "vpi": 1008.2,
+      "dmi": 12.68,
+      "er": 76.5,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/marcel-hoeche/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1008.2,
+    "dmi": 12.7,
+    "er": 76.5
+  }
+}

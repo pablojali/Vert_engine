@@ -16,11 +16,24 @@
       "dmi": 10.46,
       "er": 78.8,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/anna-carlsson/report.html"
+    },
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 20,
+      "gender_rank": 1,
+      "finish_time": "10:29:25",
+      "vpi": 904.5,
+      "dmi": 10.56,
+      "er": 92.2,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/anna-carlsson/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 801.5,
+    "vpi": 853.0,
     "dmi": 10.5,
-    "er": 78.8
+    "er": 85.5
   }
 }

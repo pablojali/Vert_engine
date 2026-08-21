@@ -1,0 +1,27 @@
+{
+  "slug": "lisa-gremaud",
+  "name": "Lisa GREMAUD",
+  "country": "CH",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 38,
+      "gender_rank": 5,
+      "finish_time": "11:11:28",
+      "vpi": 814.5,
+      "dmi": 10.49,
+      "er": 79.0,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/lisa-gremaud/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 814.5,
+    "dmi": 10.5,
+    "er": 79.0
+  }
+}

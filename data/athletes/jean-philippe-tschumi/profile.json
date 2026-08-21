@@ -1,0 +1,27 @@
+{
+  "slug": "jean-philippe-tschumi",
+  "name": "Jean-Philippe TSCHUMI",
+  "country": "CH",
+  "gender": null,
+  "portrait": "/media/athletes/jean-philippe-tschumi/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "8:48:49",
+      "vpi": 1054.4,
+      "dmi": 12.87,
+      "er": 77.4,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/jean-philippe-tschumi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1054.4,
+    "dmi": 12.9,
+    "er": 77.4
+  }
+}

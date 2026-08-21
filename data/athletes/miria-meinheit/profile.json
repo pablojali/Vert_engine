@@ -1,0 +1,27 @@
+{
+  "slug": "miria-meinheit",
+  "name": "Miria MEINHEIT",
+  "country": "DE",
+  "gender": null,
+  "portrait": "/media/athletes/miria-meinheit/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 22,
+      "gender_rank": 2,
+      "finish_time": "10:30:10",
+      "vpi": 909.0,
+      "dmi": 10.35,
+      "er": 94.0,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/miria-meinheit/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 909.0,
+    "dmi": 10.4,
+    "er": 94.0
+  }
+}

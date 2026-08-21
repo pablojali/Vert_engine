@@ -1,0 +1,27 @@
+{
+  "slug": "anna-j-haag",
+  "name": "Anna J HAAG",
+  "country": "SE",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 75,
+      "gender_rank": 6,
+      "finish_time": "13:52:21",
+      "vpi": 781.1,
+      "dmi": 9.38,
+      "er": 57.1,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/anna-j-haag/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 781.1,
+    "dmi": 9.4,
+    "er": 57.1
+  }
+}

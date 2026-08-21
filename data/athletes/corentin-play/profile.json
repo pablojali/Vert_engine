@@ -1,0 +1,27 @@
+{
+  "slug": "corentin-play",
+  "name": "Corentin PLAY",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/corentin-play/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "9:13:05",
+      "vpi": 1001.5,
+      "dmi": 12.65,
+      "er": 86.3,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/corentin-play/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1001.5,
+    "dmi": 12.6,
+    "er": 86.3
+  }
+}

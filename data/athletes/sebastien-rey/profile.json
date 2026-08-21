@@ -1,0 +1,27 @@
+{
+  "slug": "sebastien-rey",
+  "name": "Sébastien REY",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "9:40:25",
+      "vpi": 961.9,
+      "dmi": 11.89,
+      "er": 91.4,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/sebastien-rey/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 961.9,
+    "dmi": 11.9,
+    "er": 91.4
+  }
+}

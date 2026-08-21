@@ -1,0 +1,27 @@
+{
+  "slug": "daniela-rota",
+  "name": "Daniela ROTA",
+  "country": "IT",
+  "gender": null,
+  "portrait": "/media/athletes/daniela-rota/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 69,
+      "gender_rank": 5,
+      "finish_time": "13:45:41",
+      "vpi": 769.9,
+      "dmi": 9.49,
+      "er": 58.4,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/daniela-rota/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 769.9,
+    "dmi": 9.5,
+    "er": 58.4
+  }
+}

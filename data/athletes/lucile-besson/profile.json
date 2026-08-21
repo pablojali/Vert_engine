@@ -1,0 +1,27 @@
+{
+  "slug": "lucile-besson",
+  "name": "Lucile BESSON",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 44,
+      "gender_rank": 6,
+      "finish_time": "11:19:22",
+      "vpi": 812.8,
+      "dmi": 10.37,
+      "er": 80.1,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/lucile-besson/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 812.8,
+    "dmi": 10.4,
+    "er": 80.1
+  }
+}

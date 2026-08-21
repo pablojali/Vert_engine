@@ -1,0 +1,27 @@
+{
+  "slug": "martina-valmassoi",
+  "name": "Martina VALMASSOI",
+  "country": "IT",
+  "gender": null,
+  "portrait": "/media/athletes/martina-valmassoi/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 13,
+      "gender_rank": 1,
+      "finish_time": "11:29:49",
+      "vpi": 919.1,
+      "dmi": 11.53,
+      "er": 73.3,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/martina-valmassoi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 919.1,
+    "dmi": 11.5,
+    "er": 73.3
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "pauline-gex",
+  "name": "Pauline GEX",
+  "country": "CH",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 37,
+      "gender_rank": 4,
+      "finish_time": "11:09:44",
+      "vpi": 834.1,
+      "dmi": 10.21,
+      "er": 83.4,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/pauline-gex/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 834.1,
+    "dmi": 10.2,
+    "er": 83.4
+  }
+}

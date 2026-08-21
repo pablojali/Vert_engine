@@ -1,0 +1,27 @@
+{
+  "slug": "alex-germain",
+  "name": "Alex GERMAIN",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "9:47:21",
+      "vpi": 950.4,
+      "dmi": 11.73,
+      "er": 80.2,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/alex-germain/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 950.4,
+    "dmi": 11.7,
+    "er": 80.2
+  }
+}

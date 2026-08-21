@@ -1,0 +1,27 @@
+{
+  "slug": "siona-dalcolmo",
+  "name": "Siona DALCOLMO",
+  "country": "CH",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 67,
+      "gender_rank": 9,
+      "finish_time": "11:54:37",
+      "vpi": 786.6,
+      "dmi": 9.67,
+      "er": 78.3,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/siona-dalcolmo/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 786.6,
+    "dmi": 9.7,
+    "er": 78.3
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "lucie-jamsin",
+  "name": "Lucie JAMSIN",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/lucie-jamsin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_name": "Trail Verbier St-Bernard",
+      "year": 2026,
+      "distance_km": 75.52041308623512,
+      "position": 60,
+      "gender_rank": 7,
+      "finish_time": "11:48:32",
+      "vpi": 800.6,
+      "dmi": 9.39,
+      "er": 76.6,
+      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/lucie-jamsin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 800.6,
+    "dmi": 9.4,
+    "er": 76.6
+  }
+}
