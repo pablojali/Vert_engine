@@ -16,7 +16,7 @@ TRANSLATIONS = {
         "nav_races": "Races",
         "nav_athletes": "Athletes",
         "nav_rankings": "Rankings",
-        "nav_about": "Engine",
+        "nav_about": "About VTL",
         "nav_search": "Search",
         "site_tagline": "Performance Intelligence for Trail Running",
         "site_hero_sub": (
@@ -64,6 +64,13 @@ TRANSLATIONS = {
         "rankings_top_dmi": "Top DMI",
         "rankings_top_er": "Top ER",
         "about_title": "The Engine",
+        "about_meta_title": "About Vertical Trail Labs | Trail Running Performance Intelligence",
+        "about_meta_description": (
+            "Learn about Vertical Trail Labs, an independent trail running "
+            "performance platform analyzing terrain, race data and athlete "
+            "performance."
+        ),
+        "about_tagline": "Built by a trail runner, for trail runners.",
         "about_intro_p1": (
             "Every race tells a story hidden in its terrain. The Vertical "
             "Trail Engine transforms official race profiles and checkpoint "
@@ -73,6 +80,21 @@ TRANSLATIONS = {
         "about_intro_p2": (
             "Our proprietary methodology goes beyond finishing times to "
             "measure performance in the context of the terrain itself."
+        ),
+        "about_core_p1": (
+            "The final result tells us who finished first. It doesn't "
+            "necessarily tell us how an athlete performed across the "
+            "mountain."
+        ),
+        "about_core_p2": (
+            "VTL analyzes race terrain and checkpoint performance to "
+            "understand what happens throughout a race: climbing, "
+            "descending, terrain transitions, fatigue, pacing, endurance, "
+            "and performance across different sections of the course."
+        ),
+        "about_core_p3": (
+            "The platform transforms race data into structured performance "
+            "information that can be explored at race and athlete level."
         ),
         "about_vpi_title": "VPI — Vertical Power Index",
         "video_vpi_label": "Watch: how VPI works",
@@ -97,6 +119,43 @@ TRANSLATIONS = {
             "(distance + elevation/100) instead of raw distance."
         ),
         "about_er_formula": "ER = 100 − (pacing decay % between halves)",
+        "founder_title": "Founder",
+        "founder_name": "Pablo Jali",
+        "founder_role": "Founder · Vertical Trail Labs",
+        "founder_photo_alt": "Pablo Jali — Founder, Vertical Trail Labs",
+        "founder_bio_p1": (
+            "Vertical Trail Labs was created by Pablo Jali, a trail runner "
+            "interested in understanding what happens beyond the finish "
+            "line."
+        ),
+        "founder_bio_p2": (
+            "The idea behind VTL came from a simple observation: race "
+            "results tell us who finished first, but they only tell part "
+            "of the story."
+        ),
+        "founder_bio_p3": (
+            "Mountain races are shaped by terrain, climbing, descending, "
+            "pacing and fatigue. VTL was created to analyze those elements "
+            "and turn them into measurable performance signals."
+        ),
+        "founder_bio_p4": (
+            "What started as a personal project has evolved into an "
+            "independent platform focused on building a structured "
+            "database of trail running performance."
+        ),
+        "independent_title": "Independent project",
+        "independent_statement": (
+            "Vertical Trail Labs is an independent project and is not "
+            "affiliated with UTMB, LiveTrail or any race organizer unless "
+            "explicitly stated."
+        ),
+        "about_contact_title": "Contact",
+        "about_contact_body": "Questions, collaborations, data requests or feedback?",
+        "about_contact_cta": "Get in touch at",
+        "share_button_label": "Share",
+        "share_copy_link": "Copy link",
+        "share_link_copied": "Link copied",
+        "share_title_suffix": "VTL Performance Analysis",
         "search_title": "Search",
         "search_placeholder": "Race or athlete...",
         "race_performance_title": "Performance by athlete",
@@ -127,7 +186,7 @@ TRANSLATIONS = {
         "nav_races": "Carreras",
         "nav_athletes": "Atletas",
         "nav_rankings": "Rankings",
-        "nav_about": "El Engine",
+        "nav_about": "Acerca de VTL",
         "nav_search": "Buscar",
         "site_tagline": "Inteligencia de rendimiento para el trail running",
         "site_hero_sub": (
@@ -175,6 +234,13 @@ TRANSLATIONS = {
         "rankings_top_dmi": "Top DMI",
         "rankings_top_er": "Top ER",
         "about_title": "El Engine",
+        "about_meta_title": "Acerca de Vertical Trail Labs | Inteligencia de Rendimiento en Trail Running",
+        "about_meta_description": (
+            "Conocé Vertical Trail Labs, una plataforma independiente de "
+            "rendimiento en trail running que analiza terreno, datos de "
+            "carrera y rendimiento de atletas."
+        ),
+        "about_tagline": "Creado por un corredor de trail, para corredores de trail.",
         "about_intro_p1": (
             "Cada carrera esconde una historia en su terreno. El Vertical "
             "Trail Engine transforma los perfiles oficiales de carrera y los "
@@ -185,6 +251,23 @@ TRANSLATIONS = {
         "about_intro_p2": (
             "Nuestra metodología propia va más allá de los tiempos finales "
             "para medir el rendimiento en el contexto del terreno mismo."
+        ),
+        "about_core_p1": (
+            "El resultado final nos dice quién llegó primero. No "
+            "necesariamente nos dice cómo rindió un atleta a lo largo de "
+            "la montaña."
+        ),
+        "about_core_p2": (
+            "VTL analiza el terreno de la carrera y el rendimiento en los "
+            "puntos de control para entender qué pasa durante la carrera: "
+            "subidas, bajadas, transiciones de terreno, fatiga, ritmo, "
+            "resistencia y rendimiento en las distintas secciones del "
+            "recorrido."
+        ),
+        "about_core_p3": (
+            "La plataforma transforma los datos de carrera en información "
+            "de rendimiento estructurada, explorable a nivel de carrera y "
+            "de atleta."
         ),
         "about_vpi_title": "VPI — Vertical Power Index",
         "video_vpi_label": "Ver: cómo funciona el VPI",
@@ -210,6 +293,44 @@ TRANSLATIONS = {
             "crudos."
         ),
         "about_er_formula": "ER = 100 − (decaimiento de ritmo % entre mitades)",
+        "founder_title": "Fundador",
+        "founder_name": "Pablo Jali",
+        "founder_role": "Fundador · Vertical Trail Labs",
+        "founder_photo_alt": "Pablo Jali — Fundador, Vertical Trail Labs",
+        "founder_bio_p1": (
+            "Vertical Trail Labs fue creado por Pablo Jali, un corredor de "
+            "trail interesado en entender qué pasa más allá de la línea de "
+            "meta."
+        ),
+        "founder_bio_p2": (
+            "La idea de VTL surgió de una observación simple: los "
+            "resultados de carrera nos dicen quién llegó primero, pero "
+            "solo cuentan parte de la historia."
+        ),
+        "founder_bio_p3": (
+            "Las carreras de montaña están definidas por el terreno, la "
+            "subida, la bajada, el ritmo y la fatiga. VTL nació para "
+            "analizar esos elementos y convertirlos en señales de "
+            "rendimiento medibles."
+        ),
+        "founder_bio_p4": (
+            "Lo que empezó como un proyecto personal evolucionó hacia una "
+            "plataforma independiente enfocada en construir una base de "
+            "datos estructurada de rendimiento en trail running."
+        ),
+        "independent_title": "Proyecto independiente",
+        "independent_statement": (
+            "Vertical Trail Labs es un proyecto independiente y no está "
+            "afiliado a UTMB, LiveTrail ni a ningún organizador de "
+            "carreras, salvo que se indique explícitamente."
+        ),
+        "about_contact_title": "Contacto",
+        "about_contact_body": "¿Preguntas, propuestas de colaboración, correcciones de datos o feedback?",
+        "about_contact_cta": "Escribinos a",
+        "share_button_label": "Compartir",
+        "share_copy_link": "Copiar enlace",
+        "share_link_copied": "Enlace copiado",
+        "share_title_suffix": "Análisis de Rendimiento VTL",
         "search_title": "Buscar",
         "search_placeholder": "Carrera o atleta...",
         "race_performance_title": "Rendimiento por corredor",
@@ -240,7 +361,7 @@ TRANSLATIONS = {
         "nav_races": "Courses",
         "nav_athletes": "Athlètes",
         "nav_rankings": "Classements",
-        "nav_about": "Le Moteur",
+        "nav_about": "À propos de VTL",
         "nav_search": "Rechercher",
         "site_tagline": "Intelligence de performance pour le trail running",
         "site_hero_sub": (
@@ -289,6 +410,13 @@ TRANSLATIONS = {
         "rankings_top_dmi": "Top DMI",
         "rankings_top_er": "Top ER",
         "about_title": "Le Moteur",
+        "about_meta_title": "À propos de Vertical Trail Labs | Intelligence de Performance en Trail Running",
+        "about_meta_description": (
+            "Découvrez Vertical Trail Labs, une plateforme indépendante de "
+            "performance en trail running qui analyse le terrain, les "
+            "données de course et la performance des athlètes."
+        ),
+        "about_tagline": "Créé par un coureur de trail, pour les coureurs de trail.",
         "about_intro_p1": (
             "Chaque course cache une histoire dans son terrain. Le Vertical "
             "Trail Engine transforme les profils officiels de course et les "
@@ -300,6 +428,23 @@ TRANSLATIONS = {
             "Notre méthodologie propriétaire va au-delà des temps d'arrivée "
             "pour mesurer la performance dans le contexte du terrain "
             "lui-même."
+        ),
+        "about_core_p1": (
+            "Le résultat final nous dit qui a fini premier. Il ne nous dit "
+            "pas nécessairement comment un athlète a performé à travers la "
+            "montagne."
+        ),
+        "about_core_p2": (
+            "VTL analyse le terrain de la course et la performance aux "
+            "points de contrôle pour comprendre ce qui se passe pendant "
+            "la course : montée, descente, transitions de terrain, "
+            "fatigue, gestion de l'effort, endurance, et performance sur "
+            "les différentes sections du parcours."
+        ),
+        "about_core_p3": (
+            "La plateforme transforme les données de course en "
+            "informations de performance structurées, consultables au "
+            "niveau de la course et de l'athlète."
         ),
         "about_vpi_title": "VPI — Vertical Power Index",
         "video_vpi_label": "Voir : comment fonctionne le VPI",
@@ -325,6 +470,44 @@ TRANSLATIONS = {
             "distance brute."
         ),
         "about_er_formula": "ER = 100 − (décroissance du rythme % entre les moitiés)",
+        "founder_title": "Fondateur",
+        "founder_name": "Pablo Jali",
+        "founder_role": "Fondateur · Vertical Trail Labs",
+        "founder_photo_alt": "Pablo Jali — Fondateur, Vertical Trail Labs",
+        "founder_bio_p1": (
+            "Vertical Trail Labs a été créé par Pablo Jali, un coureur de "
+            "trail intéressé par ce qui se passe au-delà de la ligne "
+            "d'arrivée."
+        ),
+        "founder_bio_p2": (
+            "L'idée de VTL est née d'une observation simple : les "
+            "résultats de course nous disent qui a fini premier, mais ils "
+            "ne racontent qu'une partie de l'histoire."
+        ),
+        "founder_bio_p3": (
+            "Les courses de montagne sont façonnées par le terrain, la "
+            "montée, la descente, la gestion de l'effort et la fatigue. "
+            "VTL a été créé pour analyser ces éléments et les transformer "
+            "en signaux de performance mesurables."
+        ),
+        "founder_bio_p4": (
+            "Ce qui a commencé comme un projet personnel est devenu une "
+            "plateforme indépendante dédiée à la construction d'une base "
+            "de données structurée de la performance en trail running."
+        ),
+        "independent_title": "Projet indépendant",
+        "independent_statement": (
+            "Vertical Trail Labs est un projet indépendant et n'est "
+            "affilié à l'UTMB, LiveTrail ni à aucun organisateur de "
+            "course, sauf mention explicite."
+        ),
+        "about_contact_title": "Contact",
+        "about_contact_body": "Des questions, une collaboration, une correction de données ou un retour ?",
+        "about_contact_cta": "Écrivez-nous à",
+        "share_button_label": "Partager",
+        "share_copy_link": "Copier le lien",
+        "share_link_copied": "Lien copié",
+        "share_title_suffix": "Analyse de Performance VTL",
         "search_title": "Rechercher",
         "search_placeholder": "Course ou athlète...",
         "race_performance_title": "Performance par athlète",
