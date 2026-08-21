@@ -1533,6 +1533,34 @@ def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
     return r.returncode == 0, _redact_token(r.stdout) + _redact_token(r.stderr)
 
 
+class _TeeStdout:
+    """Stand-in for io.StringIO() as a redirect_stdout() target: buffers
+    everything written (same full-log behavior as before), and also
+    calls on_line(line) for each complete line - used to stream
+    publish.py's own section-header prints live to a st.status() while
+    it's running, instead of only ever seeing them in the log after the
+    (possibly slow) call already returned."""
+    def __init__(self, on_line):
+        self._buf = io.StringIO()
+        self._on_line = on_line
+        self._partial = ""
+
+    def write(self, s: str) -> int:
+        self._buf.write(s)
+        self._partial += s
+        while "\n" in self._partial:
+            line, self._partial = self._partial.split("\n", 1)
+            if line.strip():
+                self._on_line(line.strip())
+        return len(s)
+
+    def flush(self) -> None:
+        pass
+
+    def getvalue(self) -> str:
+        return self._buf.getvalue()
+
+
 def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str, status=None) -> tuple[bool, str]:
     """Backs up data/ first, then builds the site (equivalent to
     `python publish.py`), mirrors output/ into the vertlabs-web checkout,
@@ -1558,10 +1586,20 @@ def _publish_to_branch(web_repo_dir: Path, branch: str, commit_message: str, sta
     _step("🏗️ Generando el sitio (HTML/CSS/JS desde `data/`)...")
     try:
         import publish as publish_module
-        buf = io.StringIO()
-        with redirect_stdout(buf):
+        # publish.py already prints its own section headers ("1/8 Cargando
+        # posts...", etc., once per locale) - previously these were only
+        # ever seen in the collapsed "Ver detalle" log AFTER the whole
+        # (possibly slow) call returned. Tee just those header lines live
+        # to status, so a slow generation shows WHICH of the 8 steps it's
+        # stuck on instead of one opaque "Generando el sitio..." for
+        # however many minutes. Skips the much chattier per-page "  ✓ ..."
+        # lines (hundreds/thousands of those at real scale) - still
+        # captured in the full log below, just not streamed one by one.
+        header_prefixes = ("===",) + tuple(f"{n}/8" for n in range(1, 9))
+        tee = _TeeStdout(on_line=lambda line: _step(f"　{line}") if line.startswith(header_prefixes) else None)
+        with redirect_stdout(tee):
             publish_module.main()
-        log_lines.append(buf.getvalue())
+        log_lines.append(tee.getvalue())
     except Exception:
         return False, "Falló la generación del sitio (publish.py):\n" + traceback.format_exc()
 
