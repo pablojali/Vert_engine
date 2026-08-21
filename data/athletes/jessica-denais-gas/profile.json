@@ -1,0 +1,27 @@
+{
+  "slug": "jessica-denais-gas",
+  "name": "Jessica DENAIS-GAS",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 109,
+      "gender_rank": 9,
+      "finish_time": "14:52:53",
+      "vpi": 714.6,
+      "dmi": 8.93,
+      "er": 68.3,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/jessica-denais-gas/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 714.6,
+    "dmi": 8.9,
+    "er": 68.3
+  }
+}

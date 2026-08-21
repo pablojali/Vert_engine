@@ -1,0 +1,27 @@
+{
+  "slug": "benjamin-gys",
+  "name": "Benjamin GYS",
+  "country": "BE",
+  "gender": null,
+  "portrait": "/media/athletes/benjamin-gys/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "11:06:55",
+      "vpi": 960.4,
+      "dmi": 11.78,
+      "er": 71.1,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/benjamin-gys/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 960.4,
+    "dmi": 11.8,
+    "er": 71.1
+  }
+}

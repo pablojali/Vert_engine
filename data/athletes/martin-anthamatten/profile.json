@@ -1,0 +1,27 @@
+{
+  "slug": "martin-anthamatten",
+  "name": "Martin ANTHAMATTEN",
+  "country": "CH",
+  "gender": null,
+  "portrait": "/media/athletes/martin-anthamatten/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "9:32:39",
+      "vpi": 1106.8,
+      "dmi": 13.96,
+      "er": 74.9,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/martin-anthamatten/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1106.8,
+    "dmi": 14.0,
+    "er": 74.9
+  }
+}

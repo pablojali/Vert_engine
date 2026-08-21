@@ -1,0 +1,27 @@
+{
+  "slug": "augustin-saurel",
+  "name": "Augustin SAUREL",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "10:52:04",
+      "vpi": 961.4,
+      "dmi": 12.35,
+      "er": 70.7,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/augustin-saurel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 961.4,
+    "dmi": 12.4,
+    "er": 70.7
+  }
+}

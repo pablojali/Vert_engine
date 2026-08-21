@@ -1,0 +1,27 @@
+{
+  "slug": "robin-challamel",
+  "name": "Robin CHALLAMEL",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "10:29:24",
+      "vpi": 1006.7,
+      "dmi": 12.62,
+      "er": 65.9,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/robin-challamel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1006.7,
+    "dmi": 12.6,
+    "er": 65.9
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "carina-helmreich",
+  "name": "Carina HELMREICH",
+  "country": "DE",
+  "gender": null,
+  "portrait": "/media/athletes/carina-helmreich/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 58,
+      "gender_rank": 4,
+      "finish_time": "13:30:09",
+      "vpi": 780.5,
+      "dmi": 10.02,
+      "er": 73.4,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/carina-helmreich/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 780.5,
+    "dmi": 10.0,
+    "er": 73.4
+  }
+}

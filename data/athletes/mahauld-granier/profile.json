@@ -1,0 +1,27 @@
+{
+  "slug": "mahauld-granier",
+  "name": "Mahauld GRANIER",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/mahauld-granier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_name": "Monterosa Walserwaeg by UTMB",
+      "year": 2026,
+      "distance_km": 80.38031955279868,
+      "position": 35,
+      "gender_rank": 3,
+      "finish_time": "12:32:37",
+      "vpi": 838.2,
+      "dmi": 10.44,
+      "er": 63.3,
+      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/mahauld-granier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 838.2,
+    "dmi": 10.4,
+    "er": 63.3
+  }
+}
