@@ -744,7 +744,7 @@
     }
   },
   "utmb-mont-blanc": {
-    "nombre": "UTMB - Mont Blanc",
+    "nombre": "UTMB - Mont Blanc ",
     "anios": {
       "2025": {
         "174": {
@@ -976,6 +976,386 @@
               "id": "144",
               "nombre": "Chamonix",
               "km": 100.5
+            }
+          ]
+        }
+      },
+      "2026": {
+        "174": {
+          "gpx_file": "data/gpx/utmb-mont-blanc/2026/utmb_174km_universal.gpx",
+          "race_slug_api": "utmb",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Chamonix",
+              "km": 0.0
+            },
+            {
+              "id": "2",
+              "nombre": "Les Houches",
+              "km": 9.1
+            },
+            {
+              "id": "4",
+              "nombre": "Col de Voza",
+              "km": 14.5
+            },
+            {
+              "id": "6",
+              "nombre": "Saint-Gervais",
+              "km": 22.9
+            },
+            {
+              "id": "10",
+              "nombre": "Les Contamines Montjoie",
+              "km": 32.4
+            },
+            {
+              "id": "12",
+              "nombre": "La Balme",
+              "km": 41.1
+            },
+            {
+              "id": "14",
+              "nombre": "Refuge de la Croix du Bonhomme",
+              "km": 46.9
+            },
+            {
+              "id": "16",
+              "nombre": "Les Chapieux",
+              "km": 52.2
+            },
+            {
+              "id": "18",
+              "nombre": "Col de la Seigne",
+              "km": 62.9
+            },
+            {
+              "id": "22",
+              "nombre": "Lac Combal",
+              "km": 69.8
+            },
+            {
+              "id": "24",
+              "nombre": "Arête du Mont-Favre",
+              "km": 73.8
+            },
+            {
+              "id": "26",
+              "nombre": "Checrouit - Maison Vieille",
+              "km": 78.3
+            },
+            {
+              "id": "28",
+              "nombre": "Courmayeur Sport Center Entrée",
+              "km": 83.2
+            },
+            {
+              "id": "30",
+              "nombre": "Courmayeur Sport Center Sortie",
+              "km": 83.3
+            },
+            {
+              "id": "36",
+              "nombre": "Refuge Bertone",
+              "km": 88.6
+            },
+            {
+              "id": "38",
+              "nombre": "Refuge Bonatti",
+              "km": 96.1
+            },
+            {
+              "id": "40",
+              "nombre": "Arnouvaz",
+              "km": 101.4
+            },
+            {
+              "id": "44",
+              "nombre": "Grand Col Ferret",
+              "km": 106.0
+            },
+            {
+              "id": "48",
+              "nombre": "La Fouly",
+              "km": 115.9
+            },
+            {
+              "id": "51",
+              "nombre": "Champex-Lac entrée",
+              "km": 130.1
+            },
+            {
+              "id": "52",
+              "nombre": "Champex-Lac sortie",
+              "km": 130.1
+            },
+            {
+              "id": "54",
+              "nombre": "Plan de l'Au",
+              "km": 135.0
+            },
+            {
+              "id": "56",
+              "nombre": "La Giète",
+              "km": 141.6
+            },
+            {
+              "id": "58",
+              "nombre": "Trient",
+              "km": 146.6
+            },
+            {
+              "id": "60",
+              "nombre": "Les Tseppes",
+              "km": 150.6
+            },
+            {
+              "id": "62",
+              "nombre": "Vallorcine Entrée",
+              "km": 157.9
+            },
+            {
+              "id": "64",
+              "nombre": "Vallorcine Sortie",
+              "km": 157.9
+            },
+            {
+              "id": "82",
+              "nombre": "La Flégère",
+              "km": 169.2
+            },
+            {
+              "id": "200",
+              "nombre": "Chamonix",
+              "km": 176.2
+            }
+          ]
+        },
+        "100": {
+          "gpx_file": "data/gpx/utmb-mont-blanc/2026/track (1).gpx",
+          "race_slug_api": "ccc",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Courmayeur",
+              "km": 0.0
+            },
+            {
+              "id": "34",
+              "nombre": "Tête de la Tronche",
+              "km": 9.4
+            },
+            {
+              "id": "36",
+              "nombre": "Refuge Bertone",
+              "km": 13.6
+            },
+            {
+              "id": "38",
+              "nombre": "Refuge Bonatti",
+              "km": 21.2
+            },
+            {
+              "id": "40",
+              "nombre": "Arnouvaz",
+              "km": 26.3
+            },
+            {
+              "id": "44",
+              "nombre": "Grand Col Ferret",
+              "km": 30.9
+            },
+            {
+              "id": "48",
+              "nombre": "La Fouly",
+              "km": 40.7
+            },
+            {
+              "id": "51",
+              "nombre": "Champex-Lac entrée",
+              "km": 54.9
+            },
+            {
+              "id": "52",
+              "nombre": "Champex-Lac sortie",
+              "km": 54.9
+            },
+            {
+              "id": "54",
+              "nombre": "Plan de l'Au",
+              "km": 59.8
+            },
+            {
+              "id": "56",
+              "nombre": "La Giète",
+              "km": 66.3
+            },
+            {
+              "id": "58",
+              "nombre": "Trient",
+              "km": 71.5
+            },
+            {
+              "id": "60",
+              "nombre": "Les Tseppes",
+              "km": 75.2
+            },
+            {
+              "id": "62",
+              "nombre": "Vallorcine Entrée",
+              "km": 82.5
+            },
+            {
+              "id": "64",
+              "nombre": "Vallorcine Sortie",
+              "km": 82.5
+            },
+            {
+              "id": "82",
+              "nombre": "La Flégère",
+              "km": 93.7
+            },
+            {
+              "id": "200",
+              "nombre": "Chamonix",
+              "km": 100.9
+            }
+          ]
+        },
+        "148": {
+          "gpx_file": "data/gpx/utmb-mont-blanc/2026/ccc_100km_universal.gpx",
+          "race_slug_api": "tds",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Courmayeur",
+              "km": 0.0
+            },
+            {
+              "id": "84",
+              "nombre": "Checrouit - Maison Vielle",
+              "km": 7.7
+            },
+            {
+              "id": "86",
+              "nombre": "Arête du Mont-Favre",
+              "km": 12.2
+            },
+            {
+              "id": "88",
+              "nombre": "Lac Combal",
+              "km": 16.1
+            },
+            {
+              "id": "90",
+              "nombre": "Col Chavannes",
+              "km": 20.6
+            },
+            {
+              "id": "92",
+              "nombre": "La Thuile - Petit Saint Bernard",
+              "km": 36.2
+            },
+            {
+              "id": "94",
+              "nombre": "Séez",
+              "km": 47.5
+            },
+            {
+              "id": "96",
+              "nombre": "Bourg Saint-Maurice - Entrée",
+              "km": 51.1
+            },
+            {
+              "id": "98",
+              "nombre": "Bourg Saint-Maurice - Sortie",
+              "km": 51.1
+            },
+            {
+              "id": "100",
+              "nombre": "Fort de la Platte",
+              "km": 55.7
+            },
+            {
+              "id": "102",
+              "nombre": "Passeur de Pralognan",
+              "km": 61.9
+            },
+            {
+              "id": "104",
+              "nombre": "Cormet de Roselend",
+              "km": 66.1
+            },
+            {
+              "id": "106",
+              "nombre": "La Gittaz",
+              "km": 73.6
+            },
+            {
+              "id": "108",
+              "nombre": "Entre deux Nants",
+              "km": 76.7
+            },
+            {
+              "id": "110",
+              "nombre": "Pas d'Outray",
+              "km": 84.0
+            },
+            {
+              "id": "112",
+              "nombre": "Beaufort entrée",
+              "km": 92.3
+            },
+            {
+              "id": "114",
+              "nombre": "Beaufort sortie",
+              "km": 92.4
+            },
+            {
+              "id": "116",
+              "nombre": "Hauteluce",
+              "km": 98.6
+            },
+            {
+              "id": "118",
+              "nombre": " Barrage de la Girotte",
+              "km": 108.6
+            },
+            {
+              "id": "120",
+              "nombre": "Remontée le Signal E",
+              "km": 115.3
+            },
+            {
+              "id": "122",
+              "nombre": "Signal S",
+              "km": 115.4
+            },
+            {
+              "id": "124",
+              "nombre": "Les Contamines Montjoie",
+              "km": 122.8
+            },
+            {
+              "id": "126",
+              "nombre": "Col de Tricot",
+              "km": 130.1
+            },
+            {
+              "id": "128",
+              "nombre": "Bellevue",
+              "km": 136.8
+            },
+            {
+              "id": "130",
+              "nombre": "Les Houches",
+              "km": 141.4
+            },
+            {
+              "id": "200",
+              "nombre": "Chamonix",
+              "km": 150.5
             }
           ]
         }
