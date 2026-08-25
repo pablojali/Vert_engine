@@ -1224,7 +1224,7 @@
           ]
         },
         "148": {
-          "gpx_file": "data/gpx/utmb-mont-blanc/2026/ccc_100km_universal.gpx",
+          "gpx_file": "data/gpx/utmb-mont-blanc/2026/148.gpx",
           "race_slug_api": "tds",
           "checkpoints": [
             {
@@ -1310,7 +1310,7 @@
             {
               "id": "114",
               "nombre": "Beaufort sortie",
-              "km": 92.4
+              "km": 92.3
             },
             {
               "id": "116",
