@@ -1,0 +1,27 @@
+{
+  "slug": "julien-bouyoud",
+  "name": "Julien BOUYOUD",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/julien-bouyoud/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 10,
+      "gender_rank": 9,
+      "finish_time": "22:12:59",
+      "vpi": 847.0,
+      "dmi": 9.81,
+      "er": 74.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/julien-bouyoud/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 847.0,
+    "dmi": 9.8,
+    "er": 74.2
+  }
+}

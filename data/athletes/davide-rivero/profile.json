@@ -1,0 +1,27 @@
+{
+  "slug": "davide-rivero",
+  "name": "Davide RIVERO",
+  "country": "IT",
+  "gender": null,
+  "portrait": "/media/athletes/davide-rivero/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "21:27:43",
+      "vpi": 894.2,
+      "dmi": 10.6,
+      "er": 79.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/davide-rivero/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 894.2,
+    "dmi": 10.6,
+    "er": 79.7
+  }
+}

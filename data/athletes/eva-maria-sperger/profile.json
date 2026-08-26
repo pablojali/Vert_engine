@@ -1,0 +1,27 @@
+{
+  "slug": "eva-maria-sperger",
+  "name": "Eva Maria SPERGER",
+  "country": "DE",
+  "gender": null,
+  "portrait": "/media/athletes/eva-maria-sperger/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 28,
+      "gender_rank": 8,
+      "finish_time": "25:35:05",
+      "vpi": 723.7,
+      "dmi": 8.45,
+      "er": 75.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/eva-maria-sperger/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 723.7,
+    "dmi": 8.4,
+    "er": 75.7
+  }
+}

@@ -16,11 +16,24 @@
       "dmi": 10.04,
       "er": 76.5,
       "report": "/media/races/monterosa-walserwaeg-120k/charts/runners/lisa-borzani/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 26,
+      "gender_rank": 7,
+      "finish_time": "25:22:06",
+      "vpi": 736.2,
+      "dmi": 8.49,
+      "er": 71.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/lisa-borzani/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 787.2,
-    "dmi": 10.0,
-    "er": 76.5
+    "vpi": 761.7,
+    "dmi": 9.3,
+    "er": 74.2
   }
 }

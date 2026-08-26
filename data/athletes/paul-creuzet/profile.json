@@ -1,0 +1,27 @@
+{
+  "slug": "paul-creuzet",
+  "name": "Paul CREUZET",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "21:12:03",
+      "vpi": 864.2,
+      "dmi": 10.67,
+      "er": 76.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/paul-creuzet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 864.2,
+    "dmi": 10.7,
+    "er": 76.2
+  }
+}

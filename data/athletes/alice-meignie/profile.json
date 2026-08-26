@@ -1,0 +1,27 @@
+{
+  "slug": "alice-meignie",
+  "name": "Alice MEIGNIÉ",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 11,
+      "gender_rank": 2,
+      "finish_time": "22:30:29",
+      "vpi": 832.0,
+      "dmi": 9.4,
+      "er": 78.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/alice-meignie/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 832.0,
+    "dmi": 9.4,
+    "er": 78.3
+  }
+}

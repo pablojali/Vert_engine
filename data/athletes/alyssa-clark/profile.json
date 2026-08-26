@@ -1,0 +1,27 @@
+{
+  "slug": "alyssa-clark",
+  "name": "Alyssa CLARK",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/alyssa-clark/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 15,
+      "gender_rank": 3,
+      "finish_time": "22:54:19",
+      "vpi": 804.0,
+      "dmi": 9.58,
+      "er": 81.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/alyssa-clark/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 804.0,
+    "dmi": 9.6,
+    "er": 81.1
+  }
+}

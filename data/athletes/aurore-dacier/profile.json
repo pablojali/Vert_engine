@@ -1,0 +1,27 @@
+{
+  "slug": "aurore-dacier",
+  "name": "Aurore DACIER",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/aurore-dacier/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 21,
+      "gender_rank": 4,
+      "finish_time": "23:53:16",
+      "vpi": 777.7,
+      "dmi": 9.28,
+      "er": 82.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/aurore-dacier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 777.7,
+    "dmi": 9.3,
+    "er": 82.3
+  }
+}

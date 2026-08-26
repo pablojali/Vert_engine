@@ -1,7 +1,7 @@
 {
   "slug": "remy-brassac",
   "name": "Remy BRASSAC",
-  "country": null,
+  "country": "FR",
   "portrait": "/media/athletes/remy-brassac/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 12.27,
       "er": 71.6,
       "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/remy-brassac/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 1,
+      "gender_rank": 1,
+      "finish_time": "19:28:43",
+      "vpi": 949.9,
+      "dmi": 11.47,
+      "er": 82.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/remy-brassac/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1082.2,
-    "dmi": 12.3,
-    "er": 71.6
+    "vpi": 1016.0,
+    "dmi": 11.9,
+    "er": 77.1
   }
 }

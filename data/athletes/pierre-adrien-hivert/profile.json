@@ -1,7 +1,7 @@
 {
   "slug": "pierre-adrien-hivert",
   "name": "Pierre-Adrien HIVERT",
-  "country": null,
+  "country": "FR",
   "portrait": "/media/athletes/pierre-adrien-hivert/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 14.66,
       "er": 81.8,
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/pierre-adrien-hivert/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "20:14:26",
+      "vpi": 901.8,
+      "dmi": 10.95,
+      "er": 83.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/pierre-adrien-hivert/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1083.0,
-    "dmi": 14.7,
-    "er": 81.8
+    "vpi": 992.4,
+    "dmi": 12.8,
+    "er": 82.7
   }
 }

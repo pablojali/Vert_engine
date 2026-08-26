@@ -1,0 +1,27 @@
+{
+  "slug": "adrien-jacques",
+  "name": "Adrien JACQUES",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/adrien-jacques/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "21:22:07",
+      "vpi": 853.4,
+      "dmi": 10.35,
+      "er": 76.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/adrien-jacques/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 853.4,
+    "dmi": 10.4,
+    "er": 76.2
+  }
+}

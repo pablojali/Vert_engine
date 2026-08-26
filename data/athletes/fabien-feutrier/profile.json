@@ -1,7 +1,7 @@
 {
   "slug": "fabien-feutrier",
   "name": "Fabien FEUTRIER",
-  "country": null,
+  "country": "FR",
   "portrait": "/media/athletes/fabien-feutrier/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 13.03,
       "er": 78.7,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/fabien-feutrier/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "21:46:17",
+      "vpi": 842.7,
+      "dmi": 10.12,
+      "er": 71.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/fabien-feutrier/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 894.9,
-    "dmi": 13.0,
-    "er": 78.7
+    "vpi": 868.8,
+    "dmi": 11.6,
+    "er": 74.9
   }
 }

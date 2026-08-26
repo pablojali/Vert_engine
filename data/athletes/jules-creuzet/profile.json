@@ -1,0 +1,27 @@
+{
+  "slug": "jules-creuzet",
+  "name": "Jules CREUZET",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "21:48:52",
+      "vpi": 838.0,
+      "dmi": 10.24,
+      "er": 82.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/jules-creuzet/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 838.0,
+    "dmi": 10.2,
+    "er": 82.7
+  }
+}

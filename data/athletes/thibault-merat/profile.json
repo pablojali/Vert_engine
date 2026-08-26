@@ -16,11 +16,24 @@
       "dmi": 13.66,
       "er": 79.4,
       "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/thibault-merat/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 12,
+      "gender_rank": 10,
+      "finish_time": "22:43:25",
+      "vpi": 818.4,
+      "dmi": 9.88,
+      "er": 86.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/thibault-merat/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 998.3,
-    "dmi": 13.7,
-    "er": 79.4
+    "vpi": 908.4,
+    "dmi": 11.8,
+    "er": 82.8
   }
 }

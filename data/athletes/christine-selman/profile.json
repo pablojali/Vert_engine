@@ -1,0 +1,27 @@
+{
+  "slug": "christine-selman",
+  "name": "Christine SELMAN",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/christine-selman/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 32,
+      "gender_rank": 9,
+      "finish_time": "25:44:39",
+      "vpi": 719.1,
+      "dmi": 8.47,
+      "er": 68.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/christine-selman/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 719.1,
+    "dmi": 8.5,
+    "er": 68.7
+  }
+}

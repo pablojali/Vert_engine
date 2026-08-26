@@ -1,0 +1,27 @@
+{
+  "slug": "sarah-vieuille",
+  "name": "Sarah VIEUILLE",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/sarah-vieuille/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 9,
+      "gender_rank": 1,
+      "finish_time": "22:08:16",
+      "vpi": 831.0,
+      "dmi": 9.94,
+      "er": 67.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/sarah-vieuille/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 831.0,
+    "dmi": 9.9,
+    "er": 67.1
+  }
+}

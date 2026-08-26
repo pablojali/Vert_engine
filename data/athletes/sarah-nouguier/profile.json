@@ -1,0 +1,27 @@
+{
+  "slug": "sarah-nouguier",
+  "name": "Sarah NOUGUIER",
+  "country": "DE",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 33,
+      "gender_rank": 10,
+      "finish_time": "25:45:11",
+      "vpi": 721.4,
+      "dmi": 8.38,
+      "er": 78.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/sarah-nouguier/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 721.4,
+    "dmi": 8.4,
+    "er": 78.9
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "blandine-orsini",
+  "name": "Blandine ORSINI",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/blandine-orsini/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 22,
+      "gender_rank": 5,
+      "finish_time": "24:07:49",
+      "vpi": 773.7,
+      "dmi": 9.14,
+      "er": 82.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/blandine-orsini/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 773.7,
+    "dmi": 9.1,
+    "er": 82.8
+  }
+}
