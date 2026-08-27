@@ -686,17 +686,31 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
 }
 .share-button:hover, .share-button:focus-visible { color: var(--color-cyan); border-color: var(--color-cyan); }
 
-.career-avg-section {
+.vtl-profile-section {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+  gap: 2rem;
   margin: 1rem 0 2rem;
 }
+.vtl-profile-details { display: flex; flex-direction: column; gap: 1rem; }
+.vtl-profile-sample { margin: 0; color: var(--color-muted); font-size: 0.9rem; }
+.vtl-profile-maturity {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-cyan);
+}
+.vtl-profile-empty { color: var(--color-muted); margin: 1rem 0 2rem; }
+
 .stats-list { list-style: none; padding: 0; display: flex; gap: 2rem; margin: 0; }
 .stats-list li { display: flex; flex-direction: column; }
 .stat-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.stat-label small { display: block; text-transform: none; letter-spacing: normal; color: var(--color-muted); font-size: 0.7rem; font-weight: 400; }
 .stat-value { font-size: 1.6rem; font-weight: 700; }
 
 .radar-chart-wrap { flex-shrink: 0; width: 200px; }
