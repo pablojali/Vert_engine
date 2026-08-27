@@ -46,13 +46,29 @@ def _search_name(name: str) -> str:
     return _fold_ascii(name or "").lower()
 
 
+def _profile_maturity_key(race_count: int) -> str | None:
+    """Sample-size label for the VTL Performance Profile - communicates
+    how many analyzed races back the profile, not a statistical
+    confidence interval. Thresholds are a display convention, isolated
+    here so they can be tuned without touching the aggregation itself
+    (which is still career_avg, computed once in the Engine at export
+    time - this function never averages anything)."""
+    if race_count <= 0:
+        return None
+    if race_count == 1:
+        return "early"
+    if race_count <= 3:
+        return "emerging"
+    if race_count <= 6:
+        return "established"
+    return "high_confidence"
+
+
 def load_athletes() -> list[dict]:
     athletes = []
     for f in sorted(ATHLETES_DIR.glob("*/profile.json")):
         athlete = json.loads(f.read_text(encoding="utf-8"))
         athlete["_source_dir"] = f.parent
-        avg = athlete.get("career_avg") or {}
-        athlete["radar_svg"] = build_radar_svg(avg.get("vpi"), avg.get("dmi"), avg.get("er"))
         athletes.append(athlete)
     return athletes
 
@@ -85,6 +101,18 @@ def generate(loc: dict, t: dict, events: list[dict]) -> list[dict]:
         athlete["primary_race"] = max(
             athlete.get("races", []), key=lambda r: r.get("year") or 0, default=None
         )
+        # VTL Performance Profile: one outlined triangle per eligible race
+        # (all three metrics present, so the chart never plots a partial/
+        # misleading shape), overlaid on the same chart and colored by
+        # distance bracket - not a single averaged polygon. The displayed
+        # race count always matches exactly what's plotted.
+        eligible_races = [
+            r for r in athlete.get("races", [])
+            if r.get("vpi") is not None and r.get("dmi") is not None and r.get("er") is not None
+        ]
+        athlete["profile_race_count"] = len(eligible_races)
+        athlete["profile_maturity_key"] = _profile_maturity_key(len(eligible_races))
+        athlete["radar_svg"] = build_radar_svg(eligible_races)
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 
