@@ -1,8 +1,9 @@
 """
 Builds a small self-contained SVG radar/spider chart (3 axes: VPI, DMI,
-ER) for an athlete's career averages. Rendered server-side as plain SVG
-markup (no JS, no CDN) so it always works offline and inherits the
-site's CSS via classes, same as the existing hex-icon SVGs.
+ER) overlaying one triangle per analyzed race, colored by distance
+bracket. Rendered server-side as plain SVG markup (no JS, no CDN) so it
+always works offline and inherits the site's CSS via classes, same as
+the existing hex-icon SVGs.
 
 The three metrics are on different scales (m/h, km/h, 0-100 score), so
 each axis is normalized against a fixed reference ceiling before being
@@ -19,6 +20,22 @@ ER_MAX = 100    # already a 0-100 score
 AXES = ("vpi", "dmi", "er")
 CX, CY, R = 110, 110, 80
 
+# Distance brackets requested for the overlay: >120K red, 80-120K green,
+# <=80K orange. Unknown distance falls back to a neutral/muted stroke
+# instead of silently guessing a bracket.
+LONG_KM = 120
+MID_KM = 80
+
+
+def _bracket_color(distance_km) -> str:
+    if distance_km is None:
+        return "var(--color-muted)"
+    if distance_km > LONG_KM:
+        return "var(--color-dist-long)"
+    if distance_km > MID_KM:
+        return "var(--color-dist-mid)"
+    return "var(--color-dist-short)"
+
 
 def _angle(i: int) -> float:
     return math.radians(-90 + i * 120)
@@ -33,14 +50,20 @@ def _fmt_points(pts) -> str:
     return " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
 
 
-def build_radar_svg(vpi, dmi, er) -> str | None:
-    """Returns an inline <svg> string, or None if there's no data yet."""
-    if vpi is None and dmi is None and er is None:
-        return None
-
+def _ratios(vpi, dmi, er) -> list[float]:
     values = (vpi or 0, dmi or 0, er or 0)
     maxes = (VPI_MAX, DMI_MAX, ER_MAX)
-    ratios = [max(0.0, min(1.0, v / m)) for v, m in zip(values, maxes)]
+    return [max(0.0, min(1.0, v / m)) for v, m in zip(values, maxes)]
+
+
+def build_radar_svg(races: list[dict]) -> str | None:
+    """races: dicts with vpi/dmi/er (all required, already filtered by the
+    caller - see athlete_generator.py's eligibility check) and optional
+    distance_km. One outlined triangle per race, overlaid on the same
+    3-axis grid - not a single averaged shape. Returns None if `races`
+    is empty."""
+    if not races:
+        return None
 
     grid_rings = "\n".join(
         f'    <polygon class="radar-grid" points="{_fmt_points(_point(i, frac) for i in range(3))}"/>'
@@ -50,7 +73,16 @@ def build_radar_svg(vpi, dmi, er) -> str | None:
         f'    <line class="radar-axis" x1="{CX}" y1="{CY}" x2="{_point(i, 1.0)[0]:.1f}" y2="{_point(i, 1.0)[1]:.1f}"/>'
         for i in range(3)
     )
-    data_polygon = _fmt_points(_point(i, ratios[i]) for i in range(3))
+
+    race_polygons = []
+    for race in races:
+        ratios = _ratios(race.get("vpi"), race.get("dmi"), race.get("er"))
+        points = _fmt_points(_point(i, ratios[i]) for i in range(3))
+        color = _bracket_color(race.get("distance_km"))
+        race_polygons.append(
+            f'    <polygon class="radar-data" points="{points}" '
+            f'style="fill:none;stroke:{color};stroke-width:2;stroke-opacity:0.85"/>'
+        )
 
     label_r = R + 24
     label_anchors = ("middle", "start", "end")
@@ -63,10 +95,10 @@ def build_radar_svg(vpi, dmi, er) -> str | None:
     )
 
     return (
-        f'<svg viewBox="0 0 220 220" class="radar-chart" role="img" aria-label="VPI/DMI/ER radar chart">\n'
+        f'<svg viewBox="0 0 220 220" class="radar-chart" role="img" aria-label="VPI/DMI/ER radar chart, one outline per analyzed race">\n'
         f'{grid_rings}\n'
         f'{axis_lines}\n'
-        f'    <polygon class="radar-data" points="{data_polygon}"/>\n'
+        + "\n".join(race_polygons) + "\n"
         f'{labels}\n'
         f'</svg>'
     )

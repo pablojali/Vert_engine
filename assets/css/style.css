@@ -10,6 +10,7 @@
   --color-blue: #5b8def;
   --color-muted: #8b949e;
   --color-border: #21262d;
+  --color-red: #f85149;
 
   /* Metric <-> color mapping, kept consistent with the Streamlit Engine's
      own charts: VPI (climb) cyan, DMI (descent) orange, ER (endurance)
@@ -17,6 +18,14 @@
   --color-vpi: var(--color-cyan);
   --color-dmi: var(--color-orange);
   --color-er: var(--color-violet);
+
+  /* Distance-bracket colors for the VTL Performance Profile chart (one
+     outline per race, colored by that race's distance) - a separate
+     meaning from the metric colors above, so its own tokens instead of
+     reusing --color-green (reserved for the logo). */
+  --color-dist-long: var(--color-red);   /* >120K */
+  --color-dist-mid: #3fb950;             /* 80-120K */
+  --color-dist-short: var(--color-orange); /* <=80K */
 }
 
 * { box-sizing: border-box; }
@@ -706,6 +715,18 @@ a.stat-box.stat-box-orange:hover { border-color: var(--color-orange); }
   color: var(--color-cyan);
 }
 .vtl-profile-empty { color: var(--color-muted); margin: 1rem 0 2rem; }
+
+.vtl-profile-legend { margin: 0; display: flex; flex-wrap: wrap; gap: 0.9rem; color: var(--color-muted); font-size: 0.78rem; }
+.legend-swatch {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 0.35rem;
+}
+.legend-dist-short { background: var(--color-dist-short); }
+.legend-dist-mid { background: var(--color-dist-mid); }
+.legend-dist-long { background: var(--color-dist-long); }
 
 .stats-list { list-style: none; padding: 0; display: flex; gap: 2rem; margin: 0; }
 .stats-list li { display: flex; flex-direction: column; }

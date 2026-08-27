@@ -51,6 +51,11 @@
         {{ athlete.profile_race_count }} {{ t.athlete_profile_race_singular if athlete.profile_race_count == 1 else t.athlete_profile_races_plural }}
         <span class="vtl-profile-maturity">{{ t['athlete_profile_maturity_' ~ athlete.profile_maturity_key] }}</span>
       </p>
+      <p class="vtl-profile-legend">
+        <span><span class="legend-swatch legend-dist-short"></span>{{ t.athlete_profile_legend_short }}</span>
+        <span><span class="legend-swatch legend-dist-mid"></span>{{ t.athlete_profile_legend_mid }}</span>
+        <span><span class="legend-swatch legend-dist-long"></span>{{ t.athlete_profile_legend_long }}</span>
+      </p>
     </div>
   </div>
   {% else %}

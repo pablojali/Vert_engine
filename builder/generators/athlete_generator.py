@@ -69,8 +69,6 @@ def load_athletes() -> list[dict]:
     for f in sorted(ATHLETES_DIR.glob("*/profile.json")):
         athlete = json.loads(f.read_text(encoding="utf-8"))
         athlete["_source_dir"] = f.parent
-        avg = athlete.get("career_avg") or {}
-        athlete["radar_svg"] = build_radar_svg(avg.get("vpi"), avg.get("dmi"), avg.get("er"))
         athletes.append(athlete)
     return athletes
 
@@ -103,17 +101,18 @@ def generate(loc: dict, t: dict, events: list[dict]) -> list[dict]:
         athlete["primary_race"] = max(
             athlete.get("races", []), key=lambda r: r.get("year") or 0, default=None
         )
-        # Sample size behind the VTL Performance Profile (the career_avg
-        # radar chart, already computed once per athlete in the Engine at
-        # export time - not recomputed here). A race only "counts" once
-        # it has all three metrics, so the displayed count always matches
-        # what actually fed the chart - never a partial/misleading number.
-        profile_race_count = sum(
-            1 for r in athlete.get("races", [])
+        # VTL Performance Profile: one outlined triangle per eligible race
+        # (all three metrics present, so the chart never plots a partial/
+        # misleading shape), overlaid on the same chart and colored by
+        # distance bracket - not a single averaged polygon. The displayed
+        # race count always matches exactly what's plotted.
+        eligible_races = [
+            r for r in athlete.get("races", [])
             if r.get("vpi") is not None and r.get("dmi") is not None and r.get("er") is not None
-        )
-        athlete["profile_race_count"] = profile_race_count
-        athlete["profile_maturity_key"] = _profile_maturity_key(profile_race_count)
+        ]
+        athlete["profile_race_count"] = len(eligible_races)
+        athlete["profile_maturity_key"] = _profile_maturity_key(len(eligible_races))
+        athlete["radar_svg"] = build_radar_svg(eligible_races)
         html = template.render(athlete=athlete, t=t, locale=loc["code"], page_path=f"athletes/{athlete['slug']}/")
         write_page(out_path(loc["prefix"], f"athletes/{athlete['slug']}/index.html"), html)
 
