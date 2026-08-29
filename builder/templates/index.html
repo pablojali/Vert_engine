@@ -88,4 +88,10 @@
   </ul>
 </section>
 {% endif %}
+
+<section class="analysis-cta home-analysis-cta">
+  <h2>{{ t.home_analysis_title }}</h2>
+  <p>{{ t.home_analysis_body }}</p>
+  <a href="{{ locale_url(locale, 'analysis/') }}" class="analysis-cta-button">{{ t.analysis_cta_button }}</a>
+</section>
 {% endblock %}

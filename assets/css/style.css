@@ -1058,3 +1058,83 @@ tbody tr:hover { background: var(--color-bg-raised); }
   text-decoration: none;
 }
 .notfound-btn:hover { border-color: var(--color-cyan); color: var(--color-cyan); text-decoration: none; }
+
+/* --- Get Your VTL Analysis --- */
+.analysis-page { max-width: 560px; }
+.analysis-form { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.1rem; }
+.form-row { display: flex; flex-direction: column; gap: 0.4rem; }
+.form-row label { font-size: 0.85rem; font-weight: 600; color: var(--color-muted); }
+.analysis-form input[type="text"],
+.analysis-form input[type="email"],
+.analysis-form input[type="date"],
+.analysis-form input[type="file"],
+.analysis-form textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-raised);
+  color: var(--color-text);
+}
+.analysis-form textarea { resize: vertical; }
+.analysis-form input:focus,
+.analysis-form textarea:focus { outline: none; border-color: var(--color-cyan); }
+
+.analysis-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+.cf-turnstile { margin: 0.25rem 0; }
+
+.analysis-form-error {
+  margin: 0;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--color-red);
+  border-radius: 8px;
+  background: rgba(248, 81, 73, 0.1);
+  color: var(--color-red);
+  font-size: 0.9rem;
+}
+
+.analysis-submit-btn {
+  align-self: flex-start;
+  background: var(--color-cyan);
+  color: #0d1117;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.7rem 1.75rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.analysis-submit-btn:hover { filter: brightness(1.1); }
+.analysis-submit-btn:disabled { opacity: 0.6; cursor: default; filter: none; }
+
+.analysis-privacy-note { margin: 0; color: var(--color-muted); font-size: 0.8rem; }
+
+.analysis-success { margin-top: 2rem; padding: 1.5rem; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-bg-raised); }
+.analysis-success h2 { margin: 0 0 0.5rem; }
+.analysis-success p { margin: 0; color: var(--color-muted); }
+
+.analysis-cta {
+  margin: 2.5rem 0 0;
+  padding: 1.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-raised);
+  text-align: center;
+}
+.analysis-cta h2 { margin: 0 0 0.4rem; }
+.analysis-cta p { margin: 0 0 1rem; color: var(--color-muted); }
+.analysis-cta-button {
+  display: inline-block;
+  background: var(--color-cyan);
+  color: #0d1117;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.65rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.analysis-cta-button:hover { text-decoration: none; filter: brightness(1.1); }
+.home-analysis-cta { margin-top: 3rem; }

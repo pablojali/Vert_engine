@@ -37,6 +37,13 @@ env.globals["site_domain"] = "vertlabs.run"
 env.globals["locales"] = LOCALES
 env.globals["locale_url"] = locale_url
 
+# Turnstile SITE key (public by design - safe to bake into static HTML,
+# unlike the SECRET key, which only ever lives server-side as the
+# Cloudflare Pages Function's TURNSTILE_SECRET_KEY env var, never here).
+# Placeholder until a real widget is created in the Cloudflare dashboard
+# (Turnstile -> Add site) - see functions/README.md for the full setup.
+env.globals["turnstile_site_key"] = "1x00000000000000000000AA"
+
 
 def country_flag_url(iso_code: str) -> str | None:
     """Builds a small flag image URL for a 2-letter ISO country code via the

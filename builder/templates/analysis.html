@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.analysis_meta_title }}{% endblock %}
+{% block description %}{{ t.analysis_meta_description }}{% endblock %}
+{% block extra_head %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endblock %}
+
+{% block content %}
+<article class="analysis-page">
+  <h1>{{ t.analysis_title }}</h1>
+  <p class="hero-sub">{{ t.analysis_intro_p1 }}</p>
+  <p class="hero-sub">{{ t.analysis_intro_p2 }}</p>
+
+  <form
+    id="analysis-form" class="analysis-form" novalidate
+    data-error-required="{{ t.analysis_error_required }}"
+    data-error-email="{{ t.analysis_error_email }}"
+    data-error-gpx-type="{{ t.analysis_error_gpx_type }}"
+    data-error-gpx-size="{{ t.analysis_error_gpx_size }}"
+    data-error-generic="{{ t.analysis_error_generic }}"
+    data-submitting-label="{{ t.analysis_submitting }}"
+    data-submit-label="{{ t.analysis_submit }}"
+  >
+    <div class="form-row">
+      <label for="analysis-name">{{ t.analysis_field_name }} *</label>
+      <input type="text" id="analysis-name" name="name" required autocomplete="name">
+    </div>
+    <div class="form-row">
+      <label for="analysis-email">{{ t.analysis_field_email }} *</label>
+      <input type="email" id="analysis-email" name="email" required autocomplete="email">
+    </div>
+    <div class="form-row">
+      <label for="analysis-race">{{ t.analysis_field_race }} *</label>
+      <input type="text" id="analysis-race" name="race" required>
+    </div>
+    <div class="form-row">
+      <label for="analysis-distance">{{ t.analysis_field_distance }} *</label>
+      <input type="text" id="analysis-distance" name="distance" required placeholder="e.g. 100K">
+    </div>
+    <div class="form-row">
+      <label for="analysis-date">{{ t.analysis_field_date }} *</label>
+      <input type="date" id="analysis-date" name="race_date" required>
+    </div>
+    <div class="form-row">
+      <label for="analysis-gpx">{{ t.analysis_field_gpx }} *</label>
+      <input type="file" id="analysis-gpx" name="gpx" accept=".gpx" required>
+    </div>
+    <div class="form-row">
+      <label for="analysis-message">{{ t.analysis_field_message }}</label>
+      <textarea id="analysis-message" name="message" rows="4"></textarea>
+    </div>
+
+    {# Honeypot: real users never see or fill this (hidden off-screen);
+       a filled value means a bot, checked server-side in the Function. #}
+    <div class="analysis-honeypot" aria-hidden="true">
+      <label for="analysis-company">Company</label>
+      <input type="text" id="analysis-company" name="company" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}"></div>
+
+    <p class="analysis-form-error" id="analysis-form-error" hidden></p>
+
+    <button type="submit" class="analysis-submit-btn" id="analysis-submit-btn">{{ t.analysis_submit }}</button>
+
+    <p class="analysis-privacy-note">{{ t.analysis_privacy_note }}</p>
+  </form>
+
+  <div class="analysis-success" id="analysis-success" hidden>
+    <h2>{{ t.analysis_success_title }}</h2>
+    <p>{{ t.analysis_success_body }}</p>
+  </div>
+</article>
+{% endblock %}
