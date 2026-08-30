@@ -5,7 +5,7 @@
 // No-ops entirely on any page without the form (every other page).
 
 (function () {
-  var MAX_GPX_BYTES = 15 * 1024 * 1024; // keep in sync with functions/api/analysis-request.js
+  var MAX_GPX_BYTES = 8 * 1024 * 1024; // keep in sync with functions/api/analysis-request.js
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   var form = document.getElementById("analysis-form");

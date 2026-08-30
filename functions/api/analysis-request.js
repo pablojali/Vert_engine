@@ -1,19 +1,19 @@
 // Cloudflare Pages Function: POST /api/analysis-request
 //
 // Receives the "Get Your VTL Analysis" form (multipart/form-data),
-// validates it, verifies Turnstile, stores the GPX privately in R2, and
-// emails a notification via Resend. Runs entirely on Cloudflare's edge
-// using only Web-standard APIs (fetch, FormData, crypto, R2 bindings) -
-// no Node.js APIs, and no access whatsoever to the private Terrain
-// Intelligence Engine (a completely separate, private codebase/repo).
+// validates it, verifies Turnstile, and emails it to VTL via Resend
+// with the GPX attached directly - GPX files are small (a few MB at
+// most), so there's no need for separate file storage (R2, which has a
+// cost) at this volume. The GPX is never persisted anywhere server-side
+// - it only ever exists in memory for the length of this request and in
+// the resulting email. Runs entirely on Cloudflare's edge using only
+// Web-standard APIs (fetch, FormData, btoa) - no Node.js APIs, and no
+// access whatsoever to the private Terrain Intelligence Engine (a
+// completely separate, private codebase/repo).
 //
-// Required bindings/env vars - set in Cloudflare Pages ->
-// Settings -> Environment variables (secrets) / Bindings:
+// Required env vars - set in Cloudflare Pages -> Settings ->
+// Environment variables (secrets):
 //
-//   GPX_BUCKET            R2 bucket binding. Create a bucket, bind it
-//                         here under this exact name. Never enable
-//                         public access on it - this Function is the
-//                         only door in.
 //   TURNSTILE_SECRET_KEY  secret - from the Turnstile widget you create
 //                         in the Cloudflare dashboard (Turnstile -> Add
 //                         site). The matching public "site key" goes in
@@ -21,19 +21,20 @@
 //   RESEND_API_KEY        secret - from https://resend.com (free tier
 //                         is enough for this volume). Verify the
 //                         vertlabs.run sending domain there first.
-//   NOTIFY_EMAIL          plain var - where the notification lands.
-//   ADMIN_TOKEN           secret - a long random string you generate
-//                         yourself (e.g. `openssl rand -hex 32`). Gates
-//                         /api/analysis-gpx/* downloads.
-//   PUBLIC_SITE_URL       plain var - "https://vertlabs.run", used to
-//                         build the GPX download link in the email.
+//   NOTIFY_EMAIL          plain var - where the notification (with the
+//                         GPX attached) lands. Your choice of inbox -
+//                         doesn't have to be hello@vertlabs.run.
 //
-// If GPX_BUCKET/TURNSTILE_SECRET_KEY/RESEND_API_KEY aren't set yet, the
-// Function still degrades safely (Turnstile check passes open, storage/
-// email errors are reported without ever leaking why) - but you do need
-// all of them configured before relying on this in production.
+// If TURNSTILE_SECRET_KEY/RESEND_API_KEY aren't set yet, the Function
+// still degrades safely (Turnstile check passes open, a missing Resend
+// key is reported as a clean server_error instead of a silent failure)
+// - but you need both configured before relying on this in production.
 
-const MAX_GPX_BYTES = 15 * 1024 * 1024; // keep in sync with assets/js/analysis-form.js
+// Base64-encoded (after inflation) attachments need to stay well under
+// typical inbox limits (Gmail caps incoming mail around 25 MB) - real
+// GPX files are almost always a few MB at most, so this is generous
+// headroom, not a tight squeeze.
+const MAX_GPX_BYTES = 8 * 1024 * 1024; // keep in sync with assets/js/analysis-form.js
 const MAX_FIELD_LENGTH = 500;
 
 function jsonResponse(body, status) {
@@ -63,6 +64,18 @@ async function looksLikeGpx(file) {
   return /<\?xml|<gpx[\s>]/i.test(head);
 }
 
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000; // process in chunks - avoids blowing the
+  // call-stack/argument limit that String.fromCharCode.apply(null, hugeArray)
+  // would hit on a multi-MB file.
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
 async function verifyTurnstile(token, secret, ip) {
   if (!secret) return true; // not configured yet - don't hard-block submissions
   if (!token) return false;
@@ -80,11 +93,8 @@ async function verifyTurnstile(token, secret, ip) {
   return !!data.success;
 }
 
-async function sendNotificationEmail(env, fields, gpxKey) {
-  const downloadUrl =
-    env.PUBLIC_SITE_URL && env.ADMIN_TOKEN
-      ? env.PUBLIC_SITE_URL + "/api/analysis-gpx/" + gpxKey + "?token=" + env.ADMIN_TOKEN
-      : "(configure PUBLIC_SITE_URL / ADMIN_TOKEN for a direct link) R2 key: " + gpxKey;
+async function sendNotificationEmail(env, fields, gpxFile) {
+  const gpxBase64 = arrayBufferToBase64(await gpxFile.arrayBuffer());
 
   const lines = [
     "Name: " + fields.name,
@@ -94,7 +104,7 @@ async function sendNotificationEmail(env, fields, gpxKey) {
     "Race date: " + fields.race_date,
     "Message: " + (fields.message || "(none)"),
     "",
-    "GPX file: " + downloadUrl,
+    "GPX file attached: " + sanitizeFilename(gpxFile.name),
   ];
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -109,6 +119,12 @@ async function sendNotificationEmail(env, fields, gpxKey) {
       reply_to: fields.email,
       subject: "VTL Analysis Request — " + fields.name + " — " + fields.race,
       text: lines.join("\n"),
+      attachments: [
+        {
+          filename: sanitizeFilename(gpxFile.name),
+          content: gpxBase64,
+        },
+      ],
     }),
   });
 
@@ -168,38 +184,18 @@ export async function onRequestPost(context) {
     return jsonResponse({ success: false, error: "gpx_invalid" }, 400);
   }
 
-  if (!env.GPX_BUCKET) {
+  if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) {
     return jsonResponse({ success: false, error: "server_error" }, 500);
   }
 
-  const requestId = crypto.randomUUID();
-  const gpxKey = "analysis-requests/" + requestId + "/" + sanitizeFilename(gpxFile.name);
-
-  try {
-    await env.GPX_BUCKET.put(gpxKey, gpxFile.stream(), {
-      httpMetadata: { contentType: "application/gpx+xml" },
-      customMetadata: {
-        name: fields.name,
-        email: fields.email,
-        race: fields.race,
-        race_date: fields.race_date,
-      },
-    });
-  } catch (err) {
+  const emailed = await sendNotificationEmail(env, fields, gpxFile).catch(function () {
+    return false;
+  });
+  if (!emailed) {
     return jsonResponse({ success: false, error: "server_error" }, 500);
   }
 
-  // The submission is already safely stored even if the notification
-  // email fails (e.g. RESEND_API_KEY not configured yet) - don't lose it
-  // over a downstream email hiccup.
-  const emailed =
-    env.RESEND_API_KEY && env.NOTIFY_EMAIL
-      ? await sendNotificationEmail(env, fields, gpxKey).catch(function () {
-          return false;
-        })
-      : false;
-
-  return jsonResponse({ success: true, emailed: emailed });
+  return jsonResponse({ success: true });
 }
 
 export async function onRequestGet() {

@@ -19,8 +19,8 @@ Then, once for the whole site:
   11. copy ONLY images/ and charts/ (public) from data/ -> output/media/
       (shared across locales - images aren't language-dependent)
   12. copy functions/ -> output/functions/ (Cloudflare Pages Functions -
-      the /api/analysis-request and /api/analysis-gpx backend for the
-      "Get Your VTL Analysis" form; see functions/README.md)
+      the /api/analysis-request backend for the "Get Your VTL Analysis"
+      form; see functions/README.md)
 
 Security rule (see Claude.md section 6): output/ must never contain
 Python code, raw GPX, raw results/, or internal calculation parameters.
