@@ -128,6 +128,18 @@ async function sendNotificationEmail(env, fields, gpxFile) {
     }),
   });
 
+  if (!res.ok) {
+    // Visible only in Cloudflare's own Function logs (dashboard -> your
+    // Pages project -> the deployment -> Logs, or `wrangler pages
+    // deployment tail`) - never sent back to the client. This is almost
+    // always either an invalid RESEND_API_KEY or the "from" domain
+    // (vertlabs.run) not yet verified in Resend.
+    const errorBody = await res.text().catch(function () {
+      return "(could not read response body)";
+    });
+    console.error("Resend API error", res.status, errorBody);
+  }
+
   return res.ok;
 }
 
@@ -185,10 +197,16 @@ export async function onRequestPost(context) {
   }
 
   if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) {
+    console.error(
+      "Missing env var(s):",
+      !env.RESEND_API_KEY ? "RESEND_API_KEY " : "",
+      !env.NOTIFY_EMAIL ? "NOTIFY_EMAIL" : ""
+    );
     return jsonResponse({ success: false, error: "server_error" }, 500);
   }
 
-  const emailed = await sendNotificationEmail(env, fields, gpxFile).catch(function () {
+  const emailed = await sendNotificationEmail(env, fields, gpxFile).catch(function (err) {
+    console.error("sendNotificationEmail threw:", err && err.message);
     return false;
   });
   if (!emailed) {
