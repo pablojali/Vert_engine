@@ -1154,7 +1154,7 @@
             {
               "id": "38",
               "nombre": "Refuge Bonatti",
-              "km": 21.2
+              "km": 21.1
             },
             {
               "id": "40",
@@ -1164,7 +1164,7 @@
             {
               "id": "44",
               "nombre": "Grand Col Ferret",
-              "km": 30.9
+              "km": 30.8
             },
             {
               "id": "48",
@@ -1174,52 +1174,47 @@
             {
               "id": "51",
               "nombre": "Champex-Lac entrée",
-              "km": 54.9
+              "km": 54.2
             },
             {
               "id": "52",
               "nombre": "Champex-Lac sortie",
-              "km": 54.9
+              "km": 54.2
             },
             {
               "id": "54",
               "nombre": "Plan de l'Au",
-              "km": 59.8
+              "km": 59.1
             },
             {
-              "id": "56",
-              "nombre": "La Giète",
-              "km": 66.3
+              "id": "57",
+              "nombre": "Martigny",
+              "km": 69.2
             },
             {
               "id": "58",
               "nombre": "Trient",
-              "km": 71.5
+              "km": 79.1
             },
             {
               "id": "60",
               "nombre": "Les Tseppes",
-              "km": 75.2
+              "km": 82.9
             },
             {
               "id": "62",
               "nombre": "Vallorcine Entrée",
-              "km": 82.5
+              "km": 90.1
             },
             {
               "id": "64",
               "nombre": "Vallorcine Sortie",
-              "km": 82.5
-            },
-            {
-              "id": "82",
-              "nombre": "La Flégère",
-              "km": 93.7
+              "km": 90.1
             },
             {
               "id": "200",
               "nombre": "Chamonix",
-              "km": 100.9
+              "km": 107.8
             }
           ]
         },
