@@ -199,13 +199,11 @@ export async function onRequestPost(context) {
   }
 
   if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) {
-    const missing = (!env.RESEND_API_KEY ? "RESEND_API_KEY " : "") + (!env.NOTIFY_EMAIL ? "NOTIFY_EMAIL" : "");
-    console.error("Missing env var(s):", missing);
-    // TEMP_DEBUG: remove the `debug` field below before going to
-    // production - it's only here so setup issues can be diagnosed
-    // without paid Cloudflare log access, on staging, with no real
-    // users hitting this endpoint yet.
-    return jsonResponse({ success: false, error: "server_error", debug: "Missing env var(s): " + missing }, 500);
+    console.error(
+      "Missing env var(s):",
+      (!env.RESEND_API_KEY ? "RESEND_API_KEY " : "") + (!env.NOTIFY_EMAIL ? "NOTIFY_EMAIL" : "")
+    );
+    return jsonResponse({ success: false, error: "server_error" }, 500);
   }
 
   const emailResult = await sendNotificationEmail(env, fields, gpxFile).catch(function (err) {
@@ -213,9 +211,7 @@ export async function onRequestPost(context) {
     return { ok: false, detail: "threw: " + (err && err.message) };
   });
   if (!emailResult.ok) {
-    // TEMP_DEBUG: same as above - drop `debug` once this is confirmed
-    // working, so a real production error never echoes internal details.
-    return jsonResponse({ success: false, error: "server_error", debug: emailResult.detail }, 500);
+    return jsonResponse({ success: false, error: "server_error" }, 500);
   }
 
   return jsonResponse({ success: true });

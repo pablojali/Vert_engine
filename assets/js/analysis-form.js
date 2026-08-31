@@ -76,12 +76,6 @@
           (code === "gpx_too_large" && form.dataset.errorGpxSize) ||
           (code === "invalid_input" && form.dataset.errorRequired) ||
           form.dataset.errorGeneric;
-        // TEMP_DEBUG: surfaces the server's `debug` field (see
-        // functions/api/analysis-request.js) while setting up Resend -
-        // remove this "+ debug" once real submissions work end to end.
-        if (result.data && result.data.debug) {
-          message += " (debug: " + result.data.debug + ")";
-        }
         showError(message);
       })
       .catch(function () {
