@@ -288,20 +288,35 @@ el gráfico puede estar inflado - visualmente se veía como un pico
 aislado sin ninguna indicación de que ese punto es menos confiable que
 el resto.
 
-**Mitigación implementada:** `calculate_indices_by_segment` ahora marca
-cada tramo con `VPI Reliable`/`DMI Reliable` (booleano), en `False`
-cuando: (a) el "share" de esfuerzo en que se basa la estimación de
-tiempo es menor a `LOW_EFFORT_SHARE_THRESHOLD` (15% - la estimación
-descansa en una porción demasiado chica del tramo para confiar en ella)
-o (b) el valor resultante supera `VPI_PLAUSIBILITY_CEILING` (1500 m/h) /
-`DMI_PLAUSIBILITY_CEILING` (20 km/h) - más allá de lo que un corredor
-sostiene realmente en terreno real. Los tramos marcados como no
-confiables se resaltan en el gráfico (`build_runner_analysis_bundle`)
-con un punto en otro color (rombo rojo) y un tooltip: "Approximate value
-— short/irregular terrain within this checkpoint segment". Como
-`build_full_runner_report_html` usa las mismas figuras, el resaltado
-también aparece en el informe HTML público (embebido en el sitio vía
-iframe), no solo en la vista de Streamlit.
+**Mitigación implementada (v1, revisada):** la primera versión marcaba
+un tramo como no confiable usando un umbral fijo ("effort-share < 15%"
+o un techo absoluto de m/h). En la práctica, en carreras con checkpoints
+espaciados, es NORMAL que la porción empinada de un tramo sea una parte
+chica del tramo total - ese umbral terminaba marcando casi la mitad de
+los tramos de una carrera real, sin ninguna capacidad de distinguir el
+outlier real del resto (feedback del usuario: "si todos los puntos
+tienen rombos... no da confiabilidad").
+
+**Versión actual:** `calculate_indices_by_segment` marca un tramo como
+no confiable de forma **relativa al propio corredor**, no contra un
+número fijo: compara el VPI/DMI de cada tramo contra la MEDIANA de los
+demás tramos de ESE MISMO corredor en ESA MISMA carrera
+(`_flag_relative_outliers`), y solo marca cuando supera
+`VPI_OUTLIER_MULTIPLIER`/`DMI_OUTLIER_MULTIPLIER` (1.5x esa mediana) -
+así se adapta automáticamente a cómo es el terreno/los checkpoints de
+cada carrera en particular, en vez de un corte universal. Con menos de
+`MIN_SEGMENTS_FOR_OUTLIER_CHECK` (4) tramos válidos no se marca nada
+(una mediana con tan poca data no significa nada). Verificado offline
+con una carrera sintética de 15 tramos normales (460-590 m/h) + 1 tramo
+anómalo (subida corta escondida, ~1600 m/h): la versión anterior hubiera
+marcado varios de los 15 normales; la actual marca exactamente 1 de 16.
+
+Los tramos marcados se resaltan en el gráfico
+(`build_runner_analysis_bundle`) con un punto en otro color (rombo rojo)
+y un tooltip: "Approximate value — short/irregular terrain within this
+checkpoint segment". Como `build_full_runner_report_html` usa las
+mismas figuras, el resaltado también aparece en el informe HTML público
+(embebido en el sitio vía iframe), no solo en la vista de Streamlit.
 
 **Próximos pasos (si se retoma):** la corrección de raíz sería usar el
 GPX propio del corredor (con timestamp real por punto, ya hay
@@ -309,10 +324,9 @@ scaffolding parcial en `process_runner_gpx_with_time`/
 `build_runner_slope_windows`) en vez de estimar por reparto de tiempo -
 elimina la necesidad de estimar del todo para quien suba su GPX personal
 (conecta directo con el formulario "Get Your VTL Analysis" del sitio
-público). Los umbrales de plausibilidad (`LOW_EFFORT_SHARE_THRESHOLD`,
-`VPI_PLAUSIBILITY_CEILING`, `DMI_PLAUSIBILITY_CEILING`) son ajustables
-sin tocar el resto de la lógica si en la práctica marcan de más/de
-menos.
+público). El multiplicador (`VPI_OUTLIER_MULTIPLIER`/
+`DMI_OUTLIER_MULTIPLIER`, hoy 1.5x) es ajustable sin tocar el resto de
+la lógica si en la práctica marca de más/de menos.
 
 ---
 

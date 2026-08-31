@@ -45,12 +45,19 @@ ALTITUDE_THRESHOLD = 1800         # meters above sea level
 # checkpoint-to-checkpoint effort-share time allocation in
 # calculate_indices_by_segment() is only an estimate - it gets noisy
 # when the qualifying climb/descent is a short, steep sliver of a much
-# longer segment. Flag those instead of hiding them: a segment is
-# marked unreliable when its effort-share is too thin to trust, or the
-# resulting rate is past what's physically plausible on real terrain.
-LOW_EFFORT_SHARE_THRESHOLD = 15   # % - below this, the time estimate rests on too little of the segment
-VPI_PLAUSIBILITY_CEILING = 1500   # m/h - beyond real sustained climbing rates on trail
-DMI_PLAUSIBILITY_CEILING = 20     # km/h - beyond real sustained technical-descent running speed
+# longer segment. Flag those instead of hiding them - RELATIVE to this
+# same runner's other segments in this same race, not a fixed absolute
+# number: how "empinado" a segment's qualifying terrain is relative to
+# its total distance varies a lot by race/course, so a flat cutoff (an
+# earlier version of this used "effort-share below 15%") ends up
+# flagging perfectly ordinary segments on courses with sparser
+# checkpoints, drowning out the one real outlier in noise. A segment
+# well above THIS runner's own median for the same race is a much
+# rarer, more meaningful signal - that's what a person scanning the
+# chart for "one weird spike" is actually doing.
+VPI_OUTLIER_MULTIPLIER = 1.5   # flag a segment's VPI if > 1.5x this runner's own median VPI across the race
+DMI_OUTLIER_MULTIPLIER = 1.5   # same, for DMI
+MIN_SEGMENTS_FOR_OUTLIER_CHECK = 4  # too few segments -> a "median" isn't meaningful, don't flag anything
 
 # Consistent color palette shared by the effort map and the bar chart
 SLOPE_CATEGORY_COLORS = {
@@ -701,25 +708,6 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
                     descent_time_h = segment_time_h * descent_effort_share
                     dmi_raw = descent_dist_km / descent_time_h if descent_time_h > 0 else None
 
-        # A segment's VPI/DMI estimate is flagged (not dropped) when the
-        # effort-share the whole rate is built on is too thin to trust, or
-        # the resulting rate is past what's physically plausible - almost
-        # always a short/steep climb or descent tucked inside a much
-        # longer, gentler checkpoint segment. See the constants above and
-        # docs/05-known-issues.md.
-        vpi_reliable = None
-        if vpi_raw is not None:
-            vpi_reliable = not (
-                (climb_effort_share is not None and climb_effort_share * 100 < LOW_EFFORT_SHARE_THRESHOLD)
-                or vpi_raw > VPI_PLAUSIBILITY_CEILING
-            )
-        dmi_reliable = None
-        if dmi_raw is not None:
-            dmi_reliable = not (
-                (descent_effort_share is not None and descent_effort_share * 100 < LOW_EFFORT_SHARE_THRESHOLD)
-                or dmi_raw > DMI_PLAUSIBILITY_CEILING
-            )
-
         rows.append({
             "Segment": f"P{p_start}→P{p_end}",
             "Start Km": km_start,
@@ -728,10 +716,8 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
             "Runner Time (h)": round(segment_time_h, 2) if segment_time_h is not None else None,
             "Climb Effort Share (%)": round(climb_effort_share * 100, 1) if climb_effort_share is not None else None,
             "VPI Raw (m/h)": round(vpi_raw, 1) if vpi_raw is not None else None,
-            "VPI Reliable": vpi_reliable,
             "Descent Effort Share (%)": round(descent_effort_share * 100, 1) if descent_effort_share is not None else None,
             "DMI Raw (km/h)": round(dmi_raw, 2) if dmi_raw is not None else None,
-            "DMI Reliable": dmi_reliable,
         })
 
     df_segments_out = pd.DataFrame(rows)
@@ -740,7 +726,37 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
     df_segments_out["VPI Index (0-100)"] = normalize_segment_index(df_segments_out["VPI Raw (m/h)"])
     df_segments_out["DMI Index (0-100)"] = normalize_segment_index(df_segments_out["DMI Raw (km/h)"])
 
+    # Reliability flag: RELATIVE to this runner's own median for this same
+    # race, not a fixed absolute number (see the constants above) - a
+    # segment far above what this runner showed everywhere else in the
+    # same race is a much more meaningful signal than an arbitrary cutoff
+    # that doesn't adapt to how spread out a given course's checkpoints
+    # or terrain are.
+    df_segments_out["VPI Reliable"] = _flag_relative_outliers(
+        df_segments_out["VPI Raw (m/h)"], VPI_OUTLIER_MULTIPLIER
+    )
+    df_segments_out["DMI Reliable"] = _flag_relative_outliers(
+        df_segments_out["DMI Raw (km/h)"], DMI_OUTLIER_MULTIPLIER
+    )
+
     return df_segments_out
+
+
+def _flag_relative_outliers(values, multiplier):
+    """None where `values` is null, else True/False for whether that value
+    is within `multiplier`x this same series' own median - used to flag a
+    segment's VPI/DMI only when it's a real outlier for THIS runner in
+    THIS race, not against a fixed universal number. Skips flagging
+    entirely (everything True) when there aren't enough valid segments
+    for a median to mean anything."""
+    valid = values.dropna()
+    if len(valid) < MIN_SEGMENTS_FOR_OUTLIER_CHECK:
+        return values.apply(lambda v: None if pd.isna(v) else True)
+    median = valid.median()
+    if not median or median <= 0:
+        return values.apply(lambda v: None if pd.isna(v) else True)
+    ceiling = median * multiplier
+    return values.apply(lambda v: None if pd.isna(v) else v <= ceiling)
 
 
 def process_runner_gpx_with_time(file):
