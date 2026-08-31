@@ -1,0 +1,27 @@
+{
+  "slug": "anais-duval",
+  "name": "Anaïs DUVAL",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/anais-duval/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 41,
+      "gender_rank": 11,
+      "finish_time": "26:30:36",
+      "vpi": 708.4,
+      "dmi": 8.15,
+      "er": 74.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/anais-duval/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 708.4,
+    "dmi": 8.2,
+    "er": 74.3
+  }
+}

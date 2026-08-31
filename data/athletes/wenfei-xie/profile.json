@@ -1,0 +1,27 @@
+{
+  "slug": "wenfei-xie",
+  "name": "Wenfei XIE",
+  "country": "CN",
+  "gender": null,
+  "portrait": "/media/athletes/wenfei-xie/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 108,
+      "gender_rank": 16,
+      "finish_time": "29:59:31",
+      "vpi": 624.1,
+      "dmi": 7.15,
+      "er": 70.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/wenfei-xie/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 624.1,
+    "dmi": 7.2,
+    "er": 70.3
+  }
+}

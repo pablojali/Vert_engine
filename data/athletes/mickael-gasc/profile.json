@@ -1,0 +1,27 @@
+{
+  "slug": "mickael-gasc",
+  "name": "Mickael GASC",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/mickael-gasc/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 14,
+      "gender_rank": 12,
+      "finish_time": "22:53:41",
+      "vpi": 820.1,
+      "dmi": 9.58,
+      "er": 76.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/mickael-gasc/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 820.1,
+    "dmi": 9.6,
+    "er": 76.1
+  }
+}

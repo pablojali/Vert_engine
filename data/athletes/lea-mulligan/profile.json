@@ -1,0 +1,27 @@
+{
+  "slug": "lea-mulligan",
+  "name": "Lea MULLIGAN",
+  "country": "US",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 65,
+      "gender_rank": 13,
+      "finish_time": "28:08:17",
+      "vpi": 653.6,
+      "dmi": 7.81,
+      "er": 51.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/lea-mulligan/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 653.6,
+    "dmi": 7.8,
+    "er": 51.8
+  }
+}

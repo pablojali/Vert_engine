@@ -1,0 +1,27 @@
+{
+  "slug": "paul-balbo",
+  "name": "Paul BALBO",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 13,
+      "gender_rank": 11,
+      "finish_time": "22:46:03",
+      "vpi": 821.7,
+      "dmi": 9.73,
+      "er": 80.5,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/paul-balbo/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 821.7,
+    "dmi": 9.7,
+    "er": 80.5
+  }
+}

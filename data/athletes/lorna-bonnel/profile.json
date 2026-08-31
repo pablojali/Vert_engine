@@ -1,0 +1,27 @@
+{
+  "slug": "lorna-bonnel",
+  "name": "Lorna BONNEL",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 92,
+      "gender_rank": 15,
+      "finish_time": "29:13:24",
+      "vpi": 652.3,
+      "dmi": 7.11,
+      "er": 50.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/lorna-bonnel/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 652.3,
+    "dmi": 7.1,
+    "er": 50.6
+  }
+}

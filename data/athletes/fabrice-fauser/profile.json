@@ -1,0 +1,27 @@
+{
+  "slug": "fabrice-fauser",
+  "name": "Fabrice FAUSER",
+  "country": "CH",
+  "gender": null,
+  "portrait": "/media/athletes/fabrice-fauser/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 17,
+      "gender_rank": 14,
+      "finish_time": "23:14:06",
+      "vpi": 783.3,
+      "dmi": 9.62,
+      "er": 90.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/fabrice-fauser/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 783.3,
+    "dmi": 9.6,
+    "er": 90.6
+  }
+}

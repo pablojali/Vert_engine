@@ -1,0 +1,27 @@
+{
+  "slug": "stephanie-case",
+  "name": "Stephanie CASE",
+  "country": "CA",
+  "gender": null,
+  "portrait": "/media/athletes/stephanie-case/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 61,
+      "gender_rank": 12,
+      "finish_time": "27:54:29",
+      "vpi": 684.8,
+      "dmi": 7.48,
+      "er": 64.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/stephanie-case/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 684.8,
+    "dmi": 7.5,
+    "er": 64.3
+  }
+}

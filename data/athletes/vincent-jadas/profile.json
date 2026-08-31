@@ -1,0 +1,27 @@
+{
+  "slug": "vincent-jadas",
+  "name": "Vincent JADAS",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/vincent-jadas/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 25,
+      "gender_rank": 19,
+      "finish_time": "25:08:49",
+      "vpi": 747.8,
+      "dmi": 8.7,
+      "er": 76.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/vincent-jadas/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 747.8,
+    "dmi": 8.7,
+    "er": 76.9
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "pierre-reygade",
+  "name": "Pierre REYGADE",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/pierre-reygade/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 18,
+      "gender_rank": 15,
+      "finish_time": "23:27:23",
+      "vpi": 797.0,
+      "dmi": 9.35,
+      "er": 78.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/pierre-reygade/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 797.0,
+    "dmi": 9.4,
+    "er": 78.6
+  }
+}

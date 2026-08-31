@@ -1,0 +1,27 @@
+{
+  "slug": "antoine-marguery",
+  "name": "Antoine MARGUERY",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 20,
+      "gender_rank": 17,
+      "finish_time": "23:51:02",
+      "vpi": 785.0,
+      "dmi": 9.29,
+      "er": 78.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/antoine-marguery/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 785.0,
+    "dmi": 9.3,
+    "er": 78.8
+  }
+}

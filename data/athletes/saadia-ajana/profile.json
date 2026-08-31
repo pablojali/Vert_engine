@@ -1,0 +1,27 @@
+{
+  "slug": "saadia-ajana",
+  "name": "Saadia AJANA",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 140,
+      "gender_rank": 20,
+      "finish_time": "32:00:46",
+      "vpi": 604.1,
+      "dmi": 6.77,
+      "er": 70.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/saadia-ajana/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 604.1,
+    "dmi": 6.8,
+    "er": 70.0
+  }
+}

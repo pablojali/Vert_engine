@@ -1,0 +1,27 @@
+{
+  "slug": "antoine-barbier-de-chalais",
+  "name": "Antoine BARBIER DE CHALAIS",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/antoine-barbier-de-chalais/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 23,
+      "gender_rank": 18,
+      "finish_time": "24:30:24",
+      "vpi": 767.9,
+      "dmi": 8.76,
+      "er": 71.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/antoine-barbier-de-chalais/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 767.9,
+    "dmi": 8.8,
+    "er": 71.2
+  }
+}

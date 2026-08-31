@@ -1,0 +1,27 @@
+{
+  "slug": "aurelie-gosset",
+  "name": "Aurélie GOSSET",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 124,
+      "gender_rank": 18,
+      "finish_time": "31:07:36",
+      "vpi": 601.9,
+      "dmi": 6.92,
+      "er": 50.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/aurelie-gosset/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 601.9,
+    "dmi": 6.9,
+    "er": 50.6
+  }
+}

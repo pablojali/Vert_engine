@@ -1,0 +1,27 @@
+{
+  "slug": "alexandre-vionnet-fuasset",
+  "name": "Alexandre VIONNET FUASSET",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 27,
+      "gender_rank": 20,
+      "finish_time": "25:31:38",
+      "vpi": 733.1,
+      "dmi": 8.81,
+      "er": 65.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/alexandre-vionnet-fuasset/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 733.1,
+    "dmi": 8.8,
+    "er": 65.8
+  }
+}

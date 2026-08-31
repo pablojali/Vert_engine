@@ -1,0 +1,27 @@
+{
+  "slug": "blandine-wattigny",
+  "name": "Blandine WATTIGNY",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/blandine-wattigny/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 148.36032945474318,
+      "position": 79,
+      "gender_rank": 14,
+      "finish_time": "28:49:34",
+      "vpi": 644.5,
+      "dmi": 7.53,
+      "er": 65.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/blandine-wattigny/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 644.5,
+    "dmi": 7.5,
+    "er": 65.7
+  }
+}
