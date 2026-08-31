@@ -16,11 +16,24 @@
       "dmi": 13.76,
       "er": 83.9,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/guangfu-meng/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 12,
+      "gender_rank": 12,
+      "finish_time": "11:16:28",
+      "vpi": 1189.0,
+      "dmi": 14.18,
+      "er": 77.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/guangfu-meng/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1131.7,
-    "dmi": 13.8,
-    "er": 83.9
+    "vpi": 1160.4,
+    "dmi": 14.0,
+    "er": 80.8
   }
 }

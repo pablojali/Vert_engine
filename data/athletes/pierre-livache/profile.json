@@ -1,0 +1,27 @@
+{
+  "slug": "pierre-livache",
+  "name": "Pierre LIVACHE",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/pierre-livache/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 11,
+      "gender_rank": 11,
+      "finish_time": "11:15:29",
+      "vpi": 1202.6,
+      "dmi": 14.08,
+      "er": 88.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/pierre-livache/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1202.6,
+    "dmi": 14.1,
+    "er": 88.0
+  }
+}

@@ -16,11 +16,24 @@
       "dmi": 13.08,
       "er": 82.7,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/davide-cheraz/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 18,
+      "gender_rank": 18,
+      "finish_time": "11:37:32",
+      "vpi": 1149.8,
+      "dmi": 13.75,
+      "er": 80.4,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/davide-cheraz/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1065.2,
-    "dmi": 13.1,
-    "er": 82.7
+    "vpi": 1107.5,
+    "dmi": 13.4,
+    "er": 81.6
   }
 }

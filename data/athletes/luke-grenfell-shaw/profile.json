@@ -1,0 +1,27 @@
+{
+  "slug": "luke-grenfell-shaw",
+  "name": "Luke GRENFELL-SHAW",
+  "country": "GB",
+  "gender": null,
+  "portrait": "/media/athletes/luke-grenfell-shaw/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "10:47:23",
+      "vpi": 1218.1,
+      "dmi": 14.55,
+      "er": 78.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/luke-grenfell-shaw/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1218.1,
+    "dmi": 14.6,
+    "er": 78.0
+  }
+}

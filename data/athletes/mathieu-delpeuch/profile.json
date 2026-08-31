@@ -1,0 +1,27 @@
+{
+  "slug": "mathieu-delpeuch",
+  "name": "Mathieu DELPEUCH",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/mathieu-delpeuch/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "10:59:16",
+      "vpi": 1210.4,
+      "dmi": 14.32,
+      "er": 87.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/mathieu-delpeuch/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1210.4,
+    "dmi": 14.3,
+    "er": 87.9
+  }
+}

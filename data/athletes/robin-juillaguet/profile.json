@@ -1,7 +1,7 @@
 {
   "slug": "robin-juillaguet",
   "name": "Robin JUILLAGUET",
-  "country": null,
+  "country": "FR",
   "portrait": "/media/athletes/robin-juillaguet/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 16.2,
       "er": 78.7,
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/robin-juillaguet/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 13,
+      "gender_rank": 13,
+      "finish_time": "11:16:39",
+      "vpi": 1183.9,
+      "dmi": 14.22,
+      "er": 84.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/robin-juillaguet/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1191.3,
-    "dmi": 16.2,
-    "er": 78.7
+    "vpi": 1187.6,
+    "dmi": 15.2,
+    "er": 81.6
   }
 }

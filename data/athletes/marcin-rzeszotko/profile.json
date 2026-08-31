@@ -1,7 +1,7 @@
 {
   "slug": "marcin-rzeszotko",
   "name": "Marcin RZESZÓTKO",
-  "country": null,
+  "country": "PL",
   "portrait": "/media/athletes/marcin-rzeszotko/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 15.98,
       "er": 80.8,
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/marcin-rzeszotko/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 17,
+      "gender_rank": 17,
+      "finish_time": "11:36:19",
+      "vpi": 1160.3,
+      "dmi": 13.65,
+      "er": 76.5,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/marcin-rzeszotko/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1171.5,
-    "dmi": 16.0,
-    "er": 80.8
+    "vpi": 1165.9,
+    "dmi": 14.8,
+    "er": 78.6
   }
 }

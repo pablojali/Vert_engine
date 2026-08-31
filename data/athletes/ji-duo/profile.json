@@ -16,11 +16,24 @@
       "dmi": 12.66,
       "er": 81.0,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/ji-duo/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "10:58:26",
+      "vpi": 1204.5,
+      "dmi": 14.58,
+      "er": 77.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/ji-duo/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 974.4,
-    "dmi": 12.7,
-    "er": 81.0
+    "vpi": 1089.4,
+    "dmi": 13.6,
+    "er": 79.3
   }
 }

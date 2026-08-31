@@ -1,0 +1,27 @@
+{
+  "slug": "guillaume-tiphene",
+  "name": "Guillaume TIPHENE",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/guillaume-tiphene/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "10:58:26",
+      "vpi": 1219.2,
+      "dmi": 14.3,
+      "er": 83.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/guillaume-tiphene/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1219.2,
+    "dmi": 14.3,
+    "er": 83.8
+  }
+}

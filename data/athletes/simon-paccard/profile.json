@@ -16,11 +16,24 @@
       "dmi": 12.26,
       "er": 73.6,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/simon-paccard/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "10:50:59",
+      "vpi": 1212.5,
+      "dmi": 14.53,
+      "er": 78.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/simon-paccard/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1090.9,
-    "dmi": 12.3,
-    "er": 73.6
+    "vpi": 1151.7,
+    "dmi": 13.4,
+    "er": 76.2
   }
 }

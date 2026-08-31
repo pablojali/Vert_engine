@@ -1,0 +1,27 @@
+{
+  "slug": "hans-troyer",
+  "name": "Hans TROYER",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/hans-troyer/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "10:33:29",
+      "vpi": 1253.4,
+      "dmi": 15.26,
+      "er": 84.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/hans-troyer/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1253.4,
+    "dmi": 15.3,
+    "er": 84.9
+  }
+}

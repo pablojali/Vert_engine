@@ -1,0 +1,27 @@
+{
+  "slug": "adam-loomis",
+  "name": "Adam LOOMIS",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/adam-loomis/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 19,
+      "gender_rank": 19,
+      "finish_time": "11:43:14",
+      "vpi": 1144.2,
+      "dmi": 13.71,
+      "er": 77.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/adam-loomis/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1144.2,
+    "dmi": 13.7,
+    "er": 77.0
+  }
+}

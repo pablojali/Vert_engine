@@ -16,11 +16,24 @@
       "dmi": 13.56,
       "er": 90.4,
       "report": "/media/races/utmb-mont-blanc-2025/charts/runners/canhua-luo/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 16,
+      "gender_rank": 16,
+      "finish_time": "11:33:38",
+      "vpi": 1133.4,
+      "dmi": 14.32,
+      "er": 89.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/canhua-luo/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1073.3,
-    "dmi": 13.6,
-    "er": 90.4
+    "vpi": 1103.4,
+    "dmi": 13.9,
+    "er": 90.0
   }
 }
