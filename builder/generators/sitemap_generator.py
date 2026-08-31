@@ -8,7 +8,7 @@ from builder.i18n import LOCALES
 BASE_URL = f"https://{env.globals['site_domain']}"
 # "rankings/" intentionally left out while it's hidden from the nav
 # (see base.html) - the page still builds, just isn't promoted for indexing.
-STATIC_PAGE_PATHS = ["", "races/", "athletes/", "about/", "search/"]
+STATIC_PAGE_PATHS = ["", "races/", "athletes/", "about/", "search/", "analysis/"]
 
 
 def generate(

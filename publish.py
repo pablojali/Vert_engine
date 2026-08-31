@@ -18,6 +18,9 @@ Then, once for the whole site:
   10. copy assets/ -> output/assets/ (shared, not localized)
   11. copy ONLY images/ and charts/ (public) from data/ -> output/media/
       (shared across locales - images aren't language-dependent)
+  12. copy functions/ -> output/functions/ (Cloudflare Pages Functions -
+      the /api/analysis-request backend for the "Get Your VTL Analysis"
+      form; see functions/README.md)
 
 Security rule (see Claude.md section 6): output/ must never contain
 Python code, raw GPX, raw results/, or internal calculation parameters.
@@ -42,6 +45,7 @@ from builder.generators import (
 
 ROOT = Path(__file__).parent
 ASSETS_SRC = ROOT / "assets"
+FUNCTIONS_SRC = ROOT / "functions"
 OUTPUT_DIR = ROOT / "output"
 
 PUBLIC_SUBDIRS = ("images", "charts")
@@ -53,6 +57,20 @@ def copy_assets() -> None:
         shutil.rmtree(dest)
     shutil.copytree(ASSETS_SRC, dest)
     print("  ✓ assets/ copiados a output/assets/")
+
+
+def copy_functions() -> None:
+    """Copies functions/ (Cloudflare Pages Functions, plain JS) verbatim
+    into output/functions/ so it's mirrored into vertlabs-web and
+    survives every publish like assets/ does - it's not per-locale
+    content, and it never touches data/ (no GPX, no private Engine
+    code) - see functions/README.md."""
+    dest = OUTPUT_DIR / "functions"
+    if dest.exists():
+        shutil.rmtree(dest)
+    if FUNCTIONS_SRC.exists():
+        shutil.copytree(FUNCTIONS_SRC, dest)
+        print("  ✓ functions/ copiadas a output/functions/")
 
 
 def copy_public_media(races: list[dict], athletes: list[dict], posts: list[dict]) -> None:
@@ -152,6 +170,9 @@ def main() -> None:
     copy_public_media(
         races_by_locale["en"] + events_by_locale["en"], athletes_by_locale["en"], posts_by_locale["en"]
     )
+
+    print("Copiando Cloudflare Pages Functions...")
+    copy_functions()
 
     print(f"\nListo. Sitio generado en: {OUTPUT_DIR}")
     print("Siguiente paso: copiar output/ al repo público vertlabs-web y pushear.")

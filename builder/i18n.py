@@ -202,6 +202,46 @@ TRANSLATIONS = {
         "notfound_cta_athletes": "Back to Athletes",
         "notfound_cta_races": "Explore Races",
         "notfound_cta_home": "Home",
+        "analysis_meta_title": "Get Your VTL Analysis | Vertical Trail Labs",
+        "analysis_meta_description": (
+            "Submit your race data and GPX file to get a personal VTL "
+            "performance analysis - VPI, DMI and ER for your own race."
+        ),
+        "analysis_title": "Get Your VTL Analysis",
+        "analysis_intro_p1": "Want to see what your race tells us?",
+        "analysis_intro_p2": (
+            "Send us your race details and GPX file. We'll review your "
+            "data and get back to you."
+        ),
+        "analysis_field_name": "Name",
+        "analysis_field_email": "Email",
+        "analysis_field_race": "Race",
+        "analysis_field_distance": "Distance",
+        "analysis_field_date": "Race date",
+        "analysis_field_gpx": "GPX file",
+        "analysis_field_message": "Message (optional)",
+        "analysis_submit": "Request Analysis",
+        "analysis_submitting": "Sending…",
+        "analysis_success_title": "Request Received",
+        "analysis_success_body": (
+            "Thanks — your analysis request has been received. We'll "
+            "review your race data and get back to you."
+        ),
+        "analysis_privacy_note": (
+            "Your information and GPX file will only be used to process "
+            "your VTL analysis request. We do not publish submitted "
+            "personal data without permission."
+        ),
+        "analysis_error_generic": "Something went wrong. Please try again.",
+        "analysis_error_required": "Please fill in all required fields.",
+        "analysis_error_email": "Please enter a valid email address.",
+        "analysis_error_gpx_type": "Please upload a .gpx file.",
+        "analysis_error_gpx_size": "The GPX file is too large (max 8 MB).",
+        "analysis_cta_title": "Want Your Own Analysis?",
+        "analysis_cta_body": "See what your race tells us.",
+        "analysis_cta_button": "Get Your Analysis",
+        "home_analysis_title": "Your Race. Your Data.",
+        "home_analysis_body": "Get your own VTL performance analysis based on your race data.",
     },
     "es": {
         "nav_races": "Carreras",
@@ -398,6 +438,46 @@ TRANSLATIONS = {
         "notfound_cta_athletes": "Volver a Atletas",
         "notfound_cta_races": "Explorar Carreras",
         "notfound_cta_home": "Inicio",
+        "analysis_meta_title": "Obtené tu Análisis VTL | Vertical Trail Labs",
+        "analysis_meta_description": (
+            "Enviá los datos de tu carrera y tu archivo GPX para obtener "
+            "tu propio análisis de rendimiento VTL - VPI, DMI y ER."
+        ),
+        "analysis_title": "Obtené tu Análisis VTL",
+        "analysis_intro_p1": "¿Querés ver qué te dice tu carrera?",
+        "analysis_intro_p2": (
+            "Envianos los detalles de tu carrera y tu archivo GPX. Vamos "
+            "a revisar tus datos y responderte."
+        ),
+        "analysis_field_name": "Nombre",
+        "analysis_field_email": "Email",
+        "analysis_field_race": "Carrera",
+        "analysis_field_distance": "Distancia",
+        "analysis_field_date": "Fecha de la carrera",
+        "analysis_field_gpx": "Archivo GPX",
+        "analysis_field_message": "Mensaje (opcional)",
+        "analysis_submit": "Solicitar Análisis",
+        "analysis_submitting": "Enviando…",
+        "analysis_success_title": "Solicitud Recibida",
+        "analysis_success_body": (
+            "Gracias — tu solicitud de análisis fue recibida. Vamos a "
+            "revisar los datos de tu carrera y responderte."
+        ),
+        "analysis_privacy_note": (
+            "Tu información y archivo GPX se van a usar solo para "
+            "procesar tu solicitud de análisis VTL. No publicamos datos "
+            "personales enviados sin permiso."
+        ),
+        "analysis_error_generic": "Algo salió mal. Probá de nuevo.",
+        "analysis_error_required": "Completá todos los campos obligatorios.",
+        "analysis_error_email": "Ingresá un email válido.",
+        "analysis_error_gpx_type": "Subí un archivo .gpx.",
+        "analysis_error_gpx_size": "El archivo GPX es demasiado grande (máx. 8 MB).",
+        "analysis_cta_title": "¿Querés tu propio análisis?",
+        "analysis_cta_body": "Mirá qué te dice tu carrera.",
+        "analysis_cta_button": "Obtené tu Análisis",
+        "home_analysis_title": "Tu Carrera. Tus Datos.",
+        "home_analysis_body": "Obtené tu propio análisis de rendimiento VTL basado en los datos de tu carrera.",
     },
     "fr": {
         "nav_races": "Courses",
@@ -596,5 +676,47 @@ TRANSLATIONS = {
         "notfound_cta_athletes": "Retour aux Athlètes",
         "notfound_cta_races": "Explorer les Courses",
         "notfound_cta_home": "Accueil",
+        "analysis_meta_title": "Obtenez votre Analyse VTL | Vertical Trail Labs",
+        "analysis_meta_description": (
+            "Envoyez les données de votre course et votre fichier GPX "
+            "pour obtenir votre analyse de performance VTL personnelle - "
+            "VPI, DMI et ER."
+        ),
+        "analysis_title": "Obtenez votre Analyse VTL",
+        "analysis_intro_p1": "Vous voulez voir ce que votre course révèle ?",
+        "analysis_intro_p2": (
+            "Envoyez-nous les détails de votre course et votre fichier "
+            "GPX. Nous allons examiner vos données et vous répondre."
+        ),
+        "analysis_field_name": "Nom",
+        "analysis_field_email": "Email",
+        "analysis_field_race": "Course",
+        "analysis_field_distance": "Distance",
+        "analysis_field_date": "Date de la course",
+        "analysis_field_gpx": "Fichier GPX",
+        "analysis_field_message": "Message (optionnel)",
+        "analysis_submit": "Demander une Analyse",
+        "analysis_submitting": "Envoi…",
+        "analysis_success_title": "Demande Reçue",
+        "analysis_success_body": (
+            "Merci — votre demande d'analyse a été reçue. Nous allons "
+            "examiner les données de votre course et vous répondre."
+        ),
+        "analysis_privacy_note": (
+            "Vos informations et votre fichier GPX ne seront utilisés "
+            "que pour traiter votre demande d'analyse VTL. Nous ne "
+            "publions pas les données personnelles envoyées sans "
+            "autorisation."
+        ),
+        "analysis_error_generic": "Une erreur s'est produite. Veuillez réessayer.",
+        "analysis_error_required": "Veuillez remplir tous les champs obligatoires.",
+        "analysis_error_email": "Veuillez entrer une adresse email valide.",
+        "analysis_error_gpx_type": "Veuillez téléverser un fichier .gpx.",
+        "analysis_error_gpx_size": "Le fichier GPX est trop volumineux (max. 8 Mo).",
+        "analysis_cta_title": "Vous voulez votre propre analyse ?",
+        "analysis_cta_body": "Découvrez ce que votre course révèle.",
+        "analysis_cta_button": "Obtenez votre Analyse",
+        "home_analysis_title": "Votre Course. Vos Données.",
+        "home_analysis_body": "Obtenez votre propre analyse de performance VTL basée sur les données de votre course.",
     },
 }

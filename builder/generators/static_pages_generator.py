@@ -1,6 +1,6 @@
 """
-Renders the pages with no per-item data: /about/ and /search/, for a
-given locale.
+Renders the pages with no per-item data: /about/, /search/ and
+/analysis/, for a given locale.
 """
 from builder.env import env, write_page, out_path, ROOT_DIR
 
@@ -28,6 +28,10 @@ def generate(loc: dict, t: dict) -> None:
     write_page(
         out_path(loc["prefix"], "search/index.html"),
         env.get_template("search.html").render(t=t, locale=loc["code"], page_path="search/"),
+    )
+    write_page(
+        out_path(loc["prefix"], "analysis/index.html"),
+        env.get_template("analysis.html").render(t=t, locale=loc["code"], page_path="analysis/"),
     )
     # Bare "404.html" (not a folder/index.html) so Cloudflare Pages picks it
     # up as this locale's not-found page - it walks up from the missing
