@@ -129,18 +129,14 @@ async function sendNotificationEmail(env, fields, gpxFile) {
   });
 
   if (!res.ok) {
-    // Visible only in Cloudflare's own Function logs (dashboard -> your
-    // Pages project -> the deployment -> Logs, or `wrangler pages
-    // deployment tail`) - never sent back to the client. This is almost
-    // always either an invalid RESEND_API_KEY or the "from" domain
-    // (vertlabs.run) not yet verified in Resend.
     const errorBody = await res.text().catch(function () {
       return "(could not read response body)";
     });
     console.error("Resend API error", res.status, errorBody);
+    return { ok: false, detail: "Resend " + res.status + ": " + errorBody };
   }
 
-  return res.ok;
+  return { ok: true, detail: null };
 }
 
 export async function onRequestPost(context) {
@@ -197,20 +193,23 @@ export async function onRequestPost(context) {
   }
 
   if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL) {
-    console.error(
-      "Missing env var(s):",
-      !env.RESEND_API_KEY ? "RESEND_API_KEY " : "",
-      !env.NOTIFY_EMAIL ? "NOTIFY_EMAIL" : ""
-    );
-    return jsonResponse({ success: false, error: "server_error" }, 500);
+    const missing = (!env.RESEND_API_KEY ? "RESEND_API_KEY " : "") + (!env.NOTIFY_EMAIL ? "NOTIFY_EMAIL" : "");
+    console.error("Missing env var(s):", missing);
+    // TEMP_DEBUG: remove the `debug` field below before going to
+    // production - it's only here so setup issues can be diagnosed
+    // without paid Cloudflare log access, on staging, with no real
+    // users hitting this endpoint yet.
+    return jsonResponse({ success: false, error: "server_error", debug: "Missing env var(s): " + missing }, 500);
   }
 
-  const emailed = await sendNotificationEmail(env, fields, gpxFile).catch(function (err) {
+  const emailResult = await sendNotificationEmail(env, fields, gpxFile).catch(function (err) {
     console.error("sendNotificationEmail threw:", err && err.message);
-    return false;
+    return { ok: false, detail: "threw: " + (err && err.message) };
   });
-  if (!emailed) {
-    return jsonResponse({ success: false, error: "server_error" }, 500);
+  if (!emailResult.ok) {
+    // TEMP_DEBUG: same as above - drop `debug` once this is confirmed
+    // working, so a real production error never echoes internal details.
+    return jsonResponse({ success: false, error: "server_error", debug: emailResult.detail }, 500);
   }
 
   return jsonResponse({ success: true });
