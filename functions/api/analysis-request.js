@@ -20,7 +20,13 @@
 //                         builder/env.py (not a secret, safe in git).
 //   RESEND_API_KEY        secret - from https://resend.com (free tier
 //                         is enough for this volume). Verify the
-//                         vertlabs.run sending domain there first.
+//                         notify.vertlabs.run sending SUBdomain there
+//                         first (kept separate from the vertlabs.run
+//                         root domain so it can't collide with Migadu's
+//                         MX records for real mailboxes there) - the
+//                         "from" address below must match whatever
+//                         domain you actually verified in Resend, or
+//                         every send fails with a 403.
 //   NOTIFY_EMAIL          plain var - where the notification (with the
 //                         GPX attached) lands. Your choice of inbox -
 //                         doesn't have to be hello@vertlabs.run.
@@ -114,7 +120,7 @@ async function sendNotificationEmail(env, fields, gpxFile) {
       authorization: "Bearer " + env.RESEND_API_KEY,
     },
     body: JSON.stringify({
-      from: "Vertical Trail Labs <hello@vertlabs.run>",
+      from: "Vertical Trail Labs <hello@notify.vertlabs.run>",
       to: [env.NOTIFY_EMAIL],
       reply_to: fields.email,
       subject: "VTL Analysis Request — " + fields.name + " — " + fields.race,

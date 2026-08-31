@@ -28,9 +28,15 @@ All of this is done once, in the Cloudflare dashboard for the
      Turnstile site keys are meant to be public.
    - Secret Key: set as the `TURNSTILE_SECRET_KEY` env var below.
 
-2. **Resend** (email). Create a free account at resend.com, verify the
-   `vertlabs.run` sending domain (Resend walks you through the DNS
-   records), then create an API key.
+2. **Resend** (email). Create a free account at resend.com, verify a
+   sending domain there (Resend walks you through the DNS records) -
+   **use a subdomain** like `notify.vertlabs.run` rather than the bare
+   `vertlabs.run`, so it can never collide with your real mailboxes'
+   MX records (e.g. Migadu). Then create an API key **in that same
+   Resend project**. The `from` address in
+   `functions/api/analysis-request.js` must exactly match whatever
+   domain you verified - if you use a different subdomain, update that
+   line too.
 
 3. **Environment variables.** Pages project -> Settings -> Environment
    variables, for the **Production** environment (and Preview too, if
