@@ -255,5 +255,66 @@ carreras afectadas para recuperar las 9 páginas perdidas.
 
 ---
 
+## VPI/DMI inflado en tramos con terreno corto e irregular (subida/bajada corta escondida en un tramo largo)
+**Estado:** causa identificada y mitigada con un flag visual (2026-08-31) — no corregido de raíz
+
+**Descripción:** mismo mecanismo de fondo que el issue de arriba ("ER da
+valores inflados"), pero en el VPI/DMI **por tramo** (el gráfico
+interactivo del informe de cada corredor, `calculate_indices_by_segment`
+en `app.py`). Entre dos checkpoints no se sabe en qué punto exacto
+empezó/terminó una subida o bajada real — el motor lo **estima**
+repartiendo el tiempo del corredor en ese tramo proporcional al
+"esfuerzo" (distancia + desnivel/100) de la parte empinada vs. el tramo
+completo. Cuando la parte empinada es corta pero con desnivel
+concentrado, comparada con la distancia total del tramo, esa porción de
+tiempo estimada se vuelve chica y termina dividiendo por muy poco tiempo
+- inflando el VPI/DMI de ese tramo puntual sin que el corredor haya
+hecho nada extraordinario ahí.
+
+**Confirmado offline** (sin acceso a LiveTrail) reconstruyendo
+`calculate_indices_by_segment` verbatim y probándola con un tramo
+sintético de checkpoint (6.9km) con una subida corta y empinada seguida
+de una bajada larga y suave — el mismo patrón que un usuario reportó
+viendo en un informe real (tramo con VPI ≈1875 m/h, muy por encima del
+resto de la carrera). Variando solo qué tan corta/concentrada es la
+subida sintética, el VPI del tramo escala de ~500 m/h (razonable) a
+~1600+ m/h (implausible) sin cambiar el desnivel real ganado - confirma
+que es un artefacto del método de estimación, no la performance real
+del corredor.
+
+**Impacto:** el VPI/DMI **global** de toda la carrera es bastante más
+robusto (promedia muchos tramos), pero el valor de un tramo puntual en
+el gráfico puede estar inflado - visualmente se veía como un pico
+aislado sin ninguna indicación de que ese punto es menos confiable que
+el resto.
+
+**Mitigación implementada:** `calculate_indices_by_segment` ahora marca
+cada tramo con `VPI Reliable`/`DMI Reliable` (booleano), en `False`
+cuando: (a) el "share" de esfuerzo en que se basa la estimación de
+tiempo es menor a `LOW_EFFORT_SHARE_THRESHOLD` (15% - la estimación
+descansa en una porción demasiado chica del tramo para confiar en ella)
+o (b) el valor resultante supera `VPI_PLAUSIBILITY_CEILING` (1500 m/h) /
+`DMI_PLAUSIBILITY_CEILING` (20 km/h) - más allá de lo que un corredor
+sostiene realmente en terreno real. Los tramos marcados como no
+confiables se resaltan en el gráfico (`build_runner_analysis_bundle`)
+con un punto en otro color (rombo rojo) y un tooltip: "Approximate value
+— short/irregular terrain within this checkpoint segment". Como
+`build_full_runner_report_html` usa las mismas figuras, el resaltado
+también aparece en el informe HTML público (embebido en el sitio vía
+iframe), no solo en la vista de Streamlit.
+
+**Próximos pasos (si se retoma):** la corrección de raíz sería usar el
+GPX propio del corredor (con timestamp real por punto, ya hay
+scaffolding parcial en `process_runner_gpx_with_time`/
+`build_runner_slope_windows`) en vez de estimar por reparto de tiempo -
+elimina la necesidad de estimar del todo para quien suba su GPX personal
+(conecta directo con el formulario "Get Your VTL Analysis" del sitio
+público). Los umbrales de plausibilidad (`LOW_EFFORT_SHARE_THRESHOLD`,
+`VPI_PLAUSIBILITY_CEILING`, `DMI_PLAUSIBILITY_CEILING`) son ajustables
+sin tocar el resto de la lógica si en la práctica marcan de más/de
+menos.
+
+---
+
 <!-- Agregar nuevos issues debajo, con el mismo formato: título, Estado,
      Descripción, Impacto, Próximos pasos. -->

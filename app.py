@@ -40,6 +40,18 @@ MODERATE_SLOPE_MIN = 5            # between 5% and 12% = moderate climb/descent
 MODERATE_SLOPE_MAX = 12
 ALTITUDE_THRESHOLD = 1800         # meters above sea level
 
+# Per-segment VPI/DMI reliability flags (see docs/05-known-issues.md,
+# "VPI/DMI inflado en tramos con terreno corto e irregular"). The
+# checkpoint-to-checkpoint effort-share time allocation in
+# calculate_indices_by_segment() is only an estimate - it gets noisy
+# when the qualifying climb/descent is a short, steep sliver of a much
+# longer segment. Flag those instead of hiding them: a segment is
+# marked unreliable when its effort-share is too thin to trust, or the
+# resulting rate is past what's physically plausible on real terrain.
+LOW_EFFORT_SHARE_THRESHOLD = 15   # % - below this, the time estimate rests on too little of the segment
+VPI_PLAUSIBILITY_CEILING = 1500   # m/h - beyond real sustained climbing rates on trail
+DMI_PLAUSIBILITY_CEILING = 20     # km/h - beyond real sustained technical-descent running speed
+
 # Consistent color palette shared by the effort map and the bar chart
 SLOPE_CATEGORY_COLORS = {
     "Strong Climb (≥12%)": "#ff4b4b",
@@ -689,6 +701,25 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
                     descent_time_h = segment_time_h * descent_effort_share
                     dmi_raw = descent_dist_km / descent_time_h if descent_time_h > 0 else None
 
+        # A segment's VPI/DMI estimate is flagged (not dropped) when the
+        # effort-share the whole rate is built on is too thin to trust, or
+        # the resulting rate is past what's physically plausible - almost
+        # always a short/steep climb or descent tucked inside a much
+        # longer, gentler checkpoint segment. See the constants above and
+        # docs/05-known-issues.md.
+        vpi_reliable = None
+        if vpi_raw is not None:
+            vpi_reliable = not (
+                (climb_effort_share is not None and climb_effort_share * 100 < LOW_EFFORT_SHARE_THRESHOLD)
+                or vpi_raw > VPI_PLAUSIBILITY_CEILING
+            )
+        dmi_reliable = None
+        if dmi_raw is not None:
+            dmi_reliable = not (
+                (descent_effort_share is not None and descent_effort_share * 100 < LOW_EFFORT_SHARE_THRESHOLD)
+                or dmi_raw > DMI_PLAUSIBILITY_CEILING
+            )
+
         rows.append({
             "Segment": f"P{p_start}→P{p_end}",
             "Start Km": km_start,
@@ -697,8 +728,10 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
             "Runner Time (h)": round(segment_time_h, 2) if segment_time_h is not None else None,
             "Climb Effort Share (%)": round(climb_effort_share * 100, 1) if climb_effort_share is not None else None,
             "VPI Raw (m/h)": round(vpi_raw, 1) if vpi_raw is not None else None,
+            "VPI Reliable": vpi_reliable,
             "Descent Effort Share (%)": round(descent_effort_share * 100, 1) if descent_effort_share is not None else None,
             "DMI Raw (km/h)": round(dmi_raw, 2) if dmi_raw is not None else None,
+            "DMI Reliable": dmi_reliable,
         })
 
     df_segments_out = pd.DataFrame(rows)
@@ -1232,6 +1265,19 @@ def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km,
         text=df_segment_degradation["Segment"],
         hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h<extra></extra>",
     ))
+    vpi_flagged = df_segment_degradation[df_segment_degradation["VPI Reliable"] == False]  # noqa: E712 (pandas bool mask, not Python bool)
+    if not vpi_flagged.empty:
+        fig_vpi.add_trace(go.Scatter(
+            x=vpi_flagged["End Km"], y=vpi_flagged["VPI Raw (m/h)"],
+            mode="markers", name="Approximate (irregular terrain)",
+            marker=dict(color="#f85149", size=13, symbol="diamond", line=dict(width=2, color="#0d1117")),
+            text=vpi_flagged["Segment"],
+            hovertemplate=(
+                "%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h"
+                "<br>⚠ Approximate value — short/irregular terrain within this checkpoint segment"
+                "<extra></extra>"
+            ),
+        ))
     fig_vpi.update_layout(
         template="plotly_dark", xaxis_title="Accumulated Km", yaxis_title="VPI (m/h)",
         height=380, hovermode="x unified",
@@ -1245,6 +1291,19 @@ def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km,
         text=df_segment_degradation["Segment"],
         hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h<extra></extra>",
     ))
+    dmi_flagged = df_segment_degradation[df_segment_degradation["DMI Reliable"] == False]  # noqa: E712
+    if not dmi_flagged.empty:
+        fig_dmi.add_trace(go.Scatter(
+            x=dmi_flagged["End Km"], y=dmi_flagged["DMI Raw (km/h)"],
+            mode="markers", name="Approximate (irregular terrain)",
+            marker=dict(color="#f85149", size=13, symbol="diamond", line=dict(width=2, color="#0d1117")),
+            text=dmi_flagged["Segment"],
+            hovertemplate=(
+                "%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h"
+                "<br>⚠ Approximate value — short/irregular terrain within this checkpoint segment"
+                "<extra></extra>"
+            ),
+        ))
     fig_dmi.update_layout(
         template="plotly_dark", xaxis_title="Accumulated Km", yaxis_title="DMI (km/h)",
         height=380, hovermode="x unified",
