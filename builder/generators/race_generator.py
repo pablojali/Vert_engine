@@ -58,15 +58,8 @@ def _build_events(races: list[dict], loc: dict) -> list[dict]:
     events = []
     for year_dir, distances in groups.items():
         distances = sorted(distances, key=lambda r: r.get("distance_km") or 0)
-        # The event's own identity comes from its LARGEST distance, not
-        # its smallest: a companion race with its own distinct display
-        # name (e.g. CCC, a 100km distance run the same week as UTMB's
-        # own ~148-174km race) shouldn't rename the whole event hub after
-        # itself just for sorting first. The flagship/longest distance is
-        # what a multi-distance week is actually known by.
-        main_race = max(distances, key=lambda r: r.get("distance_km") or 0)
-        name = main_race.get("name", "")
-        year = main_race.get("year", 0)
+        name = distances[0].get("name", "")
+        year = distances[0].get("year", 0)
         slug = _slugify(f"{name}-{year}")
         icon = _find_event_icon(year_dir, slug)
         events.append({
