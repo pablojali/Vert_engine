@@ -40,7 +40,7 @@
   <h2>{{ t.athlete_profile_title }}</h2>
   {% if athlete.profile_race_count > 0 %}
   <div class="vtl-profile-section">
-    <div class="radar-chart-wrap">{{ athlete.radar_svg | safe }}</div>
+    <button type="button" class="radar-chart-wrap" data-radar-trigger aria-label="{{ t.radar_expand }}">{{ athlete.radar_svg | safe }}</button>
     <div class="vtl-profile-details">
       <ul class="stats-list">
         <li><span class="stat-label metric-vpi">VPI<small>{{ t.athlete_profile_vpi_caption }}</small></span><span class="stat-value metric-vpi">{{ athlete.career_avg.vpi if athlete.career_avg.vpi is not none else '—' }}</span></li>
