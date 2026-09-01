@@ -272,9 +272,8 @@ Ultra Trail by UTMB) sigue emparejando correctamente.
 ---
 
 ## Slug de `race.json` sin distancia colisiona con otra distancia o con el event hub
-**Estado:** causa raíz confirmada con un caso real de pérdida de datos +
-fix parcial aplicado (2026-09-01) — quedan 6 carreras ya publicadas por
-corregir a mano
+**Estado:** resuelto (2026-09-01) — las 7 carreras afectadas corregidas
+y republicadas, guard estructural agregado para que no vuelva a pasar
 
 **Actualización (2026-09-01):** esto dejó de ser un riesgo teórico. Los
 20 corredores de CCC exportados vía "Top Runners" quedaron guardados
@@ -321,16 +320,32 @@ función `_find_slug_collision()` que:
    sigue colisionando con otra carrera, **bloquea el export** con un
    error explícito en vez de dejarlo pisar la otra carrera en silencio.
 
-Esto evita que el mismo problema vuelva a ocurrir con una carrera nueva,
-pero no corrige retroactivamente las 6 carreras ya publicadas con
-colisión (ver detalle original abajo) - siguen perdiendo página/media
-cada vez que se publica, hasta que se las corrija a mano una por una,
-igual que se hizo con CCC.
+**Las 6 carreras restantes, corregidas (2026-09-01):** mismo tratamiento
+que CCC - slug propio con la distancia agregada, `race.json` +
+`profile.json` de cada atleta actualizados, republicado y verificado con
+un rebuild completo (cero warnings de colisión, cada distancia y cada
+event hub generan su propia página/media intactas):
+- Eiger Ultra Trail 101k → `eiger-ultra-trail-2026-101k`
+- Marathon du Mont Blanc 42k/90k → `marathon-du-mont-blanc-2026-42k` /
+  `-90k` (era colisión triple: entre sí Y con el event hub)
+- Monterosa Walserwaeg 90k → `monterosa-walserwaeg-90k` (mismo patrón
+  que el 120k, que ya estaba bien)
+- Trail du Saint-Jacques by UTMB 86k → `trail-du-saint-jacques-by-utmb-2026-86k`
+- Trail Verbier St-Bernard 77k/140k → `-77k` / `-140k`
+- UTMB Mont Blanc 2025 100k/174k → `-100k` / `-174k`
+- UTMB Mont Blanc 2026 148k → `-148k` (una séptima colisión, expuesta
+  recién al arreglar CCC - antes quedaba tapada por la colisión más
+  grande entre 148k y CCC/100k)
+
+El guard en "Exportar a Web" (arriba) evita que una carrera nueva vuelva
+a caer en esto.
 
 ---
 
 ### Detalle original (2026-08-21)
-**Estado:** detectado y advertido en build (2026-08-21), sin corregir — pendiente para más adelante (decisión del usuario)
+**Estado:** resuelto, ver arriba (2026-09-01) — quedó documentado igual
+como referencia de las 9 páginas originalmente pisadas y del porqué del
+fix elegido
 
 **Descripción:** distinto del issue de "Colisión de slug/carpeta" de arriba
 (ese es sobre el emparejamiento de carpeta en "Exportar a Web"/el registry;
