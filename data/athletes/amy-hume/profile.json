@@ -6,7 +6,7 @@
   "portrait": null,
   "races": [
     {
-      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_slug": "trail-verbier-st-bernard-2026-140k",
       "race_name": "Trail Verbier St-Bernard",
       "year": 2026,
       "distance_km": 137.9857218827645,
@@ -16,7 +16,7 @@
       "vpi": 557.2,
       "dmi": 6.96,
       "er": 65.6,
-      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/amy-hume/report.html"
+      "report": "/media/races/trail-verbier-st-bernard-2026-140k/charts/runners/amy-hume/report.html"
     }
   ],
   "career_avg": {

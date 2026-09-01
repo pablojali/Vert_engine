@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/carina-helmreich/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_slug": "monterosa-walserwaeg-90k",
       "race_name": "Monterosa Walserwaeg by UTMB",
       "year": 2026,
       "distance_km": 80.38031955279868,
@@ -16,7 +16,7 @@
       "vpi": 780.5,
       "dmi": 10.02,
       "er": 73.4,
-      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/carina-helmreich/report.html"
+      "report": "/media/races/monterosa-walserwaeg-90k/charts/runners/carina-helmreich/report.html"
     }
   ],
   "career_avg": {

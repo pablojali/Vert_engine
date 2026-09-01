@@ -1,5 +1,5 @@
 {
-  "slug": "utmb-mont-blanc-2025",
+  "slug": "utmb-mont-blanc-2025-100k",
   "name": "UTMB - Mont Blanc",
   "year": 2025,
   "distance_km": 99.41021421194841,
@@ -21,7 +21,7 @@
       "er": 90.8,
       "pace_first_half": 3.59,
       "pace_second_half": 3.92,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/francesco-puppi/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/francesco-puppi/report.html",
       "charts": []
     },
     {
@@ -36,7 +36,7 @@
       "er": 88.6,
       "pace_first_half": 3.6,
       "pace_second_half": 4.01,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/david-sinclair/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/david-sinclair/report.html",
       "charts": []
     },
     {
@@ -51,7 +51,7 @@
       "er": 88.0,
       "pace_first_half": 3.6,
       "pace_second_half": 4.03,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/drew-holmen/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/drew-holmen/report.html",
       "charts": []
     },
     {
@@ -66,7 +66,7 @@
       "er": 90.1,
       "pace_first_half": 3.7,
       "pace_second_half": 4.06,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/arnaud-bonin/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/arnaud-bonin/report.html",
       "charts": []
     },
     {
@@ -81,7 +81,7 @@
       "er": 86.3,
       "pace_first_half": 3.64,
       "pace_second_half": 4.14,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/jeshurun-small/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/jeshurun-small/report.html",
       "charts": []
     },
     {
@@ -96,7 +96,7 @@
       "er": 83.9,
       "pace_first_half": 3.61,
       "pace_second_half": 4.19,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/guangfu-meng/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/guangfu-meng/report.html",
       "charts": []
     },
     {
@@ -111,7 +111,7 @@
       "er": 82.4,
       "pace_first_half": 3.6,
       "pace_second_half": 4.23,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/eli-hemming/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/eli-hemming/report.html",
       "charts": []
     },
     {
@@ -126,7 +126,7 @@
       "er": 86.1,
       "pace_first_half": 3.68,
       "pace_second_half": 4.19,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/loic-rolland/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/loic-rolland/report.html",
       "charts": []
     },
     {
@@ -141,7 +141,7 @@
       "er": 87.6,
       "pace_first_half": 3.73,
       "pace_second_half": 4.19,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/mario-olmedo-sancha/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/mario-olmedo-sancha/report.html",
       "charts": []
     },
     {
@@ -156,7 +156,7 @@
       "er": 87.0,
       "pace_first_half": 3.74,
       "pace_second_half": 4.22,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/guidu-qin/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/guidu-qin/report.html",
       "charts": []
     },
     {
@@ -171,7 +171,7 @@
       "er": 79.0,
       "pace_first_half": 3.63,
       "pace_second_half": 4.39,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreas-reiterer/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/andreas-reiterer/report.html",
       "charts": []
     },
     {
@@ -186,7 +186,7 @@
       "er": 90.4,
       "pace_first_half": 3.88,
       "pace_second_half": 4.26,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/canhua-luo/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/canhua-luo/report.html",
       "charts": []
     },
     {
@@ -201,7 +201,7 @@
       "er": 81.9,
       "pace_first_half": 3.71,
       "pace_second_half": 4.39,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/nicholas-handel/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/nicholas-handel/report.html",
       "charts": []
     },
     {
@@ -216,7 +216,7 @@
       "er": 82.2,
       "pace_first_half": 3.74,
       "pace_second_half": 4.4,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/morten-antonsen/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/morten-antonsen/report.html",
       "charts": []
     },
     {
@@ -231,7 +231,7 @@
       "er": 75.9,
       "pace_first_half": 3.63,
       "pace_second_half": 4.5,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/anthony-costales/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/anthony-costales/report.html",
       "charts": []
     },
     {
@@ -246,7 +246,7 @@
       "er": 85.9,
       "pace_first_half": 3.83,
       "pace_second_half": 4.37,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreas-rieder/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/andreas-rieder/report.html",
       "charts": []
     },
     {
@@ -261,7 +261,7 @@
       "er": 82.7,
       "pace_first_half": 3.79,
       "pace_second_half": 4.45,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/davide-cheraz/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/davide-cheraz/report.html",
       "charts": []
     },
     {
@@ -276,7 +276,7 @@
       "er": 86.0,
       "pace_first_half": 3.87,
       "pace_second_half": 4.41,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/stian-dahl-sommerseth/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/stian-dahl-sommerseth/report.html",
       "charts": []
     },
     {
@@ -291,7 +291,7 @@
       "er": 73.6,
       "pace_first_half": 3.64,
       "pace_second_half": 4.6,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/simon-paccard/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/simon-paccard/report.html",
       "charts": []
     },
     {
@@ -306,7 +306,7 @@
       "er": 73.1,
       "pace_first_half": 3.65,
       "pace_second_half": 4.63,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreu-simon-aymerich/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/andreu-simon-aymerich/report.html",
       "charts": []
     },
     {
@@ -321,7 +321,7 @@
       "er": 84.9,
       "pace_first_half": 4.03,
       "pace_second_half": 4.64,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/martyna-mlynarczyk/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/martyna-mlynarczyk/report.html",
       "charts": []
     },
     {
@@ -336,7 +336,7 @@
       "er": 87.4,
       "pace_first_half": 4.09,
       "pace_second_half": 4.6,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/sylvia-nordskar/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/sylvia-nordskar/report.html",
       "charts": []
     },
     {
@@ -351,7 +351,7 @@
       "er": 86.8,
       "pace_first_half": 4.09,
       "pace_second_half": 4.63,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/anna-tarasova/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/anna-tarasova/report.html",
       "charts": []
     },
     {
@@ -366,7 +366,7 @@
       "er": 81.1,
       "pace_first_half": 4.02,
       "pace_second_half": 4.78,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/blandine-l-hirondel/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/blandine-l-hirondel/report.html",
       "charts": []
     },
     {
@@ -381,7 +381,7 @@
       "er": 85.0,
       "pace_first_half": 4.14,
       "pace_second_half": 4.76,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/veronika-leng/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/veronika-leng/report.html",
       "charts": []
     },
     {
@@ -396,7 +396,7 @@
       "er": 90.8,
       "pace_first_half": 4.28,
       "pace_second_half": 4.68,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/lotti-brinks/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/lotti-brinks/report.html",
       "charts": []
     },
     {
@@ -411,7 +411,7 @@
       "er": 88.1,
       "pace_first_half": 4.3,
       "pace_second_half": 4.81,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/robyn-lesh/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/robyn-lesh/report.html",
       "charts": []
     },
     {
@@ -426,7 +426,7 @@
       "er": 81.0,
       "pace_first_half": 4.19,
       "pace_second_half": 4.98,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/julie-roux/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/julie-roux/report.html",
       "charts": []
     },
     {
@@ -441,7 +441,7 @@
       "er": 89.1,
       "pace_first_half": 4.48,
       "pace_second_half": 4.97,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/jingyan-tang/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/jingyan-tang/report.html",
       "charts": []
     },
     {
@@ -456,7 +456,7 @@
       "er": 85.0,
       "pace_first_half": 4.39,
       "pace_second_half": 5.05,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/allison-baca/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/allison-baca/report.html",
       "charts": []
     },
     {
@@ -471,7 +471,7 @@
       "er": 88.6,
       "pace_first_half": 4.49,
       "pace_second_half": 5.0,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/giuditta-turini/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/giuditta-turini/report.html",
       "charts": []
     },
     {
@@ -486,7 +486,7 @@
       "er": 79.8,
       "pace_first_half": 4.3,
       "pace_second_half": 5.18,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/eleanor-davis/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/eleanor-davis/report.html",
       "charts": []
     },
     {
@@ -501,7 +501,7 @@
       "er": 89.4,
       "pace_first_half": 4.55,
       "pace_second_half": 5.03,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/fuzhao-xiang/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/fuzhao-xiang/report.html",
       "charts": []
     },
     {
@@ -516,7 +516,7 @@
       "er": 83.3,
       "pace_first_half": 4.41,
       "pace_second_half": 5.14,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/lea-duhet/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/lea-duhet/report.html",
       "charts": []
     },
     {
@@ -531,7 +531,7 @@
       "er": 93.6,
       "pace_first_half": 4.71,
       "pace_second_half": 5.01,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/fiona-pascall/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/fiona-pascall/report.html",
       "charts": []
     },
     {
@@ -546,7 +546,7 @@
       "er": 78.2,
       "pace_first_half": 4.34,
       "pace_second_half": 5.29,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/hau-ha-thi/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/hau-ha-thi/report.html",
       "charts": []
     },
     {
@@ -561,7 +561,7 @@
       "er": 82.9,
       "pace_first_half": 4.52,
       "pace_second_half": 5.29,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/lingjie-chi/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/lingjie-chi/report.html",
       "charts": []
     },
     {
@@ -576,7 +576,7 @@
       "er": 87.9,
       "pace_first_half": 4.64,
       "pace_second_half": 5.2,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/anna-fisher/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/anna-fisher/report.html",
       "charts": []
     },
     {
@@ -591,7 +591,7 @@
       "er": 84.7,
       "pace_first_half": 4.58,
       "pace_second_half": 5.29,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/emily-schmitz/report.html",
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/emily-schmitz/report.html",
       "charts": []
     }
   ]

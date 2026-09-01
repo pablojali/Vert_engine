@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/julien-bouyoud/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-148k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 148.36032945474318,
@@ -16,7 +16,7 @@
       "vpi": 847.0,
       "dmi": 9.81,
       "er": 74.2,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/julien-bouyoud/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-148k/charts/runners/julien-bouyoud/report.html"
     }
   ],
   "career_avg": {

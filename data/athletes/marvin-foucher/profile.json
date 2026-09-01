@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/marvin-foucher/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-148k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 148.36032945474318,
@@ -16,7 +16,7 @@
       "vpi": 797.9,
       "dmi": 9.71,
       "er": 75.9,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/marvin-foucher/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-148k/charts/runners/marvin-foucher/report.html"
     }
   ],
   "career_avg": {

@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/andreu-simon-aymerich/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2025",
+      "race_slug": "utmb-mont-blanc-2025-100k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2025,
       "distance_km": 99.41021421194841,
@@ -15,7 +15,7 @@
       "vpi": 1071.2,
       "dmi": 12.49,
       "er": 73.1,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreu-simon-aymerich/report.html"
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/andreu-simon-aymerich/report.html"
     }
   ],
   "career_avg": {

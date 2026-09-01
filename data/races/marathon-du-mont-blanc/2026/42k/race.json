@@ -1,5 +1,5 @@
 {
-  "slug": "marathon-du-mont-blanc-2026",
+  "slug": "marathon-du-mont-blanc-2026-42k",
   "name": "Marathon du Mont Blanc",
   "year": 2026,
   "distance_km": 43.69851227375547,
@@ -21,7 +21,7 @@
       "er": 84.8,
       "pace_first_half": 2.79,
       "pace_second_half": 3.21,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/remi-bonnet/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/remi-bonnet/report.html",
       "charts": []
     },
     {
@@ -36,7 +36,7 @@
       "er": 83.2,
       "pace_first_half": 2.8,
       "pace_second_half": 3.27,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/frederic-tranchand/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/frederic-tranchand/report.html",
       "charts": []
     },
     {
@@ -51,7 +51,7 @@
       "er": 85.7,
       "pace_first_half": 2.92,
       "pace_second_half": 3.33,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/manuel-merillas-moledo/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/manuel-merillas-moledo/report.html",
       "charts": []
     },
     {
@@ -66,7 +66,7 @@
       "er": 77.3,
       "pace_first_half": 2.86,
       "pace_second_half": 3.51,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/adrien-briffod/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/adrien-briffod/report.html",
       "charts": []
     },
     {
@@ -81,7 +81,7 @@
       "er": 72.2,
       "pace_first_half": 2.79,
       "pace_second_half": 3.57,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/kevin-kibet/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/kevin-kibet/report.html",
       "charts": []
     },
     {
@@ -96,7 +96,7 @@
       "er": 80.2,
       "pace_first_half": 2.96,
       "pace_second_half": 3.55,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/antonio-martinez-perez/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/antonio-martinez-perez/report.html",
       "charts": []
     },
     {
@@ -111,7 +111,7 @@
       "er": 86.2,
       "pace_first_half": 3.07,
       "pace_second_half": 3.5,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/loic-robert/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/loic-robert/report.html",
       "charts": []
     },
     {
@@ -126,7 +126,7 @@
       "er": 75.4,
       "pace_first_half": 2.92,
       "pace_second_half": 3.64,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/corbera-rubio-miquel/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/corbera-rubio-miquel/report.html",
       "charts": []
     },
     {
@@ -141,7 +141,7 @@
       "er": 72.7,
       "pace_first_half": 2.89,
       "pace_second_half": 3.68,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/sammy-rotich-chelangat/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/sammy-rotich-chelangat/report.html",
       "charts": []
     },
     {
@@ -156,7 +156,7 @@
       "er": 75.5,
       "pace_first_half": 2.94,
       "pace_second_half": 3.66,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/pierre-galbourdin/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/pierre-galbourdin/report.html",
       "charts": []
     },
     {
@@ -171,7 +171,7 @@
       "er": 87.3,
       "pace_first_half": 3.12,
       "pace_second_half": 3.51,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/tove-alexandersson/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/tove-alexandersson/report.html",
       "charts": []
     },
     {
@@ -186,7 +186,7 @@
       "er": 83.4,
       "pace_first_half": 3.36,
       "pace_second_half": 3.92,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/ida-amelie-robsahm/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/ida-amelie-robsahm/report.html",
       "charts": []
     },
     {
@@ -201,7 +201,7 @@
       "er": 84.9,
       "pace_first_half": 3.42,
       "pace_second_half": 3.94,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/naomi-lang/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/naomi-lang/report.html",
       "charts": []
     },
     {
@@ -216,7 +216,7 @@
       "er": 83.4,
       "pace_first_half": 3.59,
       "pace_second_half": 4.18,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/emilie-bulle/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/emilie-bulle/report.html",
       "charts": []
     },
     {
@@ -231,7 +231,7 @@
       "er": 77.8,
       "pace_first_half": 3.59,
       "pace_second_half": 4.38,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/bianca-tarboton/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/bianca-tarboton/report.html",
       "charts": []
     },
     {
@@ -246,7 +246,7 @@
       "er": 71.0,
       "pace_first_half": 3.35,
       "pace_second_half": 4.32,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/agnes-josefsson/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/agnes-josefsson/report.html",
       "charts": []
     },
     {
@@ -261,7 +261,7 @@
       "er": 68.2,
       "pace_first_half": 3.48,
       "pace_second_half": 4.59,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/kirsten-de-baey-ruszin/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/kirsten-de-baey-ruszin/report.html",
       "charts": []
     },
     {
@@ -276,7 +276,7 @@
       "er": 77.8,
       "pace_first_half": 3.67,
       "pace_second_half": 4.48,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/anais-chevalier-bouchet/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/anais-chevalier-bouchet/report.html",
       "charts": []
     },
     {
@@ -291,7 +291,7 @@
       "er": 78.0,
       "pace_first_half": 3.71,
       "pace_second_half": 4.53,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/holly-wootten/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/holly-wootten/report.html",
       "charts": []
     },
     {
@@ -306,7 +306,7 @@
       "er": 80.5,
       "pace_first_half": 3.77,
       "pace_second_half": 4.51,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/camille-poquet/report.html",
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/camille-poquet/report.html",
       "charts": []
     }
   ]

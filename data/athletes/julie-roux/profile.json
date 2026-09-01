@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/julie-roux/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2025",
+      "race_slug": "utmb-mont-blanc-2025-100k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2025,
       "distance_km": 99.41021421194841,
@@ -15,7 +15,7 @@
       "vpi": 966.0,
       "dmi": 11.48,
       "er": 81.0,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/julie-roux/report.html"
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/julie-roux/report.html"
     }
   ],
   "career_avg": {

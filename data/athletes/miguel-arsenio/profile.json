@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/miguel-arsenio/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_slug": "marathon-du-mont-blanc-2026-90k",
       "race_name": "Marathon du Mont Blanc",
       "year": 2026,
       "distance_km": 86.90286418650041,
@@ -15,7 +15,7 @@
       "vpi": 1059.3,
       "dmi": 11.96,
       "er": 83.5,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/miguel-arsenio/report.html"
+      "report": "/media/races/marathon-du-mont-blanc-2026-90k/charts/runners/miguel-arsenio/report.html"
     },
     {
       "race_slug": "utmb-mont-blanc-2026-ccc",

@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/fuzhao-xiang/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2025",
+      "race_slug": "utmb-mont-blanc-2025-100k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2025,
       "distance_km": 99.41021421194841,
@@ -15,7 +15,7 @@
       "vpi": 907.7,
       "dmi": 11.52,
       "er": 89.4,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/fuzhao-xiang/report.html"
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/fuzhao-xiang/report.html"
     }
   ],
   "career_avg": {
