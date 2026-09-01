@@ -99,6 +99,8 @@ TRANSLATIONS = {
         "about_vpi_title": "VPI — Vertical Power Index",
         "video_vpi_label": "Watch: how VPI works",
         "video_close": "Close video",
+        "radar_expand": "Enlarge chart",
+        "radar_close": "Close chart",
         "about_vpi_desc": (
             "Meters of elevation gain per hour, measured only on strong-climb "
             "segments (slope ≥12%). Measures pure climbing efficiency and "
@@ -333,6 +335,8 @@ TRANSLATIONS = {
         "about_vpi_title": "VPI — Vertical Power Index",
         "video_vpi_label": "Ver: cómo funciona el VPI",
         "video_close": "Cerrar video",
+        "radar_expand": "Ampliar gráfico",
+        "radar_close": "Cerrar gráfico",
         "about_vpi_desc": (
             "Metros de desnivel positivo por hora, medidos únicamente en los "
             "tramos de fuerte pendiente (≥12%). Mide la eficiencia y potencia "
@@ -571,6 +575,8 @@ TRANSLATIONS = {
         "about_vpi_title": "VPI — Vertical Power Index",
         "video_vpi_label": "Voir : comment fonctionne le VPI",
         "video_close": "Fermer la vidéo",
+        "radar_expand": "Agrandir le graphique",
+        "radar_close": "Fermer le graphique",
         "about_vpi_desc": (
             "Mètres de dénivelé positif par heure, mesurés uniquement sur "
             "les tronçons à forte pente (≥12%). Mesure l'efficacité pure en "

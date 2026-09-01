@@ -27,8 +27,9 @@
     </button>
   </div>
   <p class="race-meta">{{ race_entry.race_name }} {{ race_entry.year }}</p>
-  <iframe src="{{ race_entry.report }}" class="report-frame" title="{{ athlete.name }} — {{ race_entry.race_name }}" scrolling="no"></iframe>
 
   {% include "_analysis_cta.html" %}
+
+  <iframe src="{{ race_entry.report }}" class="report-frame" title="{{ athlete.name }} — {{ race_entry.race_name }}" scrolling="no"></iframe>
 </article>
 {% endblock %}
