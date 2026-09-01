@@ -5,6 +5,47 @@ documentación — actualizar a mano cuando cambie.
 
 ---
 
+## "Exportar a Web" se perdía si el Engine se reiniciaba antes de Publicar
+**Estado:** resuelto (2026-09-01)
+
+**Descripción:** se cargaron 20 corredores de CCC vía "Top Runners" y se
+exportaron con "🌐 Exportar a Web" (con sus informes HTML) de la forma
+habitual. El Engine (Streamlit Community Cloud) se reinició después del
+export pero antes de tocar "🚀 Publicar a Producción". Al publicar más
+tarde, el log mostró "Sin cambios en data/ - nada para respaldar" desde
+la primera línea, y ninguno de los 20 corredores llegó a GitHub.
+
+Causa raíz: el disco de Streamlit Community Cloud es efímero — un
+reinicio del Engine re-clona el repo desde GitHub en un contenedor
+nuevo, descartando cualquier archivo modificado en disco que no se haya
+commiteado todavía. "Exportar a Web" escribía `race.json`/`profile.json`
+correctamente en el filesystem local, pero el único lugar que
+commiteaba+pusheaba `data/` a GitHub (`_backup_engine_data()`) corría
+exclusivamente dentro de "Publicar a Producción". Si el reinicio caía
+entre el export y el publish, el export quedaba solo en el contenedor
+viejo (ya descartado) y jamás llegaba a git — indistinguible, para
+`_backup_engine_data()`, de "no cambió nada".
+
+**Impacto:** pérdida silenciosa y total de un export (corredores +
+informes HTML) sin ningún mensaje de error en ningún paso — ni al
+exportar (que sí escribió bien en su momento) ni al publicar (que
+correctamente no encontró nada que respaldar, dado el estado del disco
+en ese momento).
+
+**Fix:** `tab_web_export` ahora llama a `_backup_engine_data()`
+inmediatamente después de un export exitoso, en vez de esperar al botón
+de Publicar. El export queda commiteado y pusheado a GitHub apenas se
+escribe, así que un reinicio posterior del Engine — sin importar cuándo
+ocurra — ya no puede borrarlo. Si el respaldo automático falla (ej. sin
+red), se lo avisa explícitamente en pantalla con instrucción de no
+reiniciar el Engine hasta resolverlo.
+
+**Próximos pasos:** ninguno — los 20 corredores de CCC originales no son
+recuperables (nunca llegaron a disco de forma persistente) y deben
+volver a cargarse desde LiveTrail.
+
+---
+
 ## Lavaredo 80K — checkpoint inicial sin datos
 **Estado:** sin resolver
 <!-- TODO: verificar — este item viene de contexto provisto directamente,

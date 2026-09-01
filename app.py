@@ -4303,6 +4303,30 @@ with tab_web_export:
 
                     st.success(f"✅ Exportado. {len(written_paths)} archivo(s) escrito(s):")
                     st.code("\n".join(written_paths))
+
+                    # --- Respaldo inmediato a GitHub: el disco de Streamlit
+                    # Cloud es efímero (un reinicio del Engine re-clona el
+                    # repo desde GitHub, descartando cualquier cambio en
+                    # data/ que no se haya commiteado todavía). Sin este
+                    # respaldo, un export exitoso podía perderse en silencio
+                    # si el Engine se reiniciaba antes de tocar "Publicar a
+                    # Producción" - que era el único lugar que corría este
+                    # mismo backup. Ahora el export queda a salvo apenas se
+                    # escribe, sin depender de un paso posterior. ---
+                    backup_ok, backup_log = _backup_engine_data()
+                    if backup_ok:
+                        st.caption(
+                            "✅ Respaldado en GitHub (Vert_engine) - este export ya no se pierde "
+                            "aunque reiniciés el Engine antes de publicar."
+                        )
+                    else:
+                        st.warning(
+                            "⚠️ Se exportó a disco, pero el respaldo automático a GitHub falló. "
+                            "**No reinicies el Engine** hasta resolver esto o vas a perder el export."
+                        )
+                        with st.expander("Ver detalle del error de respaldo"):
+                            st.code(backup_log)
+
                     if auto_report_failures:
                         with st.expander(f"⚠️ {len(auto_report_failures)} informe(s) no se pudieron generar automáticamente"):
                             for failure in auto_report_failures:
