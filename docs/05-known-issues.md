@@ -5,44 +5,69 @@ documentación — actualizar a mano cuando cambie.
 
 ---
 
-## "Exportar a Web" se perdía si el Engine se reiniciaba antes de Publicar
+## "Exportar a Web" no quedaba respaldado en GitHub hasta el próximo Publish
 **Estado:** resuelto (2026-09-01)
 
-**Descripción:** se cargaron 20 corredores de CCC vía "Top Runners" y se
-exportaron con "🌐 Exportar a Web" (con sus informes HTML) de la forma
-habitual. El Engine (Streamlit Community Cloud) se reinició después del
-export pero antes de tocar "🚀 Publicar a Producción". Al publicar más
-tarde, el log mostró "Sin cambios en data/ - nada para respaldar" desde
-la primera línea, y ninguno de los 20 corredores llegó a GitHub.
-
-Causa raíz: el disco de Streamlit Community Cloud es efímero — un
+**Descripción:** el disco de Streamlit Community Cloud es efímero — un
 reinicio del Engine re-clona el repo desde GitHub en un contenedor
 nuevo, descartando cualquier archivo modificado en disco que no se haya
 commiteado todavía. "Exportar a Web" escribía `race.json`/`profile.json`
 correctamente en el filesystem local, pero el único lugar que
 commiteaba+pusheaba `data/` a GitHub (`_backup_engine_data()`) corría
-exclusivamente dentro de "Publicar a Producción". Si el reinicio caía
-entre el export y el publish, el export quedaba solo en el contenedor
-viejo (ya descartado) y jamás llegaba a git — indistinguible, para
-`_backup_engine_data()`, de "no cambió nada".
+exclusivamente dentro de "Publicar a Producción". Si el Engine se
+reiniciaba entre un export y el próximo publish, ese export se perdía
+por completo, sin ningún error visible en ningún paso (ni al exportar,
+que sí escribió bien en su momento, ni al publicar, que correctamente no
+encontraba nada que respaldar dado el estado del disco en ese momento).
 
-**Impacto:** pérdida silenciosa y total de un export (corredores +
-informes HTML) sin ningún mensaje de error en ningún paso — ni al
-exportar (que sí escribió bien en su momento) ni al publicar (que
-correctamente no encontró nada que respaldar, dado el estado del disco
-en ese momento).
+Nota: se investigó originalmente como posible causa de que a 20
+corredores de CCC no se les haya generado/adjuntado el informe HTML
+(ver issue siguiente), pero el usuario confirmó que en ese caso el
+reinicio fue *antes* de cargar los corredores, y que `race.json`/
+`profile.json` sí llegaron a producción correctamente — así que esta
+issue no es la causa de ese caso puntual. Sigue siendo un gap real y
+vale la pena tenerlo cerrado igual, para el caso general.
 
 **Fix:** `tab_web_export` ahora llama a `_backup_engine_data()`
 inmediatamente después de un export exitoso, en vez de esperar al botón
 de Publicar. El export queda commiteado y pusheado a GitHub apenas se
-escribe, así que un reinicio posterior del Engine — sin importar cuándo
-ocurra — ya no puede borrarlo. Si el respaldo automático falla (ej. sin
-red), se lo avisa explícitamente en pantalla con instrucción de no
-reiniciar el Engine hasta resolverlo.
+escribe, así que un reinicio posterior del Engine ya no puede borrarlo.
+Si el respaldo automático falla, se lo avisa explícitamente en pantalla.
 
-**Próximos pasos:** ninguno — los 20 corredores de CCC originales no son
-recuperables (nunca llegaron a disco de forma persistente) y deben
-volver a cargarse desde LiveTrail.
+---
+
+## Informe HTML no generado/adjuntado para corredores de CCC (Top Runners)
+**Estado:** diagnóstico en curso (2026-09-01)
+
+**Descripción:** se cargaron 20 corredores de CCC vía "🏆 Top Runners".
+`race.json`/`profile.json` se generaron y publicaron correctamente (los
+corredores aparecen en el listado de la carrera y en cada perfil), pero
+el informe HTML completo de cada corredor no se generó ni se adjuntó.
+
+Causa raíz aún no confirmada: la generación del informe
+(`build_full_runner_report_html`) está envuelta en un `except Exception`
+silencioso tanto en "Top Runners" como en "Runner Metrics (LiveTrail)" -
+cualquier error ahí desaparecía sin dejar rastro (solo un caption
+genérico "no se pudo generar su informe", fácil de perder entre 20
+corredores). Sin un traceback real, no se pudo confirmar todavía si el
+problema es algo específico de los datos de CCC (ej. muchos checkpoints,
+un DNF/withdrawn en el lote) o una regresión del cambio reciente al
+flag de confiabilidad relativo de VPI/DMI.
+
+**Impacto:** informes de rendimiento completos ausentes para corredores
+por lo demás correctamente publicados, sin ningún indicio en pantalla de
+qué falló ni por qué.
+
+**Fix parcial aplicado:** se dejó de silenciar la excepción en ambos
+lugares - ahora se guarda el traceback completo y se muestra en un
+expander (`⚠️ N informe(s) no se pudieron generar - ver por qué` en Top
+Runners; advertencia + expander en Runner Metrics). Esto no arregla la
+causa real todavía, pero la próxima vez que ocurra va a mostrar
+exactamente qué excepción la causó.
+
+**Próximos pasos:** volver a cargar (al menos) uno de los bibs de CCC en
+"Top Runners" y revisar el nuevo expander de errores - el traceback que
+muestre es lo que hace falta para arreglar la causa real.
 
 ---
 

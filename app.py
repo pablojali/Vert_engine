@@ -2504,8 +2504,13 @@ with tab_runner_lt:
                     )
                 except Exception:
                     # A report-generation hiccup shouldn't hide the indices/
-                    # charts below, which already computed fine.
+                    # charts below, which already computed fine - but it's
+                    # surfaced instead of swallowed, so a broken report is
+                    # never invisible (this used to fail silently).
                     full_report_html_lt = None
+                    st.warning("⚠️ No se pudo generar el informe completo de este corredor.")
+                    with st.expander("Ver detalle técnico del error"):
+                        st.code(traceback.format_exc(), language="python")
                 _web_export_track_result(
                     selected_race_lt, runner_info_lt, indices_lt, report_html=full_report_html_lt,
                 )
@@ -3000,6 +3005,7 @@ with tab_top:
                         )
                         label = f"{runner_info_bib.get('Name') or ('Bib ' + str(bib))} (Bib {bib})"
                         results[label] = analysis_bib["df_summary"]
+                        report_error_bib = None
                         try:
                             report_html_bib = build_full_runner_report_html(
                                 runner_info=runner_info_bib,
@@ -3013,12 +3019,18 @@ with tab_top:
                             # A report-generation hiccup for this one runner
                             # shouldn't sink their whole fetch - they still get
                             # their VPI/DMI/ER, just without an auto-attached
-                            # report (same as before this existed).
+                            # report (same as before this existed). But the
+                            # failure itself is kept (not swallowed) so it
+                            # shows up below instead of silently vanishing -
+                            # that silence is exactly what let 20 CCC runners'
+                            # reports go missing with zero trace of why.
                             report_html_bib = None
+                            report_error_bib = traceback.format_exc()
                         reports[label] = {
                             "runner_info": runner_info_bib,
                             "indices": analysis_bib["indices"],
                             "report_html": report_html_bib,
+                            "report_error": report_error_bib,
                         }
                         _web_export_track_result(
                             selected_race_top, runner_info_bib, analysis_bib["indices"],
@@ -3152,9 +3164,19 @@ with tab_top:
                     key="dl_top_reports_zip",
                 )
 
+            report_failures_top = {
+                label: report_data["report_error"] for label, report_data in reports.items()
+                if not report_data.get("report_html") and report_data.get("report_error")
+            }
+            if report_failures_top:
+                with st.expander(f"⚠️ {len(report_failures_top)} informe(s) no se pudieron generar - ver por qué"):
+                    for label, tb in report_failures_top.items():
+                        st.markdown(f"**{label}:**")
+                        st.code(tb, language="python")
+
             for i, (label, report_data) in enumerate(reports.items()):
                 if not report_data.get("report_html"):
-                    st.caption(f"⚠️ {label}: no se pudo generar su informe.")
+                    st.caption(f"⚠️ {label}: no se pudo generar su informe (ver detalle arriba).")
                     continue
                 st.download_button(
                     f"📄 {label}",
