@@ -292,11 +292,24 @@ ningún error en ningún paso. `race.json`/`profile.json` de CCC sí
 sobrevivieron porque los datos de los atletas viven en sus propios
 `data/athletes/<slug>/profile.json`, ajenos a esta colisión de media.
 
-**Fix de CCC:** renombrado a slug `utmb-mont-blanc-2026-ccc` / nombre
-"CCC by UTMB" (sigue bajo la carpeta `data/races/utmb-mont-blanc/`, o
-sea vinculada al evento UTMB como corresponde) - `race.json` y los 20
-`profile.json` actualizados, republicado y verificado: ambas distancias
-ahora generan página y media propias sin pisarse.
+**Fix de CCC:** renombrado SOLO el slug a `utmb-mont-blanc-2026-ccc`
+(sigue bajo la carpeta `data/races/utmb-mont-blanc/`, vinculada al
+evento UTMB como corresponde) - `race.json` y los 20 `profile.json`
+actualizados, republicado y verificado: ambas distancias ahora generan
+página y media propias sin pisarse.
+
+El nombre visible se dejó igual ("UTMB - Mont Blanc", el mismo que el
+148k) a propósito: un primer intento de mostrar "CCC by UTMB" como
+nombre propio requería cambiar de qué distancia toma su identidad el
+"event hub" (`_build_events()` en `race_generator.py`, que hasta ahora
+siempre usaba la distancia más chica) - y ese cambio, aunque resolvía
+CCC, además le cambiaba en silencio el slug/URL a los event hubs de
+Lavaredo y Monterosa (que no tenían nada que ver con este bug y
+funcionaban bien). Revertido antes de publicar por ese efecto
+colateral - si más adelante se quiere que CCC muestre su propio nombre,
+hay que resolver primero de qué distancia toma identidad el event hub
+cuando sus distancias tienen nombres distintos (no solo "la más chica"
+ni "la más grande" a ciegas).
 
 **Fix estructural en "Exportar a Web":** implementado el fix que ya
 estaba recomendado más abajo, pero nunca se había hecho. Ahora hay una
