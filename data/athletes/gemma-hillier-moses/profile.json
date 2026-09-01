@@ -1,0 +1,27 @@
+{
+  "slug": "gemma-hillier-moses",
+  "name": "Gemma HILLIER MOSES",
+  "country": "GB",
+  "gender": null,
+  "portrait": "/media/athletes/gemma-hillier-moses/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 69,
+      "gender_rank": 12,
+      "finish_time": "13:07:30",
+      "vpi": 1032.8,
+      "dmi": 11.91,
+      "er": 86.9,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/gemma-hillier-moses/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1032.8,
+    "dmi": 11.9,
+    "er": 86.9
+  }
+}

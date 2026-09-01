@@ -1,0 +1,27 @@
+{
+  "slug": "diane-rassineux",
+  "name": "Diane RASSINEUX",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/diane-rassineux/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 72,
+      "gender_rank": 14,
+      "finish_time": "13:14:48",
+      "vpi": 1012.0,
+      "dmi": 12.05,
+      "er": 83.2,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/diane-rassineux/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1012.0,
+    "dmi": 12.0,
+    "er": 83.2
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "lindsay-allison",
+  "name": "Lindsay ALLISON",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/lindsay-allison/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 77,
+      "gender_rank": 17,
+      "finish_time": "13:23:56",
+      "vpi": 1003.6,
+      "dmi": 12.04,
+      "er": 83.8,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/lindsay-allison/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1003.6,
+    "dmi": 12.0,
+    "er": 83.8
+  }
+}

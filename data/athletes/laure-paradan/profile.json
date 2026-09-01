@@ -2,7 +2,7 @@
   "slug": "laure-paradan",
   "name": "Laure PARADAN",
   "country": "FR",
-  "portrait": null,
+  "portrait": "/media/athletes/laure-paradan/images/portrait.jpg",
   "races": [
     {
       "race_slug": "trail-du-saint-jacques-by-utmb-2026-86k",
@@ -16,11 +16,24 @@
       "dmi": 12.76,
       "er": 81.3,
       "report": "/media/races/trail-du-saint-jacques-by-utmb-2026-86k/charts/runners/laure-paradan/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 76,
+      "gender_rank": 16,
+      "finish_time": "13:23:40",
+      "vpi": 1005.1,
+      "dmi": 11.99,
+      "er": 81.4,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/laure-paradan/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 947.0,
-    "dmi": 12.8,
-    "er": 81.3
+    "vpi": 976.0,
+    "dmi": 12.4,
+    "er": 81.4
   }
 }

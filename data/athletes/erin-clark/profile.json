@@ -1,0 +1,27 @@
+{
+  "slug": "erin-clark",
+  "name": "Erin CLARK",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/erin-clark/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 82,
+      "gender_rank": 19,
+      "finish_time": "13:37:32",
+      "vpi": 976.8,
+      "dmi": 11.88,
+      "er": 76.1,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/erin-clark/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 976.8,
+    "dmi": 11.9,
+    "er": 76.1
+  }
+}

@@ -1,7 +1,7 @@
 {
   "slug": "elisa-kristinsdottir",
   "name": "Elísa KRISTINSDÓTTIR",
-  "country": null,
+  "country": "IS",
   "portrait": "/media/athletes/elisa-kristinsdottir/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 14.03,
       "er": 81.5,
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/elisa-kristinsdottir/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 78,
+      "gender_rank": 18,
+      "finish_time": "13:24:49",
+      "vpi": 992.3,
+      "dmi": 12.14,
+      "er": 74.5,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/elisa-kristinsdottir/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1041.5,
-    "dmi": 14.0,
-    "er": 81.5
+    "vpi": 1016.9,
+    "dmi": 13.1,
+    "er": 78.0
   }
 }

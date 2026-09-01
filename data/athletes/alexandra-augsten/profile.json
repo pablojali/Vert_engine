@@ -1,0 +1,27 @@
+{
+  "slug": "alexandra-augsten",
+  "name": "Alexandra AUGSTEN",
+  "country": "CA",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 83,
+      "gender_rank": 20,
+      "finish_time": "13:38:11",
+      "vpi": 986.4,
+      "dmi": 11.91,
+      "er": 78.0,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/alexandra-augsten/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 986.4,
+    "dmi": 11.9,
+    "er": 78.0
+  }
+}

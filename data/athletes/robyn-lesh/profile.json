@@ -16,11 +16,24 @@
       "dmi": 11.93,
       "er": 88.1,
       "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/robyn-lesh/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 71,
+      "gender_rank": 13,
+      "finish_time": "13:11:34",
+      "vpi": 1010.3,
+      "dmi": 12.2,
+      "er": 88.0,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/robyn-lesh/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 962.9,
-    "dmi": 11.9,
-    "er": 88.1
+    "vpi": 986.6,
+    "dmi": 12.1,
+    "er": 88.0
   }
 }
