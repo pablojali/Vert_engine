@@ -6,7 +6,7 @@
   "portrait": null,
   "races": [
     {
-      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_slug": "monterosa-walserwaeg-90k",
       "race_name": "Monterosa Walserwaeg by UTMB",
       "year": 2026,
       "distance_km": 80.38031955279868,
@@ -16,7 +16,7 @@
       "vpi": 718.7,
       "dmi": 9.07,
       "er": 69.5,
-      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/malgorzata-burkiewicz/report.html"
+      "report": "/media/races/monterosa-walserwaeg-90k/charts/runners/malgorzata-burkiewicz/report.html"
     }
   ],
   "career_avg": {

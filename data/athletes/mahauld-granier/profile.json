@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/mahauld-granier/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_slug": "monterosa-walserwaeg-90k",
       "race_name": "Monterosa Walserwaeg by UTMB",
       "year": 2026,
       "distance_km": 80.38031955279868,
@@ -16,10 +16,10 @@
       "vpi": 838.2,
       "dmi": 10.44,
       "er": 63.3,
-      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/mahauld-granier/report.html"
+      "report": "/media/races/monterosa-walserwaeg-90k/charts/runners/mahauld-granier/report.html"
     },
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-148k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 148.36032945474318,
@@ -29,7 +29,7 @@
       "vpi": 735.9,
       "dmi": 8.61,
       "er": 75.9,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/mahauld-granier/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-148k/charts/runners/mahauld-granier/report.html"
     }
   ],
   "career_avg": {

@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/antonio-martinez-perez/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_slug": "marathon-du-mont-blanc-2026-42k",
       "race_name": "Marathon du Mont Blanc",
       "year": 2026,
       "distance_km": 43.69851227375547,
@@ -15,7 +15,7 @@
       "vpi": 1365.0,
       "dmi": 16.16,
       "er": 80.2,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/antonio-martinez-perez/report.html"
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/antonio-martinez-perez/report.html"
     }
   ],
   "career_avg": {

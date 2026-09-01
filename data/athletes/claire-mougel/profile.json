@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/claire-mougel/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_slug": "monterosa-walserwaeg-90k",
       "race_name": "Monterosa Walserwaeg by UTMB",
       "year": 2026,
       "distance_km": 80.38031955279868,
@@ -16,7 +16,7 @@
       "vpi": 737.5,
       "dmi": 9.08,
       "er": 58.7,
-      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/claire-mougel/report.html"
+      "report": "/media/races/monterosa-walserwaeg-90k/charts/runners/claire-mougel/report.html"
     }
   ],
   "career_avg": {

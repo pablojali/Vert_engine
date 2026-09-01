@@ -18,7 +18,7 @@
       "gender_rank": 2
     },
     {
-      "race_slug": "utmb-mont-blanc-2025",
+      "race_slug": "utmb-mont-blanc-2025-100k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2025,
       "distance_km": 99.41021421194841,
@@ -28,7 +28,7 @@
       "vpi": 1092.6,
       "dmi": 13.31,
       "er": 79.0,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/andreas-reiterer/report.html"
+      "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/andreas-reiterer/report.html"
     }
   ],
   "career_avg": {

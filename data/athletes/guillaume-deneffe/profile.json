@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/guillaume-deneffe/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2025",
+      "race_slug": "utmb-mont-blanc-2025-174k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2025,
       "distance_km": 172.88251977594712,
@@ -15,7 +15,7 @@
       "vpi": 884.5,
       "dmi": 11.69,
       "er": 76.3,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/guillaume-deneffe/report.html"
+      "report": "/media/races/utmb-mont-blanc-2025-174k/charts/runners/guillaume-deneffe/report.html"
     }
   ],
   "career_avg": {

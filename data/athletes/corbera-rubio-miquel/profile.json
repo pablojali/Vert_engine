@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/corbera-rubio-miquel/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_slug": "marathon-du-mont-blanc-2026-42k",
       "race_name": "Marathon du Mont Blanc",
       "year": 2026,
       "distance_km": 43.69851227375547,
@@ -15,7 +15,7 @@
       "vpi": 1339.1,
       "dmi": 16.32,
       "er": 75.4,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/corbera-rubio-miquel/report.html"
+      "report": "/media/races/marathon-du-mont-blanc-2026-42k/charts/runners/corbera-rubio-miquel/report.html"
     }
   ],
   "career_avg": {

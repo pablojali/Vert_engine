@@ -5,7 +5,7 @@
   "portrait": null,
   "races": [
     {
-      "race_slug": "trail-du-saint-jacques-by-utmb-2026",
+      "race_slug": "trail-du-saint-jacques-by-utmb-2026-86k",
       "race_name": "Trail du Saint Jacques by UTMB",
       "year": 2026,
       "distance_km": 85.94466007919439,
@@ -15,7 +15,7 @@
       "vpi": 1033.2,
       "dmi": 13.72,
       "er": 70.0,
-      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026/charts/runners/remi-ledez/report.html"
+      "report": "/media/races/trail-du-saint-jacques-by-utmb-2026-86k/charts/runners/remi-ledez/report.html"
     }
   ],
   "career_avg": {

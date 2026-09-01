@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/cristian-minoggio/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_slug": "marathon-du-mont-blanc-2026-90k",
       "race_name": "Marathon du Mont Blanc",
       "year": 2026,
       "distance_km": 86.90286418650041,
@@ -15,10 +15,10 @@
       "vpi": 1180.0,
       "dmi": 13.18,
       "er": 87.6,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/cristian-minoggio/report.html"
+      "report": "/media/races/marathon-du-mont-blanc-2026-90k/charts/runners/cristian-minoggio/report.html"
     },
     {
-      "race_slug": "monterosa-walserwaeg-by-utmb-2026",
+      "race_slug": "monterosa-walserwaeg-90k",
       "race_name": "Monterosa Walserwaeg by UTMB",
       "year": 2026,
       "distance_km": 80.38031955279868,
@@ -28,7 +28,7 @@
       "vpi": 1090.9,
       "dmi": 14.03,
       "er": 73.2,
-      "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/cristian-minoggio/report.html"
+      "report": "/media/races/monterosa-walserwaeg-90k/charts/runners/cristian-minoggio/report.html"
     },
     {
       "race_slug": "utmb-mont-blanc-2026-ccc",

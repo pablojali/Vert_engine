@@ -6,7 +6,7 @@
   "portrait": null,
   "races": [
     {
-      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_slug": "trail-verbier-st-bernard-2026-140k",
       "race_name": "Trail Verbier St-Bernard",
       "year": 2026,
       "distance_km": 137.9857218827645,
@@ -16,7 +16,7 @@
       "vpi": 762.7,
       "dmi": 9.54,
       "er": 76.5,
-      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/anonymous/report.html"
+      "report": "/media/races/trail-verbier-st-bernard-2026-140k/charts/runners/anonymous/report.html"
     }
   ],
   "career_avg": {

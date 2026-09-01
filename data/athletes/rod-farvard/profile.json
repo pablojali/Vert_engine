@@ -5,7 +5,7 @@
   "portrait": "/media/athletes/rod-farvard/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2025",
+      "race_slug": "utmb-mont-blanc-2025-174k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2025,
       "distance_km": 172.88251977594712,
@@ -15,7 +15,7 @@
       "vpi": 918.7,
       "dmi": 12.24,
       "er": 82.6,
-      "report": "/media/races/utmb-mont-blanc-2025/charts/runners/rod-farvard/report.html"
+      "report": "/media/races/utmb-mont-blanc-2025-174k/charts/runners/rod-farvard/report.html"
     }
   ],
   "career_avg": {

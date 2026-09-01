@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/corentin-play/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "trail-verbier-st-bernard-2026",
+      "race_slug": "trail-verbier-st-bernard-2026-77k",
       "race_name": "Trail Verbier St-Bernard",
       "year": 2026,
       "distance_km": 75.52041308623512,
@@ -16,7 +16,7 @@
       "vpi": 1001.5,
       "dmi": 12.65,
       "er": 86.3,
-      "report": "/media/races/trail-verbier-st-bernard-2026/charts/runners/corentin-play/report.html"
+      "report": "/media/races/trail-verbier-st-bernard-2026-77k/charts/runners/corentin-play/report.html"
     }
   ],
   "career_avg": {

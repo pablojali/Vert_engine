@@ -5,7 +5,7 @@
   "portrait": null,
   "races": [
     {
-      "race_slug": "marathon-du-mont-blanc-2026",
+      "race_slug": "marathon-du-mont-blanc-2026-90k",
       "race_name": "Marathon du Mont Blanc",
       "year": 2026,
       "distance_km": 86.90286418650041,
@@ -15,7 +15,7 @@
       "vpi": 1077.6,
       "dmi": 12.11,
       "er": 78.8,
-      "report": "/media/races/marathon-du-mont-blanc-2026/charts/runners/baptiste-ellmenreich/report.html"
+      "report": "/media/races/marathon-du-mont-blanc-2026-90k/charts/runners/baptiste-ellmenreich/report.html"
     }
   ],
   "career_avg": {
