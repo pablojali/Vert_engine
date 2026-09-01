@@ -108,7 +108,7 @@ def generate(loc: dict, t: dict, posts_by_race_slug: dict | None = None) -> tupl
             route_owners.setdefault(e["slug"], []).append("event hub")
         for slug, owners in route_owners.items():
             if len(owners) > 1:
-                print(f"  ⚠ WARNING: /races/{slug}/ is claimed by {len(owners)} pages ({', '.join(owners)}) - only the last one written will be reachable. Fix by giving race.json a distance-specific slug (e.g. '{slug}-<distance>').")
+                print(f"  ⚠ WARNING: /races/{slug}/ is claimed by {len(owners)} pages ({', '.join(owners)}) - the last one written silently overwrites the page AND its media (charts/runners/*, including HTML reports) of the others, with no error anywhere. Fix by giving race.json a distance-specific slug (e.g. '{slug}-<distance>').")
 
     event_by_race_slug = {}
     for event in events:

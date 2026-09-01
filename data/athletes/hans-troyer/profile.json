@@ -6,8 +6,8 @@
   "portrait": "/media/athletes/hans-troyer/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
-      "race_name": "UTMB - Mont Blanc",
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "CCC by UTMB",
       "year": 2026,
       "distance_km": 106.31359277879822,
       "position": 3,
@@ -16,7 +16,7 @@
       "vpi": 1253.4,
       "dmi": 15.26,
       "er": 84.9,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/hans-troyer/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/hans-troyer/report.html"
     }
   ],
   "career_avg": {

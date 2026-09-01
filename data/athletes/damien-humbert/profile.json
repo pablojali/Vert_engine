@@ -6,8 +6,8 @@
   "portrait": "/media/athletes/damien-humbert/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
-      "race_name": "UTMB - Mont Blanc",
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "CCC by UTMB",
       "year": 2026,
       "distance_km": 106.31359277879822,
       "position": 20,
@@ -16,7 +16,7 @@
       "vpi": 1138.3,
       "dmi": 13.71,
       "er": 66.3,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/damien-humbert/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/damien-humbert/report.html"
     }
   ],
   "career_avg": {

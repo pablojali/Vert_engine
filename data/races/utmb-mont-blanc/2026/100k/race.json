@@ -1,6 +1,6 @@
 {
-  "slug": "utmb-mont-blanc-2026",
-  "name": "UTMB - Mont Blanc",
+  "slug": "utmb-mont-blanc-2026-ccc",
+  "name": "CCC by UTMB",
   "year": 2026,
   "distance_km": 106.31359277879822,
   "elevation_gain_m": 6423.0,
@@ -22,7 +22,7 @@
       "er": 88.6,
       "pace_first_half": 3.39,
       "pace_second_half": 3.77,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/cristian-minoggio/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/cristian-minoggio/report.html",
       "charts": []
     },
     {
@@ -38,7 +38,7 @@
       "er": 87.0,
       "pace_first_half": 3.39,
       "pace_second_half": 3.83,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/miguel-arsenio/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/miguel-arsenio/report.html",
       "charts": []
     },
     {
@@ -54,7 +54,7 @@
       "er": 84.9,
       "pace_first_half": 3.38,
       "pace_second_half": 3.89,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/hans-troyer/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/hans-troyer/report.html",
       "charts": []
     },
     {
@@ -70,7 +70,7 @@
       "er": 78.0,
       "pace_first_half": 3.4,
       "pace_second_half": 4.15,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/luke-grenfell-shaw/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/luke-grenfell-shaw/report.html",
       "charts": []
     },
     {
@@ -86,7 +86,7 @@
       "er": 78.9,
       "pace_first_half": 3.42,
       "pace_second_half": 4.15,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/simon-paccard/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/simon-paccard/report.html",
       "charts": []
     },
     {
@@ -102,7 +102,7 @@
       "er": 85.4,
       "pace_first_half": 3.55,
       "pace_second_half": 4.07,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/daniel-jones/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/daniel-jones/report.html",
       "charts": []
     },
     {
@@ -118,7 +118,7 @@
       "er": 77.6,
       "pace_first_half": 3.41,
       "pace_second_half": 4.17,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/ji-duo/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/ji-duo/report.html",
       "charts": []
     },
     {
@@ -134,7 +134,7 @@
       "er": 83.8,
       "pace_first_half": 3.52,
       "pace_second_half": 4.09,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/guillaume-tiphene/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/guillaume-tiphene/report.html",
       "charts": []
     },
     {
@@ -150,7 +150,7 @@
       "er": 87.9,
       "pace_first_half": 3.61,
       "pace_second_half": 4.05,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/mathieu-delpeuch/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/mathieu-delpeuch/report.html",
       "charts": []
     },
     {
@@ -166,7 +166,7 @@
       "er": 83.4,
       "pace_first_half": 3.53,
       "pace_second_half": 4.11,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/anthony-felber/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/anthony-felber/report.html",
       "charts": []
     },
     {
@@ -182,7 +182,7 @@
       "er": 88.0,
       "pace_first_half": 3.67,
       "pace_second_half": 4.11,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/pierre-livache/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/pierre-livache/report.html",
       "charts": []
     },
     {
@@ -198,7 +198,7 @@
       "er": 77.7,
       "pace_first_half": 3.47,
       "pace_second_half": 4.25,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/guangfu-meng/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/guangfu-meng/report.html",
       "charts": []
     },
     {
@@ -214,7 +214,7 @@
       "er": 84.6,
       "pace_first_half": 3.6,
       "pace_second_half": 4.16,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/robin-juillaguet/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/robin-juillaguet/report.html",
       "charts": []
     },
     {
@@ -230,7 +230,7 @@
       "er": 83.7,
       "pace_first_half": 3.59,
       "pace_second_half": 4.18,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/morten-antonsen/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/morten-antonsen/report.html",
       "charts": []
     },
     {
@@ -246,7 +246,7 @@
       "er": 83.6,
       "pace_first_half": 3.61,
       "pace_second_half": 4.21,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/tobias-baggenstos/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/tobias-baggenstos/report.html",
       "charts": []
     },
     {
@@ -262,7 +262,7 @@
       "er": 89.6,
       "pace_first_half": 3.8,
       "pace_second_half": 4.19,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/canhua-luo/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/canhua-luo/report.html",
       "charts": []
     },
     {
@@ -278,7 +278,7 @@
       "er": 76.5,
       "pace_first_half": 3.55,
       "pace_second_half": 4.39,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/marcin-rzeszotko/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/marcin-rzeszotko/report.html",
       "charts": []
     },
     {
@@ -294,7 +294,7 @@
       "er": 80.4,
       "pace_first_half": 3.63,
       "pace_second_half": 4.34,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/davide-cheraz/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/davide-cheraz/report.html",
       "charts": []
     },
     {
@@ -310,7 +310,7 @@
       "er": 77.0,
       "pace_first_half": 3.6,
       "pace_second_half": 4.42,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/adam-loomis/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/adam-loomis/report.html",
       "charts": []
     },
     {
@@ -326,7 +326,7 @@
       "er": 66.3,
       "pace_first_half": 3.43,
       "pace_second_half": 4.59,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/damien-humbert/report.html",
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/damien-humbert/report.html",
       "charts": []
     }
   ]

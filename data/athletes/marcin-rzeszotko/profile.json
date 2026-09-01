@@ -17,8 +17,8 @@
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/marcin-rzeszotko/report.html"
     },
     {
-      "race_slug": "utmb-mont-blanc-2026",
-      "race_name": "UTMB - Mont Blanc",
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "CCC by UTMB",
       "year": 2026,
       "distance_km": 106.31359277879822,
       "position": 17,
@@ -27,7 +27,7 @@
       "vpi": 1160.3,
       "dmi": 13.65,
       "er": 76.5,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/marcin-rzeszotko/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/marcin-rzeszotko/report.html"
     }
   ],
   "career_avg": {
