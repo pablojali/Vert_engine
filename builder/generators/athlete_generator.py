@@ -46,6 +46,31 @@ def _search_name(name: str) -> str:
     return _fold_ascii(name or "").lower()
 
 
+_MONTH_ABBR = {
+    "en": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "es": ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+    "fr": ["Janv", "Févr", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Déc"],
+}
+
+
+def _month_label(date_str: str | None, locale_code: str) -> str | None:
+    """Abbreviated, locale-aware month name from a race's "YYYY-MM-DD"
+    date - None (never raises) for a race with no date on file yet, so
+    the Race History table can fall back to showing just the year."""
+    if not date_str:
+        return None
+    parts = date_str.split("-")
+    if len(parts) < 2:
+        return None
+    try:
+        month_num = int(parts[1])
+    except ValueError:
+        return None
+    if not 1 <= month_num <= 12:
+        return None
+    return _MONTH_ABBR.get(locale_code, _MONTH_ABBR["en"])[month_num - 1]
+
+
 def _profile_maturity_key(race_count: int) -> str | None:
     """Sample-size label for the VTL Performance Profile - communicates
     how many analyzed races back the profile, not a statistical
@@ -79,9 +104,19 @@ def generate(loc: dict, t: dict, events: list[dict]) -> list[dict]:
     index_template = env.get_template("athletes_index.html")
     athletes = load_athletes()
 
+    # profile.json only stores each race's year (not its full date) - the
+    # actual date lives on race.json, keyed by race_slug via the already-
+    # built events (event["distances"] carries the same race dicts
+    # race_generator.py loaded, "date" included). Looked up once here
+    # instead of re-reading every race.json per athlete.
+    date_by_race_slug = {
+        d["slug"]: d.get("date") for event in events for d in event["distances"]
+    }
+
     for athlete in athletes:
         athlete["url"] = locale_url(loc["code"], f"athletes/{athlete['slug']}/")
         for r in athlete.get("races", []):
+            r["month"] = _month_label(date_by_race_slug.get(r["race_slug"]), loc["code"])
             if r.get("report"):
                 # Render the uploaded full-analysis HTML inside our own page
                 # (header/nav/footer intact, embedded via iframe) instead of

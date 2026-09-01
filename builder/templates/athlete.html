@@ -82,7 +82,7 @@
         {% for r in athlete.races|sort(attribute='year', reverse=True) %}
         <tr>
           <td><a href="{{ r.url }}">{{ r.race_name }}</a></td>
-          <td>{{ r.year }}</td>
+          <td>{{ (r.month ~ ' ' ~ r.year) if r.month else r.year }}</td>
           <td>{{ r.distance_km|round(1) ~ ' km' if r.distance_km else '—' }}</td>
           <td>{{ r.position }}</td>
           <td>{{ r.gender_rank if r.gender_rank is defined and r.gender_rank is not none else '—' }}</td>
