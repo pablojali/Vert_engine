@@ -1,0 +1,27 @@
+{
+  "slug": "caitlin-fielder",
+  "name": "Caitlin FIELDER",
+  "country": "NZ",
+  "gender": null,
+  "portrait": "/media/athletes/caitlin-fielder/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 43,
+      "gender_rank": 5,
+      "finish_time": "12:25:17",
+      "vpi": 1081.2,
+      "dmi": 12.89,
+      "er": 92.4,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/caitlin-fielder/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1081.2,
+    "dmi": 12.9,
+    "er": 92.4
+  }
+}

@@ -1,7 +1,7 @@
 {
   "slug": "marie-goncalves",
   "name": "Marie GONCALVES",
-  "country": null,
+  "country": "FR",
   "portrait": "/media/athletes/marie-goncalves/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 13.63,
       "er": 76.7,
       "report": "/media/races/lavaredo-ultra-trail-80k/charts/runners/marie-goncalves/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 61,
+      "gender_rank": 9,
+      "finish_time": "12:51:08",
+      "vpi": 1038.2,
+      "dmi": 12.49,
+      "er": 88.0,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/marie-goncalves/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1017.9,
-    "dmi": 13.6,
-    "er": 76.7
+    "vpi": 1028.0,
+    "dmi": 13.1,
+    "er": 82.4
   }
 }

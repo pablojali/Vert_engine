@@ -1,0 +1,27 @@
+{
+  "slug": "jennifer-lichter",
+  "name": "Jennifer LICHTER",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/jennifer-lichter/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 40,
+      "gender_rank": 4,
+      "finish_time": "12:24:01",
+      "vpi": 1084.6,
+      "dmi": 12.94,
+      "er": 84.6,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/jennifer-lichter/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1084.6,
+    "dmi": 12.9,
+    "er": 84.6
+  }
+}

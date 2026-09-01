@@ -1,7 +1,7 @@
 {
   "slug": "miao-yao",
   "name": "Miao YAO",
-  "country": null,
+  "country": "CN",
   "portrait": "/media/athletes/miao-yao/images/portrait.jpg",
   "races": [
     {
@@ -15,11 +15,24 @@
       "dmi": 11.42,
       "er": 72.1,
       "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/miao-yao/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 37,
+      "gender_rank": 3,
+      "finish_time": "12:15:41",
+      "vpi": 1100.0,
+      "dmi": 12.93,
+      "er": 83.1,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/miao-yao/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1031.6,
-    "dmi": 11.4,
-    "er": 72.1
+    "vpi": 1065.8,
+    "dmi": 12.2,
+    "er": 77.6
   }
 }

@@ -1,0 +1,27 @@
+{
+  "slug": "anna-stiina-erkkila",
+  "name": "Anna-Stiina ERKKILÄ",
+  "country": "FI",
+  "gender": null,
+  "portrait": "/media/athletes/anna-stiina-erkkila/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 49,
+      "gender_rank": 6,
+      "finish_time": "12:36:12",
+      "vpi": 1060.8,
+      "dmi": 12.78,
+      "er": 85.0,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/anna-stiina-erkkila/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1060.8,
+    "dmi": 12.8,
+    "er": 85.0
+  }
+}

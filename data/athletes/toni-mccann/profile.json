@@ -1,0 +1,27 @@
+{
+  "slug": "toni-mccann",
+  "name": "Toni MCCANN",
+  "country": "ZA",
+  "gender": null,
+  "portrait": "/media/athletes/toni-mccann/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 33,
+      "gender_rank": 2,
+      "finish_time": "12:06:14",
+      "vpi": 1104.2,
+      "dmi": 13.18,
+      "er": 85.3,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/toni-mccann/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1104.2,
+    "dmi": 13.2,
+    "er": 85.3
+  }
+}

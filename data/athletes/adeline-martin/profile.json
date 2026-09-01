@@ -1,0 +1,27 @@
+{
+  "slug": "adeline-martin",
+  "name": "Adeline MARTIN",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/adeline-martin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 55,
+      "gender_rank": 8,
+      "finish_time": "12:45:38",
+      "vpi": 1057.8,
+      "dmi": 12.37,
+      "er": 84.3,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/adeline-martin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1057.8,
+    "dmi": 12.4,
+    "er": 84.3
+  }
+}

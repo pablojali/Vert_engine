@@ -1,0 +1,27 @@
+{
+  "slug": "yngvild-kaspersen",
+  "name": "Yngvild KASPERSEN",
+  "country": "NO",
+  "gender": null,
+  "portrait": "/media/athletes/yngvild-kaspersen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 29,
+      "gender_rank": 1,
+      "finish_time": "12:01:14",
+      "vpi": 1125.0,
+      "dmi": 13.09,
+      "er": 97.7,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/yngvild-kaspersen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1125.0,
+    "dmi": 13.1,
+    "er": 97.7
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "honoka-akiyama",
+  "name": "Honoka AKIYAMA",
+  "country": "JP",
+  "gender": null,
+  "portrait": "/media/athletes/honoka-akiyama/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 50,
+      "gender_rank": 7,
+      "finish_time": "12:37:02",
+      "vpi": 1074.0,
+      "dmi": 12.52,
+      "er": 81.7,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/honoka-akiyama/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1074.0,
+    "dmi": 12.5,
+    "er": 81.7
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "slug": "theres-leboeuf",
+  "name": "Theres LEBOEUF",
+  "country": "CH",
+  "gender": null,
+  "portrait": "/media/athletes/theres-leboeuf/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 63,
+      "gender_rank": 10,
+      "finish_time": "12:58:47",
+      "vpi": 1030.6,
+      "dmi": 12.43,
+      "er": 80.8,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/theres-leboeuf/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1030.6,
+    "dmi": 12.4,
+    "er": 80.8
+  }
+}
