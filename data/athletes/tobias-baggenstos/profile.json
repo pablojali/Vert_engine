@@ -6,8 +6,8 @@
   "portrait": "/media/athletes/tobias-baggenstos/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
-      "race_name": "UTMB - Mont Blanc",
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "CCC by UTMB",
       "year": 2026,
       "distance_km": 106.31359277879822,
       "position": 15,
@@ -16,7 +16,7 @@
       "vpi": 1162.6,
       "dmi": 14.34,
       "er": 83.6,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/tobias-baggenstos/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/tobias-baggenstos/report.html"
     }
   ],
   "career_avg": {

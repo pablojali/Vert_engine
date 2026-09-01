@@ -37,37 +37,38 @@ Si el respaldo automático falla, se lo avisa explícitamente en pantalla.
 ---
 
 ## Informe HTML no generado/adjuntado para corredores de CCC (Top Runners)
-**Estado:** diagnóstico en curso (2026-09-01)
+**Estado:** resuelto (2026-09-01) — la causa real NO era la generación del informe
 
 **Descripción:** se cargaron 20 corredores de CCC vía "🏆 Top Runners".
 `race.json`/`profile.json` se generaron y publicaron correctamente (los
 corredores aparecen en el listado de la carrera y en cada perfil), pero
-el informe HTML completo de cada corredor no se generó ni se adjuntó.
+el informe HTML completo de cada corredor no llegó a `vertlabs-web`.
 
-Causa raíz aún no confirmada: la generación del informe
-(`build_full_runner_report_html`) está envuelta en un `except Exception`
-silencioso tanto en "Top Runners" como en "Runner Metrics (LiveTrail)" -
-cualquier error ahí desaparecía sin dejar rastro (solo un caption
-genérico "no se pudo generar su informe", fácil de perder entre 20
-corredores). Sin un traceback real, no se pudo confirmar todavía si el
-problema es algo específico de los datos de CCC (ej. muchos checkpoints,
-un DNF/withdrawn en el lote) o una regresión del cambio reciente al
-flag de confiabilidad relativo de VPI/DMI.
+Se investigó primero como una posible excepción silenciada en
+`build_full_runner_report_html` (ver el fix de visibilidad de errores
+más abajo, que sigue siendo válido en general) - pero el usuario
+confirmó que reintentando el fetch **no aparecía ningún error**, y que
+tampoco funcionaba subiendo el informe a mano en "Exportar a Web". Eso
+descartó la generación del informe: los 20 `report.html` SÍ se estaban
+generando y escribiendo bien en `data/` (confirmado inspeccionando el
+repo directamente - 20 archivos de ~98KB cada uno, con contenido real).
 
-**Impacto:** informes de rendimiento completos ausentes para corredores
-por lo demás correctamente publicados, sin ningún indicio en pantalla de
-qué falló ni por qué.
+**Causa real:** colisión de slug - ver "Slug de `race.json` sin
+distancia colisiona con otra distancia o con el event hub" más abajo.
+CCC es la distancia 100k del evento UTMB Mont Blanc 2026, que terminó
+con el mismo slug público que la distancia 148k del mismo evento. Al
+publicar, la copia de media de la carrera generada después borraba
+(`shutil.rmtree`) la carpeta `charts/` completa de la generada antes -
+los 20 `report.html` de CCC existían en Vert_engine pero nunca
+sobrevivían el paso a `vertlabs-web`.
 
-**Fix parcial aplicado:** se dejó de silenciar la excepción en ambos
-lugares - ahora se guarda el traceback completo y se muestra en un
-expander (`⚠️ N informe(s) no se pudieron generar - ver por qué` en Top
-Runners; advertencia + expander en Runner Metrics). Esto no arregla la
-causa real todavía, pero la próxima vez que ocurra va a mostrar
-exactamente qué excepción la causó.
+**Impacto:** informes de rendimiento completos ausentes en producción
+para corredores por lo demás correctamente publicados, sin ningún
+indicio en pantalla de qué falló ni por qué.
 
-**Próximos pasos:** volver a cargar (al menos) uno de los bibs de CCC en
-"Top Runners" y revisar el nuevo expander de errores - el traceback que
-muestre es lo que hace falta para arreglar la causa real.
+**Fix:** ver el issue de colisión de slug más abajo - renombrado el
+slug de CCC y agregada una validación en "Exportar a Web" que bloquea
+un export si el slug elegido ya lo usa otra carrera.
 
 ---
 
@@ -271,6 +272,51 @@ Ultra Trail by UTMB) sigue emparejando correctamente.
 ---
 
 ## Slug de `race.json` sin distancia colisiona con otra distancia o con el event hub
+**Estado:** causa raíz confirmada con un caso real de pérdida de datos +
+fix parcial aplicado (2026-09-01) — quedan 6 carreras ya publicadas por
+corregir a mano
+
+**Actualización (2026-09-01):** esto dejó de ser un riesgo teórico. Los
+20 corredores de CCC exportados vía "Top Runners" quedaron guardados
+correctamente en `data/` (VPI/DMI, race.json, profile.json, los 20
+`report.html` - todo perfecto en disco y en el repo de Vert_engine), pero
+sus informes HTML nunca llegaron a `vertlabs-web`. Causa: CCC es la
+distancia "100k" del evento UTMB Mont Blanc 2026, y tanto esa distancia
+como la de 148k del mismo evento calcularon el mismo slug por defecto
+(`utmb-mont-blanc-2026`, de nombre+año sin distancia) - exactamente el
+mecanismo descripto abajo. Al publicar, la carrera de 148k se generó
+después y su `copy_public_media()` hizo `shutil.rmtree()` sobre
+`output/media/races/utmb-mont-blanc-2026/charts/` antes de copiar la
+suya, borrando los 20 `report.html` de CCC que ya estaban ahí - sin
+ningún error en ningún paso. `race.json`/`profile.json` de CCC sí
+sobrevivieron porque los datos de los atletas viven en sus propios
+`data/athletes/<slug>/profile.json`, ajenos a esta colisión de media.
+
+**Fix de CCC:** renombrado a slug `utmb-mont-blanc-2026-ccc` / nombre
+"CCC by UTMB" (sigue bajo la carpeta `data/races/utmb-mont-blanc/`, o
+sea vinculada al evento UTMB como corresponde) - `race.json` y los 20
+`profile.json` actualizados, republicado y verificado: ambas distancias
+ahora generan página y media propias sin pisarse.
+
+**Fix estructural en "Exportar a Web":** implementado el fix que ya
+estaba recomendado más abajo, pero nunca se había hecho. Ahora hay una
+función `_find_slug_collision()` que:
+1. Al abrir el formulario, si el slug sugerido por defecto ya lo usa
+   otra carrera (carpeta/año/distancia distinta), sugiere uno
+   desambiguado (agregando la distancia) en su lugar, con un aviso.
+2. Al tocar "Exportar", vuelve a chequear el slug que quedó cargado - si
+   sigue colisionando con otra carrera, **bloquea el export** con un
+   error explícito en vez de dejarlo pisar la otra carrera en silencio.
+
+Esto evita que el mismo problema vuelva a ocurrir con una carrera nueva,
+pero no corrige retroactivamente las 6 carreras ya publicadas con
+colisión (ver detalle original abajo) - siguen perdiendo página/media
+cada vez que se publica, hasta que se las corrija a mano una por una,
+igual que se hizo con CCC.
+
+---
+
+### Detalle original (2026-08-21)
 **Estado:** detectado y advertido en build (2026-08-21), sin corregir — pendiente para más adelante (decisión del usuario)
 
 **Descripción:** distinto del issue de "Colisión de slug/carpeta" de arriba

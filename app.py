@@ -3925,6 +3925,30 @@ with tab_web_export:
                     return f.parent.parent.parent.name
             return None
 
+        def _find_slug_collision(candidate_slug: str, own_race_dir: Path) -> dict | None:
+            """Returns info about another (different folder/year/distance)
+            race already publishing under `candidate_slug`, or None.
+
+            Two races sharing a public slug isn't just a display glitch:
+            publish.py writes both to the exact same output/races/<slug>/
+            and output/media/races/<slug>/ path, so whichever is generated
+            second silently wipes the other's page AND media with no error
+            anywhere - this is exactly how 20 CCC runners' HTML reports
+            disappeared (CCC and UTMB's 148k both defaulted to the same
+            slug from sharing a name+year)."""
+            if not candidate_slug:
+                return None
+            for f in (WEB_DATA_DIR / "races").glob("*/*/*/race.json"):
+                if f.parent == own_race_dir:
+                    continue
+                try:
+                    existing = json.loads(f.read_text(encoding="utf-8"))
+                except Exception:
+                    continue
+                if existing.get("slug") == candidate_slug:
+                    return {"name": existing.get("name"), "folder": str(f.parent.relative_to(WEB_DATA_DIR))}
+            return None
+
         _slugified_name_guess = _slugify(default_name) or "carrera"
         _existing_folder_match = _find_existing_race_folder(
             default_year, f"{default_distance}k" if default_distance else "", default_total_km, default_name,
@@ -3953,6 +3977,30 @@ with tab_web_export:
             json.loads(guessed_race_path.read_text(encoding="utf-8")) if guessed_race_path.exists() else {}
         )
         guessed_event_icon = _find_existing_image(guessed_race_dir.parent / "images", "icon")
+
+        # --- Disambiguate the SUGGESTED slug up front when it would
+        # collide with a different already-published race (e.g. another
+        # distance of the same event, sharing the same name+year default).
+        # Never touches a slug this exact race_dir already published under
+        # - only a brand-new suggestion gets adjusted. ---
+        default_race_slug = existing_race_for_prefill.get("slug") or (
+            _slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name)
+        )
+        if not existing_race_for_prefill.get("slug"):
+            _slug_collision_for_default = _find_slug_collision(default_race_slug, guessed_race_dir)
+            if _slug_collision_for_default:
+                _disambiguated_slug = (
+                    f"{default_race_slug}-{default_distance}k" if default_distance
+                    else f"{default_race_slug}-{_slugify(default_race_folder)}"
+                )
+                st.warning(
+                    f"⚠️ El slug `{default_race_slug}` ya lo usa "
+                    f"`{_slug_collision_for_default['folder']}` ({_slug_collision_for_default['name']}) - "
+                    f"sugerí `{_disambiguated_slug}` en su lugar más abajo. Dos carreras con el "
+                    "mismo slug se pisan entre sí (página e informes incluidos) al publicar, sin "
+                    "ningún aviso."
+                )
+                default_race_slug = _disambiguated_slug
 
         st.markdown("---")
         st.markdown("##### Metadata de la carrera (no calculada por el Engine, se completa a mano)")
@@ -3989,8 +4037,12 @@ with tab_web_export:
                 )
                 race_slug = st.text_input(
                     "Slug público (vertlabs.run/races/<esto>/)",
-                    value=existing_race_for_prefill.get("slug")
-                    or (_slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name)),
+                    value=default_race_slug,
+                    help=(
+                        "Tiene que ser único entre TODAS las carreras (incluidas otras "
+                        "distancias del mismo evento) - si dos comparten slug, la segunda "
+                        "en publicarse pisa la página y los informes de la primera."
+                    ),
                 )
 
             st.markdown("---")
@@ -4058,6 +4110,22 @@ with tab_web_export:
         if export_submit:
             if not race_slug or not race_year or not race_folder or not race_distance_folder:
                 st.error("Completá al menos slug, año, carpeta y carpeta de distancia.")
+            elif (
+                _slug_collision := _find_slug_collision(
+                    race_slug, WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
+                )
+            ):
+                # Hard-block instead of just warning: this is the exact
+                # write that silently wiped 20 CCC runners' HTML reports
+                # last time - a different race already owns this slug and
+                # publishing now would overwrite its page and media with
+                # no error anywhere.
+                st.error(
+                    f"❌ El slug `{race_slug}` ya lo usa `{_slug_collision['folder']}` "
+                    f"({_slug_collision['name']}) - exportar así pisaría esa carrera (página e "
+                    "informes HTML incluidos) al publicar, sin ningún aviso. Cambiá el slug de "
+                    "arriba a uno distinto (ej. agregándole la distancia) y volvé a exportar."
+                )
             else:
                 try:
                     def _save_upload(upload, dest_dir: Path, base_name: str):

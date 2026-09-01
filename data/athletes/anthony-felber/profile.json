@@ -6,8 +6,8 @@
   "portrait": "/media/athletes/anthony-felber/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
-      "race_name": "UTMB - Mont Blanc",
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "CCC by UTMB",
       "year": 2026,
       "distance_km": 106.31359277879822,
       "position": 10,
@@ -16,7 +16,7 @@
       "vpi": 1199.8,
       "dmi": 14.48,
       "er": 83.4,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/anthony-felber/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/anthony-felber/report.html"
     }
   ],
   "career_avg": {

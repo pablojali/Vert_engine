@@ -31,8 +31,8 @@
       "report": "/media/races/monterosa-walserwaeg-by-utmb-2026/charts/runners/cristian-minoggio/report.html"
     },
     {
-      "race_slug": "utmb-mont-blanc-2026",
-      "race_name": "UTMB - Mont Blanc",
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "CCC by UTMB",
       "year": 2026,
       "distance_km": 106.31359277879822,
       "position": 1,
@@ -41,7 +41,7 @@
       "vpi": 1274.5,
       "dmi": 15.65,
       "er": 88.6,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/cristian-minoggio/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/cristian-minoggio/report.html"
     }
   ],
   "career_avg": {
