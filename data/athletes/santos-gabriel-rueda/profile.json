@@ -28,11 +28,24 @@
       "dmi": 11.64,
       "er": 74.1,
       "report": "/media/races/utmb-mont-blanc-2025-174k/charts/runners/santos-gabriel-rueda/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 20,
+      "gender_rank": 20,
+      "finish_time": "21:04:23",
+      "vpi": 983.7,
+      "dmi": 12.42,
+      "er": 79.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/santos-gabriel-rueda/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 931.6,
-    "dmi": 11.4,
-    "er": 74.9
+    "vpi": 949.0,
+    "dmi": 11.8,
+    "er": 76.5
   }
 }

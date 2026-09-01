@@ -1,0 +1,27 @@
+{
+  "slug": "raul-octaviu-butaci",
+  "name": "Raul Octaviu BUTACI",
+  "country": "RO",
+  "gender": null,
+  "portrait": "/media/athletes/raul-octaviu-butaci/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 13,
+      "gender_rank": 13,
+      "finish_time": "20:26:46",
+      "vpi": 1005.2,
+      "dmi": 12.94,
+      "er": 79.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/raul-octaviu-butaci/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1005.2,
+    "dmi": 12.9,
+    "er": 79.7
+  }
+}

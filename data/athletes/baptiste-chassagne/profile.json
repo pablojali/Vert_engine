@@ -16,11 +16,24 @@
       "dmi": 12.64,
       "er": 81.8,
       "report": "/media/races/marathon-du-mont-blanc-2026-90k/charts/runners/baptiste-chassagne/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 2,
+      "gender_rank": 2,
+      "finish_time": "18:47:38",
+      "vpi": 1104.5,
+      "dmi": 13.92,
+      "er": 83.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/baptiste-chassagne/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1142.6,
-    "dmi": 12.6,
-    "er": 81.8
+    "vpi": 1123.6,
+    "dmi": 13.3,
+    "er": 82.8
   }
 }

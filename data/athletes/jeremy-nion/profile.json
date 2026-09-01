@@ -1,0 +1,27 @@
+{
+  "slug": "jeremy-nion",
+  "name": "Jérémy NION",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 16,
+      "gender_rank": 16,
+      "finish_time": "20:48:28",
+      "vpi": 1002.8,
+      "dmi": 12.54,
+      "er": 85.5,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/jeremy-nion/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1002.8,
+    "dmi": 12.5,
+    "er": 85.5
+  }
+}

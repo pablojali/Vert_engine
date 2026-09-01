@@ -1,0 +1,27 @@
+{
+  "slug": "joaquin-lopez",
+  "name": "Joaquin LOPEZ",
+  "country": "EC",
+  "gender": null,
+  "portrait": "/media/athletes/joaquin-lopez/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 5,
+      "gender_rank": 5,
+      "finish_time": "19:06:48",
+      "vpi": 1089.7,
+      "dmi": 13.48,
+      "er": 81.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/joaquin-lopez/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1089.7,
+    "dmi": 13.5,
+    "er": 81.7
+  }
+}

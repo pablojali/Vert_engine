@@ -1,0 +1,27 @@
+{
+  "slug": "aubin-ferrari",
+  "name": "Aubin FERRARI",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/aubin-ferrari/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 18,
+      "gender_rank": 18,
+      "finish_time": "20:56:53",
+      "vpi": 992.0,
+      "dmi": 12.61,
+      "er": 77.5,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/aubin-ferrari/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 992.0,
+    "dmi": 12.6,
+    "er": 77.5
+  }
+}

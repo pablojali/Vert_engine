@@ -1,7 +1,7 @@
 {
   "slug": "gautier-bonnecarrere",
   "name": "Gautier BONNECARRERE",
-  "country": null,
+  "country": "FR",
   "portrait": "/media/athletes/gautier-bonnecarrere/images/portrait.png",
   "races": [
     {
@@ -15,11 +15,24 @@
       "er": 74.8,
       "report": "/media/races/val-d-aran-by-utmb-2026-110k/charts/runners/gautier-bonnecarrere/report.html",
       "distance_km": 108.84385386686421
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 7,
+      "gender_rank": 7,
+      "finish_time": "19:23:16",
+      "vpi": 1072.0,
+      "dmi": 13.43,
+      "er": 78.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/gautier-bonnecarrere/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1109.0,
-    "dmi": 12.7,
-    "er": 74.8
+    "vpi": 1090.5,
+    "dmi": 13.0,
+    "er": 76.7
   }
 }

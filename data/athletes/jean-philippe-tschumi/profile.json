@@ -17,11 +17,24 @@
       "dmi": 12.87,
       "er": 77.4,
       "report": "/media/races/trail-verbier-st-bernard-2026-77k/charts/runners/jean-philippe-tschumi/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 10,
+      "gender_rank": 10,
+      "finish_time": "19:58:24",
+      "vpi": 1040.1,
+      "dmi": 12.97,
+      "er": 74.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/jean-philippe-tschumi/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1054.4,
+    "vpi": 1047.2,
     "dmi": 12.9,
-    "er": 77.4
+    "er": 75.8
   }
 }

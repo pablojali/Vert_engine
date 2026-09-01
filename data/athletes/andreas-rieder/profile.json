@@ -28,11 +28,24 @@
       "dmi": 13.22,
       "er": 85.9,
       "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/andreas-rieder/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 14,
+      "gender_rank": 14,
+      "finish_time": "20:33:24",
+      "vpi": 1014.6,
+      "dmi": 12.69,
+      "er": 83.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/andreas-rieder/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1005.5,
-    "dmi": 13.4,
-    "er": 82.7
+    "vpi": 1008.5,
+    "dmi": 13.1,
+    "er": 82.9
   }
 }

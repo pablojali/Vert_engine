@@ -1,0 +1,27 @@
+{
+  "slug": "antoine-charvolin",
+  "name": "Antoine CHARVOLIN",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/antoine-charvolin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 8,
+      "gender_rank": 8,
+      "finish_time": "19:40:33",
+      "vpi": 1062.5,
+      "dmi": 13.0,
+      "er": 77.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/antoine-charvolin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1062.5,
+    "dmi": 13.0,
+    "er": 77.1
+  }
+}

@@ -1,7 +1,7 @@
 {
   "slug": "hannes-namberger",
   "name": "Hannes NAMBERGER",
-  "country": null,
+  "country": "DE",
   "portrait": "/media/athletes/hannes-namberger/images/portrait.jpg",
   "races": [
     {
@@ -16,11 +16,24 @@
       "er": 87.3,
       "report": "/media/races/lavaredo-ultra-trail-120k/charts/runners/hannes-namberger/report.html",
       "gender_rank": 1
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 6,
+      "gender_rank": 6,
+      "finish_time": "19:13:51",
+      "vpi": 1069.8,
+      "dmi": 13.7,
+      "er": 82.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/hannes-namberger/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1006.0,
-    "dmi": 14.9,
-    "er": 87.3
+    "vpi": 1037.9,
+    "dmi": 14.3,
+    "er": 84.6
   }
 }

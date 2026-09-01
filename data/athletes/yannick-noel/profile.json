@@ -16,11 +16,24 @@
       "dmi": 12.2,
       "er": 80.6,
       "report": "/media/races/utmb-mont-blanc-2025-174k/charts/runners/yannick-noel/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 9,
+      "gender_rank": 9,
+      "finish_time": "19:51:42",
+      "vpi": 1045.7,
+      "dmi": 13.09,
+      "er": 79.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/yannick-noel/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 933.6,
-    "dmi": 12.2,
-    "er": 80.6
+    "vpi": 989.6,
+    "dmi": 12.6,
+    "er": 80.2
   }
 }

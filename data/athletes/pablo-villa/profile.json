@@ -1,0 +1,27 @@
+{
+  "slug": "pablo-villa",
+  "name": "Pablo VILLA",
+  "country": "ES",
+  "gender": null,
+  "portrait": "/media/athletes/pablo-villa/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 11,
+      "gender_rank": 11,
+      "finish_time": "20:15:37",
+      "vpi": 1017.3,
+      "dmi": 13.13,
+      "er": 79.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/pablo-villa/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1017.3,
+    "dmi": 13.1,
+    "er": 79.6
+  }
+}

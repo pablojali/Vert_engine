@@ -1,0 +1,27 @@
+{
+  "slug": "caleb-olson",
+  "name": "Caleb OLSON",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/caleb-olson/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 3,
+      "gender_rank": 3,
+      "finish_time": "18:48:24",
+      "vpi": 1096.0,
+      "dmi": 13.96,
+      "er": 86.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/caleb-olson/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1096.0,
+    "dmi": 14.0,
+    "er": 86.3
+  }
+}

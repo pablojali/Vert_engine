@@ -1,0 +1,27 @@
+{
+  "slug": "virgile-moriset",
+  "name": "Virgile MORISET",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/virgile-moriset/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 4,
+      "gender_rank": 4,
+      "finish_time": "19:00:23",
+      "vpi": 1092.3,
+      "dmi": 13.68,
+      "er": 88.5,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/virgile-moriset/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 1092.3,
+    "dmi": 13.7,
+    "er": 88.5
+  }
+}

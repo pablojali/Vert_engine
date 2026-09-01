@@ -16,11 +16,24 @@
       "dmi": 14.21,
       "er": 88.0,
       "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/drew-holmen/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 12,
+      "gender_rank": 12,
+      "finish_time": "20:24:49",
+      "vpi": 1024.4,
+      "dmi": 12.72,
+      "er": 69.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/drew-holmen/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 1156.2,
-    "dmi": 14.2,
-    "er": 88.0
+    "vpi": 1090.3,
+    "dmi": 13.5,
+    "er": 78.8
   }
 }
