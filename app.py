@@ -1946,6 +1946,10 @@ def _render_block_editor_ui(order_key: str, key_prefix: str, images_dir: Path, a
                     label_visibility="collapsed",
                 )
             elif btype == "html":
+                st.text_input(
+                    "Título (opcional)", value=initial.get("title", ""), key=f"{key_prefix}_html_title_{bid}",
+                    placeholder="Título (opcional) — evita tener que agregar un bloque de texto solo para esto",
+                )
                 st.text_area(
                     "HTML / gráfico embebido (ej. el fragmento de 'Download chart as HTML')",
                     value=initial.get("content", ""), height=200, key=f"{key_prefix}_html_{bid}",
@@ -2007,7 +2011,11 @@ def _collect_blocks_from_state(
                 "content": st.session_state.get(f"{key_prefix}_text_{bid}", ""),
             })
         elif btype == "html":
-            blocks.append({"type": "html", "content": st.session_state.get(f"{key_prefix}_html_{bid}", "")})
+            blocks.append({
+                "type": "html",
+                "title": st.session_state.get(f"{key_prefix}_html_title_{bid}", ""),
+                "content": st.session_state.get(f"{key_prefix}_html_{bid}", ""),
+            })
         elif btype == "image":
             initial = st.session_state.get(f"block_initial_{bid}", {})
             src = initial.get("src")

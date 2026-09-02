@@ -6,7 +6,10 @@
       {% for para in block.content.split('\n\n') if para.strip() %}<p>{{ para.strip() }}</p>{% endfor %}
     </div>
     {% elif block.type == 'html' %}
-    <div class="race-analysis-content">{{ block.content | safe }}</div>
+    <div class="race-analysis-content">
+      {% if block.title %}<h2>{{ block.title }}</h2>{% endif %}
+      {{ block.content | safe }}
+    </div>
     {% elif block.type == 'image' %}
     <figure class="race-analysis-figure">
       <img src="{{ block.src }}" alt="{{ block.caption or fallback_alt }}" loading="lazy">

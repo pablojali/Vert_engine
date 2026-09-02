@@ -103,7 +103,7 @@ Notas de campos:
   "cover_image": "/media/posts/monterosa-walserwaeg-120k-pre-race/images/cover.png",
   "blocks": [
     { "type": "text", "title": "Race Overview", "content": "..." },
-    { "type": "html", "content": "..." },
+    { "type": "html", "title": "Optional heading", "content": "..." },
     { "type": "image", "src": "...", "caption": "..." },
     { "type": "top10", "...": "..." }
   ]
@@ -115,6 +115,17 @@ asociada); cuando está presente debe coincidir con el `slug` del
 una lista ordenada de bloques de contenido de 4 tipos: `text`, `html`,
 `image`, `top10` — el mismo editor de bloques que usa la tab "Posts" y la
 tab "Exportar a Web" (análisis de carrera).
+
+**`html.title` (opcional, agregado 2026-09-02):** igual que `text.title`,
+renderiza como un `<h2>` antes del HTML embebido. Antes de esto, poner un
+título arriba de un gráfico/HTML embebido requería un bloque `text` aparte
+solo para el título (contenido vacío, únicamente el título) — un bloque
+extra que reordenar/borrar junto con el de `html` cada vez. Con
+`html.title` alcanza un solo bloque. Retrocompatible: un `html` sin
+`title` (todo el contenido existente) sigue renderizando exactamente igual
+que antes (el `<h2>` es condicional). Ver `app.py` -
+`_render_block_editor_ui()` / `_collect_blocks_from_state()`, y
+`builder/templates/_blocks.html`.
 
 ## Decisiones clave / lecciones aprendidas
 - **No hay un esquema JSON formal (JSON Schema) ni validación automática**
