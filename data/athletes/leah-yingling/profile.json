@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/leah-yingling/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-174k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 174.0277326138034,
@@ -16,7 +16,7 @@
       "vpi": 860.1,
       "dmi": 10.71,
       "er": 77.9,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/leah-yingling/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-174k/charts/runners/leah-yingling/report.html"
     }
   ],
   "career_avg": {

@@ -6,7 +6,7 @@
   "portrait": null,
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-174k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 174.0277326138034,
@@ -16,7 +16,7 @@
       "vpi": 1002.8,
       "dmi": 12.54,
       "er": 85.5,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/jeremy-nion/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-174k/charts/runners/jeremy-nion/report.html"
     }
   ],
   "career_avg": {

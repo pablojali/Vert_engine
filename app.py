@@ -3933,17 +3933,34 @@ with tab_web_export:
                     return f.parent.parent.parent.name
             return None
 
-        def _find_slug_collision(candidate_slug: str, own_race_dir: Path) -> dict | None:
-            """Returns info about another (different folder/year/distance)
-            race already publishing under `candidate_slug`, or None.
+        def _find_slug_collision(
+            candidate_slug: str, own_race_dir: Path,
+            own_name: str = "", own_year=None, own_distance_km=None,
+        ) -> dict | None:
+            """Returns info about another race - or the EVENT HUB this race
+            would belong to - already publishing under `candidate_slug`, or
+            None.
 
-            Two races sharing a public slug isn't just a display glitch:
+            Two pages sharing a public slug isn't just a display glitch:
             publish.py writes both to the exact same output/races/<slug>/
             and output/media/races/<slug>/ path, so whichever is generated
             second silently wipes the other's page AND media with no error
             anywhere - this is exactly how 20 CCC runners' HTML reports
             disappeared (CCC and UTMB's 148k both defaulted to the same
-            slug from sharing a name+year)."""
+            slug from sharing a name+year).
+
+            Checking sibling race.json slugs alone isn't enough: the event
+            hub itself (race_generator._build_events()) is never written to
+            data/ as its own race.json - its slug is computed on the fly
+            from whichever sibling distance in the same year folder has the
+            SMALLEST distance_km. A brand new distance can collide with
+            that hub identity without ever touching another distance's own
+            slug (this is exactly how a later-added UTMB 174k collided with
+            its own event hub, after the CCC/148k collision had already
+            been fixed) - so `own_name`/`own_year`/`own_distance_km` (the
+            values from the form, which may not match whatever's on disk
+            yet for this same race_dir) are folded into that same
+            smallest-distance comparison."""
             if not candidate_slug:
                 return None
             for f in (WEB_DATA_DIR / "races").glob("*/*/*/race.json"):
@@ -3955,6 +3972,30 @@ with tab_web_export:
                     continue
                 if existing.get("slug") == candidate_slug:
                     return {"name": existing.get("name"), "folder": str(f.parent.relative_to(WEB_DATA_DIR))}
+
+            year_dir = own_race_dir.parent
+            if year_dir.is_dir():
+                siblings = [{"name": own_name, "year": own_year, "distance_km": own_distance_km}]
+                for f in year_dir.glob("*/race.json"):
+                    if f.parent == own_race_dir:
+                        continue
+                    try:
+                        existing = json.loads(f.read_text(encoding="utf-8"))
+                    except Exception:
+                        continue
+                    siblings.append(existing)
+                main = min(siblings, key=lambda s: s.get("distance_km") or 0)
+                hub_slug = _slugify(f"{main.get('name') or ''}-{main.get('year') or 0}")
+                # min() keeps the first item on a tie, and `siblings[0]` is
+                # always this same race's own entry - so `main is
+                # siblings[0]` means this race legitimately IS (or ties
+                # for) the hub identity, not a collision with something
+                # else.
+                if hub_slug == candidate_slug and main is not siblings[0]:
+                    return {
+                        "name": f"{main.get('name')} (event hub)",
+                        "folder": str(year_dir.relative_to(WEB_DATA_DIR)),
+                    }
             return None
 
         _slugified_name_guess = _slugify(default_name) or "carrera"
@@ -3995,7 +4036,11 @@ with tab_web_export:
             _slugify(f"{default_name}-{default_year}") if default_year else _slugify(default_name)
         )
         if not existing_race_for_prefill.get("slug"):
-            _slug_collision_for_default = _find_slug_collision(default_race_slug, guessed_race_dir)
+            _slug_collision_for_default = _find_slug_collision(
+                default_race_slug, guessed_race_dir,
+                own_name=default_name, own_year=int(default_year) if default_year else None,
+                own_distance_km=default_total_km,
+            )
             if _slug_collision_for_default:
                 _disambiguated_slug = (
                     f"{default_race_slug}-{default_distance}k" if default_distance
@@ -4120,7 +4165,9 @@ with tab_web_export:
                 st.error("Completá al menos slug, año, carpeta y carpeta de distancia.")
             elif (
                 _slug_collision := _find_slug_collision(
-                    race_slug, WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder
+                    race_slug, WEB_DATA_DIR / "races" / race_folder / race_year / race_distance_folder,
+                    own_name=race_name, own_year=int(race_year) if race_year else None,
+                    own_distance_km=race_distance_km,
                 )
             ):
                 # Hard-block instead of just warning: this is the exact

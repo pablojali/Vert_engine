@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/emilie-mann/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-174k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 174.0277326138034,
@@ -16,7 +16,7 @@
       "vpi": 806.3,
       "dmi": 10.1,
       "er": 74.6,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/emilie-mann/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-174k/charts/runners/emilie-mann/report.html"
     }
   ],
   "career_avg": {

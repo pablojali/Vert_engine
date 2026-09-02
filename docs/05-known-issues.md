@@ -272,8 +272,36 @@ Ultra Trail by UTMB) sigue emparejando correctamente.
 ---
 
 ## Slug de `race.json` sin distancia colisiona con otra distancia o con el event hub
-**Estado:** resuelto (2026-09-01) — las 7 carreras afectadas corregidas
-y republicadas, guard estructural agregado para que no vuelva a pasar
+**Estado:** resuelto (2026-09-02) — el guard de "Exportar a Web" del
+2026-09-01 tenía un agujero real (ver actualización 2026-09-02 abajo),
+ya cerrado
+
+**Actualización (2026-09-02) - el guard no cubría colisión con el event
+hub:** una nueva distancia (UTMB Mont Blanc 2026, 174k) exportada
+DESPUÉS del fix del 2026-09-01 volvió a colisionar - esta vez con su
+propio event hub, no con una distancia hermana. Causa: `_find_slug_collision()`
+solo comparaba el slug candidato contra el campo `"slug"` de otros
+`race.json` en disco. El event hub, en cambio, nunca se guarda como su
+propio `race.json` - `race_generator._build_events()` calcula su slug al
+vuelo, a partir de nombre+año de la distancia con el `distance_km` más
+chico dentro de la misma carpeta de año. Una distancia nueva puede
+colisionar con esa identidad calculada sin tocar el slug de ninguna otra
+distancia existente, y el guard no tenía forma de detectarlo.
+
+**Fix:** `_find_slug_collision()` ahora replica ese mismo cálculo
+(nombre+año de la distancia con `distance_km` mínimo, incluyendo la
+carrera que se está por exportar en esa comparación - no solo las que ya
+están en disco) y lo suma como una fuente más de colisión. Verificado
+con 4 casos unitarios (distancia nueva grande con slug sin desambiguar →
+colisión; misma distancia con slug desambiguado → sin colisión;
+re-exportar una carrera ya publicada con su propio slug → sin colisión;
+una distancia nueva que legítimamente pasa a ser la más chica → sin
+colisión, es la identidad correcta del hub). El UTMB 174k afectado se
+corrigió a mano igual que los casos anteriores
+(`utmb-mont-blanc-2026-174k`).
+
+**Histórico (2026-09-01):** las 7 carreras afectadas originalmente
+corregidas y republicadas, guard estructural agregado por primera vez.
 
 **Actualización (2026-09-01):** esto dejó de ser un riesgo teórico. Los
 20 corredores de CCC exportados vía "Top Runners" quedaron guardados

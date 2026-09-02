@@ -6,7 +6,7 @@
   "portrait": "/media/athletes/raul-octaviu-butaci/images/portrait.jpg",
   "races": [
     {
-      "race_slug": "utmb-mont-blanc-2026",
+      "race_slug": "utmb-mont-blanc-2026-174k",
       "race_name": "UTMB - Mont Blanc",
       "year": 2026,
       "distance_km": 174.0277326138034,
@@ -16,7 +16,7 @@
       "vpi": 1005.2,
       "dmi": 12.94,
       "er": 79.7,
-      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/raul-octaviu-butaci/report.html"
+      "report": "/media/races/utmb-mont-blanc-2026-174k/charts/runners/raul-octaviu-butaci/report.html"
     }
   ],
   "career_avg": {
