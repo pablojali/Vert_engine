@@ -1,0 +1,27 @@
+{
+  "slug": "julia-rezzi",
+  "name": "Julia REZZI",
+  "country": "FR",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 123,
+      "gender_rank": 16,
+      "finish_time": "25:44:55",
+      "vpi": 805.2,
+      "dmi": 10.13,
+      "er": 75.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/julia-rezzi/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 805.2,
+    "dmi": 10.1,
+    "er": 75.2
+  }
+}

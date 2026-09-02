@@ -1,0 +1,27 @@
+{
+  "slug": "careth-arnold",
+  "name": "Careth ARNOLD",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/careth-arnold/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 51,
+      "gender_rank": 4,
+      "finish_time": "23:05:20",
+      "vpi": 890.6,
+      "dmi": 11.46,
+      "er": 74.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/careth-arnold/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 890.6,
+    "dmi": 11.5,
+    "er": 74.7
+  }
+}

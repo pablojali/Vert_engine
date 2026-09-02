@@ -28,11 +28,24 @@
       "dmi": 10.39,
       "er": 69.1,
       "report": "/media/races/utmb-mont-blanc-2025-174k/charts/runners/lucy-bartholomew/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 63,
+      "gender_rank": 7,
+      "finish_time": "23:44:29",
+      "vpi": 876.6,
+      "dmi": 10.86,
+      "er": 70.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/lucy-bartholomew/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 834.5,
-    "dmi": 11.6,
-    "er": 75.4
+    "vpi": 848.5,
+    "dmi": 11.3,
+    "er": 73.8
   }
 }

@@ -1,0 +1,27 @@
+{
+  "slug": "anne-sofie-pollestad",
+  "name": "Anne-Sofie POLLESTAD",
+  "country": "NO",
+  "gender": null,
+  "portrait": "/media/athletes/anne-sofie-pollestad/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 74,
+      "gender_rank": 10,
+      "finish_time": "24:04:56",
+      "vpi": 856.0,
+      "dmi": 11.05,
+      "er": 78.8,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/anne-sofie-pollestad/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 856.0,
+    "dmi": 11.0,
+    "er": 78.8
+  }
+}

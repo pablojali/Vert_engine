@@ -1,0 +1,27 @@
+{
+  "slug": "rachel-entrekin",
+  "name": "Rachel ENTREKIN",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/rachel-entrekin/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 32,
+      "gender_rank": 2,
+      "finish_time": "22:15:54",
+      "vpi": 937.3,
+      "dmi": 11.57,
+      "er": 74.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/rachel-entrekin/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 937.3,
+    "dmi": 11.6,
+    "er": 74.6
+  }
+}

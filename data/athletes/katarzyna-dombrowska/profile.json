@@ -1,7 +1,7 @@
 {
   "slug": "katarzyna-dombrowska",
   "name": "Katarzyna DOMBROWSKA",
-  "country": null,
+  "country": "PL",
   "portrait": "/media/athletes/katarzyna-dombrowska/images/portrait.png",
   "races": [
     {
@@ -16,11 +16,24 @@
       "dmi": 8.55,
       "er": 44.6,
       "report": "/media/races/val-d-aran-by-utmb-2026/charts/runners/katarzyna-dombrowska/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 57,
+      "gender_rank": 6,
+      "finish_time": "23:27:34",
+      "vpi": 878.2,
+      "dmi": 11.36,
+      "er": 76.2,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/katarzyna-dombrowska/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 784.4,
-    "dmi": 8.6,
-    "er": 44.6
+    "vpi": 831.3,
+    "dmi": 10.0,
+    "er": 60.4
   }
 }

@@ -1,0 +1,27 @@
+{
+  "slug": "oana-marina",
+  "name": "Oana MARINA",
+  "country": "RO",
+  "gender": null,
+  "portrait": "/media/athletes/oana-marina/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 131,
+      "gender_rank": 18,
+      "finish_time": "25:52:56",
+      "vpi": 801.7,
+      "dmi": 10.1,
+      "er": 69.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/oana-marina/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 801.7,
+    "dmi": 10.1,
+    "er": 69.0
+  }
+}

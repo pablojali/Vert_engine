@@ -1,0 +1,27 @@
+{
+  "slug": "antonina-iushina",
+  "name": "Antonina IUSHINA",
+  "country": "AN",
+  "gender": null,
+  "portrait": "/media/athletes/antonina-iushina/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 66,
+      "gender_rank": 8,
+      "finish_time": "23:49:58",
+      "vpi": 858.4,
+      "dmi": 11.31,
+      "er": 73.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/antonina-iushina/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 858.4,
+    "dmi": 11.3,
+    "er": 73.1
+  }
+}

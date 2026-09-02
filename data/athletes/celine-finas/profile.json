@@ -2,7 +2,7 @@
   "slug": "celine-finas",
   "name": "Céline FINAS",
   "country": "FR",
-  "portrait": null,
+  "portrait": "/media/athletes/celine-finas/images/portrait.jpg",
   "races": [
     {
       "race_slug": "marathon-du-mont-blanc-2026-90k",
@@ -16,11 +16,24 @@
       "dmi": 9.33,
       "er": 79.3,
       "report": "/media/races/marathon-du-mont-blanc-2026-90k/charts/runners/celine-finas/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 117,
+      "gender_rank": 15,
+      "finish_time": "25:33:56",
+      "vpi": 815.9,
+      "dmi": 10.16,
+      "er": 76.1,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/celine-finas/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 880.4,
-    "dmi": 9.3,
-    "er": 79.3
+    "vpi": 848.2,
+    "dmi": 9.7,
+    "er": 77.7
   }
 }

@@ -1,0 +1,27 @@
+{
+  "slug": "anne-cecile-thevenot",
+  "name": "Anne Cécile THÉVENOT",
+  "country": "FR",
+  "gender": null,
+  "portrait": "/media/athletes/anne-cecile-thevenot/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 72,
+      "gender_rank": 9,
+      "finish_time": "24:02:00",
+      "vpi": 839.7,
+      "dmi": 11.28,
+      "er": 91.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/anne-cecile-thevenot/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 839.7,
+    "dmi": 11.3,
+    "er": 91.0
+  }
+}

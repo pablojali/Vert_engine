@@ -16,11 +16,24 @@
       "dmi": 12.34,
       "er": 81.1,
       "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/blandine-l-hirondel/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 26,
+      "gender_rank": 1,
+      "finish_time": "21:54:49",
+      "vpi": 947.6,
+      "dmi": 11.84,
+      "er": 76.3,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/blandine-l-hirondel/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 992.6,
-    "dmi": 12.3,
-    "er": 81.1
+    "vpi": 970.1,
+    "dmi": 12.1,
+    "er": 78.7
   }
 }

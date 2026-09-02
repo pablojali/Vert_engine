@@ -1,0 +1,27 @@
+{
+  "slug": "jazmine-lowther",
+  "name": "Jazmine LOWTHER",
+  "country": "CA",
+  "gender": null,
+  "portrait": "/media/athletes/jazmine-lowther/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 56,
+      "gender_rank": 5,
+      "finish_time": "23:21:55",
+      "vpi": 886.0,
+      "dmi": 11.11,
+      "er": 85.4,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/jazmine-lowther/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 886.0,
+    "dmi": 11.1,
+    "er": 85.4
+  }
+}

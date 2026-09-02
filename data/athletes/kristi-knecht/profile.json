@@ -1,0 +1,27 @@
+{
+  "slug": "kristi-knecht",
+  "name": "Kristi KNECHT",
+  "country": "US",
+  "gender": null,
+  "portrait": null,
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 142,
+      "gender_rank": 20,
+      "finish_time": "26:15:30",
+      "vpi": 801.9,
+      "dmi": 9.89,
+      "er": 84.0,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/kristi-knecht/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 801.9,
+    "dmi": 9.9,
+    "er": 84.0
+  }
+}

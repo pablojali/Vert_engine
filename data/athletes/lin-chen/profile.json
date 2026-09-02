@@ -1,0 +1,27 @@
+{
+  "slug": "lin-chen",
+  "name": "Lin CHEN",
+  "country": "CN",
+  "gender": null,
+  "portrait": "/media/athletes/lin-chen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 112,
+      "gender_rank": 14,
+      "finish_time": "25:21:43",
+      "vpi": 817.9,
+      "dmi": 10.3,
+      "er": 78.6,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/lin-chen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 817.9,
+    "dmi": 10.3,
+    "er": 78.6
+  }
+}

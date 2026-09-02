@@ -1,0 +1,27 @@
+{
+  "slug": "leah-yingling",
+  "name": "Leah YINGLING",
+  "country": "US",
+  "gender": null,
+  "portrait": "/media/athletes/leah-yingling/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 81,
+      "gender_rank": 12,
+      "finish_time": "24:18:16",
+      "vpi": 860.1,
+      "dmi": 10.71,
+      "er": 77.9,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/leah-yingling/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 860.1,
+    "dmi": 10.7,
+    "er": 77.9
+  }
+}

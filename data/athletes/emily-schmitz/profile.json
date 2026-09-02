@@ -16,11 +16,24 @@
       "dmi": 11.1,
       "er": 84.7,
       "report": "/media/races/utmb-mont-blanc-2025-100k/charts/runners/emily-schmitz/report.html"
+    },
+    {
+      "race_slug": "utmb-mont-blanc-2026",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 174.0277326138034,
+      "position": 33,
+      "gender_rank": 3,
+      "finish_time": "22:17:28",
+      "vpi": 928.6,
+      "dmi": 11.72,
+      "er": 84.7,
+      "report": "/media/races/utmb-mont-blanc-2026/charts/runners/emily-schmitz/report.html"
     }
   ],
   "career_avg": {
-    "vpi": 888.6,
-    "dmi": 11.1,
+    "vpi": 908.6,
+    "dmi": 11.4,
     "er": 84.7
   }
 }
