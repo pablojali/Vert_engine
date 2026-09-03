@@ -1,0 +1,83 @@
+Contexto:
+
+Tengo dos archivos de referencia que voy
+a dejar en el repo del engine, Nueva carpeta Report:
+
+  - vertlabs_pdf_report_engine.zip → código fuente de un generador de PDF (mockup
+    funcional) para el "Athlete Performance Report" de VertLabs
+  - VertLabs_Wayne_Walsh_Lavaredo120K_2026.pdf → el PDF de referencia que ese código
+    produce, para que compares visualmente el resultado final
+
+
+FLUJO DE USUARIO QUE QUIERO (esto es lo importante, léelo antes de tocar código):
+
+1. Yo ya uso el engine hoy así: corro el análisis de una carrera (como siempre),
+   y en la pestaña actual pego el link de Livetrail de un corredor para
+   analizarlo. Esa pestaña y ese flujo NO cambian — se mantienen tal cual están.
+2. Quiero una pestaña NUEVA, "Report", que:
+   a) me deje elegir una carrera + un atleta que YA fueron procesados por el
+      engine (no vuelve a scrapear ni a recalcular nada — reusa los datos que
+      ya existen en memoria/sesión o en el storage que el engine ya usa hoy
+      para esos resultados),
+   b) tome esos datos reales y arme el JSON con la forma que espera
+      render_pdf.py (necesito ver el mapeo campo a campo antes de aprobarlo),
+   c) genere el PDF y me dé un st.download_button para bajarlo a mi PC,
+   d) ADEMÁS intente guardar una copia del PDF generado en algún lugar
+      del repo engine. 
+
+Antes de tocar nada, hacé este Step 0 de investigación y reportame lo que
+encontraste antes de proponer un plan:
+
+1. Descomprimí vertlabs_pdf_report_engine.zip en una carpeta temporal de
+   referencia (ej. _reference/pdf_mockup/) y leé todos sus archivos:
+   theme.py, components.py, interpretation.py, make_charts.py, render_pdf.py,
+   data/wayne_walsh_lavaredo120k_2026.json, fonts_ttf/.
+2. Abrí el PDF adjunto y confirmá visualmente que el código reproduce ese diseño.
+3. Inspeccioná la app Streamlit actual: cómo están armadas las pestañas hoy
+   (st.tabs, multipage, sidebar nav), y en qué variable/estructura de sesión
+   o storage quedan los datos de una carrera+atleta ya analizados, para poder
+   leerlos desde la pestaña nueva sin recalcular nada.
+4. Localizá el JSON real que el engine produce hoy para un atleta procesado
+   (el que alimenta el Builder/HTML), y compará su shape contra
+   data/wayne_walsh_lavaredo120k_2026.json. Decime explícitamente qué campos
+   de interpretation.py (degradation_index, position_summary, segments con
+   sus roles BEST CLIMB/WORST CLIMB/etc., vpi_half, dmi_half,
+   effort_pace_half) existen hoy, cuáles hay que derivar, y cuáles no existen
+   en absoluto.
+5. Confirmá qué fuentes están realmente disponibles: el zip trae Inter
+   convertido a TTF en fonts_ttf/, pero JetBrainsMono-Medium.ttf NO está
+   incluido (era una fuente de sistema en mi sandbox, no se empaquetó).
+   Consíguela (es open source, SIL license) y agregala al repo, o proponeme
+   una alternativa mono si preferís no depender de ella.
+6. Verificá qué necesita reportlab/matplotlib para correr en Streamlit
+   Community Cloud (requirements.txt, y si hace falta algo en packages.txt).
+
+Objetivo de estructura (no lo implementes todavía, primero confirmá el plan):
+
+- Carpeta nueva y aislada, ej. pdf_reports/, con theme.py, components.py,
+  interpretation.py, make_charts.py, render_pdf.py, y fonts/. Esta carpeta
+  NO debe ser importada por el Builder ni por nada que termine en output/.
+- La pestaña "Report" vive en la app Streamlit privada. El PDF NUNCA debe
+  llegar a output/ ni a ninguna carpeta que el Builder empuje a
+  vertlabs-web / Cloudflare Pages. Es privado: se genera en memoria (BytesIO)
+  y se descarga bajo demanda. Si en algún punto ves riesgo de que algo se
+  filtre a la salida pública, avisame antes de continuar.
+- Preservá tal cual el patrón de interpretation.py: reglas por umbral,
+  centralizadas en THRESHOLDS, con una frase fija por bucket (ver
+  fatigue_signal() como ejemplo). Cada frase del PDF debe seguir siendo
+  trazable a un campo de datos real — NO lo reemplaces por texto generado
+  libremente por un LLM en cada corrida. Si al mapear datos reales (paso 4
+  del Step 0) falta un campo que interpretation.py necesita, decime
+  explícitamente qué falta en vez de inventar un valor por defecto o
+  simplificar la regla.
+
+Trabajá sobre web-builder (o una rama nueva desde ahí). No toques main ni el
+deployment de Streamlit Cloud.
+
+Dame el plan con checkpoints antes de escribir código. Quiero aprobar cada
+paso: (1) resultado del Step 0 completo + opciones de guardado persistente,
+(2) estructura de carpetas + mapeo de datos campo a campo, (3) integración de
+la pestaña Streamlit leyendo datos reales de sesión, sin el PDF todavía,
+(4) generación real del PDF + download button, (5) implementación de guardado
+persistente según lo que decida en el punto 1, (6) prueba de punta a punta
+con un atleta real.
