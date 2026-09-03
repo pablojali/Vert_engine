@@ -8,3 +8,5 @@ streamlit
 requests
 openpyxl
 Jinja2
+reportlab
+matplotlib

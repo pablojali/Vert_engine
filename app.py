@@ -26,6 +26,8 @@ from data.gpx_loader import (
     get_carrera_info,
     get_carreras,
 )
+from pdf_reports.data_mapper import build_report_data, MissingReportData
+from pdf_reports.render_pdf import build_pdf
 
 # 1. Page configuration - VertLabs style
 st.set_page_config(page_title="VertLabs - Trail Analytics", page_icon="🏃‍♂️", layout="wide")
@@ -1570,20 +1572,21 @@ def _sync_output_to_web_repo(web_repo_dir: Path) -> None:
             entry.unlink()
 
 
-def _backup_engine_data() -> tuple[bool, str]:
-    """Commits+pushes Vert_engine's own data/ to GitHub. Runs before the
-    site is even built, so a Codespace dying or hanging right after this
-    never loses race/athlete data again - only ever the site rebuild,
-    which is a 2-minute redo, not a from-scratch data re-entry."""
-    r = _run_git(ENGINE_ROOT, "add", "data/")
+def _backup_engine_folder(folder: str, commit_message: str) -> tuple[bool, str]:
+    """Commits+pushes one folder inside Vert_engine to GitHub - shared by
+    _backup_engine_data() (data/) and the "Report" tab (reports/), so a
+    Streamlit Cloud restart/redeploy (which wipes anything not
+    committed - see docs/05-known-issues.md) can never silently lose
+    either one."""
+    r = _run_git(ENGINE_ROOT, "add", folder)
     log = r.stdout + r.stderr
     r = _run_git(ENGINE_ROOT, "diff", "--cached", "--quiet")
     if r.returncode == 0:
-        return True, log + "Sin cambios en data/ - nada para respaldar.\n"
-    r = _run_git(ENGINE_ROOT, "commit", "-m", "Backup de datos desde el botón Publicar")
+        return True, log + f"Sin cambios en {folder} - nada para respaldar.\n"
+    r = _run_git(ENGINE_ROOT, "commit", "-m", commit_message)
     log += r.stdout + r.stderr
     if r.returncode != 0:
-        return False, "Falló el respaldo de data/ (commit):\n" + log
+        return False, f"Falló el respaldo de {folder} (commit):\n" + log
 
     r = _run_git(ENGINE_ROOT, "rev-parse", "--abbrev-ref", "HEAD")
     current_branch = r.stdout.strip() or "HEAD"
@@ -1591,8 +1594,16 @@ def _backup_engine_data() -> tuple[bool, str]:
     r = _run_git(ENGINE_ROOT, "push", "-u", "origin", current_branch)
     log += r.stdout + r.stderr
     if r.returncode != 0:
-        return False, "Falló el respaldo de data/ (push):\n" + log
+        return False, f"Falló el respaldo de {folder} (push):\n" + log
     return True, log
+
+
+def _backup_engine_data() -> tuple[bool, str]:
+    """Commits+pushes Vert_engine's own data/ to GitHub. Runs before the
+    site is even built, so a Codespace dying or hanging right after this
+    never loses race/athlete data again - only ever the site rebuild,
+    which is a 2-minute redo, not a from-scratch data re-entry."""
+    return _backup_engine_folder("data/", "Backup de datos desde el botón Publicar")
 
 
 def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
@@ -1900,14 +1911,18 @@ def _web_export_track_result(race_key, runner_info, indices, report_html=None):
         pass
 
 
-def _pdf_report_track_result(race_key, runner_info, indices, df_runner, df_segment_degradation):
+def _pdf_report_track_result(race_key, runner_info, indices, df_runner, df_segment_degradation, df_crossed):
     """Stashes everything the 'Report' tab (PDF Athlete Performance
     Report) needs for one runner, keyed the same way as
     web_export_pool - called from the exact same two call sites, right
     after indices are computed. Unlike web_export_pool this keeps the
     full per-checkpoint DataFrame (has the 'Rank' column used for
-    position_progression) and the per-segment breakdown DataFrame (VPI/
-    DMI Raw, reliability flags) - the Report tab reads these directly
+    position_progression), the per-segment breakdown DataFrame (VPI/
+    DMI Raw, reliability flags), and df_crossed (has 'Effort Km
+    Accumulated', the same effort-weighted halving calculate_runner_indices
+    already uses for the ER first/second-half split - reused so VPI/DMI's
+    own halves are computed the exact same way instead of a simplified
+    plain-distance approximation). The Report tab reads these directly
     instead of recalculating anything, so it can offer every runner
     analyzed this session, not just the last one."""
     try:
@@ -1922,6 +1937,7 @@ def _pdf_report_track_result(race_key, runner_info, indices, df_runner, df_segme
             "indices": indices,
             "df_runner": df_runner,
             "df_segment_degradation": df_segment_degradation,
+            "df_crossed": df_crossed,
         }
     except Exception:
         pass
@@ -2562,6 +2578,7 @@ with tab_runner_lt:
                 )
                 _pdf_report_track_result(
                     selected_race_lt, runner_info_lt, indices_lt, df_runner_lt, df_segment_degradation_lt,
+                    df_crossed_lt,
                 )
 
                 fig_vpi_lt = figures_lt["🧗 VPI - Vertical Power Index"]
@@ -3088,6 +3105,7 @@ with tab_top:
                         _pdf_report_track_result(
                             selected_race_top, runner_info_bib, analysis_bib["indices"],
                             df_runner_bib, analysis_bib["df_segment_degradation"],
+                            analysis_bib["df_crossed"],
                         )
                     except Exception:
                         errors[bib] = traceback.format_exc()
@@ -4740,4 +4758,69 @@ with tab_pdf_report:
                 st.write("**df_segment_degradation:**")
                 st.dataframe(df_segment_pdf, use_container_width=True)
 
-            st.info("🚧 Generación de PDF: próximo checkpoint (aún no genera nada acá).")
+            st.markdown("---")
+            generate_pdf_clicked = st.button(
+                "📄 Generar PDF", type="primary", use_container_width=True, key="pdf_report_generate_btn",
+            )
+            if generate_pdf_clicked:
+                race_data_pdf = st.session_state.get('saved_races', {}).get(pdf_race_key)
+                if not race_data_pdf:
+                    st.error(
+                        "⚠️ Esta carrera ya no está cargada en '🗺️ Race Analysis' esta sesión "
+                        "(hace falta su geometría de checkpoints/GPX, no solo lo que quedó "
+                        "acá) - volvé a cargarla ahí y probá de nuevo."
+                    )
+                else:
+                    try:
+                        total_gain_pdf = calculate_total_elevation_gain(race_data_pdf["df"])
+                        report_data_pdf = build_report_data(
+                            pdf_race_key, runner_bundle, race_data_pdf, total_gain_pdf,
+                        )
+                        pdf_bytes = build_pdf(report_data_pdf)
+                    except MissingReportData as e:
+                        st.session_state.pop('pdf_report_bytes', None)
+                        st.error(f"⚠️ No se pudo armar el PDF: {e}")
+                    except Exception:
+                        st.session_state.pop('pdf_report_bytes', None)
+                        st.error("❌ Error inesperado generando el PDF.")
+                        with st.expander("Ver detalle técnico del error"):
+                            st.code(traceback.format_exc(), language="python")
+                    else:
+                        athlete_slug_pdf = _slugify(runner_info_pdf.get("Name") or "runner")
+                        race_slug_pdf = _slugify(pdf_race_key)
+                        st.session_state['pdf_report_bytes'] = pdf_bytes
+                        st.session_state['pdf_report_filename'] = f"{athlete_slug_pdf}_{race_slug_pdf}_vtl_report.pdf"
+                        st.session_state['pdf_report_athlete_slug'] = athlete_slug_pdf
+                        st.session_state['pdf_report_race_slug'] = race_slug_pdf
+                        st.success("✅ PDF generado.")
+
+            if st.session_state.get('pdf_report_bytes'):
+                st.download_button(
+                    "⬇️ Descargar PDF",
+                    data=st.session_state['pdf_report_bytes'],
+                    file_name=st.session_state.get('pdf_report_filename', "vtl_report.pdf"),
+                    mime="application/pdf",
+                    use_container_width=True,
+                    key="pdf_report_download_btn",
+                )
+
+                if st.button(
+                    "💾 Guardar copia en el repo (reports/)", use_container_width=True, key="pdf_report_persist_btn",
+                ):
+                    reports_dir = ENGINE_ROOT / "reports" / st.session_state['pdf_report_athlete_slug']
+                    reports_dir.mkdir(parents=True, exist_ok=True)
+                    pdf_path = reports_dir / f"{st.session_state['pdf_report_race_slug']}.pdf"
+                    pdf_path.write_bytes(st.session_state['pdf_report_bytes'])
+                    with st.spinner("Commiteando y pusheando reports/ a GitHub..."):
+                        backup_ok, backup_log = _backup_engine_folder(
+                            "reports/", "Guardar informe PDF desde la pestaña Report",
+                        )
+                    if backup_ok:
+                        st.success(f"✅ Guardado y respaldado en `{pdf_path.relative_to(ENGINE_ROOT)}`.")
+                    else:
+                        st.warning(
+                            "⚠️ Se guardó en disco pero el respaldo a GitHub falló - no reinicies "
+                            "el Engine hasta resolverlo, o vas a perder esta copia."
+                        )
+                        with st.expander("Ver detalle del error de respaldo"):
+                            st.code(backup_log)
