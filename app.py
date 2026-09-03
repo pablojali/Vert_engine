@@ -1418,6 +1418,17 @@ if 'saved_races' not in st.session_state:
 if 'web_export_pool' not in st.session_state:
     st.session_state['web_export_pool'] = {}
 
+# Separate pool feeding the "Report" tab (PDF Athlete Performance Report):
+# same call sites as web_export_pool above, but this one DOES carry the
+# full per-checkpoint/per-segment DataFrames (web_export_pool
+# deliberately doesn't, since it only ever needed the reduced summary
+# for race.json/profile.json) - the Report tab needs the full breakdown
+# to build the PDF's charts and segment table without recalculating
+# anything. Kept as its own dict so extending it can't affect the
+# public-web export path at all.
+if 'pdf_report_pool' not in st.session_state:
+    st.session_state['pdf_report_pool'] = {}
+
 WEB_DATA_DIR = Path(__file__).parent / "data"
 ENGINE_ROOT = Path(__file__).parent
 PUBLISH_CONFIG_PATH = ENGINE_ROOT / ".local_publish_config.json"
@@ -1889,6 +1900,33 @@ def _web_export_track_result(race_key, runner_info, indices, report_html=None):
         pass
 
 
+def _pdf_report_track_result(race_key, runner_info, indices, df_runner, df_segment_degradation):
+    """Stashes everything the 'Report' tab (PDF Athlete Performance
+    Report) needs for one runner, keyed the same way as
+    web_export_pool - called from the exact same two call sites, right
+    after indices are computed. Unlike web_export_pool this keeps the
+    full per-checkpoint DataFrame (has the 'Rank' column used for
+    position_progression) and the per-segment breakdown DataFrame (VPI/
+    DMI Raw, reliability flags) - the Report tab reads these directly
+    instead of recalculating anything, so it can offer every runner
+    analyzed this session, not just the last one."""
+    try:
+        if not race_key or not runner_info or not indices:
+            return
+        race_pool = st.session_state['pdf_report_pool'].setdefault(race_key, {})
+        name = runner_info.get("Name") or "Runner"
+        bib = runner_info.get("Bib")
+        runner_key = str(bib) if bib not in (None, "") else _slugify(name)
+        race_pool[runner_key] = {
+            "runner_info": runner_info,
+            "indices": indices,
+            "df_runner": df_runner,
+            "df_segment_degradation": df_segment_degradation,
+        }
+    except Exception:
+        pass
+
+
 # ---------------------------------------------
 # Shared block-editor engine, used by both the race Analysis Editor and
 # the Posts editor: an ordered list of content blocks (text/html/image/
@@ -2045,10 +2083,10 @@ def _collect_blocks_from_state(
     return blocks
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_engine_live, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_engine_live, tab_checkpoints, tab_web_export, tab_posts, tab_pdf_report = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
      "⚖️ UTMB vs GPX", "🏆 Top Runners", "📡 Engine Live", "🧩 Checkpoint Fetcher",
-     "🌐 Exportar a Web", "📰 Posts"]
+     "🌐 Exportar a Web", "📰 Posts", "📄 Report"]
 )
 
 # ---------------------------------------------
@@ -2521,6 +2559,9 @@ with tab_runner_lt:
                         st.code(traceback.format_exc(), language="python")
                 _web_export_track_result(
                     selected_race_lt, runner_info_lt, indices_lt, report_html=full_report_html_lt,
+                )
+                _pdf_report_track_result(
+                    selected_race_lt, runner_info_lt, indices_lt, df_runner_lt, df_segment_degradation_lt,
                 )
 
                 fig_vpi_lt = figures_lt["🧗 VPI - Vertical Power Index"]
@@ -3043,6 +3084,10 @@ with tab_top:
                         _web_export_track_result(
                             selected_race_top, runner_info_bib, analysis_bib["indices"],
                             report_html=report_html_bib,
+                        )
+                        _pdf_report_track_result(
+                            selected_race_top, runner_info_bib, analysis_bib["indices"],
+                            df_runner_bib, analysis_bib["df_segment_degradation"],
                         )
                     except Exception:
                         errors[bib] = traceback.format_exc()
@@ -4621,3 +4666,78 @@ with tab_posts:
             }
             post_path.write_text(json.dumps(post_json, ensure_ascii=False, indent=2), encoding="utf-8")
             st.success("✅ Post guardado. Usá el botón '🚀 Publicar sitio' de la barra lateral para subirlo.")
+
+
+# ---------------------------------------------
+# TAB: Report (PDF Athlete Performance Report)
+#
+# Checkpoint 3 of the PDF report feature (see Report/Contexto.txt):
+# reads real session data from pdf_report_pool, populated automatically
+# by "Runner Metrics (LiveTrail)" and "Top Runners" every time they
+# finish computing a runner's indices (_pdf_report_track_result) - never
+# recalculates or re-scrapes anything itself. PDF generation is a later
+# checkpoint; this one only proves the tab can find and display the
+# right already-computed data for a chosen race + athlete.
+# ---------------------------------------------
+with tab_pdf_report:
+    st.header("📄 Athlete Performance Report (PDF)")
+    st.caption(
+        "Elegí una carrera y un corredor ya procesados esta sesión (en '🏃 Runner Metrics "
+        "(LiveTrail)' o '🏆 Top Runners') para armar su PDF - no se vuelve a calcular ni a "
+        "scrapear nada."
+    )
+
+    report_pool = st.session_state.get('pdf_report_pool', {})
+    if not report_pool:
+        st.info(
+            "⚠️ Todavía no analizaste ningún corredor esta sesión. Andá a "
+            "'🏃 Runner Metrics (LiveTrail)' o '🏆 Top Runners', analizá al menos uno, "
+            "y va a aparecer acá automáticamente."
+        )
+    else:
+        pdf_race_key = st.selectbox(
+            "Carrera", options=list(report_pool.keys()), key="pdf_report_race_selector",
+        )
+        runners_for_pdf = report_pool.get(pdf_race_key, {})
+
+        if not runners_for_pdf:
+            st.warning("Esta carrera no tiene corredores con datos completos todavía.")
+        else:
+            runner_labels = {
+                f"{r['runner_info'].get('Name') or 'Runner'} (Bib {r['runner_info'].get('Bib') or '-'})": key
+                for key, r in runners_for_pdf.items()
+            }
+            pdf_runner_label = st.selectbox(
+                "Corredor", options=list(runner_labels.keys()), key="pdf_report_runner_selector",
+            )
+            selected_runner_key = runner_labels[pdf_runner_label]
+            runner_bundle = runners_for_pdf[selected_runner_key]
+
+            runner_info_pdf = runner_bundle["runner_info"]
+            indices_pdf = runner_bundle["indices"]
+            df_runner_pdf = runner_bundle["df_runner"]
+            df_segment_pdf = runner_bundle["df_segment_degradation"]
+
+            st.markdown("---")
+            st.markdown(f"##### {runner_info_pdf.get('Name') or 'Runner'} — {pdf_race_key}")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("VPI", indices_pdf.get("VPI") if indices_pdf.get("VPI") is not None else "—")
+            c2.metric("DMI", indices_pdf.get("DMI") if indices_pdf.get("DMI") is not None else "—")
+            c3.metric("ER", indices_pdf.get("ER") if indices_pdf.get("ER") is not None else "—")
+            c4.metric("Overall Rank", runner_info_pdf.get("Overall Rank") or "—")
+
+            valid_segments = df_segment_pdf.dropna(subset=["VPI Raw (m/h)", "DMI Raw (km/h)"], how="all")
+            st.caption(
+                f"{len(df_segment_pdf)} segmento(s) calculado(s) ({len(valid_segments)} con VPI o DMI "
+                f"válido) · {len(df_runner_pdf)} checkpoint(s) de este corredor."
+            )
+
+            with st.expander("Ver datos crudos disponibles (para el mapeo del PDF)"):
+                st.write("**runner_info:**", runner_info_pdf)
+                st.write("**indices:**", indices_pdf)
+                st.write("**df_runner (checkpoints):**")
+                st.dataframe(df_runner_pdf, use_container_width=True)
+                st.write("**df_segment_degradation:**")
+                st.dataframe(df_segment_pdf, use_container_width=True)
+
+            st.info("🚧 Generación de PDF: próximo checkpoint (aún no genera nada acá).")

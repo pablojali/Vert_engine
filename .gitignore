@@ -5,3 +5,4 @@ venv/
 output/
 .env
 .local_publish_config.json
+_reference/
