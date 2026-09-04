@@ -26,6 +26,8 @@ from data.gpx_loader import (
     get_carrera_info,
     get_carreras,
 )
+from pdf_reports.data_mapper import build_report_data, MissingReportData
+from pdf_reports.render_pdf import build_pdf
 
 # 1. Page configuration - VertLabs style
 st.set_page_config(page_title="VertLabs - Trail Analytics", page_icon="🏃‍♂️", layout="wide")
@@ -1418,6 +1420,17 @@ if 'saved_races' not in st.session_state:
 if 'web_export_pool' not in st.session_state:
     st.session_state['web_export_pool'] = {}
 
+# Separate pool feeding the "Report" tab (PDF Athlete Performance Report):
+# same call sites as web_export_pool above, but this one DOES carry the
+# full per-checkpoint/per-segment DataFrames (web_export_pool
+# deliberately doesn't, since it only ever needed the reduced summary
+# for race.json/profile.json) - the Report tab needs the full breakdown
+# to build the PDF's charts and segment table without recalculating
+# anything. Kept as its own dict so extending it can't affect the
+# public-web export path at all.
+if 'pdf_report_pool' not in st.session_state:
+    st.session_state['pdf_report_pool'] = {}
+
 WEB_DATA_DIR = Path(__file__).parent / "data"
 ENGINE_ROOT = Path(__file__).parent
 PUBLISH_CONFIG_PATH = ENGINE_ROOT / ".local_publish_config.json"
@@ -1559,20 +1572,21 @@ def _sync_output_to_web_repo(web_repo_dir: Path) -> None:
             entry.unlink()
 
 
-def _backup_engine_data() -> tuple[bool, str]:
-    """Commits+pushes Vert_engine's own data/ to GitHub. Runs before the
-    site is even built, so a Codespace dying or hanging right after this
-    never loses race/athlete data again - only ever the site rebuild,
-    which is a 2-minute redo, not a from-scratch data re-entry."""
-    r = _run_git(ENGINE_ROOT, "add", "data/")
+def _backup_engine_folder(folder: str, commit_message: str) -> tuple[bool, str]:
+    """Commits+pushes one folder inside Vert_engine to GitHub - shared by
+    _backup_engine_data() (data/) and the "Report" tab (reports/), so a
+    Streamlit Cloud restart/redeploy (which wipes anything not
+    committed - see docs/05-known-issues.md) can never silently lose
+    either one."""
+    r = _run_git(ENGINE_ROOT, "add", folder)
     log = r.stdout + r.stderr
     r = _run_git(ENGINE_ROOT, "diff", "--cached", "--quiet")
     if r.returncode == 0:
-        return True, log + "Sin cambios en data/ - nada para respaldar.\n"
-    r = _run_git(ENGINE_ROOT, "commit", "-m", "Backup de datos desde el botón Publicar")
+        return True, log + f"Sin cambios en {folder} - nada para respaldar.\n"
+    r = _run_git(ENGINE_ROOT, "commit", "-m", commit_message)
     log += r.stdout + r.stderr
     if r.returncode != 0:
-        return False, "Falló el respaldo de data/ (commit):\n" + log
+        return False, f"Falló el respaldo de {folder} (commit):\n" + log
 
     r = _run_git(ENGINE_ROOT, "rev-parse", "--abbrev-ref", "HEAD")
     current_branch = r.stdout.strip() or "HEAD"
@@ -1580,8 +1594,16 @@ def _backup_engine_data() -> tuple[bool, str]:
     r = _run_git(ENGINE_ROOT, "push", "-u", "origin", current_branch)
     log += r.stdout + r.stderr
     if r.returncode != 0:
-        return False, "Falló el respaldo de data/ (push):\n" + log
+        return False, f"Falló el respaldo de {folder} (push):\n" + log
     return True, log
+
+
+def _backup_engine_data() -> tuple[bool, str]:
+    """Commits+pushes Vert_engine's own data/ to GitHub. Runs before the
+    site is even built, so a Codespace dying or hanging right after this
+    never loses race/athlete data again - only ever the site rebuild,
+    which is a 2-minute redo, not a from-scratch data re-entry."""
+    return _backup_engine_folder("data/", "Backup de datos desde el botón Publicar")
 
 
 def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
@@ -1889,6 +1911,38 @@ def _web_export_track_result(race_key, runner_info, indices, report_html=None):
         pass
 
 
+def _pdf_report_track_result(race_key, runner_info, indices, df_runner, df_segment_degradation, df_crossed):
+    """Stashes everything the 'Report' tab (PDF Athlete Performance
+    Report) needs for one runner, keyed the same way as
+    web_export_pool - called from the exact same two call sites, right
+    after indices are computed. Unlike web_export_pool this keeps the
+    full per-checkpoint DataFrame (has the 'Rank' column used for
+    position_progression), the per-segment breakdown DataFrame (VPI/
+    DMI Raw, reliability flags), and df_crossed (has 'Effort Km
+    Accumulated', the same effort-weighted halving calculate_runner_indices
+    already uses for the ER first/second-half split - reused so VPI/DMI's
+    own halves are computed the exact same way instead of a simplified
+    plain-distance approximation). The Report tab reads these directly
+    instead of recalculating anything, so it can offer every runner
+    analyzed this session, not just the last one."""
+    try:
+        if not race_key or not runner_info or not indices:
+            return
+        race_pool = st.session_state['pdf_report_pool'].setdefault(race_key, {})
+        name = runner_info.get("Name") or "Runner"
+        bib = runner_info.get("Bib")
+        runner_key = str(bib) if bib not in (None, "") else _slugify(name)
+        race_pool[runner_key] = {
+            "runner_info": runner_info,
+            "indices": indices,
+            "df_runner": df_runner,
+            "df_segment_degradation": df_segment_degradation,
+            "df_crossed": df_crossed,
+        }
+    except Exception:
+        pass
+
+
 # ---------------------------------------------
 # Shared block-editor engine, used by both the race Analysis Editor and
 # the Posts editor: an ordered list of content blocks (text/html/image/
@@ -2045,10 +2099,10 @@ def _collect_blocks_from_state(
     return blocks
 
 
-tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_engine_live, tab_checkpoints, tab_web_export, tab_posts = st.tabs(
+tab_race, tab_runner_lt, tab_gpx, tab_comparison, tab_top, tab_engine_live, tab_checkpoints, tab_web_export, tab_posts, tab_pdf_report = st.tabs(
     ["🗺️ Race Analysis", "🏃 Runner Metrics (LiveTrail)", "🛰️ GPX Metrics",
      "⚖️ UTMB vs GPX", "🏆 Top Runners", "📡 Engine Live", "🧩 Checkpoint Fetcher",
-     "🌐 Exportar a Web", "📰 Posts"]
+     "🌐 Exportar a Web", "📰 Posts", "📄 Report"]
 )
 
 # ---------------------------------------------
@@ -2521,6 +2575,10 @@ with tab_runner_lt:
                         st.code(traceback.format_exc(), language="python")
                 _web_export_track_result(
                     selected_race_lt, runner_info_lt, indices_lt, report_html=full_report_html_lt,
+                )
+                _pdf_report_track_result(
+                    selected_race_lt, runner_info_lt, indices_lt, df_runner_lt, df_segment_degradation_lt,
+                    df_crossed_lt,
                 )
 
                 fig_vpi_lt = figures_lt["🧗 VPI - Vertical Power Index"]
@@ -3043,6 +3101,11 @@ with tab_top:
                         _web_export_track_result(
                             selected_race_top, runner_info_bib, analysis_bib["indices"],
                             report_html=report_html_bib,
+                        )
+                        _pdf_report_track_result(
+                            selected_race_top, runner_info_bib, analysis_bib["indices"],
+                            df_runner_bib, analysis_bib["df_segment_degradation"],
+                            analysis_bib["df_crossed"],
                         )
                     except Exception:
                         errors[bib] = traceback.format_exc()
@@ -4621,3 +4684,143 @@ with tab_posts:
             }
             post_path.write_text(json.dumps(post_json, ensure_ascii=False, indent=2), encoding="utf-8")
             st.success("✅ Post guardado. Usá el botón '🚀 Publicar sitio' de la barra lateral para subirlo.")
+
+
+# ---------------------------------------------
+# TAB: Report (PDF Athlete Performance Report)
+#
+# Checkpoint 3 of the PDF report feature (see Report/Contexto.txt):
+# reads real session data from pdf_report_pool, populated automatically
+# by "Runner Metrics (LiveTrail)" and "Top Runners" every time they
+# finish computing a runner's indices (_pdf_report_track_result) - never
+# recalculates or re-scrapes anything itself. PDF generation is a later
+# checkpoint; this one only proves the tab can find and display the
+# right already-computed data for a chosen race + athlete.
+# ---------------------------------------------
+with tab_pdf_report:
+    st.header("📄 Athlete Performance Report (PDF)")
+    st.caption(
+        "Elegí una carrera y un corredor ya procesados esta sesión (en '🏃 Runner Metrics "
+        "(LiveTrail)' o '🏆 Top Runners') para armar su PDF - no se vuelve a calcular ni a "
+        "scrapear nada."
+    )
+
+    report_pool = st.session_state.get('pdf_report_pool', {})
+    if not report_pool:
+        st.info(
+            "⚠️ Todavía no analizaste ningún corredor esta sesión. Andá a "
+            "'🏃 Runner Metrics (LiveTrail)' o '🏆 Top Runners', analizá al menos uno, "
+            "y va a aparecer acá automáticamente."
+        )
+    else:
+        pdf_race_key = st.selectbox(
+            "Carrera", options=list(report_pool.keys()), key="pdf_report_race_selector",
+        )
+        runners_for_pdf = report_pool.get(pdf_race_key, {})
+
+        if not runners_for_pdf:
+            st.warning("Esta carrera no tiene corredores con datos completos todavía.")
+        else:
+            runner_labels = {
+                f"{r['runner_info'].get('Name') or 'Runner'} (Bib {r['runner_info'].get('Bib') or '-'})": key
+                for key, r in runners_for_pdf.items()
+            }
+            pdf_runner_label = st.selectbox(
+                "Corredor", options=list(runner_labels.keys()), key="pdf_report_runner_selector",
+            )
+            selected_runner_key = runner_labels[pdf_runner_label]
+            runner_bundle = runners_for_pdf[selected_runner_key]
+
+            runner_info_pdf = runner_bundle["runner_info"]
+            indices_pdf = runner_bundle["indices"]
+            df_runner_pdf = runner_bundle["df_runner"]
+            df_segment_pdf = runner_bundle["df_segment_degradation"]
+
+            st.markdown("---")
+            st.markdown(f"##### {runner_info_pdf.get('Name') or 'Runner'} — {pdf_race_key}")
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("VPI", indices_pdf.get("VPI") if indices_pdf.get("VPI") is not None else "—")
+            c2.metric("DMI", indices_pdf.get("DMI") if indices_pdf.get("DMI") is not None else "—")
+            c3.metric("ER", indices_pdf.get("ER") if indices_pdf.get("ER") is not None else "—")
+            c4.metric("Overall Rank", runner_info_pdf.get("Overall Rank") or "—")
+
+            valid_segments = df_segment_pdf.dropna(subset=["VPI Raw (m/h)", "DMI Raw (km/h)"], how="all")
+            st.caption(
+                f"{len(df_segment_pdf)} segmento(s) calculado(s) ({len(valid_segments)} con VPI o DMI "
+                f"válido) · {len(df_runner_pdf)} checkpoint(s) de este corredor."
+            )
+
+            with st.expander("Ver datos crudos disponibles (para el mapeo del PDF)"):
+                st.write("**runner_info:**", runner_info_pdf)
+                st.write("**indices:**", indices_pdf)
+                st.write("**df_runner (checkpoints):**")
+                st.dataframe(df_runner_pdf, use_container_width=True)
+                st.write("**df_segment_degradation:**")
+                st.dataframe(df_segment_pdf, use_container_width=True)
+
+            st.markdown("---")
+            generate_pdf_clicked = st.button(
+                "📄 Generar PDF", type="primary", use_container_width=True, key="pdf_report_generate_btn",
+            )
+            if generate_pdf_clicked:
+                race_data_pdf = st.session_state.get('saved_races', {}).get(pdf_race_key)
+                if not race_data_pdf:
+                    st.error(
+                        "⚠️ Esta carrera ya no está cargada en '🗺️ Race Analysis' esta sesión "
+                        "(hace falta su geometría de checkpoints/GPX, no solo lo que quedó "
+                        "acá) - volvé a cargarla ahí y probá de nuevo."
+                    )
+                else:
+                    try:
+                        total_gain_pdf = calculate_total_elevation_gain(race_data_pdf["df"])
+                        report_data_pdf = build_report_data(
+                            pdf_race_key, runner_bundle, race_data_pdf, total_gain_pdf,
+                        )
+                        pdf_bytes = build_pdf(report_data_pdf)
+                    except MissingReportData as e:
+                        st.session_state.pop('pdf_report_bytes', None)
+                        st.error(f"⚠️ No se pudo armar el PDF: {e}")
+                    except Exception:
+                        st.session_state.pop('pdf_report_bytes', None)
+                        st.error("❌ Error inesperado generando el PDF.")
+                        with st.expander("Ver detalle técnico del error"):
+                            st.code(traceback.format_exc(), language="python")
+                    else:
+                        athlete_slug_pdf = _slugify(runner_info_pdf.get("Name") or "runner")
+                        race_slug_pdf = _slugify(pdf_race_key)
+                        st.session_state['pdf_report_bytes'] = pdf_bytes
+                        st.session_state['pdf_report_filename'] = f"{athlete_slug_pdf}_{race_slug_pdf}_vtl_report.pdf"
+                        st.session_state['pdf_report_athlete_slug'] = athlete_slug_pdf
+                        st.session_state['pdf_report_race_slug'] = race_slug_pdf
+                        st.success("✅ PDF generado.")
+
+            if st.session_state.get('pdf_report_bytes'):
+                st.download_button(
+                    "⬇️ Descargar PDF",
+                    data=st.session_state['pdf_report_bytes'],
+                    file_name=st.session_state.get('pdf_report_filename', "vtl_report.pdf"),
+                    mime="application/pdf",
+                    use_container_width=True,
+                    key="pdf_report_download_btn",
+                )
+
+                if st.button(
+                    "💾 Guardar copia en el repo (reports/)", use_container_width=True, key="pdf_report_persist_btn",
+                ):
+                    reports_dir = ENGINE_ROOT / "reports" / st.session_state['pdf_report_athlete_slug']
+                    reports_dir.mkdir(parents=True, exist_ok=True)
+                    pdf_path = reports_dir / f"{st.session_state['pdf_report_race_slug']}.pdf"
+                    pdf_path.write_bytes(st.session_state['pdf_report_bytes'])
+                    with st.spinner("Commiteando y pusheando reports/ a GitHub..."):
+                        backup_ok, backup_log = _backup_engine_folder(
+                            "reports/", "Guardar informe PDF desde la pestaña Report",
+                        )
+                    if backup_ok:
+                        st.success(f"✅ Guardado y respaldado en `{pdf_path.relative_to(ENGINE_ROOT)}`.")
+                    else:
+                        st.warning(
+                            "⚠️ Se guardó en disco pero el respaldo a GitHub falló - no reinicies "
+                            "el Engine hasta resolverlo, o vas a perder esta copia."
+                        )
+                        with st.expander("Ver detalle del error de respaldo"):
+                            st.code(backup_log)
