@@ -1,8 +1,21 @@
 """Reusable low-level drawing components shared by every page."""
+import io
 import math
+from pathlib import Path
 from reportlab.lib.colors import HexColor, Color
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas as canvas_mod
 from . import theme as T
+
+LOGO_PATH = Path(__file__).parent / "logo.png"
+_logo_reader = None
+
+
+def _logo_image() -> ImageReader:
+    global _logo_reader
+    if _logo_reader is None:
+        _logo_reader = ImageReader(str(LOGO_PATH))
+    return _logo_reader
 
 
 def hex_alpha(hexcolor, alpha):
@@ -41,38 +54,19 @@ def draw_topo_motif(c, x, y, w, h, seed=1, n=5, alpha=0.05):
 
 
 # ---------------------------------------------------------------- header
-def draw_header(c, page_index, page_total=4):
+def draw_header(c, page_index, page_total=5):
     top = T.PAGE_H - T.MARGIN
     x = T.MARGIN
 
-    # Wordmark logo — geometric mark + type, consistent every page
-    mark_size = 20
+    # Real VertLabs hexagon mark (assets/img/logo.png) instead of a
+    # hand-drawn placeholder glyph - square aspect, drawn at a fixed
+    # height with mask="auto" to keep its transparent background.
+    mark_size = 24
     my = top - mark_size + 4
-    c.saveState()
-    c.setFillColor(HexColor(T.CYAN))
-    c.setStrokeColor(HexColor(T.CYAN))
-    # Minimal ascending-peaks glyph as the brand mark
-    p = c.beginPath()
-    p.moveTo(x, my)
-    p.lineTo(x + 7, my + mark_size)
-    p.lineTo(x + 12.5, my + mark_size * 0.42)
-    p.lineTo(x + 18, my + mark_size)
-    p.lineTo(x + 25, my)
-    p.close()
-    c.setFillColor(hex_alpha(T.CYAN, 0.16))
-    c.drawPath(p, fill=1, stroke=0)
-    c.setLineWidth(1.6)
-    c.setStrokeColor(HexColor(T.CYAN))
-    p2 = c.beginPath()
-    p2.moveTo(x, my)
-    p2.lineTo(x + 7, my + mark_size)
-    p2.lineTo(x + 12.5, my + mark_size * 0.42)
-    p2.lineTo(x + 18, my + mark_size)
-    p2.lineTo(x + 25, my)
-    c.drawPath(p2, fill=0, stroke=1)
-    c.restoreState()
+    c.drawImage(_logo_image(), x, my, width=mark_size, height=mark_size,
+                preserveAspectRatio=True, mask="auto")
 
-    tx = x + 34
+    tx = x + mark_size + 10
     c.setFillColor(HexColor(T.TEXT))
     c.setFont(T.FONT_BOLD, 15.5)
     c.drawString(tx, top - 8, "VERTICAL TRAIL LABS")
@@ -95,6 +89,30 @@ def draw_header(c, page_index, page_total=4):
     c.setLineWidth(0.9)
     c.line(T.MARGIN, div_y, T.PAGE_W - T.MARGIN, div_y)
     return div_y
+
+
+def draw_image_bytes(c, x, y, w, h, image_bytes, border=True, round_corners=False):
+    """Draws an image fetched as raw bytes over HTTP (athlete portrait,
+    country flag) inside a bordered box, centered/cropped to fill it.
+    These come from external CDNs with no alpha channel, so no mask is
+    applied (unlike the logo). Callers should skip calling this entirely
+    when image_bytes is None (fetch failed or the athlete has none) -
+    there is nothing to fall back to that wouldn't misrepresent data."""
+    img = ImageReader(io.BytesIO(image_bytes))
+    c.saveState()
+    if round_corners:
+        p = c.beginPath()
+        p.roundRect(x, y, w, h, min(w, h) * 0.12)
+        c.clipPath(p, stroke=0, fill=0)
+    c.drawImage(img, x, y, width=w, height=h, preserveAspectRatio=True, anchor="c", mask=None)
+    c.restoreState()
+    if border:
+        c.setStrokeColor(HexColor(T.LINE))
+        c.setLineWidth(0.9)
+        if round_corners:
+            c.roundRect(x, y, w, h, min(w, h) * 0.12, fill=0, stroke=1)
+        else:
+            c.rect(x, y, w, h, fill=0, stroke=1)
 
 
 def draw_footer(c, athlete_name, race_name):
@@ -204,21 +222,26 @@ def draw_kpi_card(c, x, y, w, h, label, value, unit, color=T.TEXT, sub=None):
 
 
 # ---------------------------------------------------------------- performance triangle
-def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx):
+def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx, axis_range):
     """
     Radar-style triangle. Vertices 120 deg apart:
       top = VPI (cyan), bottom-right = DMI (orange), bottom-left = ER (green)
-    Geometry uses NORMALIZED 0-100 indices only.
+    Geometry uses NORMALIZED 0-100 ratios internally, but each of the 3
+    rings is labeled with that axis's own real value (e.g. VPI's rings
+    read 900/1200/1500 m/h) instead of a bare 33/66/100 - same
+    axis_range bands and ring fractions as the public site's own VTL
+    Performance Profile triangle (builder/generators/radar_chart.py),
+    so the two look and read the same way.
     """
     angles = {"vpi": 90, "dmi": 90 - 120, "er": 90 - 240}  # degrees, standard math orientation
+    ring_fractions = (1 / 3, 2 / 3, 1.0)
 
     def pt(angle_deg, r):
         a = math.radians(angle_deg)
         return (cx + r * math.cos(a), cy + r * math.sin(a))
 
-    # background rings (25/50/75/100)
     c.saveState()
-    for frac in (0.25, 0.5, 0.75, 1.0):
+    for frac in ring_fractions:
         r = radius * frac
         p = c.beginPath()
         v = pt(angles["vpi"], r)
@@ -238,6 +261,20 @@ def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx):
         c.setStrokeColor(HexColor(T.LINE))
         c.setLineWidth(0.7)
         c.line(cx, cy, px, py)
+
+    # per-ring value labels, offset perpendicular to each axis so they
+    # don't sit directly on the spoke line
+    c.setFont(T.FONT_MONO, 6.3)
+    c.setFillColor(HexColor(T.TEXT_FAINT))
+    for k, angle_deg in angles.items():
+        lo, hi = axis_range[k]
+        perp = math.radians(angle_deg) + math.pi / 2
+        for frac in ring_fractions:
+            px, py = pt(angle_deg, radius * frac)
+            tx = px + 8 * math.cos(perp)
+            ty = py + 8 * math.sin(perp)
+            value = round(lo + frac * (hi - lo))
+            c.drawCentredString(tx, ty - 2, str(value))
 
     # athlete polygon
     va = pt(angles["vpi"], radius * vpi_idx / 100)
@@ -272,7 +309,13 @@ def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx):
 
 
 # ---------------------------------------------------------------- horizontal bar
-def draw_metric_bar(c, x, y, w, h, label_left, label_right, raw_value, index_value, color):
+def draw_metric_bar(c, x, y, w, h, label_left, label_right, raw_value, index_value, color, axis_range=None):
+    """Bar length reflects index_value (0-100, the same VTL axis-range
+    ratio the triangle uses) - but the fill no longer prints that
+    abstract number on top of it (real user feedback: "no me gusta lo
+    de index VPI 43/100, eso que es?"). Instead, when axis_range=(lo, hi)
+    is given, the two endpoints are labeled below the bar so what the
+    fill length actually means is self-evident."""
     draw_label(c, x, y + h + 12, label_left, color=T.TEXT_MUTED, size=8)
     c.setFont(T.FONT_BOLD, 12)
     c.setFillColor(HexColor(T.TEXT))
@@ -283,12 +326,9 @@ def draw_metric_bar(c, x, y, w, h, label_left, label_right, raw_value, index_val
     c.setFillColor(HexColor(color))
     c.roundRect(x, y, fill_w, h, h / 2, fill=1, stroke=0)
 
-    c.setFont(T.FONT_MONO, 8.5)
-    c.setFillColor(HexColor(T.BG))
-    txt = f"{index_value}"
-    tw = c.stringWidth(txt, T.FONT_MONO, 8.5)
-    if fill_w > tw + 16:
-        c.drawString(x + fill_w - tw - 8, y + h / 2 - 3, txt)
-    else:
-        c.setFillColor(HexColor(T.TEXT))
-        c.drawString(x + fill_w + 8, y + h / 2 - 3, txt)
+    if axis_range is not None:
+        lo, hi = axis_range
+        c.setFont(T.FONT_MONO, 6.8)
+        c.setFillColor(HexColor(T.TEXT_FAINT))
+        c.drawString(x, y - 10, str(round(lo)))
+        c.drawRightString(x + w, y - 10, str(round(hi)))

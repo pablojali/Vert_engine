@@ -2355,7 +2355,11 @@ with tab_race:
                 invalid_ids = []
                 for cp in active_checkpoints:
                     try:
-                        valid_checkpoints.append({"point": int(cp["id"]), "km": float(cp["km"])})
+                        valid_checkpoints.append({
+                            "point": int(cp["id"]),
+                            "km": float(cp["km"]),
+                            "name": cp.get("nombre") or None,
+                        })
                     except (ValueError, TypeError):
                         invalid_ids.append(cp.get("id"))
 

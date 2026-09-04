@@ -22,9 +22,28 @@ import io
 from . import theme as T
 from . import components as K
 from . import interpretation as I
+from .data_mapper import AXIS_RANGE
 from .make_charts import build_charts
 
 FONTS_DIR = Path(__file__).parent / "fonts"
+
+# Page 2 (Performance & Fatigue) row geometry - also used to size the
+# progression chart PNGs at build time so they render at native
+# resolution instead of being stretched into a cramped box (user
+# feedback: "veo todo muy pequeño ahi"). Degradation Curve now gets its
+# own page (user feedback: "prefiero pasar Degradation Curve a la otra
+# pagina y mover todo para abajo") with a full-width chart.
+P2_ROW_H = 200
+P2_ROW_GAP = 20
+P2_LEFT_W = 160
+P2_CHART_GAP = 18
+P2_CIMG_PAD = 14
+P2_CHART_W_IN = (T.CONTENT_W - P2_LEFT_W - P2_CHART_GAP - P2_CIMG_PAD) / 72
+P2_CHART_H_IN = (P2_ROW_H - 2 * P2_CIMG_PAD) / 72
+
+P3_CHART_H = 320
+P3_CHART_W_IN = T.CONTENT_W / 72
+P3_CHART_H_IN = P3_CHART_H / 72
 
 _fonts_registered = False
 
@@ -55,6 +74,28 @@ def page1(c, data, model, charts):
     y = div_y - 34
 
     K.draw_label(c, x, y, "ATHLETE PERFORMANCE REPORT", color=T.TEXT_FAINT, size=8.2)
+
+    # Athlete portrait + nationality flag, top-right of the header block
+    # (real user feedback: "Agrega la imagen que tenemos del corredor,
+    # Agrega la nacionalidad o la banderita que tenemos tb."). Both are
+    # best-effort fetches (data_mapper._fetch_image_bytes) - silently
+    # skipped when unavailable rather than leaving a broken placeholder.
+    portrait_bytes = data["athlete"].get("portrait_bytes")
+    flag_bytes = data["athlete"].get("flag_bytes")
+    if portrait_bytes:
+        portrait_size = 72
+        portrait_x = x + w - portrait_size
+        portrait_top = div_y - 4
+        K.draw_image_bytes(c, portrait_x, portrait_top - portrait_size, portrait_size, portrait_size,
+                            portrait_bytes, round_corners=True)
+        if flag_bytes:
+            flag_w, flag_h = 24, 16
+            K.draw_image_bytes(c, portrait_x + portrait_size - flag_w - 4,
+                                portrait_top - portrait_size - flag_h - 8, flag_w, flag_h, flag_bytes)
+    elif flag_bytes:
+        flag_w, flag_h = 26, 17
+        K.draw_image_bytes(c, x + w - flag_w, div_y - 8 - flag_h, flag_w, flag_h, flag_bytes)
+
     y -= 30
     c.setFont(T.FONT_BLACK, 30)
     c.setFillColor(HexColor(T.TEXT))
@@ -101,7 +142,8 @@ def page1(c, data, model, charts):
     tri_cy = panel_y + panel_h / 2 + 34
     m = data["metrics"]
     K.draw_performance_triangle(c, tri_cx, tri_cy, 98,
-                                 m["vpi"]["index"], m["dmi"]["index"], m["er"]["index"])
+                                 m["vpi"]["index"], m["dmi"]["index"], m["er"]["index"],
+                                 axis_range=AXIS_RANGE)
 
     ry = panel_y + 40
     labels = [
@@ -130,10 +172,12 @@ def page1(c, data, model, charts):
         py -= 16
     py -= 6
 
+    strong_m = m[model["strongest"][0]]
+    weak_m = m[model["weakest"][0]]
     profile_body = (
         f"Strongest on {I.DIMENSION_LABELS[model['strongest'][0]][2].lower()} terrain "
-        f"(index {model['strongest'][1]}/100), with {I.DIMENSION_LABELS[model['weakest'][0]][2].lower()} "
-        f"the limiting dimension (index {model['weakest'][1]}/100). {model['fatigue_sentence']}"
+        f"({strong_m['raw']} {strong_m['unit']}), with {I.DIMENSION_LABELS[model['weakest'][0]][2].lower()} "
+        f"the limiting dimension ({weak_m['raw']} {weak_m['unit']}). {model['fatigue_sentence']}"
     )
     py = K.draw_paragraph(c, right_x + 18, py, profile_body, T.FONT_REG, 9.2, 14.4, right_w - 36,
                            color=T.TEXT_MUTED)
@@ -162,6 +206,11 @@ def page1(c, data, model, charts):
 
 # ================================================================= PAGE 2
 def page2(c, data, model, charts):
+    """Vertical Power / Descent Mastery / Endurance progression, one row
+    each - enlarged versus the original mockup layout (user feedback:
+    "veo todo muy pequeño ahi"). Degradation Curve moved to page3 to
+    give these three charts room to read like the site's own Plotly
+    charts (elevation profile behind the line, larger type)."""
     K.draw_page_background(c)
     div_y = K.draw_header(c, 2)
     x = T.MARGIN
@@ -173,10 +222,10 @@ def page2(c, data, model, charts):
     c.drawString(x, y, "PERFORMANCE & FATIGUE")
     y -= 30
 
-    row_h = 106
-    row_gap = 13
-    left_w = 152
-    chart_gap = 18
+    row_h = P2_ROW_H
+    row_gap = P2_ROW_GAP
+    left_w = P2_LEFT_W
+    chart_gap = P2_CHART_GAP
     chart_w = w - left_w - chart_gap
 
     dims = [
@@ -191,18 +240,18 @@ def page2(c, data, model, charts):
     for code, full, raw, color, chart_name, half, key in dims:
         row_y = y - row_h
         K.rounded_panel(c, x, row_y, w, row_h, r=9)
-        pad = 16
+        pad = 18
 
-        c.setFont(T.FONT_BOLD, 14)
+        c.setFont(T.FONT_BOLD, 16)
         c.setFillColor(HexColor(color))
-        c.drawString(x + pad, row_y + row_h - 24, code)
-        c.setFont(T.FONT_MED, 6.6)
+        c.drawString(x + pad, row_y + row_h - 28, code)
+        c.setFont(T.FONT_MED, 7.2)
         c.setFillColor(HexColor(T.TEXT_MUTED))
-        c.drawString(x + pad, row_y + row_h - 34, full)
+        c.drawString(x + pad, row_y + row_h - 40, full)
 
-        c.setFont(T.FONT_BOLD, 19)
+        c.setFont(T.FONT_BOLD, 23)
         c.setFillColor(HexColor(T.TEXT))
-        c.drawString(x + pad, row_y + row_h - 58, raw)
+        c.drawString(x + pad, row_y + row_h - 70, raw)
 
         if key == "er":
             f_val, s_val = half["first_min_km"], half["second_min_km"]
@@ -215,27 +264,27 @@ def page2(c, data, model, charts):
             deg = half["degradation_pct"]
             deg_word = "DEGRADATION"
 
-        ty = row_y + 34
-        c.setFont(T.FONT_MED, 6.2)
+        ty = row_y + 52
+        c.setFont(T.FONT_MED, 6.6)
         c.setFillColor(HexColor(T.TEXT_FAINT))
         c.drawString(x + pad, ty, "1ST HALF")
-        c.setFont(T.FONT_SEMIBOLD, 8.4)
+        c.setFont(T.FONT_SEMIBOLD, 9.4)
         c.setFillColor(HexColor(T.TEXT))
-        c.drawString(x + pad, ty - 11, f"{f_val}{unit}")
+        c.drawString(x + pad, ty - 13, f"{f_val}{unit}")
 
-        c.setFont(T.FONT_MED, 6.2)
+        c.setFont(T.FONT_MED, 6.6)
         c.setFillColor(HexColor(T.TEXT_FAINT))
-        c.drawString(x + pad + 76, ty, "2ND HALF")
-        c.setFont(T.FONT_SEMIBOLD, 8.4)
+        c.drawString(x + pad + 86, ty, "2ND HALF")
+        c.setFont(T.FONT_SEMIBOLD, 9.4)
         c.setFillColor(HexColor(T.TEXT))
-        c.drawString(x + pad + 76, ty - 11, f"{s_val}{unit}")
+        c.drawString(x + pad + 86, ty - 13, f"{s_val}{unit}")
 
-        c.setFont(T.FONT_MED, 6.4)
+        c.setFont(T.FONT_MED, 7)
         c.setFillColor(HexColor(T.TEXT_FAINT))
-        c.drawString(x + pad, row_y + 12, f"{deg_word}  {deg:+.1f}%")
+        c.drawString(x + pad, row_y + 16, f"{deg_word}  {deg:+.1f}%")
 
-        K.vline(c, x + left_w, row_y + 14, row_y + row_h - 14, color=T.LINE_SOFT)
-        cimg_pad = 14
+        K.vline(c, x + left_w, row_y + 16, row_y + row_h - 16, color=T.LINE_SOFT)
+        cimg_pad = P2_CIMG_PAD
         cimg_h = row_h - 2 * cimg_pad
         cimg_w = chart_w - cimg_pad
         c.drawImage(_img(charts, chart_name), x + left_w + chart_gap, row_y + cimg_pad,
@@ -243,9 +292,25 @@ def page2(c, data, model, charts):
 
         y = row_y - row_gap
 
-    y -= 12
-    K.hline(c, x, x + w, y, color=T.LINE)
-    y -= 26
+    K.draw_footer(c, data["athlete"]["name"], data["race"]["name"])
+
+
+# ================================================================= PAGE 3
+def page3(c, data, model, charts):
+    """Degradation Curve + fatigue KPIs - split out from Performance &
+    Fatigue onto its own page (user feedback: "prefiero pasar
+    Degradation Curve a la otra pagina y mover todo para abajo") so the
+    curve runs the full content width instead of half a row."""
+    K.draw_page_background(c)
+    div_y = K.draw_header(c, 3)
+    x = T.MARGIN
+    w = T.CONTENT_W
+    y = div_y - 32
+
+    c.setFont(T.FONT_BLACK, 20)
+    c.setFillColor(HexColor(T.TEXT))
+    c.drawString(x, y, "FATIGUE & DEGRADATION")
+    y -= 30
 
     c.setFont(T.FONT_BOLD, 13)
     c.setFillColor(HexColor(T.TEXT))
@@ -253,63 +318,62 @@ def page2(c, data, model, charts):
     c.setFont(T.FONT_MED, 7.4)
     c.setFillColor(HexColor(T.TEXT_FAINT))
     c.drawRightString(x + w, y, "NORMALIZED INDEX · NOT RAW VALUES")
-    y -= 14
+    y -= 16
 
-    section_h = 150
-    col_gap = 16
-    left_col_w = w * 0.58
-    right_col_w = w - left_col_w - col_gap
-    sec_top = y
-
-    chart_h = section_h - 10
-    c.drawImage(_img(charts, "degradation_curve"), x, sec_top - chart_h, width=left_col_w, height=chart_h,
+    chart_h = P3_CHART_H
+    K.rounded_panel(c, x, y - chart_h - 16, w, chart_h + 16, r=9)
+    c.drawImage(_img(charts, "degradation_curve"), x + 10, y - chart_h - 6, width=w - 20, height=chart_h,
                 preserveAspectRatio=False, mask="auto")
+    y -= chart_h + 16 + 26
 
-    kpi_x = x + left_col_w + col_gap
-    kpi_h = 42
-    kpi_gap = 9
-    kpi_y = sec_top
+    K.hline(c, x, x + w, y, color=T.LINE)
+    y -= 30
+
+    kpi_w = (w - 2 * 16) / 3
+    kpi_h = 62
     kpi_defs = [
         ("VPI DEGRADATION", f"{data['vpi_half']['degradation_pct']:+.1f}", T.CYAN),
         ("DMI DEGRADATION", f"{data['dmi_half']['degradation_pct']:+.1f}", T.ORANGE),
         ("EFFORT PACE CHANGE", f"{data['effort_pace_half']['change_pct']:+.1f}", T.GREEN),
     ]
-    for lab, val, col in kpi_defs:
-        kpi_y -= kpi_h
-        K.rounded_panel(c, kpi_x, kpi_y, right_col_w, kpi_h, r=8)
-        K.draw_label(c, kpi_x + 12, kpi_y + kpi_h - 15, lab, color=T.TEXT_MUTED, size=6.4)
-        c.setFont(T.FONT_BOLD, 15)
+    for i, (lab, val, col) in enumerate(kpi_defs):
+        kpi_x = x + i * (kpi_w + 16)
+        K.rounded_panel(c, kpi_x, y - kpi_h, kpi_w, kpi_h, r=8)
+        K.draw_label(c, kpi_x + 14, y - 18, lab, color=T.TEXT_MUTED, size=6.8)
+        c.setFont(T.FONT_BOLD, 21)
         c.setFillColor(HexColor(col))
-        c.drawString(kpi_x + 12, kpi_y + 9, val)
-        c.setFont(T.FONT_MED, 8)
+        c.drawString(kpi_x + 14, y - kpi_h + 16, val)
+        vw = c.stringWidth(val, T.FONT_BOLD, 21)
+        c.setFont(T.FONT_MED, 10)
         c.setFillColor(HexColor(T.TEXT_MUTED))
-        vw = c.stringWidth(val, T.FONT_BOLD, 15)
-        c.drawString(kpi_x + 12 + vw + 3, kpi_y + 11, "%")
-        kpi_y -= kpi_gap
+        c.drawString(kpi_x + 14 + vw + 4, y - kpi_h + 20, "%")
 
-    y = sec_top - section_h - 22
-    K.rounded_panel(c, x, y - 40, w, 40, r=8, fill=T.PANEL)
-    c.setFont(T.FONT_SEMIBOLD, 8)
+    y -= kpi_h + 30
+    K.hline(c, x, x + w, y, color=T.LINE)
+    y -= 30
+
+    K.rounded_panel(c, x, y - 56, w, 56, r=8, fill=T.PANEL)
+    c.setFont(T.FONT_SEMIBOLD, 8.4)
     c.setFillColor(HexColor(T.TEXT_MUTED))
-    c.drawString(x + 16, y - 16, "FATIGUE SIGNAL")
-    c.setFont(T.FONT_BOLD, 12)
+    c.drawString(x + 18, y - 20, "FATIGUE SIGNAL")
+    c.setFont(T.FONT_BOLD, 14)
     c.setFillColor(HexColor(T.TEXT))
-    c.drawString(x + 16, y - 32, model["fatigue_level"])
-    c.setFont(T.FONT_REG, 8.4)
+    c.drawString(x + 18, y - 40, model["fatigue_level"])
+    c.setFont(T.FONT_REG, 9)
     c.setFillColor(HexColor(T.TEXT_MUTED))
-    lines = K.wrap_text(c, model["fatigue_sentence"], T.FONT_REG, 8.4, w - 230)
-    ty = y - 16
+    lines = K.wrap_text(c, model["fatigue_sentence"], T.FONT_REG, 9, w - 210)
+    ty = y - 20
     for line in lines[:2]:
-        c.drawString(x + 160, ty, line)
-        ty -= 11
+        c.drawString(x + 190, ty, line)
+        ty -= 12.5
 
     K.draw_footer(c, data["athlete"]["name"], data["race"]["name"])
 
 
-# ================================================================= PAGE 3
-def page3(c, data, model, charts):
+# ================================================================= PAGE 4
+def page4(c, data, model, charts):
     K.draw_page_background(c)
-    div_y = K.draw_header(c, 3)
+    div_y = K.draw_header(c, 4)
     x = T.MARGIN
     w = T.CONTENT_W
     y = div_y - 32
@@ -422,10 +486,10 @@ def page3(c, data, model, charts):
     K.draw_footer(c, data["athlete"]["name"], data["race"]["name"])
 
 
-# ================================================================= PAGE 4
-def page4(c, data, model, charts):
+# ================================================================= PAGE 5
+def page5(c, data, model, charts):
     K.draw_page_background(c)
-    div_y = K.draw_header(c, 4)
+    div_y = K.draw_header(c, 5)
     x = T.MARGIN
     w = T.CONTENT_W
     y = div_y - 32
@@ -449,13 +513,16 @@ def page4(c, data, model, charts):
     bar_w = w
     bar_h = 14
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "CLIMBING · VPI",
-                       "", f"{m['vpi']['raw']} m/h", m["vpi"]["index"], T.CYAN)
+                       "", f"{m['vpi']['raw']} m/h", m["vpi"]["index"], T.CYAN,
+                       axis_range=AXIS_RANGE["vpi"])
     y -= bar_h + 34
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "DESCENDING · DMI",
-                       "", f"{m['dmi']['raw']} km/h", m["dmi"]["index"], T.ORANGE)
+                       "", f"{m['dmi']['raw']} km/h", m["dmi"]["index"], T.ORANGE,
+                       axis_range=AXIS_RANGE["dmi"])
     y -= bar_h + 34
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "ENDURANCE · ER",
-                       "", f"{m['er']['raw']}", m["er"]["index"], T.GREEN)
+                       "", f"{m['er']['raw']}", m["er"]["index"], T.GREEN,
+                       axis_range=AXIS_RANGE["er"])
     y -= bar_h + 26
 
     K.hline(c, x, x + w, y, color=T.LINE)
@@ -515,7 +582,11 @@ def build_pdf(data: dict) -> bytes:
     the finished PDF as bytes - never touches disk, ready for a
     st.download_button or to be written wherever the caller decides."""
     model = I.build_report_model(data)
-    charts = build_charts(data)
+    charts = build_charts(
+        data,
+        progression_wh=(P2_CHART_W_IN, P2_CHART_H_IN),
+        degradation_wh=(P3_CHART_W_IN, P3_CHART_H_IN),
+    )
 
     _register_fonts()
     buf = io.BytesIO()
@@ -527,6 +598,7 @@ def build_pdf(data: dict) -> bytes:
     page2(c, data, model, charts); c.showPage()
     page3(c, data, model, charts); c.showPage()
     page4(c, data, model, charts); c.showPage()
+    page5(c, data, model, charts); c.showPage()
 
     c.save()
     return buf.getvalue()

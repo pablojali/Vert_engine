@@ -58,7 +58,7 @@ def _save(fig, w, h) -> io.BytesIO:
 
 
 def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
-                 elevation_x=None, elevation_y=None, label_fs=9, tick_fs=8.5):
+                 elevation_x=None, elevation_y=None, label_fs=10, tick_fs=9.5):
     fig, ax = plt.subplots()
 
     if elevation_x is not None and len(elevation_x) == len(elevation_y) and max(elevation_y or [0]) > 0:
@@ -82,7 +82,7 @@ def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
     return _save(fig, w, h)
 
 
-def _degradation_chart(deg):
+def _degradation_chart(deg, w=2.95, h=1.35):
     x = deg["distance_km"]
     fig, ax = plt.subplots()
 
@@ -93,21 +93,21 @@ def _degradation_chart(deg):
         ax2.set_ylim(0, max(elev) * 3.2)
         ax2.axis("off")
 
-    ax.plot(x, deg["vpi_index"], color=T.CYAN, linewidth=1.8, label="VPI", zorder=4)
-    ax.plot(x, deg["dmi_index"], color=T.ORANGE, linewidth=1.8, label="DMI", zorder=4)
-    ax.plot(x, deg["er_index"], color=T.GREEN, linewidth=1.8, label="ER", zorder=4)
+    ax.plot(x, deg["vpi_index"], color=T.CYAN, linewidth=2.2, label="VPI", zorder=4)
+    ax.plot(x, deg["dmi_index"], color=T.ORANGE, linewidth=2.2, label="DMI", zorder=4)
+    ax.plot(x, deg["er_index"], color=T.GREEN, linewidth=2.2, label="ER", zorder=4)
     for arr, c in [(deg["vpi_index"], T.CYAN), (deg["dmi_index"], T.ORANGE), (deg["er_index"], T.GREEN)]:
-        ax.scatter([x[0], x[-1]], [arr[0], arr[-1]], color=c, s=13, zorder=5, edgecolors="none")
+        ax.scatter([x[0], x[-1]], [arr[0], arr[-1]], color=c, s=22, zorder=5, edgecolors="none")
 
     _style_ax(ax, "Index (0-100)")
-    ax.tick_params(labelsize=7.5)
-    ax.yaxis.label.set_size(7.8)
+    ax.tick_params(labelsize=10)
+    ax.yaxis.label.set_size(11)
     ax.set_ylim(0, 105)
     ax.set_xlim(x[0], x[-1])
-    ax.set_xlabel("Distance (km)", color=T.TEXT_MUTED, fontsize=7.8, labelpad=4)
-    ax.legend(loc="upper right", frameon=False, fontsize=7.2, labelcolor=T.TEXT_MUTED,
-              handlelength=1.2, handletextpad=0.4, ncol=3, bbox_to_anchor=(1.0, 1.22))
-    return _save(fig, 2.95, 1.35)
+    ax.set_xlabel("Distance (km)", color=T.TEXT_MUTED, fontsize=11, labelpad=6)
+    ax.legend(loc="upper right", frameon=False, fontsize=10, labelcolor=T.TEXT_MUTED,
+              handlelength=1.4, handletextpad=0.5, ncol=3, bbox_to_anchor=(1.0, 1.16))
+    return _save(fig, w, h)
 
 
 def _position_chart(pos):
@@ -130,28 +130,38 @@ def _position_chart(pos):
     return _save(fig, 5.05, 1.55)
 
 
-def build_charts(data: dict) -> dict:
+def build_charts(data: dict, progression_wh=(4.55, 0.92), degradation_wh=(2.95, 1.35)) -> dict:
     """Returns {name: BytesIO} for every PNG render_pdf.py embeds -
     vpi_progression, dmi_progression, pace_progression, degradation_curve,
-    position_progression."""
+    position_progression.
+
+    progression_wh / degradation_wh let the caller size these charts to
+    match the actual box they'll be drawn into (render_pdf.py's page2/
+    page3 layout constants) so the PNG renders at native resolution
+    instead of being stretched to fill a bigger box than it was drawn
+    for - real user feedback that the charts looked too small/cramped
+    led to enlarging their page layout, so the source render must grow
+    with it or the enlarged charts come out blurry."""
     _register_matplotlib_fonts()
 
     elev_x = data["degradation_index"]["distance_km"]
     elev_y = data["degradation_index"]["elevation_m"]
+    pw, ph = progression_wh
 
     charts = {}
     charts["vpi_progression"] = _line_chart(
         data["vpi_progression"]["distance_km"], data["vpi_progression"]["value_m_h"],
-        T.CYAN, "VPI (m/h)", elevation_x=elev_x, elevation_y=elev_y,
+        T.CYAN, "VPI (m/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
     )
     charts["dmi_progression"] = _line_chart(
         data["dmi_progression"]["distance_km"], data["dmi_progression"]["value_km_h"],
-        T.ORANGE, "DMI (km/h)", elevation_x=elev_x, elevation_y=elev_y,
+        T.ORANGE, "DMI (km/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
     )
     charts["pace_progression"] = _line_chart(
         data["effort_pace_progression"]["distance_km"], data["effort_pace_progression"]["pace_min_km"],
-        T.GREEN, "Pace (min/km)", elevation_x=elev_x, elevation_y=elev_y,
+        T.GREEN, "Pace (min/km)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
     )
-    charts["degradation_curve"] = _degradation_chart(data["degradation_index"])
+    charts["degradation_curve"] = _degradation_chart(data["degradation_index"],
+                                                       w=degradation_wh[0], h=degradation_wh[1])
     charts["position_progression"] = _position_chart(data["position_progression"])
     return charts

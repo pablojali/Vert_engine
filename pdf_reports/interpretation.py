@@ -82,25 +82,33 @@ def fatigue_signal(vpi_deg_pct, dmi_deg_pct, effort_change_pct):
 
 
 def primary_strength(metrics, segments):
-    key, val = strongest_dimension(metrics)
+    """User feedback: "no me gusta lo de index VPI 43/100, eso que es? -
+    debo explicarlo" - so this (and limiting_factor/summary_paragraph
+    below) now states the actual measured raw value + unit instead of
+    the abstract 0-100 axis-range figure, which still drives the
+    triangle geometry and bar fills but is no longer spoken aloud in
+    text without context."""
+    key, _ = strongest_dimension(metrics)
     label = DIMENSION_LABELS[key][2]
+    raw, unit = metrics[key]["raw"], metrics[key]["unit"]
     best_seg = next((s for s in segments if s["role"] in ("BEST CLIMB", "BEST DESCENT") and
                       ((key == "vpi" and s["role"] == "BEST CLIMB") or
                        (key == "dmi" and s["role"] == "BEST DESCENT"))), None)
     if best_seg:
-        return f"{label} — index {val}/100, peaking on {best_seg['name']}."
-    return f"{label} — highest normalized index of the three dimensions ({val}/100)."
+        return f"{label} — {raw} {unit}, peaking on {best_seg['name']}."
+    return f"{label} — the strongest of the three dimensions ({raw} {unit})."
 
 
 def limiting_factor(metrics, segments):
-    key, val = weakest_dimension(metrics)
+    key, _ = weakest_dimension(metrics)
     label = DIMENSION_LABELS[key][2]
+    raw, unit = metrics[key]["raw"], metrics[key]["unit"]
     worst_seg = next((s for s in segments if s["role"] in ("WORST CLIMB", "WORST DESCENT") and
                        ((key == "vpi" and s["role"] == "WORST CLIMB") or
                         (key == "dmi" and s["role"] == "WORST DESCENT"))), None)
     if worst_seg:
-        return f"{label} — index {val}/100, lowest point at {worst_seg['name']}."
-    return f"{label} — lowest normalized index of the three dimensions ({val}/100)."
+        return f"{label} — {raw} {unit}, lowest point at {worst_seg['name']}."
+    return f"{label} — the lowest of the three dimensions ({raw} {unit})."
 
 
 def race_character(pos_summary, fatigue_level):
@@ -214,10 +222,12 @@ def summary_paragraph(data):
     profile_article = art(profile)
     strong_label = DIMENSION_LABELS[strong_key][2]
     weak_label = DIMENSION_LABELS[weak_key][2]
+    strong_raw, strong_unit = metrics[strong_key]["raw"], metrics[strong_key]["unit"]
+    weak_raw, weak_unit = metrics[weak_key]["raw"], metrics[weak_key]["unit"]
     text = (
         f"{data['athlete']['name']}'s race data fits {profile_article} {profile.lower()}, driven by "
         f"{art(strong_label)} {strong_label.lower()} "
-        f"index of {strong_val}/100 against {art(weak_label)} {weak_label.lower()} index of {weak_val}/100. "
+        f"of {strong_raw} {strong_unit} against {art(weak_label)} {weak_label.lower()} of {weak_raw} {weak_unit}. "
         f"The clearest performance cost came from {DIMENSION_LABELS[weak_key][1]}, which declined furthest as the race "
         f"progressed. Fatigue resistance was {level.lower()}: VPI fell {abs(data['vpi_half']['degradation_pct'])}% and "
         f"DMI fell {abs(data['dmi_half']['degradation_pct'])}% between race halves, alongside a "

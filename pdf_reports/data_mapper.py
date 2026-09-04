@@ -21,6 +21,7 @@ import math
 
 import numpy as np
 import pandas as pd
+import requests
 
 # Same fixed axis bands the public site's own VTL Performance Profile
 # triangle already uses (builder/generators/radar_chart.py in the
@@ -35,6 +36,13 @@ AXIS_RANGE = {
 }
 
 RACE_KEY_RE = re.compile(r"^(.*?)\s+(\d{4})\s*-\s*([\d.]+)K$")
+
+# df_seg's "Segment" column is a bare "P{start}→P{end}" point-ID string
+# (app.py's calculate_runner_indices/calculate_indices_by_segment) - not
+# informative in the printed report (real user feedback: "los puntos de
+# paso... P18 > P22 no dice nada, hay que ponerle el nombre que tiene
+# asociado en el checkpoint").
+SEGMENT_RE = re.compile(r"^P(\d+)→P(\d+)$")
 
 
 class MissingReportData(Exception):
@@ -66,6 +74,46 @@ def _elevation_gain_label(total_elevation_gain: float) -> str:
 
 def _nan_to_none(value):
     return None if (value is None or (isinstance(value, float) and math.isnan(value))) else value
+
+
+def _fetch_image_bytes(url):
+    """Best-effort fetch for the athlete portrait / country flag - both
+    come from external CDNs (LiveTrail/Cloudinary, flagcdn.com) that the
+    report has no control over, so a timeout or a missing image must
+    never break PDF generation. Returns None on any failure; the
+    renderer simply skips drawing that image when this is None."""
+    if not url:
+        return None
+    try:
+        resp = requests.get(url, timeout=6)
+        resp.raise_for_status()
+        return resp.content
+    except Exception:
+        return None
+
+
+def _flag_url(iso_code):
+    """Same rule as app.py's _country_flag_url - duplicated rather than
+    imported since app.py runs as __main__ under `streamlit run` (see
+    build_report_data's docstring)."""
+    if not iso_code or len(iso_code) != 2 or not iso_code.isalpha():
+        return None
+    return f"https://flagcdn.com/w80/{iso_code.lower()}.png"
+
+
+def _segment_display_name(segment_label: str, point_to_name: dict) -> str:
+    """Replaces a bare 'P18→P22' label with the real checkpoint names
+    ('Bassa d'Oles → Artiga de Lin') when the race's registry has a name
+    for both endpoints; falls back to the raw point-ID label rather than
+    guessing when a name is missing."""
+    m = SEGMENT_RE.match(segment_label)
+    if not m:
+        return segment_label
+    start_name = point_to_name.get(int(m.group(1)))
+    end_name = point_to_name.get(int(m.group(2)))
+    if start_name and end_name:
+        return f"{start_name} → {end_name}"
+    return segment_label
 
 
 def _segment_progression(df_seg: pd.DataFrame, value_col: str) -> tuple[list, list]:
@@ -150,7 +198,7 @@ def _turning_point_km(df_seg: pd.DataFrame):
     return round(df_seg.loc[worst_pos, "End Km"]), int(worst_pos)
 
 
-def _segment_role_rows(df_seg: pd.DataFrame, turning_point_idx) -> list[dict]:
+def _segment_role_rows(df_seg: pd.DataFrame, turning_point_idx, point_to_name: dict) -> list[dict]:
     """Derives the 'Key Segments' table roles - none of these are a
     stored field, each is the segment with the max/min of the relevant
     already-computed raw value:
@@ -189,7 +237,7 @@ def _segment_role_rows(df_seg: pd.DataFrame, turning_point_idx) -> list[dict]:
         )
         return {
             "role": role,
-            "name": r["Segment"],
+            "name": _segment_display_name(r["Segment"], point_to_name),
             "distance_km": f"{r['Start Km']:.1f} - {r['End Km']:.1f}",
             "avg_slope_pct": float(r["Average Slope (%)"]),
             "vpi_m_h": vpi,
@@ -294,6 +342,10 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
     pos_progression = _position_progression(df_runner, race_data["checkpoints_km"])
     position_summary = _position_summary(pos_progression, turning_point_km, turning_point_idx)
 
+    point_to_name = {
+        c["point"]: c.get("name") for c in race_data["checkpoints_km"] if c.get("name")
+    }
+
     # Elevation motif for the chart backgrounds - sampled from the
     # race's own GPX at each segment's End Km, nearest match. Purely
     # decorative (same role it plays in the reference mockup).
@@ -354,6 +406,9 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
         "athlete": {
             "name": runner_info.get("Name") or "Runner",
             "category": runner_info.get("Category"),
+            "nationality": runner_info.get("Country"),
+            "portrait_bytes": _fetch_image_bytes(runner_info.get("Picture URL")),
+            "flag_bytes": _fetch_image_bytes(_flag_url(runner_info.get("Country"))),
         },
         "race": {
             "name": race_meta["name"],
@@ -396,7 +451,7 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
         "vpi_half": vpi_half,
         "dmi_half": dmi_half,
         "effort_pace_half": effort_pace_half,
-        "segments": _segment_role_rows(df_seg, turning_point_idx),
+        "segments": _segment_role_rows(df_seg, turning_point_idx, point_to_name),
         "position_progression": pos_progression,
         "position_summary": position_summary,
     }
