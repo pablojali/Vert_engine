@@ -595,8 +595,15 @@ def calculate_runner_indices(full_df_gpx, df_segments, df_runner, total_km, tota
     pace_1 = _effort_pace(first_half)
     pace_2 = _effort_pace(second_half)
 
+    # Guarded the same way VPI/DMI Raw already are elsewhere (climb_time_h
+    # > 0 else None) - a segment with zero effort-km (e.g. two
+    # checkpoints at the same km) divided cleanly by zero into +inf
+    # here, which dropna() doesn't catch downstream and eventually blew
+    # up matplotlib's axis limits in the PDF report ("Axis limits cannot
+    # be NaN or Inf") on real race data.
+    effort_km_segment = df_valid["Effort Km Segment"]
     df_valid["Effort Pace (min/effort-km)"] = (
-        (df_valid["Runner Time (h)"] * 60) / df_valid["Effort Km Segment"]
+        (df_valid["Runner Time (h)"] * 60) / effort_km_segment.where(effort_km_segment > 0)
     ).round(2)
 
     if pace_1 and pace_2 and pace_1 > 0:

@@ -19,6 +19,7 @@ interpretation.py produces still traces back to one of these fields.
 import re
 import math
 
+import numpy as np
 import pandas as pd
 
 # Same fixed axis bands the public site's own VTL Performance Profile
@@ -68,11 +69,16 @@ def _nan_to_none(value):
 
 
 def _segment_progression(df_seg: pd.DataFrame, value_col: str) -> tuple[list, list]:
-    """One (distance_km, value) pair per segment with a non-null
+    """One (distance_km, value) pair per segment with a finite
     value_col - segments where this runner has no qualifying terrain
-    for that metric are skipped rather than plotted as a fake zero."""
-    valid = df_seg.dropna(subset=[value_col])
-    return valid["End Km"].round(1).tolist(), valid[value_col].tolist()
+    for that metric are skipped rather than plotted as a fake zero.
+    Filters on np.isfinite(), not just .dropna(): a segment with a
+    near-zero effort-km (e.g. two checkpoints at almost the same km)
+    can produce +/-inf from a division, which dropna() does NOT catch -
+    matplotlib then fails with "Axis limits cannot be NaN or Inf" on
+    real data (confirmed live on a real runner's Effort Pace column)."""
+    finite = df_seg[df_seg[value_col].apply(lambda v: pd.notna(v) and np.isfinite(v))]
+    return finite["End Km"].round(1).tolist(), finite[value_col].tolist()
 
 
 def _position_progression(df_runner: pd.DataFrame, checkpoints_km: list[dict]) -> dict:
