@@ -126,9 +126,22 @@ def page1(c, data, model, charts):
 
     y -= 78
     K.hline(c, x, x + w, y, color=T.LINE)
+    y -= 24
+
+    # Data-source disclosure + CTA (user feedback: explain what feeds the
+    # analysis, and invite a more accurate one).
+    K.draw_label(c, x, y, "DATA SOURCE", color=T.TEXT_FAINT, size=7)
+    y -= 13
+    c.setFont(T.FONT_MED, 8.8)
+    c.setFillColor(HexColor(T.TEXT_MUTED))
+    c.drawString(x, y, "Race GPX matched against the race's Official Checkpoints.")
+    y -= 13
+    c.setFont(T.FONT_SEMIBOLD, 8.8)
+    c.setFillColor(HexColor(T.CYAN))
+    c.drawString(x, y, "Add your own GPX for even more accurate analysis.")
 
     # --- performance triangle (left) + athlete profile (right) -----------
-    panel_top = y - 64
+    panel_top = y - 26
     panel_h = 372
     panel_y = panel_top - panel_h
     left_w = w * 0.46

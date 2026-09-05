@@ -7,15 +7,18 @@ Community Cloud (no local disk assumptions, no state left behind
 between report generations).
 """
 import io
+import math
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+from matplotlib.ticker import MaxNLocator
 import numpy as np
 
 from . import theme as T
+from .data_mapper import AXIS_RANGE
 
 FONTS_DIR = Path(__file__).parent / "fonts"
 
@@ -58,12 +61,25 @@ def _save(fig, w, h) -> io.BytesIO:
 
 
 def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
-                 elevation_x=None, elevation_y=None, label_fs=10, tick_fs=9.5):
+                 elevation_x=None, elevation_y=None, label_fs=10, tick_fs=9.5,
+                 axis_range=None, tick_step=None):
+    """axis_range/tick_step (e.g. VPI's (600,1500)/200) draw the same fixed
+    scale used everywhere else in the report (triangle, bars) so a reader
+    always sees round reference lines - not just whatever narrow band this
+    one runner's data happens to span. Real user feedback: "agrega mas
+    lineas horizontales... esto ayuda a ver mejor los valores." Falls back
+    to a denser auto locator (still more lines than the previous default)
+    for metrics with no universal scale (effort pace)."""
     fig, ax = plt.subplots()
 
     if elevation_x is not None and len(elevation_x) == len(elevation_y) and max(elevation_y or [0]) > 0:
+        # Real user feedback: "haz mas contraste vs el perfil en todos los
+        # graficos" - the terrain silhouette was too faint to read against
+        # the cream background, so it gets a stronger fill and a defining
+        # top edge instead of just a wash of color.
         ax2 = ax.twinx()
-        ax2.fill_between(elevation_x, 0, elevation_y, color=T.TEXT_FAINT, alpha=0.10, zorder=1)
+        ax2.fill_between(elevation_x, 0, elevation_y, color=T.TEXT_FAINT, alpha=0.24, zorder=1)
+        ax2.plot(elevation_x, elevation_y, color=T.TEXT_MUTED, linewidth=1.0, alpha=0.6, zorder=1)
         ax2.set_ylim(0, max(elevation_y) * 3.4)
         ax2.axis("off")
 
@@ -77,7 +93,16 @@ def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
     ax.yaxis.label.set_size(label_fs)
     ax.set_xlim(dist[0], dist[-1])
     pad = (max(values) - min(values)) * 0.22 or 1
-    ax.set_ylim(min(values) - pad, max(values) + pad)
+    ymin, ymax = min(values) - pad, max(values) + pad
+    if axis_range:
+        ymin, ymax = min(ymin, axis_range[0]), max(ymax, axis_range[1])
+    ax.set_ylim(ymin, ymax)
+    if tick_step:
+        start = math.floor(ymin / tick_step) * tick_step
+        end = math.ceil(ymax / tick_step) * tick_step
+        ax.set_yticks(np.arange(start, end + tick_step, tick_step))
+    else:
+        ax.yaxis.set_major_locator(MaxNLocator(nbins=7, steps=[1, 2, 2.5, 5, 10]))
     ax.set_xlabel("Distance (km)", color=T.TEXT_MUTED, fontsize=label_fs, labelpad=4)
     return _save(fig, w, h)
 
@@ -89,7 +114,8 @@ def _degradation_chart(deg, w=2.95, h=1.35):
     elev = deg.get("elevation_m")
     if elev and max(elev) > 0:
         ax2 = ax.twinx()
-        ax2.fill_between(x, 0, elev, color=T.TEXT_FAINT, alpha=0.08, zorder=1)
+        ax2.fill_between(x, 0, elev, color=T.TEXT_FAINT, alpha=0.24, zorder=1)
+        ax2.plot(x, elev, color=T.TEXT_MUTED, linewidth=1.0, alpha=0.6, zorder=1)
         ax2.set_ylim(0, max(elev) * 3.2)
         ax2.axis("off")
 
@@ -102,7 +128,10 @@ def _degradation_chart(deg, w=2.95, h=1.35):
     _style_ax(ax, "Index (0-100)")
     ax.tick_params(labelsize=10)
     ax.yaxis.label.set_size(11)
-    ax.set_ylim(0, 105)
+    # User feedback: the vertical max was capped tight to the data (100),
+    # which crowded the lines against the top of the chart - 130 gives
+    # them headroom without changing what the values mean.
+    ax.set_ylim(0, 130)
     ax.set_xlim(x[0], x[-1])
     ax.set_xlabel("Distance (km)", color=T.TEXT_MUTED, fontsize=11, labelpad=6)
     ax.legend(loc="upper right", frameon=False, fontsize=10, labelcolor=T.TEXT_MUTED,
@@ -115,7 +144,7 @@ def _position_chart(pos):
     y = pos["position"]
     fig, ax = plt.subplots()
     ax.plot(x, y, color=T.TEXT, linewidth=2.0, zorder=3)
-    ax.fill_between(x, y, max(y) + 8, color=T.TEXT, alpha=0.06, zorder=2)
+    ax.fill_between(x, y, max(y) + 8, color=T.TEXT, alpha=0.12, zorder=2)
     ax.scatter([x[0], x[-1]], [y[0], y[-1]], color=T.TEXT, s=18, zorder=4, edgecolors="none")
 
     best_i = int(np.argmin(y))
@@ -152,10 +181,12 @@ def build_charts(data: dict, progression_wh=(4.55, 0.92), degradation_wh=(2.95, 
     charts["vpi_progression"] = _line_chart(
         data["vpi_progression"]["distance_km"], data["vpi_progression"]["value_m_h"],
         T.CYAN, "VPI (m/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
+        axis_range=AXIS_RANGE["vpi"], tick_step=200,
     )
     charts["dmi_progression"] = _line_chart(
         data["dmi_progression"]["distance_km"], data["dmi_progression"]["value_km_h"],
         T.ORANGE, "DMI (km/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
+        axis_range=AXIS_RANGE["dmi"], tick_step=2,
     )
     charts["pace_progression"] = _line_chart(
         data["effort_pace_progression"]["distance_km"], data["effort_pace_progression"]["pace_min_km"],

@@ -41,8 +41,12 @@ RACE_KEY_RE = re.compile(r"^(.*?)\s+(\d{4})\s*-\s*([\d.]+)K$")
 # (app.py's calculate_runner_indices/calculate_indices_by_segment) - not
 # informative in the printed report (real user feedback: "los puntos de
 # paso... P18 > P22 no dice nada, hay que ponerle el nombre que tiene
-# asociado en el checkpoint").
-SEGMENT_RE = re.compile(r"^P(\d+)→P(\d+)$")
+# asociado en el checkpoint"). The point IDs sometimes arrive as pandas
+# float64 (a NaN elsewhere in the same column promotes the whole column
+# from int to float), which prints as "P22.0->P24.0" - real user report
+# after the first fix shipped - so the trailing ".0" must be tolerated,
+# not just the bare-integer form.
+SEGMENT_RE = re.compile(r"^P(\d+(?:\.\d+)?)→P(\d+(?:\.\d+)?)$")
 
 
 class MissingReportData(Exception):
@@ -109,8 +113,8 @@ def _segment_display_name(segment_label: str, point_to_name: dict) -> str:
     m = SEGMENT_RE.match(segment_label)
     if not m:
         return segment_label
-    start_name = point_to_name.get(int(m.group(1)))
-    end_name = point_to_name.get(int(m.group(2)))
+    start_name = point_to_name.get(int(float(m.group(1))))
+    end_name = point_to_name.get(int(float(m.group(2))))
     if start_name and end_name:
         return f"{start_name} → {end_name}"
     return segment_label
