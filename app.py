@@ -27,6 +27,7 @@ from data.gpx_loader import (
     get_carreras,
 )
 from pdf_reports.data_mapper import build_report_data, MissingReportData
+from pdf_reports.interpretation import build_report_model
 from pdf_reports.render_pdf import build_pdf
 
 # 1. Page configuration - VertLabs style
@@ -4771,69 +4772,65 @@ with tab_pdf_report:
 
             st.markdown("---")
 
-            # Free-text field-comparison note: the Engine has no access to
-            # the full race field's results (LiveTrail only exposes rank,
-            # and only for runners analyzed this session), so there's no
-            # reliable way to compute "vs the rest of the field"
-            # automatically (confirmed with the user) - this is a
-            # deliberate hand-written field instead, pre-filled with a
-            # starting draft the user edits with the real context before
-            # generating the PDF.
-            field_note_key = f"pdf_field_note_{pdf_race_key}_{selected_runner_key}"
-            if field_note_key not in st.session_state:
-                st.session_state[field_note_key] = (
-                    f"Relative to the rest of the field, {runner_info_pdf.get('Name') or 'this runner'}'s "
-                    "numbers stand out - well above most of the runners analyzed, competitive with the top "
-                    "20, though a step behind the pace of the top 5. Edit this with the race's actual "
-                    "context once you've reviewed the full results."
+            race_data_pdf = st.session_state.get('saved_races', {}).get(pdf_race_key)
+            if not race_data_pdf:
+                st.error(
+                    "⚠️ Esta carrera ya no está cargada en '🗺️ Race Analysis' esta sesión "
+                    "(hace falta su geometría de checkpoints/GPX, no solo lo que quedó "
+                    "acá) - volvé a cargarla ahí y probá de nuevo."
                 )
-            field_comparison_note = st.text_area(
-                "📊 Comparación con el resto del campo (opcional)",
-                key=field_note_key,
-                height=110,
-                help=(
-                    "El Engine no tiene los resultados de todo el campo (LiveTrail solo da el rank, y "
-                    "solo de los corredores que analizaste esta sesión), así que esto lo escribís vos. "
-                    "Va tal cual, en la última página del PDF ('HOW THIS COMPARES'). Dejalo vacío para "
-                    "que esa sección no aparezca."
-                ),
-            )
-
-            generate_pdf_clicked = st.button(
-                "📄 Generar PDF", type="primary", use_container_width=True, key="pdf_report_generate_btn",
-            )
-            if generate_pdf_clicked:
-                race_data_pdf = st.session_state.get('saved_races', {}).get(pdf_race_key)
-                if not race_data_pdf:
-                    st.error(
-                        "⚠️ Esta carrera ya no está cargada en '🗺️ Race Analysis' esta sesión "
-                        "(hace falta su geometría de checkpoints/GPX, no solo lo que quedó "
-                        "acá) - volvé a cargarla ahí y probá de nuevo."
+            else:
+                try:
+                    total_gain_pdf = calculate_total_elevation_gain(race_data_pdf["df"])
+                    report_data_pdf = build_report_data(
+                        pdf_race_key, runner_bundle, race_data_pdf, total_gain_pdf,
                     )
+                except MissingReportData as e:
+                    st.error(f"⚠️ No se pudo armar el PDF: {e}")
                 else:
-                    try:
-                        total_gain_pdf = calculate_total_elevation_gain(race_data_pdf["df"])
-                        report_data_pdf = build_report_data(
-                            pdf_race_key, runner_bundle, race_data_pdf, total_gain_pdf,
-                            field_comparison_note=field_comparison_note,
-                        )
-                        pdf_bytes = build_pdf(report_data_pdf)
-                    except MissingReportData as e:
-                        st.session_state.pop('pdf_report_bytes', None)
-                        st.error(f"⚠️ No se pudo armar el PDF: {e}")
-                    except Exception:
-                        st.session_state.pop('pdf_report_bytes', None)
-                        st.error("❌ Error inesperado generando el PDF.")
-                        with st.expander("Ver detalle técnico del error"):
-                            st.code(traceback.format_exc(), language="python")
-                    else:
-                        athlete_slug_pdf = _slugify(runner_info_pdf.get("Name") or "runner")
-                        race_slug_pdf = _slugify(pdf_race_key)
-                        st.session_state['pdf_report_bytes'] = pdf_bytes
-                        st.session_state['pdf_report_filename'] = f"{athlete_slug_pdf}_{race_slug_pdf}_vtl_report.pdf"
-                        st.session_state['pdf_report_athlete_slug'] = athlete_slug_pdf
-                        st.session_state['pdf_report_race_slug'] = race_slug_pdf
-                        st.success("✅ PDF generado.")
+                    # Editable Athlete Performance Summary - pre-filled with
+                    # the Engine's own auto-generated text. User feedback:
+                    # the Engine has no access to the full race field's
+                    # results (LiveTrail only exposes rank, and only for
+                    # runners analyzed this session), so there's no reliable
+                    # way to compute "vs the rest of the field" on its own -
+                    # rather than a separate section, the user edits this
+                    # summary directly with whatever context they have.
+                    default_summary_pdf = build_report_model(report_data_pdf)["summary_paragraph"]
+                    summary_key = f"pdf_summary_text_{pdf_race_key}_{selected_runner_key}"
+                    if summary_key not in st.session_state:
+                        st.session_state[summary_key] = default_summary_pdf
+                    summary_text_pdf = st.text_area(
+                        "📝 Athlete Performance Summary (editable)",
+                        key=summary_key,
+                        height=160,
+                        help=(
+                            "Texto autogenerado a partir de los datos reales de esta carrera. Editalo con "
+                            "lo que sepas del resto del campo (top 20, top 5, etc.) u otro contexto - el "
+                            "Engine no tiene los resultados de todo el campo, así que eso lo agregás vos. "
+                            "Va tal cual al PDF, reemplazando este mismo texto en la página 5."
+                        ),
+                    )
+
+                    generate_pdf_clicked = st.button(
+                        "📄 Generar PDF", type="primary", use_container_width=True, key="pdf_report_generate_btn",
+                    )
+                    if generate_pdf_clicked:
+                        try:
+                            pdf_bytes = build_pdf(report_data_pdf, summary_override=summary_text_pdf)
+                        except Exception:
+                            st.session_state.pop('pdf_report_bytes', None)
+                            st.error("❌ Error inesperado generando el PDF.")
+                            with st.expander("Ver detalle técnico del error"):
+                                st.code(traceback.format_exc(), language="python")
+                        else:
+                            athlete_slug_pdf = _slugify(runner_info_pdf.get("Name") or "runner")
+                            race_slug_pdf = _slugify(pdf_race_key)
+                            st.session_state['pdf_report_bytes'] = pdf_bytes
+                            st.session_state['pdf_report_filename'] = f"{athlete_slug_pdf}_{race_slug_pdf}_vtl_report.pdf"
+                            st.session_state['pdf_report_athlete_slug'] = athlete_slug_pdf
+                            st.session_state['pdf_report_race_slug'] = race_slug_pdf
+                            st.success("✅ PDF generado.")
 
             if st.session_state.get('pdf_report_bytes'):
                 st.download_button(
