@@ -306,7 +306,8 @@ def _segment_signal(role: str, row) -> str:
     return templates.get(role, "")
 
 
-def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total_elevation_gain: float) -> dict:
+def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total_elevation_gain: float,
+                       field_comparison_note: str = "") -> dict:
     """race_key: the 'Name Year - DistanceK' string used in saved_races /
     pdf_report_pool. runner_bundle: one entry of
     pdf_report_pool[race_key][runner_key]. race_data: saved_races[race_key].
@@ -315,6 +316,14 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
     than imported here, since app.py runs as __main__ under
     `streamlit run` and importing it as a module from inside this
     package would re-execute the whole Streamlit script a second time.
+
+    field_comparison_note: free text, typed by hand in the Streamlit tab.
+    The Engine has no access to the full race field's results (LiveTrail
+    only exposes rank, and only for runners the user chose to analyze
+    this session) - real user feedback confirmed there's no reliable way
+    to compute "vs the rest of the field" automatically, so this is a
+    deliberate manual field rather than a derived one. Left out of the
+    PDF entirely when blank.
 
     Raises MissingReportData with a clear reason if there isn't enough
     data to build a meaningful report - the Streamlit tab shows that
@@ -458,5 +467,6 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
         "segments": _segment_role_rows(df_seg, turning_point_idx, point_to_name),
         "position_progression": pos_progression,
         "position_summary": position_summary,
+        "field_comparison_note": (field_comparison_note or "").strip(),
     }
     return data

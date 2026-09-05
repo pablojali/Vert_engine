@@ -4770,6 +4770,35 @@ with tab_pdf_report:
                 st.dataframe(df_segment_pdf, use_container_width=True)
 
             st.markdown("---")
+
+            # Free-text field-comparison note: the Engine has no access to
+            # the full race field's results (LiveTrail only exposes rank,
+            # and only for runners analyzed this session), so there's no
+            # reliable way to compute "vs the rest of the field"
+            # automatically (confirmed with the user) - this is a
+            # deliberate hand-written field instead, pre-filled with a
+            # starting draft the user edits with the real context before
+            # generating the PDF.
+            field_note_key = f"pdf_field_note_{pdf_race_key}_{selected_runner_key}"
+            if field_note_key not in st.session_state:
+                st.session_state[field_note_key] = (
+                    f"Relative to the rest of the field, {runner_info_pdf.get('Name') or 'this runner'}'s "
+                    "numbers stand out - well above most of the runners analyzed, competitive with the top "
+                    "20, though a step behind the pace of the top 5. Edit this with the race's actual "
+                    "context once you've reviewed the full results."
+                )
+            field_comparison_note = st.text_area(
+                "📊 Comparación con el resto del campo (opcional)",
+                key=field_note_key,
+                height=110,
+                help=(
+                    "El Engine no tiene los resultados de todo el campo (LiveTrail solo da el rank, y "
+                    "solo de los corredores que analizaste esta sesión), así que esto lo escribís vos. "
+                    "Va tal cual, en la última página del PDF ('HOW THIS COMPARES'). Dejalo vacío para "
+                    "que esa sección no aparezca."
+                ),
+            )
+
             generate_pdf_clicked = st.button(
                 "📄 Generar PDF", type="primary", use_container_width=True, key="pdf_report_generate_btn",
             )
@@ -4786,6 +4815,7 @@ with tab_pdf_report:
                         total_gain_pdf = calculate_total_elevation_gain(race_data_pdf["df"])
                         report_data_pdf = build_report_data(
                             pdf_race_key, runner_bundle, race_data_pdf, total_gain_pdf,
+                            field_comparison_note=field_comparison_note,
                         )
                         pdf_bytes = build_pdf(report_data_pdf)
                     except MissingReportData as e:

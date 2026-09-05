@@ -512,50 +512,80 @@ def page5(c, data, model, charts):
     c.drawString(x, y, "VERTICAL TRAIL LABS ASSESSMENT")
     y -= 30
 
+    # This page's sections just barely fit the page at their original
+    # (roomy) spacing - adding the optional "HOW THIS COMPARES" note would
+    # push Methodology into the footer, so every gap below compresses to
+    # its `compact` value only when that note is actually present; with no
+    # note, spacing stays exactly as before instead of leaving a big gap
+    # where the note would have gone.
+    has_note = bool(data.get("field_comparison_note"))
+
+    def gap(compact, roomy):
+        return compact if has_note else roomy
+
     K.draw_label(c, x, y, "ATHLETE PERFORMANCE SUMMARY", size=7.6)
-    y -= 18
+    y -= gap(14, 18)
     y = K.draw_paragraph(c, x, y, model["summary_paragraph"], T.FONT_REG, 9.4, 14.6, w,
                           color=T.TEXT)
-    y -= 26
+    y -= gap(18, 26)
     K.hline(c, x, x + w, y, color=T.LINE)
-    y -= 30
+    y -= gap(20, 30)
+
+    if has_note:
+        K.draw_label(c, x, y, "HOW THIS COMPARES", size=7.6)
+        y -= 12
+        # Capped to 3 lines (not just wrapped freely) - this page's layout
+        # is already near its vertical budget, so an unbounded note would
+        # push "Methodology" into the footer.
+        note_lines = K.wrap_text(c, data["field_comparison_note"], T.FONT_REG, 9.4, w)[:3]
+        c.setFont(T.FONT_REG, 9.4)
+        c.setFillColor(HexColor(T.TEXT))
+        for line in note_lines:
+            c.drawString(x, y, line)
+            y -= 14.6
+        y -= 14
+        K.hline(c, x, x + w, y, color=T.LINE)
+        y -= 16
 
     K.draw_label(c, x, y, "PERFORMANCE SIGNATURE", size=7.6)
-    y -= 24
+    y -= gap(22, 24)
     m = data["metrics"]
     bar_w = w
     bar_h = 14
+    # Note: draw_metric_bar's own label sits *above* the y it's given (at
+    # y+h+12), so the gap below each bar must clear that offset before the
+    # next bar's label starts, or the two collide - keep this >= ~30.
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "CLIMBING · VPI",
                        "", f"{m['vpi']['raw']} m/h", m["vpi"]["index"], T.CYAN,
                        axis_range=AXIS_RANGE["vpi"])
-    y -= bar_h + 34
+    y -= bar_h + gap(32, 34)
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "DESCENDING · DMI",
                        "", f"{m['dmi']['raw']} km/h", m["dmi"]["index"], T.ORANGE,
                        axis_range=AXIS_RANGE["dmi"])
-    y -= bar_h + 34
+    y -= bar_h + gap(32, 34)
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "ENDURANCE · ER",
                        "", f"{m['er']['raw']}", m["er"]["index"], T.GREEN,
                        axis_range=AXIS_RANGE["er"])
-    y -= bar_h + 26
+    y -= bar_h + gap(24, 26)
 
     K.hline(c, x, x + w, y, color=T.LINE)
-    y -= 28
+    y -= gap(24, 28)
 
     K.draw_label(c, x, y, "KEY TAKEAWAYS", size=7.6)
-    y -= 20
+    y -= gap(16, 20)
     for i, tk in enumerate(model["key_takeaways"]):
         c.setFont(T.FONT_BLACK, 11)
         c.setFillColor(HexColor(T.LINE))
         c.drawString(x, y, f"{i+1:02d}")
         y = K.draw_paragraph(c, x + 26, y, tk, T.FONT_REG, 8.6, 11.6, w - 26, color=T.TEXT_MUTED)
-        y -= 10
+        y -= gap(6, 10)
 
-    y -= 12
+    y -= gap(8, 12)
     K.hline(c, x, x + w, y, color=T.LINE)
-    y -= 24
+    y -= gap(18, 24)
 
     K.draw_label(c, x, y, "METHODOLOGY", size=7.6)
-    y -= 20
+    y -= gap(16, 20)
     meth_w = (w - 24) / 3
     items = [
         ("VPI", "Vertical Power Index", "Uphill efficiency on steep climbing terrain.", T.CYAN),
@@ -575,9 +605,9 @@ def page5(c, data, model, charts):
         for li, line in enumerate(K.wrap_text(c, desc, T.FONT_REG, 7.2, meth_w)):
             c.drawString(mx, y - 26 - li * 9.5, line)
 
-    y -= 58
+    y -= gap(46, 58)
     K.hline(c, x, x + w, y, color=T.LINE_SOFT)
-    y -= 14
+    y -= gap(10, 14)
     c.setFont(T.FONT_REG, 6.8)
     c.setFillColor(HexColor(T.TEXT_FAINT))
     c.drawString(x, y, "Raw metrics retain their original units. Normalized indices are used for visual comparison.")
