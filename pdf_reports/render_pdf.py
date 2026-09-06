@@ -593,21 +593,23 @@ def page5(c, data, model, charts):
 
 
 # ================================================================= main
-def build_pdf(data: dict, summary_override: str | None = None) -> bytes:
+def build_pdf(data: dict, model_overrides: dict | None = None) -> bytes:
     """data: the dict produced by data_mapper.build_report_data(). Returns
     the finished PDF as bytes - never touches disk, ready for a
     st.download_button or to be written wherever the caller decides.
 
-    summary_override: replaces model["summary_paragraph"] (page 5's
-    "ATHLETE PERFORMANCE SUMMARY") with hand-edited text - real user
-    feedback was that the auto-generated summary is exactly the text
-    that needs editing (e.g. to add context vs the rest of the field
-    that the Engine has no way to compute on its own), not a separate
-    section. Leaves every other derived field (takeaways, race story,
-    etc.) untouched."""
+    model_overrides: replaces entries of I.build_report_model(data)'s
+    output with hand-edited text before rendering - e.g.
+    {"summary_paragraph": "...", "key_takeaways": [...]}. Real user
+    feedback: they want to preview and tweak every narrative text field
+    (tone, added context the Engine can't compute like "vs the rest of
+    the field") in the Report tab before generating, not just one field
+    in a separate section. Any key not present keeps its auto-generated
+    value; a nested value like "race_story" is replaced as a whole dict,
+    not merged key-by-key."""
     model = I.build_report_model(data)
-    if summary_override:
-        model["summary_paragraph"] = summary_override
+    if model_overrides:
+        model.update(model_overrides)
     charts = build_charts(
         data,
         progression_wh=(P2_CHART_W_IN, P2_CHART_H_IN),

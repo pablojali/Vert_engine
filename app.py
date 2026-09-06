@@ -4788,36 +4788,105 @@ with tab_pdf_report:
                 except MissingReportData as e:
                     st.error(f"⚠️ No se pudo armar el PDF: {e}")
                 else:
-                    # Editable Athlete Performance Summary - pre-filled with
-                    # the Engine's own auto-generated text. User feedback:
-                    # the Engine has no access to the full race field's
-                    # results (LiveTrail only exposes rank, and only for
-                    # runners analyzed this session), so there's no reliable
-                    # way to compute "vs the rest of the field" on its own -
-                    # rather than a separate section, the user edits this
-                    # summary directly with whatever context they have.
-                    default_summary_pdf = build_report_model(report_data_pdf)["summary_paragraph"]
-                    summary_key = f"pdf_summary_text_{pdf_race_key}_{selected_runner_key}"
-                    if summary_key not in st.session_state:
-                        st.session_state[summary_key] = default_summary_pdf
-                    summary_text_pdf = st.text_area(
-                        "📝 Athlete Performance Summary (editable)",
-                        key=summary_key,
-                        height=160,
-                        help=(
-                            "Texto autogenerado a partir de los datos reales de esta carrera. Editalo con "
-                            "lo que sepas del resto del campo (top 20, top 5, etc.) u otro contexto - el "
-                            "Engine no tiene los resultados de todo el campo, así que eso lo agregás vos. "
-                            "Va tal cual al PDF, reemplazando este mismo texto en la página 5."
-                        ),
+                    # Full preview + edit of every narrative text field the
+                    # PDF renders, pre-filled with the Engine's own
+                    # auto-generated text. User feedback: they want to see
+                    # exactly what's going in before printing, and be able
+                    # to tweak tone / add keywords / add context the Engine
+                    # can't compute on its own (e.g. vs the rest of the
+                    # field) - directly in these fields, not in a separate
+                    # bolted-on section.
+                    default_model_pdf = build_report_model(report_data_pdf)
+                    _pdf_edit_scope = f"{pdf_race_key}_{selected_runner_key}"
+
+                    def _pdf_editable(label, suffix, default_value, area=True, height=70):
+                        key = f"pdf_edit_{suffix}_{_pdf_edit_scope}"
+                        if key not in st.session_state:
+                            st.session_state[key] = default_value
+                        if area:
+                            return st.text_area(label, key=key, height=height)
+                        return st.text_input(label, key=key)
+
+                    st.markdown("##### 👁️ Vista previa y edición del análisis")
+                    st.caption(
+                        "Esto es exactamente el texto que va a ir en el PDF - lo genera el Engine a "
+                        "partir de los datos de esta carrera, pero podés editarlo todo antes de generar."
                     )
+
+                    with st.expander("Página 1 · Perfil del corredor", expanded=True):
+                        pcol1, pcol2 = st.columns(2)
+                        with pcol1:
+                            profile_classification_pdf = _pdf_editable(
+                                "Profile Classification", "profile", default_model_pdf["profile_classification"],
+                                area=False,
+                            )
+                            primary_strength_pdf = _pdf_editable(
+                                "Primary Strength", "strength", default_model_pdf["primary_strength"], area=False,
+                            )
+                        with pcol2:
+                            race_character_pdf = _pdf_editable(
+                                "Race Character", "character", default_model_pdf["race_character"], area=False,
+                            )
+                            limiting_factor_pdf = _pdf_editable(
+                                "Limiting Factor", "limiting", default_model_pdf["limiting_factor"], area=False,
+                            )
+
+                    with st.expander("Página 2-3 · Señal de fatiga", expanded=True):
+                        fcol1, fcol2 = st.columns([1, 2])
+                        with fcol1:
+                            fatigue_level_pdf = _pdf_editable(
+                                "Fatigue Level", "fatigue_level", default_model_pdf["fatigue_level"], area=False,
+                            )
+                        with fcol2:
+                            fatigue_sentence_pdf = _pdf_editable(
+                                "Fatigue Sentence", "fatigue_sentence", default_model_pdf["fatigue_sentence"],
+                                area=False,
+                            )
+
+                    with st.expander("Página 4 · La carrera contada con datos", expanded=True):
+                        story_opening_pdf = _pdf_editable(
+                            "Opening", "story_opening", default_model_pdf["race_story"]["opening"], height=90,
+                        )
+                        story_turning_pdf = _pdf_editable(
+                            "Turning Point", "story_turning", default_model_pdf["race_story"]["turning_point"],
+                            height=90,
+                        )
+                        story_closing_pdf = _pdf_editable(
+                            "Closing", "story_closing", default_model_pdf["race_story"]["closing"], height=90,
+                        )
+
+                    with st.expander("Página 5 · Resumen y conclusiones", expanded=True):
+                        summary_text_pdf = _pdf_editable(
+                            "Athlete Performance Summary", "summary", default_model_pdf["summary_paragraph"],
+                            height=160,
+                        )
+                        st.markdown("**Key Takeaways**")
+                        takeaways_pdf = [
+                            _pdf_editable(f"Takeaway {i+1}", f"takeaway_{i}", tk, area=False)
+                            for i, tk in enumerate(default_model_pdf["key_takeaways"])
+                        ]
 
                     generate_pdf_clicked = st.button(
                         "📄 Generar PDF", type="primary", use_container_width=True, key="pdf_report_generate_btn",
                     )
                     if generate_pdf_clicked:
                         try:
-                            pdf_bytes = build_pdf(report_data_pdf, summary_override=summary_text_pdf)
+                            model_overrides_pdf = {
+                                "profile_classification": profile_classification_pdf,
+                                "primary_strength": primary_strength_pdf,
+                                "limiting_factor": limiting_factor_pdf,
+                                "race_character": race_character_pdf,
+                                "fatigue_level": fatigue_level_pdf,
+                                "fatigue_sentence": fatigue_sentence_pdf,
+                                "race_story": {
+                                    "opening": story_opening_pdf,
+                                    "turning_point": story_turning_pdf,
+                                    "closing": story_closing_pdf,
+                                },
+                                "summary_paragraph": summary_text_pdf,
+                                "key_takeaways": takeaways_pdf,
+                            }
+                            pdf_bytes = build_pdf(report_data_pdf, model_overrides=model_overrides_pdf)
                         except Exception:
                             st.session_state.pop('pdf_report_bytes', None)
                             st.error("❌ Error inesperado generando el PDF.")
