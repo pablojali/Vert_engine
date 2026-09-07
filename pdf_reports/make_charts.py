@@ -152,7 +152,12 @@ def _position_chart(pos):
     ax.scatter([x[best_i]], [y[best_i]], color=T.GREEN, s=30, zorder=5)
     ax.scatter([x[worst_i]], [y[worst_i]], color=T.ORANGE, s=30, zorder=5)
 
-    _style_ax(ax, "Race position")
+    # Labeled "Gender position" since data_mapper._position_progression()
+    # now prefers per-checkpoint Gender Rank over overall/scratch rank -
+    # real user feedback: overall rank reads as very distorted for women
+    # (a runner leading the women's race can still be #60-something
+    # overall).
+    _style_ax(ax, "Gender position")
     ax.invert_yaxis()
     ax.set_xlim(x[0], x[-1])
     ax.set_xlabel("Distance (km)", color=T.TEXT_MUTED, fontsize=8.5, labelpad=5)

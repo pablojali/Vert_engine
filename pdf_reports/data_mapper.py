@@ -134,13 +134,25 @@ def _segment_progression(df_seg: pd.DataFrame, value_col: str) -> tuple[list, li
 
 
 def _position_progression(df_runner: pd.DataFrame, checkpoints_km: list[dict]) -> dict:
-    """Builds (distance_km, position) from df_runner's 'Rank' column,
-    using the race's own checkpoint-to-km mapping (the runner table
-    itself only has checkpoint 'Point' IDs, not km)."""
+    """Builds (distance_km, position) from df_runner's rank column, using
+    the race's own checkpoint-to-km mapping (the runner table itself
+    only has checkpoint 'Point' IDs, not km).
+
+    Prefers 'Gender Rank' over 'Rank' (overall/scratch) when available -
+    real user feedback: overall rank reads as very distorted for women
+    (a runner leading the women's race can still show as #60-something
+    overall), and gender rank is exactly as meaningful for men, so this
+    isn't gender-specific handling, just a better default for everyone.
+    Falls back to 'Rank' for older cached data or providers that don't
+    expose a per-checkpoint gender rank, so this never blocks on that."""
     point_to_km = {c["point"]: c["km"] for c in checkpoints_km}
+    rank_col = (
+        "Gender Rank" if "Gender Rank" in df_runner.columns and df_runner["Gender Rank"].notna().any()
+        else "Rank"
+    )
     rows = [
         (point_to_km[p], r)
-        for p, r in zip(df_runner["Point"], df_runner["Rank"])
+        for p, r in zip(df_runner["Point"], df_runner[rank_col])
         if p in point_to_km and pd.notna(r)
     ]
     rows.sort(key=lambda pr: pr[0])
@@ -170,8 +182,16 @@ def _position_summary(pos_progression: dict, turning_point_km, turning_point_idx
             largest_loss = {"places": -delta, "segment": label}
 
     return {
+        # first_position lets interpretation.py tell whether the runner
+        # actually improved (final < first) or faded (final > first) -
+        # real user feedback: the old narrative assumed every runner
+        # faded, and called a net IMPROVEMENT "decay" whenever any single
+        # segment-to-segment loss happened to exceed the best single gain.
+        "first_position": positions[0],
         "best_position": positions[best_i],
+        "best_position_km": km[best_i],
         "worst_position": positions[worst_i],
+        "worst_position_km": km[worst_i],
         "final_position": positions[-1],
         "largest_gain": largest_gain or {"places": 0, "segment": ""},
         "largest_loss": largest_loss or {"places": 0, "segment": ""},

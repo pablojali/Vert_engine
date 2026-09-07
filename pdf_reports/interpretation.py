@@ -112,13 +112,33 @@ def limiting_factor(metrics, segments):
 
 
 def race_character(pos_summary, fatigue_level):
-    gain = pos_summary["largest_gain"]["places"]
-    loss = pos_summary["largest_loss"]["places"]
-    if loss > gain and fatigue_level in ("MODERATE", "LIMITED"):
-        return "POSITIVE START, SECOND-HALF ATTRITION"
-    if gain >= loss:
+    """Rule: driven by NET direction (final vs. first position), not by
+    which single segment-to-segment move was biggest. Real user feedback
+    (reported twice): a runner who finished in a BETTER position than
+    they started was still being called out as having "decayed" whenever
+    any one bad segment happened to exceed their best single gain -
+    checking net direction first rules that out structurally."""
+    first = pos_summary["first_position"]
+    final = pos_summary["final_position"]
+    worst = pos_summary["worst_position"]
+
+    if final < first:
+        if worst > first:
+            return "RECOVERED TO FINISH STRONGER"
         return "STEADY POSITIONAL CLIMB"
+    if final > first:
+        if fatigue_level in ("MODERATE", "LIMITED"):
+            return "POSITIVE START, SECOND-HALF ATTRITION"
+        return "GRADUAL POSITIONAL SLIDE"
     return "EVEN RACE, LATE VOLATILITY"
+
+
+def _position_arc(pos_summary):
+    if pos_summary["final_position"] < pos_summary["first_position"]:
+        return "IMPROVED"
+    if pos_summary["final_position"] > pos_summary["first_position"]:
+        return "FADED"
+    return "FLAT"
 
 
 def turning_point_statement(pos_summary):
@@ -128,18 +148,37 @@ def turning_point_statement(pos_summary):
 
 
 def race_story(data):
-    """Three-part narrative built strictly from progression + index data."""
+    """Three-part narrative built strictly from progression + index data.
+
+    Real user feedback (reported twice): every position-related sentence
+    here used to assume the same fixed shape - strong start, high point
+    early, fade to a low point, stabilize at the finish - which is
+    exactly backwards for a runner who actually finished better than
+    they started. Every position clause below now branches on
+    _position_arc() (first vs. final position) instead of asserting
+    that shape unconditionally."""
     seg = data["segments"]
     deg = data["degradation_index"]
     pos = data["position_summary"]
     vpi_h = data["vpi_half"]
     dmi_h = data["dmi_half"]
     pace_h = data["effort_pace_half"]
+    arc = _position_arc(pos)
+
+    if arc == "IMPROVED":
+        opening_position_clause = (
+            f"Position opened at #{pos['first_position']} and moved toward #{pos['best_position']} "
+            f"inside the first quarter of the course, "
+        )
+    elif arc == "FADED":
+        opening_position_clause = f"Position opened at #{pos['first_position']} in the early going, "
+    else:
+        opening_position_clause = f"Position opened and stayed close to #{pos['first_position']} early on, "
 
     opening = (
         f"The race opened with the strongest climbing output of the day: "
         f"{seg[0]['vpi_m_h']} m/h on {seg[0]['name']}, well above the eventual race-average VPI. "
-        f"Position moved from {pos['best_position']}-range toward the front third inside the first quarter of the course, "
+        f"{opening_position_clause}"
         f"supported by an ER index above {deg['er_index'][0]} in the opening segments."
     )
 
@@ -160,11 +199,23 @@ def race_story(data):
         f"{turning_point_statement(pos)}"
     )
 
+    if arc == "IMPROVED":
+        closing_position_sentence = (
+            f"Position kept trending toward the front through the finish, closing at #{pos['final_position']} "
+            f"after opening at #{pos['first_position']}."
+        )
+    elif arc == "FADED":
+        closing_position_sentence = (
+            f"Position stabilizes rather than continuing to fall, closing at #{pos['final_position']} "
+            f"after a low point of #{pos['worst_position']}."
+        )
+    else:
+        closing_position_sentence = f"Position held steady, closing at #{pos['final_position']}."
+
     closing = (
         f"From this point, effort pace slows from {pace_h['first_min_km']} to {pace_h['second_min_km']} min/km "
         f"({pace_h['change_pct']}% change), and VPI falls {abs(vpi_h['degradation_pct'])}% while DMI falls "
-        f"{abs(dmi_h['degradation_pct'])}% between race halves. Position stabilizes rather than continuing to fall, "
-        f"closing at #{pos['final_position']} after a low point of #{pos['worst_position']}."
+        f"{abs(dmi_h['degradation_pct'])}% between race halves. {closing_position_sentence}"
     )
 
     return {"opening": opening, "turning_point": turning, "closing": closing}
@@ -189,6 +240,13 @@ def key_takeaways(data):
     pos = data["position_summary"]
     strong_key, _ = strongest_dimension(metrics)
     weak_key, _ = weakest_dimension(metrics)
+    arc = _position_arc(pos)
+    if arc == "IMPROVED":
+        turning_point_position_clause = "even as position kept improving regardless"
+    elif arc == "FADED":
+        turning_point_position_clause = "and position began to fall"
+    else:
+        turning_point_position_clause = "while position held steady"
 
     return [
         f"{DIMENSION_LABELS[strong_key][2]} was the defining strength, anchored by "
@@ -198,7 +256,7 @@ def key_takeaways(data):
         f"with {_dimension_anchor(weak_key, seg, best=False)}.",
 
         f"Km {pos['turning_point_km']} marked the race's defining moment, where climbing and descending "
-        f"output declined together and position began to fall.",
+        f"output declined together {turning_point_position_clause}.",
 
         f"Second-half pacing decay, not a single bad segment, was the main performance characteristic of the race.",
     ]
@@ -224,6 +282,26 @@ def summary_paragraph(data):
     weak_label = DIMENSION_LABELS[weak_key][2]
     strong_raw, strong_unit = metrics[strong_key]["raw"], metrics[strong_key]["unit"]
     weak_raw, weak_unit = metrics[weak_key]["raw"], metrics[weak_key]["unit"]
+
+    # Real user feedback (reported twice): this sentence always claimed
+    # "decline... before stabilizing" regardless of what actually
+    # happened - a runner who finished BETTER than they started was
+    # still described as having decayed. Branches on the runner's own
+    # first vs. final position instead of asserting one fixed shape.
+    arc = _position_arc(pos)
+    if arc == "IMPROVED":
+        position_sentence = (
+            f"Position tracked this closely, improving from #{pos['first_position']} to a final #"
+            f"{pos['final_position']}, with a best of #{pos['best_position']} reached along the way."
+        )
+    elif arc == "FADED":
+        position_sentence = (
+            f"Position tracked this decline directly, moving from a best of #{pos['best_position']} to a low of "
+            f"#{pos['worst_position']} before stabilizing at the km {pos['turning_point_km']} mark."
+        )
+    else:
+        position_sentence = f"Position held steady near #{pos['final_position']} for most of the race."
+
     text = (
         f"{data['athlete']['name']}'s race data fits {profile_article} {profile.lower()}, driven by "
         f"{art(strong_label)} {strong_label.lower()} "
@@ -231,10 +309,9 @@ def summary_paragraph(data):
         f"The clearest performance cost came from {DIMENSION_LABELS[weak_key][1]}, which declined furthest as the race "
         f"progressed. Fatigue resistance was {level.lower()}: VPI fell {abs(data['vpi_half']['degradation_pct'])}% and "
         f"DMI fell {abs(data['dmi_half']['degradation_pct'])}% between race halves, alongside a "
-        f"{data['effort_pace_half']['change_pct']}% slowdown in effort pace. Position tracked this decline directly, "
-        f"moving from a best of #{pos['best_position']} to a low of #{pos['worst_position']} before stabilizing at "
-        f"the km {pos['turning_point_km']} mark. The defining characteristic of the race was a strong, front-loaded "
-        f"climbing performance that outpaced the athlete's ability to sustain descending output and pace to the finish."
+        f"{data['effort_pace_half']['change_pct']}% slowdown in effort pace. {position_sentence} "
+        f"The defining characteristic of the race was a strong {DIMENSION_LABELS[strong_key][1]} performance that "
+        f"outpaced the athlete's ability to sustain {DIMENSION_LABELS[weak_key][1]} output to the finish."
     )
     return text
 

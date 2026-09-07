@@ -1112,6 +1112,14 @@ def fetch_runner_by_tenant_and_bib_livetrail(tenant, bib, race_id):
             "Speed (km/h)": None,   # not exposed by this endpoint (only by utmb.world)
             "Pace (min/km)": None,  # not exposed by this endpoint (only by utmb.world)
             "Rank": ranking_p.get("scratch"),
+            # Real user feedback: the PDF report's position tracking used
+            # this "Rank" (scratch/overall) column, which reads as very
+            # distorted for women - a runner leading the women's race can
+            # still be #60-something overall. Gender Rank is the same
+            # per-checkpoint LiveTrail field, just the "sex" bucket
+            # instead of "scratch" - see data_mapper.py's
+            # _position_progression(), which now prefers this column.
+            "Gender Rank": ranking_p.get("sex"),
             "Rest": _seconds_to_hms(p.get("restTime")),
         })
         if race_time is not None:

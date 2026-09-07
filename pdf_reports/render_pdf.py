@@ -394,6 +394,14 @@ def page4(c, data, model, charts):
     c.setFont(T.FONT_BLACK, 20)
     c.setFillColor(HexColor(T.TEXT))
     c.drawString(x, y, "THE RACE, EXPLAINED BY DATA")
+    # Real user feedback: overall/scratch position reads as very
+    # distorted for women (a runner leading the women's race can still
+    # show as #60-something overall) - tracked by gender for everyone
+    # instead (see data_mapper._position_progression()), called out here
+    # so the numbers below are never mistaken for overall placing.
+    c.setFont(T.FONT_MED, 7.4)
+    c.setFillColor(HexColor(T.TEXT_FAINT))
+    c.drawRightString(x + w, y, "TRACKED BY GENDER, NOT OVERALL PLACING")
     y -= 26
 
     pos = data["position_summary"]
