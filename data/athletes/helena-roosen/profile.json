@@ -1,0 +1,27 @@
+{
+  "slug": "helena-roosen",
+  "name": "Helena ROOSEN",
+  "country": "BE",
+  "gender": null,
+  "portrait": "/media/athletes/helena-roosen/images/portrait.jpg",
+  "races": [
+    {
+      "race_slug": "utmb-mont-blanc-2026-ccc",
+      "race_name": "UTMB - Mont Blanc",
+      "year": 2026,
+      "distance_km": 106.31359277879822,
+      "position": 183,
+      "gender_rank": 46,
+      "finish_time": "15:40:18",
+      "vpi": 837.5,
+      "dmi": 10.56,
+      "er": 93.7,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/helena-roosen/report.html"
+    }
+  ],
+  "career_avg": {
+    "vpi": 837.5,
+    "dmi": 10.6,
+    "er": 93.7
+  }
+}

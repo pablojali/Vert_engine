@@ -648,6 +648,22 @@
       "pace_second_half": 5.13,
       "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/alexandra-augsten/report.html",
       "charts": []
+    },
+    {
+      "slug": "helena-roosen",
+      "name": "Helena ROOSEN",
+      "bib": 3206,
+      "finish_time": "15:40:18",
+      "position": 183,
+      "gender_rank": 46,
+      "gender": null,
+      "vpi": 837.5,
+      "dmi": 10.56,
+      "er": 93.7,
+      "pace_first_half": 5.27,
+      "pace_second_half": 5.6,
+      "report": "/media/races/utmb-mont-blanc-2026-ccc/charts/runners/helena-roosen/report.html",
+      "charts": []
     }
   ]
 }
