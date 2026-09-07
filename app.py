@@ -1642,6 +1642,80 @@ def _ensure_web_repo(web_repo_dir: Path) -> tuple[bool, str]:
     return r.returncode == 0, _redact_token(r.stdout) + _redact_token(r.stderr)
 
 
+def _find_public_race_slug(race_name: str, race_year, distance_label: str) -> str | None:
+    """Looks up the public site slug for a race+year+distance from its
+    already-exported race.json (e.g. "utmb-mont-blanc-2026-ccc" for
+    UTMB's 100K) - the friendly per-distance name the site itself uses
+    (CCC/OCC/TDS/etc for UTMB week), not the Engine's own internal
+    race-key. Returns None if this race hasn't been exported to the web
+    yet, so the caller can fall back to a slug it can always build."""
+    distance_folder = str(distance_label).lower()
+    for race_json_path in WEB_DATA_DIR.glob("races/*/*/*/race.json"):
+        if race_json_path.parent.name != distance_folder:
+            continue
+        if race_json_path.parent.parent.name != str(race_year):
+            continue
+        try:
+            race_json = json.loads(race_json_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        if race_json.get("name") == race_name:
+            return race_json.get("slug")
+    return None
+
+
+def _publish_report_pdf_to_web(
+    pdf_bytes: bytes, athlete_name: str, race_name: str, race_year, distance_label: str, web_repo_dir: Path,
+) -> tuple[bool, str, str]:
+    """Copies a generated Athlete Performance Report PDF straight into
+    vertlabs-web's reports/ (public, no login - see reports/README.md
+    there) and pushes it to 'main' so it's live immediately, without a
+    separate manual copy/commit/push step. Returns (ok, log, public_url)
+    - public_url is "" on failure.
+
+    Filename prefers the site's own public race slug (e.g.
+    "utmb-mont-blanc-2026-ccc") over the Engine's internal race-key,
+    falling back to one built from race_name/year/distance when this
+    race hasn't been exported to the web yet - that fallback still
+    produces a valid, working URL, just a less pretty one."""
+    ok, log = _ensure_web_repo(web_repo_dir)
+    if not ok:
+        return False, f"No se pudo clonar/abrir vertlabs-web:\n{log}", ""
+
+    r = _run_git(web_repo_dir, "fetch", "origin", "main")
+    log_lines = [r.stdout + r.stderr]
+    r = _run_git(web_repo_dir, "checkout", "-B", "main", "origin/main")
+    log_lines.append(r.stdout + r.stderr)
+    if r.returncode != 0:
+        return False, "No se pudo sincronizar el checkout local con origin/main:\n" + "\n".join(log_lines), ""
+
+    public_race_slug = _find_public_race_slug(race_name, race_year, distance_label) or _slugify(
+        f"{race_name} {race_year} {distance_label}"
+    )
+    public_filename = f"{_slugify(athlete_name)}-{public_race_slug}.pdf"
+    dest = web_repo_dir / "reports" / public_filename
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(pdf_bytes)
+
+    r = _run_git(web_repo_dir, "add", f"reports/{public_filename}")
+    log_lines.append(r.stdout + r.stderr)
+    r = _run_git(web_repo_dir, "diff", "--cached", "--quiet")
+    if r.returncode == 0:
+        log_lines.append("Sin cambios - este PDF ya estaba publicado igual en vertlabs-web.")
+    else:
+        r = _run_git(web_repo_dir, "commit", "-m", f"Agregar reporte de {athlete_name} ({public_filename})")
+        log_lines.append(r.stdout + r.stderr)
+        if r.returncode != 0:
+            return False, "Falló el commit en vertlabs-web:\n" + "\n".join(log_lines), ""
+        _configure_git_push_auth(web_repo_dir, "pablojali/vertlabs-web")
+        r = _run_git(web_repo_dir, "push", "origin", "main")
+        log_lines.append(r.stdout + r.stderr)
+        if r.returncode != 0:
+            return False, "Falló el push a vertlabs-web:\n" + "\n".join(log_lines), ""
+
+    return True, "\n".join(log_lines), f"https://vertlabs.run/reports/{public_filename}"
+
+
 class _TeeStdout:
     """Stand-in for io.StringIO() as a redirect_stdout() target: buffers
     everything written (same full-log behavior as before), and also
@@ -4903,6 +4977,14 @@ with tab_pdf_report:
                             st.session_state['pdf_report_filename'] = f"{athlete_slug_pdf}_{race_slug_pdf}_vtl_report.pdf"
                             st.session_state['pdf_report_athlete_slug'] = athlete_slug_pdf
                             st.session_state['pdf_report_race_slug'] = race_slug_pdf
+                            # Stashed now (not re-read from the live selection at
+                            # button-click time) so "Guardar" always publishes the
+                            # PDF that's actually in pdf_report_bytes, even if the
+                            # user changes the race/runner selector afterward.
+                            st.session_state['pdf_report_athlete_name'] = runner_info_pdf.get("Name") or "Runner"
+                            st.session_state['pdf_report_race_name'] = report_data_pdf["race"]["name"]
+                            st.session_state['pdf_report_race_year'] = report_data_pdf["race"]["year"]
+                            st.session_state['pdf_report_distance_label'] = report_data_pdf["race"]["distance_label"]
                             st.success("✅ PDF generado.")
 
             if st.session_state.get('pdf_report_bytes'):
@@ -4916,22 +4998,52 @@ with tab_pdf_report:
                 )
 
                 if st.button(
-                    "💾 Guardar copia en el repo (reports/)", use_container_width=True, key="pdf_report_persist_btn",
+                    "💾 Guardar y publicar en vertlabs.run", use_container_width=True, key="pdf_report_persist_btn",
                 ):
                     reports_dir = ENGINE_ROOT / "reports" / st.session_state['pdf_report_athlete_slug']
                     reports_dir.mkdir(parents=True, exist_ok=True)
                     pdf_path = reports_dir / f"{st.session_state['pdf_report_race_slug']}.pdf"
                     pdf_path.write_bytes(st.session_state['pdf_report_bytes'])
-                    with st.spinner("Commiteando y pusheando reports/ a GitHub..."):
+                    with st.spinner("Commiteando y pusheando reports/ a GitHub (Vert_engine, privado)..."):
                         backup_ok, backup_log = _backup_engine_folder(
                             "reports/", "Guardar informe PDF desde la pestaña Report",
                         )
-                    if backup_ok:
-                        st.success(f"✅ Guardado y respaldado en `{pdf_path.relative_to(ENGINE_ROOT)}`.")
-                    else:
+                    if not backup_ok:
                         st.warning(
-                            "⚠️ Se guardó en disco pero el respaldo a GitHub falló - no reinicies "
+                            "⚠️ Se guardó en disco pero el respaldo privado a GitHub falló - no reinicies "
                             "el Engine hasta resolverlo, o vas a perder esta copia."
                         )
                         with st.expander("Ver detalle del error de respaldo"):
                             st.code(backup_log)
+                    else:
+                        st.success(f"✅ Guardado y respaldado en `{pdf_path.relative_to(ENGINE_ROOT)}`.")
+
+                        # Also publishes the same PDF publicly on
+                        # vertlabs-web/reports/ (no login, direct URL - see
+                        # reports/README.md there) - one click instead of a
+                        # manual copy + commit + push. Failing this doesn't
+                        # undo the private backup above, which already
+                        # succeeded.
+                        with st.spinner("Publicando en vertlabs.run/reports/..."):
+                            publish_ok, publish_log, public_url = _publish_report_pdf_to_web(
+                                st.session_state['pdf_report_bytes'],
+                                st.session_state['pdf_report_athlete_name'],
+                                st.session_state['pdf_report_race_name'],
+                                st.session_state['pdf_report_race_year'],
+                                st.session_state['pdf_report_distance_label'],
+                                Path(web_repo_dir_str).expanduser(),
+                            )
+                        if publish_ok:
+                            st.success("✅ Publicado en vertlabs.run:")
+                            st.code(public_url)
+                            st.caption(
+                                "Puede tardar 1-2 minutos en estar disponible mientras Cloudflare Pages "
+                                "hace el deploy."
+                            )
+                        else:
+                            st.warning(
+                                "⚠️ Se guardó el respaldo privado, pero falló la publicación pública en "
+                                "vertlabs-web - podés reintentar apretando el botón de nuevo."
+                            )
+                            with st.expander("Ver detalle del error de publicación"):
+                                st.code(publish_log)
