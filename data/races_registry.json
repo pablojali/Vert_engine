@@ -1674,5 +1674,78 @@
         }
       }
     }
+  },
+  "wildstrubel": {
+    "nombre": "Wildstrubel",
+    "anios": {
+      "2026": {
+        "110": {
+          "gpx_file": "data/gpx/wildstrubel/2026/WILD_110_K_officiel_79d0995203.gpx",
+          "race_slug_api": "110k",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Crans - Montana",
+              "km": 0.0
+            },
+            {
+              "id": "4",
+              "nombre": "Varneralp",
+              "km": 12.9
+            },
+            {
+              "id": "6",
+              "nombre": "Leukerbad",
+              "km": 22.9
+            },
+            {
+              "id": "8",
+              "nombre": "Gemmipass",
+              "km": 27.7
+            },
+            {
+              "id": "10",
+              "nombre": "Kandersteg",
+              "km": 44.0
+            },
+            {
+              "id": "14",
+              "nombre": "Abelboden",
+              "km": 60.3
+            },
+            {
+              "id": "16",
+              "nombre": "Sillerebüel",
+              "km": 69.6
+            },
+            {
+              "id": "18",
+              "nombre": "Lenk",
+              "km": 78.2
+            },
+            {
+              "id": "24",
+              "nombre": "Iffigenalp",
+              "km": 86.6
+            },
+            {
+              "id": "30",
+              "nombre": "Cabane Wildstrubel",
+              "km": 92.4
+            },
+            {
+              "id": "32",
+              "nombre": "Barrage du Tseuzier",
+              "km": 102.9
+            },
+            {
+              "id": "100",
+              "nombre": "Crans - Montana",
+              "km": 113.9
+            }
+          ]
+        }
+      }
+    }
   }
 }
