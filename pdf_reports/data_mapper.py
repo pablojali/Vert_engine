@@ -26,9 +26,12 @@ import requests
 # Same fixed axis bands the public site's own VTL Performance Profile
 # triangle already uses (builder/generators/radar_chart.py in the
 # vertlabs-web builder) - NOT a percentile against other analyzed
-# runners (that data doesn't exist without scraping the whole field).
-# "Index" here means "where this value sits in VTL's own typical range
-# for that metric", exactly what vertlabs.run already shows visitors.
+# runners. "Index" here means "where this value sits in VTL's own
+# typical range for that metric", exactly what vertlabs.run already
+# shows visitors. A SEPARATE, optional field-average overlay (see
+# _field_average() below) is what actually compares this runner against
+# others - real user feedback: they want to see how an athlete (elite or
+# not) stacks up against whoever else has been analyzed for this race.
 AXIS_RANGE = {
     "vpi": (600, 1500),
     "dmi": (6, 15),
@@ -326,7 +329,47 @@ def _segment_signal(role: str, row) -> str:
     return templates.get(role, "")
 
 
-def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total_elevation_gain: float) -> dict:
+def _field_average(field_bundles: list | None) -> dict | None:
+    """Averages VPI/DMI/ER across whatever OTHER runners have already
+    been analyzed for this same race this session (pdf_report_pool,
+    populated by 'Runner Metrics' / 'Top Runners') - the Engine has no
+    access to full-field results (LiveTrail only exposes rank), so this
+    is a comparison against whoever's actually been analyzed, not a true
+    field average. Returns None when there's nobody else to compare
+    against, so the caller skips the whole comparison rather than
+    showing a fake single-runner "average"."""
+    if not field_bundles:
+        return None
+
+    def _mean(key):
+        values = [b["indices"].get(key) for b in field_bundles if b["indices"].get(key) is not None]
+        return sum(values) / len(values) if values else None
+
+    vpi_avg, dmi_avg, er_avg = _mean("VPI"), _mean("DMI"), _mean("ER")
+    if vpi_avg is None and dmi_avg is None and er_avg is None:
+        return None
+
+    return {
+        "count": len(field_bundles),
+        "vpi": {
+            "raw": round(vpi_avg, 1) if vpi_avg is not None else None,
+            "unit": "m/h", "index": _axis_index("vpi", vpi_avg),
+        },
+        "dmi": {
+            "raw": round(dmi_avg, 2) if dmi_avg is not None else None,
+            "unit": "km/h", "index": _axis_index("dmi", dmi_avg),
+        },
+        "er": {
+            "raw": round(er_avg, 1) if er_avg is not None else None,
+            "unit": "pts", "index": _axis_index("er", er_avg),
+        },
+    }
+
+
+def build_report_data(
+    race_key: str, runner_bundle: dict, race_data: dict, total_elevation_gain: float,
+    field_bundles: list | None = None,
+) -> dict:
     """race_key: the 'Name Year - DistanceK' string used in saved_races /
     pdf_report_pool. runner_bundle: one entry of
     pdf_report_pool[race_key][runner_key]. race_data: saved_races[race_key].
@@ -335,6 +378,11 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
     than imported here, since app.py runs as __main__ under
     `streamlit run` and importing it as a module from inside this
     package would re-execute the whole Streamlit script a second time.
+
+    field_bundles: the OTHER entries of pdf_report_pool[race_key] (same
+    shape as runner_bundle), used to compute an optional VPI/DMI/ER
+    comparison average (see _field_average()) - omit or pass [] when
+    there's nobody else analyzed yet.
 
     Raises MissingReportData with a clear reason if there isn't enough
     data to build a meaningful report - the Streamlit tab shows that
@@ -478,5 +526,6 @@ def build_report_data(race_key: str, runner_bundle: dict, race_data: dict, total
         "segments": _segment_role_rows(df_seg, turning_point_idx, point_to_name),
         "position_progression": pos_progression,
         "position_summary": position_summary,
+        "field_average": _field_average(field_bundles),
     }
     return data

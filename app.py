@@ -4873,12 +4873,34 @@ with tab_pdf_report:
             else:
                 try:
                     total_gain_pdf = calculate_total_elevation_gain(race_data_pdf["df"])
+                    # Field-average comparison (real user feedback: "como
+                    # podemos incorporar ahí el VPI, DMI y ER average del
+                    # top 10 de la carrera") - the Engine has no full-field
+                    # results, so this averages whoever else has already
+                    # been analyzed for this race this session (Runner
+                    # Metrics / Top Runners), not literally the top 10.
+                    field_bundles_pdf = [
+                        r for key, r in runners_for_pdf.items() if key != selected_runner_key
+                    ]
                     report_data_pdf = build_report_data(
                         pdf_race_key, runner_bundle, race_data_pdf, total_gain_pdf,
+                        field_bundles=field_bundles_pdf,
                     )
                 except MissingReportData as e:
                     st.error(f"⚠️ No se pudo armar el PDF: {e}")
                 else:
+                    if report_data_pdf.get("field_average"):
+                        st.caption(
+                            f"📊 El triángulo, las barras y los gráficos de VPI/DMI van a mostrar una "
+                            f"comparación contra el promedio de los otros {report_data_pdf['field_average']['count']} "
+                            f"corredor(es) ya analizados para esta carrera."
+                        )
+                    else:
+                        st.caption(
+                            "📊 Sin comparación de campo todavía: analizá al menos otro corredor de esta "
+                            "carrera en '🏃 Runner Metrics (LiveTrail)' o '🏆 Top Runners' para que aparezca."
+                        )
+
                     # Full preview + edit of every narrative text field the
                     # PDF renders, pre-filled with the Engine's own
                     # auto-generated text. User feedback: they want to see

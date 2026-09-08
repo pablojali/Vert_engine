@@ -62,14 +62,22 @@ def _save(fig, w, h) -> io.BytesIO:
 
 def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
                  elevation_x=None, elevation_y=None, label_fs=10, tick_fs=9.5,
-                 axis_range=None, tick_step=None):
+                 axis_range=None, tick_step=None, ref_value=None):
     """axis_range/tick_step (e.g. VPI's (600,1500)/200) draw the same fixed
     scale used everywhere else in the report (triangle, bars) so a reader
     always sees round reference lines - not just whatever narrow band this
     one runner's data happens to span. Real user feedback: "agrega mas
     lineas horizontales... esto ayuda a ver mejor los valores." Falls back
     to a denser auto locator (still more lines than the previous default)
-    for metrics with no universal scale (effort pace)."""
+    for metrics with no universal scale (effort pace).
+
+    ref_value: optional constant to draw as a dashed horizontal line -
+    the field-average comparison (data_mapper._field_average()). No
+    in-chart text label on purpose: matplotlib's bbox_inches="tight" (in
+    _save()) would expand around any text drawn outside the axes,
+    throwing off the physical box size render_pdf.py already computed
+    for this chart - the label lives in the PDF page instead (a caption
+    reportlab draws directly), not in this raster."""
     fig, ax = plt.subplots()
 
     if elevation_x is not None and len(elevation_x) == len(elevation_y) and max(elevation_y or [0]) > 0:
@@ -96,6 +104,9 @@ def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
     ymin, ymax = min(values) - pad, max(values) + pad
     if axis_range:
         ymin, ymax = min(ymin, axis_range[0]), max(ymax, axis_range[1])
+    if ref_value is not None:
+        ymin, ymax = min(ymin, ref_value - pad * 0.3), max(ymax, ref_value + pad * 0.3)
+        ax.axhline(ref_value, color=T.TEXT_MUTED, linewidth=1.4, linestyle=(0, (4, 3)), zorder=3.5)
     ax.set_ylim(ymin, ymax)
     if tick_step:
         start = math.floor(ymin / tick_step) * tick_step
@@ -181,17 +192,20 @@ def build_charts(data: dict, progression_wh=(4.55, 0.92), degradation_wh=(2.95, 
     elev_x = data["degradation_index"]["distance_km"]
     elev_y = data["degradation_index"]["elevation_m"]
     pw, ph = progression_wh
+    field_avg = data.get("field_average")
 
     charts = {}
     charts["vpi_progression"] = _line_chart(
         data["vpi_progression"]["distance_km"], data["vpi_progression"]["value_m_h"],
         T.CYAN, "VPI (m/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
         axis_range=AXIS_RANGE["vpi"], tick_step=200,
+        ref_value=field_avg["vpi"]["raw"] if field_avg else None,
     )
     charts["dmi_progression"] = _line_chart(
         data["dmi_progression"]["distance_km"], data["dmi_progression"]["value_km_h"],
         T.ORANGE, "DMI (km/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
         axis_range=AXIS_RANGE["dmi"], tick_step=2,
+        ref_value=field_avg["dmi"]["raw"] if field_avg else None,
     )
     charts["pace_progression"] = _line_chart(
         data["effort_pace_progression"]["distance_km"], data["effort_pace_progression"]["pace_min_km"],

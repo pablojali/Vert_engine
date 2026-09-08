@@ -222,7 +222,7 @@ def draw_kpi_card(c, x, y, w, h, label, value, unit, color=T.TEXT, sub=None):
 
 
 # ---------------------------------------------------------------- performance triangle
-def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx, axis_range):
+def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx, axis_range, field_idx=None):
     """
     Radar-style triangle. Vertices 120 deg apart:
       top = VPI (cyan), bottom-right = DMI (orange), bottom-left = ER (green)
@@ -232,6 +232,12 @@ def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx, axis_
     axis_range bands and ring fractions as the public site's own VTL
     Performance Profile triangle (builder/generators/radar_chart.py),
     so the two look and read the same way.
+
+    field_idx: optional {"vpi": idx, "dmi": idx, "er": idx} (0-100, same
+    axis_range scale) - the field-average comparison (real user
+    feedback: "así puede compararse, sea un atleta elite o común").
+    Drawn as a dashed, unfilled outline BEHIND the athlete's own filled
+    polygon, so it reads as a reference, not a second result.
     """
     angles = {"vpi": 90, "dmi": 90 - 120, "er": 90 - 240}  # degrees, standard math orientation
     ring_fractions = (1 / 3, 2 / 3, 1.0)
@@ -276,6 +282,30 @@ def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx, axis_
             value = round(lo + frac * (hi - lo))
             c.drawCentredString(tx, ty - 2, str(value))
 
+    # field-average polygon (optional), drawn first so the athlete's own
+    # polygon stays visually on top
+    if field_idx is not None:
+        fv = pt(angles["vpi"], radius * field_idx["vpi"] / 100)
+        fd = pt(angles["dmi"], radius * field_idx["dmi"] / 100)
+        fe = pt(angles["er"], radius * field_idx["er"] / 100)
+        fpoly = c.beginPath()
+        fpoly.moveTo(*fv)
+        fpoly.lineTo(*fd)
+        fpoly.lineTo(*fe)
+        fpoly.close()
+        c.saveState()
+        c.setDash([3, 2])
+        c.setStrokeColor(HexColor(T.TEXT_MUTED))
+        c.setLineWidth(1.3)
+        c.drawPath(fpoly, fill=0, stroke=1)
+        c.restoreState()
+        for (px, py) in (fv, fd, fe):
+            c.setFillColor(HexColor(T.BG))
+            c.circle(px, py, 2.8, fill=1, stroke=0)
+            c.setStrokeColor(HexColor(T.TEXT_MUTED))
+            c.setLineWidth(1.0)
+            c.circle(px, py, 2.8, fill=0, stroke=1)
+
     # athlete polygon
     va = pt(angles["vpi"], radius * vpi_idx / 100)
     da = pt(angles["dmi"], radius * dmi_idx / 100)
@@ -309,13 +339,19 @@ def draw_performance_triangle(c, cx, cy, radius, vpi_idx, dmi_idx, er_idx, axis_
 
 
 # ---------------------------------------------------------------- horizontal bar
-def draw_metric_bar(c, x, y, w, h, label_left, label_right, raw_value, index_value, color, axis_range=None):
+def draw_metric_bar(c, x, y, w, h, label_left, label_right, raw_value, index_value, color, axis_range=None,
+                     field_index_value=None):
     """Bar length reflects index_value (0-100, the same VTL axis-range
     ratio the triangle uses) - but the fill no longer prints that
     abstract number on top of it (real user feedback: "no me gusta lo
     de index VPI 43/100, eso que es?"). Instead, when axis_range=(lo, hi)
     is given, the two endpoints are labeled below the bar so what the
-    fill length actually means is self-evident."""
+    fill length actually means is self-evident.
+
+    field_index_value: optional 0-100 position (same scale as
+    index_value) marked with a vertical tick across the bar - the
+    field-average comparison, when there's other analyzed runners to
+    compare against."""
     draw_label(c, x, y + h + 12, label_left, color=T.TEXT_MUTED, size=8)
     c.setFont(T.FONT_BOLD, 12)
     c.setFillColor(HexColor(T.TEXT))
@@ -325,6 +361,14 @@ def draw_metric_bar(c, x, y, w, h, label_left, label_right, raw_value, index_val
     fill_w = max(w * index_value / 100, h)
     c.setFillColor(HexColor(color))
     c.roundRect(x, y, fill_w, h, h / 2, fill=1, stroke=0)
+
+    if field_index_value is not None:
+        fx = x + w * max(0.0, min(100.0, field_index_value)) / 100
+        c.saveState()
+        c.setStrokeColor(HexColor(T.TEXT))
+        c.setLineWidth(1.4)
+        c.line(fx, y - 3, fx, y + h + 3)
+        c.restoreState()
 
     if axis_range is not None:
         lo, hi = axis_range

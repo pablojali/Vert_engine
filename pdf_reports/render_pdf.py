@@ -151,12 +151,35 @@ def page1(c, data, model, charts):
     K.rounded_panel(c, x, panel_y, left_w, panel_h, r=10)
     K.draw_topo_motif(c, x, panel_y, left_w, panel_h, seed=3, n=4, alpha=0.045)
     K.draw_label(c, x + 18, panel_y + panel_h - 24, "PERFORMANCE TRIANGLE", size=7.6)
+
+    # Field-average comparison (real user feedback: "así puede
+    # compararse, sea un atleta elite o común") - only drawn when other
+    # runners have actually been analyzed for this race this session, see
+    # data_mapper._field_average().
+    field_avg = data.get("field_average")
+    field_idx = None
+    if field_avg:
+        legend_right = x + left_w - 18
+        legend_y = panel_y + panel_h - 24
+        c.saveState()
+        c.setDash([3, 2])
+        c.setStrokeColor(HexColor(T.TEXT_MUTED))
+        c.setLineWidth(1.3)
+        c.line(legend_right - 78, legend_y + 3, legend_right - 62, legend_y + 3)
+        c.restoreState()
+        c.setFont(T.FONT_MED, 6.6)
+        c.setFillColor(HexColor(T.TEXT_FAINT))
+        c.drawRightString(legend_right, legend_y, f"VS. {field_avg['count']} ANALYZED")
+        field_idx = {
+            "vpi": field_avg["vpi"]["index"], "dmi": field_avg["dmi"]["index"], "er": field_avg["er"]["index"],
+        }
+
     tri_cx = x + left_w / 2
     tri_cy = panel_y + panel_h / 2 + 34
     m = data["metrics"]
     K.draw_performance_triangle(c, tri_cx, tri_cy, 98,
                                  m["vpi"]["index"], m["dmi"]["index"], m["er"]["index"],
-                                 axis_range=AXIS_RANGE)
+                                 axis_range=AXIS_RANGE, field_idx=field_idx)
 
     ry = panel_y + 40
     labels = [
@@ -233,6 +256,11 @@ def page2(c, data, model, charts):
     c.setFont(T.FONT_BLACK, 20)
     c.setFillColor(HexColor(T.TEXT))
     c.drawString(x, y, "PERFORMANCE & FATIGUE")
+    field_avg = data.get("field_average")
+    if field_avg:
+        c.setFont(T.FONT_MED, 7.4)
+        c.setFillColor(HexColor(T.TEXT_FAINT))
+        c.drawRightString(x + w, y, f"- - DASHED LINE = AVG. OF {field_avg['count']} ANALYZED")
     y -= 30
 
     row_h = P2_ROW_H
@@ -531,6 +559,11 @@ def page5(c, data, model, charts):
     K.hline(c, x, x + w, y, color=T.LINE)
     y -= 30
 
+    field_avg = data.get("field_average")
+    if field_avg:
+        c.setFont(T.FONT_MED, 6.8)
+        c.setFillColor(HexColor(T.TEXT_FAINT))
+        c.drawRightString(x + w, y, f"| MARKS VS. {field_avg['count']} ANALYZED")
     K.draw_label(c, x, y, "PERFORMANCE SIGNATURE", size=7.6)
     y -= 24
     m = data["metrics"]
@@ -538,15 +571,18 @@ def page5(c, data, model, charts):
     bar_h = 14
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "CLIMBING · VPI",
                        "", f"{m['vpi']['raw']} m/h", m["vpi"]["index"], T.CYAN,
-                       axis_range=AXIS_RANGE["vpi"])
+                       axis_range=AXIS_RANGE["vpi"],
+                       field_index_value=field_avg["vpi"]["index"] if field_avg else None)
     y -= bar_h + 34
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "DESCENDING · DMI",
                        "", f"{m['dmi']['raw']} km/h", m["dmi"]["index"], T.ORANGE,
-                       axis_range=AXIS_RANGE["dmi"])
+                       axis_range=AXIS_RANGE["dmi"],
+                       field_index_value=field_avg["dmi"]["index"] if field_avg else None)
     y -= bar_h + 34
     K.draw_metric_bar(c, x, y - bar_h, bar_w, bar_h, "ENDURANCE · ER",
                        "", f"{m['er']['raw']}", m["er"]["index"], T.GREEN,
-                       axis_range=AXIS_RANGE["er"])
+                       axis_range=AXIS_RANGE["er"],
+                       field_index_value=field_avg["er"]["index"] if field_avg else None)
     y -= bar_h + 26
 
     K.hline(c, x, x + w, y, color=T.LINE)

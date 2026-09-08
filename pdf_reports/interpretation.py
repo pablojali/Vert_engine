@@ -234,6 +234,32 @@ def _dimension_anchor(key, seg, best=True):
     return f"an ER index of {s['er_index']} on {s['name']}"
 
 
+def _fourth_takeaway(data):
+    """User feedback: the 4th takeaway was a fixed sentence, identical in
+    every report regardless of the actual data. Prefers the BEST
+    RECOVERY segment (already computed for the Key Segments table but
+    never narrated anywhere) when this runner had one, then the largest
+    single positional jump, then falls back to the actual pace-change
+    number - always something traceable to this specific runner's data,
+    never the same fixed line twice for different reasons."""
+    seg = data["segments"]
+    pos = data["position_summary"]
+    recovery = next((s for s in seg if s["role"] == "BEST RECOVERY"), None)
+    if recovery:
+        return (
+            f"Best recovery of the race came on {recovery['name']}, where climbing and descending "
+            f"output ticked back up instead of continuing to fall."
+        )
+    gain = pos.get("largest_gain") or {}
+    if gain.get("places", 0) > 0:
+        return f"The biggest single positional jump was +{gain['places']} places on {gain['segment']}."
+    pace_change = data["effort_pace_half"]["change_pct"]
+    return (
+        f"Effort pace changed {pace_change:+.1f}% between race halves - the clearest signal of how "
+        f"fatigue shaped the second half."
+    )
+
+
 def key_takeaways(data):
     metrics = data["metrics"]
     seg = data["segments"]
@@ -258,7 +284,7 @@ def key_takeaways(data):
         f"Km {pos['turning_point_km']} marked the race's defining moment, where climbing and descending "
         f"output declined together {turning_point_position_clause}.",
 
-        f"Second-half pacing decay, not a single bad segment, was the main performance characteristic of the race.",
+        _fourth_takeaway(data),
     ]
 
 
