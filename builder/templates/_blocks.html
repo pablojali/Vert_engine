@@ -3,7 +3,7 @@
     {% if block.type == 'text' %}
     <div class="race-analysis-content race-analysis-text">
       {% if block.title %}<h2>{{ block.title }}</h2>{% endif %}
-      {% for para in block.content.split('\n\n') if para.strip() %}<p>{{ para.strip() }}</p>{% endfor %}
+      {% for para in block.content.split('\n\n') if para.strip() %}{% set para = para.strip() %}{% if para.startswith('## ') %}<h3>{{ para[3:].strip() }}</h3>{% else %}<p>{{ para }}</p>{% endif %}{% endfor %}
     </div>
     {% elif block.type == 'html' %}
     <div class="race-analysis-content">

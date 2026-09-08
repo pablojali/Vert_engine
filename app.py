@@ -2093,6 +2093,11 @@ def _render_block_editor_ui(order_key: str, key_prefix: str, images_dir: Path, a
                     value=initial.get("content", ""), height=150, key=f"{key_prefix}_text_{bid}",
                     label_visibility="collapsed",
                 )
+                st.caption(
+                    "Tip: para un subtítulo DENTRO de este mismo texto (sin crear otro bloque), "
+                    "escribí una línea que empiece con `## ` - con una línea en blanco antes y después, "
+                    "igual que un párrafo normal. Ej: `## Segunda parte`."
+                )
             elif btype == "html":
                 st.text_input(
                     "Título (opcional)", value=initial.get("title", ""), key=f"{key_prefix}_html_title_{bid}",
