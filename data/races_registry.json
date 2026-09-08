@@ -1744,6 +1744,52 @@
               "km": 113.9
             }
           ]
+        },
+        "70": {
+          "gpx_file": "data/gpx/wildstrubel/2026/WILD_70_K_officiel_06edfafe0d.gpx",
+          "race_slug_api": "70k",
+          "checkpoints": [
+            {
+              "id": "0",
+              "nombre": "Kandersteg",
+              "km": 0.0
+            },
+            {
+              "id": "14",
+              "nombre": "Abelboden",
+              "km": 18.1
+            },
+            {
+              "id": "16",
+              "nombre": "Sillerebüel",
+              "km": 27.4
+            },
+            {
+              "id": "18",
+              "nombre": "Lenk",
+              "km": 35.9
+            },
+            {
+              "id": "24",
+              "nombre": "Iffigenalp",
+              "km": 44.4
+            },
+            {
+              "id": "30",
+              "nombre": "Cabane Wildstrubel",
+              "km": 50.1
+            },
+            {
+              "id": "32",
+              "nombre": "Barrage du Tseuzier",
+              "km": 60.6
+            },
+            {
+              "id": "100",
+              "nombre": "Crans - Montana",
+              "km": 71.5
+            }
+          ]
         }
       }
     }
