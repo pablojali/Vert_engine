@@ -329,6 +329,32 @@ def _segment_signal(role: str, row) -> str:
     return templates.get(role, "")
 
 
+def _field_average_progression(field_bundles: list, value_col: str) -> tuple[list, list]:
+    """Per-segment mean of value_col across every field runner's own
+    df_segment_degradation, matched by (Start Km, End Km) - runners
+    analyzed for the same race share identical checkpoint geometry, so
+    segments line up exactly across runners without needing to resample
+    or interpolate. A segment is included as soon as at least one field
+    runner has a finite value there (same don't-plot-a-fake-zero
+    principle as _segment_progression()) - it's just averaged over
+    however many actually do."""
+    frames = []
+    for b in field_bundles:
+        df = b.get("df_segment_degradation")
+        if df is None or value_col not in df.columns:
+            continue
+        sub = df[["Start Km", "End Km", value_col]].copy()
+        sub = sub[sub[value_col].apply(lambda v: pd.notna(v) and np.isfinite(v))]
+        if not sub.empty:
+            frames.append(sub)
+    if not frames:
+        return [], []
+    combined = pd.concat(frames, ignore_index=True)
+    grouped = combined.groupby(["Start Km", "End Km"], as_index=False)[value_col].mean()
+    grouped = grouped.sort_values("End Km")
+    return grouped["End Km"].round(1).tolist(), grouped[value_col].tolist()
+
+
 def _field_average(field_bundles: list | None) -> dict | None:
     """Averages VPI/DMI/ER across whatever OTHER runners have already
     been analyzed for this same race this session (pdf_report_pool,
@@ -337,7 +363,13 @@ def _field_average(field_bundles: list | None) -> dict | None:
     is a comparison against whoever's actually been analyzed, not a true
     field average. Returns None when there's nobody else to compare
     against, so the caller skips the whole comparison rather than
-    showing a fake single-runner "average"."""
+    showing a fake single-runner "average".
+
+    Includes a per-segment progression for VPI/DMI (real user feedback:
+    "quiero que en los graficos aparezca el promedio punto por punto",
+    not just a flat reference number) alongside the single overall
+    average each metric already had (still used for the triangle overlay
+    and the bar tick marks)."""
     if not field_bundles:
         return None
 
@@ -349,15 +381,20 @@ def _field_average(field_bundles: list | None) -> dict | None:
     if vpi_avg is None and dmi_avg is None and er_avg is None:
         return None
 
+    field_vpi_dist, field_vpi_val = _field_average_progression(field_bundles, "VPI Raw (m/h)")
+    field_dmi_dist, field_dmi_val = _field_average_progression(field_bundles, "DMI Raw (km/h)")
+
     return {
         "count": len(field_bundles),
         "vpi": {
             "raw": round(vpi_avg, 1) if vpi_avg is not None else None,
             "unit": "m/h", "index": _axis_index("vpi", vpi_avg),
+            "progression": {"distance_km": field_vpi_dist, "value_m_h": field_vpi_val},
         },
         "dmi": {
             "raw": round(dmi_avg, 2) if dmi_avg is not None else None,
             "unit": "km/h", "index": _axis_index("dmi", dmi_avg),
+            "progression": {"distance_km": field_dmi_dist, "value_km_h": field_dmi_val},
         },
         "er": {
             "raw": round(er_avg, 1) if er_avg is not None else None,

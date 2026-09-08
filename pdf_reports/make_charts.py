@@ -62,7 +62,7 @@ def _save(fig, w, h) -> io.BytesIO:
 
 def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
                  elevation_x=None, elevation_y=None, label_fs=10, tick_fs=9.5,
-                 axis_range=None, tick_step=None, ref_value=None):
+                 axis_range=None, tick_step=None, ref_x=None, ref_y=None):
     """axis_range/tick_step (e.g. VPI's (600,1500)/200) draw the same fixed
     scale used everywhere else in the report (triangle, bars) so a reader
     always sees round reference lines - not just whatever narrow band this
@@ -71,13 +71,16 @@ def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
     to a denser auto locator (still more lines than the previous default)
     for metrics with no universal scale (effort pace).
 
-    ref_value: optional constant to draw as a dashed horizontal line -
-    the field-average comparison (data_mapper._field_average()). No
-    in-chart text label on purpose: matplotlib's bbox_inches="tight" (in
-    _save()) would expand around any text drawn outside the axes,
-    throwing off the physical box size render_pdf.py already computed
-    for this chart - the label lives in the PDF page instead (a caption
-    reportlab draws directly), not in this raster."""
+    ref_x/ref_y: optional second (distance, value) series drawn as a
+    dashed line - the field-average comparison
+    (data_mapper._field_average_progression()), plotted point-by-point
+    like the runner's own line rather than a single flat number (real
+    user feedback: "quiero que en los graficos aparezca el promedio
+    punto por punto"). No in-chart text label on purpose: matplotlib's
+    bbox_inches="tight" (in _save()) would expand around any text drawn
+    outside the axes, throwing off the physical box size render_pdf.py
+    already computed for this chart - the label lives in the PDF page
+    instead (a caption reportlab draws directly), not in this raster."""
     fig, ax = plt.subplots()
 
     if elevation_x is not None and len(elevation_x) == len(elevation_y) and max(elevation_y or [0]) > 0:
@@ -104,9 +107,12 @@ def _line_chart(dist, values, color, ylabel, w=4.55, h=0.92, fill=True,
     ymin, ymax = min(values) - pad, max(values) + pad
     if axis_range:
         ymin, ymax = min(ymin, axis_range[0]), max(ymax, axis_range[1])
-    if ref_value is not None:
-        ymin, ymax = min(ymin, ref_value - pad * 0.3), max(ymax, ref_value + pad * 0.3)
-        ax.axhline(ref_value, color=T.TEXT_MUTED, linewidth=1.4, linestyle=(0, (4, 3)), zorder=3.5)
+    has_ref = ref_x and ref_y and len(ref_x) == len(ref_y) and len(ref_x) >= 2
+    if has_ref:
+        ymin, ymax = min(ymin, min(ref_y) - pad * 0.3), max(ymax, max(ref_y) + pad * 0.3)
+        ax.plot(ref_x, ref_y, color=T.TEXT_MUTED, linewidth=1.6, linestyle=(0, (4, 3)), zorder=3.2)
+        ax.scatter([ref_x[0], ref_x[-1]], [ref_y[0], ref_y[-1]], color=T.TEXT_MUTED, s=10, zorder=3.3,
+                   edgecolors="none")
     ax.set_ylim(ymin, ymax)
     if tick_step:
         start = math.floor(ymin / tick_step) * tick_step
@@ -194,18 +200,23 @@ def build_charts(data: dict, progression_wh=(4.55, 0.92), degradation_wh=(2.95, 
     pw, ph = progression_wh
     field_avg = data.get("field_average")
 
+    field_vpi_prog = field_avg["vpi"]["progression"] if field_avg else None
+    field_dmi_prog = field_avg["dmi"]["progression"] if field_avg else None
+
     charts = {}
     charts["vpi_progression"] = _line_chart(
         data["vpi_progression"]["distance_km"], data["vpi_progression"]["value_m_h"],
         T.CYAN, "VPI (m/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
         axis_range=AXIS_RANGE["vpi"], tick_step=200,
-        ref_value=field_avg["vpi"]["raw"] if field_avg else None,
+        ref_x=field_vpi_prog["distance_km"] if field_vpi_prog else None,
+        ref_y=field_vpi_prog["value_m_h"] if field_vpi_prog else None,
     )
     charts["dmi_progression"] = _line_chart(
         data["dmi_progression"]["distance_km"], data["dmi_progression"]["value_km_h"],
         T.ORANGE, "DMI (km/h)", w=pw, h=ph, elevation_x=elev_x, elevation_y=elev_y,
         axis_range=AXIS_RANGE["dmi"], tick_step=2,
-        ref_value=field_avg["dmi"]["raw"] if field_avg else None,
+        ref_x=field_dmi_prog["distance_km"] if field_dmi_prog else None,
+        ref_y=field_dmi_prog["value_km_h"] if field_dmi_prog else None,
     )
     charts["pace_progression"] = _line_chart(
         data["effort_pace_progression"]["distance_km"], data["effort_pace_progression"]["pace_min_km"],

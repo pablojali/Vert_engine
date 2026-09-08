@@ -294,6 +294,18 @@ def page2(c, data, model, charts):
         c.setFillColor(HexColor(T.TEXT))
         c.drawString(x + pad, row_y + row_h - 70, raw)
 
+        # Field-average comparison, right under this runner's own number
+        # (real user feedback: "debajo del numero general del corredor
+        # aparezca el valor del promedio del resto") - skipped for ER
+        # since data["field_average"] only covers vpi/dmi progressions
+        # (ER has no directly comparable per-segment metric).
+        field_avg = data.get("field_average")
+        if field_avg and key in ("vpi", "dmi") and field_avg[key].get("raw") is not None:
+            field_unit = " m/h" if key == "vpi" else " km/h"
+            c.setFont(T.FONT_MED, 8)
+            c.setFillColor(HexColor(T.TEXT_MUTED))
+            c.drawString(x + pad, row_y + row_h - 86, f"FIELD AVG {field_avg[key]['raw']}{field_unit}")
+
         if key == "er":
             f_val, s_val = half["first_min_km"], half["second_min_km"]
             unit = " min/km"
