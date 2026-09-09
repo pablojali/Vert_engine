@@ -233,7 +233,7 @@ def chart_download_button(fig, filename, key):
 
 def build_full_runner_report_html(
     runner_info, df_runner, indices, figures, df_segment_degradation, df_summary,
-    report_data=None, report_model=None,
+    report_data=None,
 ):
     """Builds a single, self-contained HTML report combining the runner
     card, checkpoints table, performance indices, every chart (VPI, DMI,
@@ -249,15 +249,19 @@ def build_full_runner_report_html(
     they match the blog's existing theme instead of looking like plain
     unstyled HTML.
 
-    report_data/report_model: the SAME data_mapper.build_report_data() /
-    interpretation.build_report_model() output the PDF report uses -
-    real user feedback: this HTML report had fallen far behind the PDF
-    ("ha quedado muy simple vs el pdf... ni aparece los valores del
-    endurance rate de ambas mitades"). Passing these in adds the VPI/DMI/
-    ER half-by-half splits and the full narrative (profile, race story,
-    key takeaways, summary) - reusing the PDF's own already-computed
-    numbers instead of re-deriving them a second, divergent way. Both are
-    optional (None skips those sections) since building them can raise
+    report_data: the SAME data_mapper.build_report_data() output the PDF
+    report uses - adds the VPI/DMI/ER half-by-half splits (real user
+    feedback: this HTML report had fallen behind the PDF, "ni aparece
+    los valores del endurance rate de ambas mitades"). Deliberately
+    titles-and-values only, no interpretation.build_report_model()
+    narrative (profile, race story, takeaways, summary): real user
+    feedback - this report gets generated for many runners at once, and
+    any auto-written "conclusion" would need to be individually fact-
+    checked per runner before publishing, which defeats the point of
+    automating it ("no quiero ninguna conclusion... sino debo revisar
+    1x1"). That narrative stays exclusive to the PDF, which IS reviewed
+    and edited one athlete at a time before being shared. Optional (None
+    skips the half-split section) since building it can raise
     MissingReportData for a runner with too little data - the caller
     decides whether to still show the basic report in that case."""
 
@@ -285,15 +289,6 @@ def build_full_runner_report_html(
       .vl-half-card .vl-half-row { display: flex; justify-content: space-between;
                                     font-size: 13px; color: #cbd5e1; margin-bottom: 4px; }
       .vl-half-card .vl-half-deg { margin-top: 8px; font-size: 12px; color: #94a3b8; }
-      .vl-profile-row { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 16px; }
-      .vl-profile-item { flex: 1 1 220px; }
-      .vl-profile-item .vl-profile-label { font-size: 12px; color: #94a3b8;
-                                             text-transform: uppercase; letter-spacing: 0.03em; }
-      .vl-profile-item .vl-profile-value { font-size: 14px; color: #f1f5f9; margin-top: 2px; }
-      .vl-story p { color: #cbd5e1; font-size: 14px; line-height: 1.55; margin: 0 0 14px; }
-      .vl-takeaways { color: #cbd5e1; font-size: 14px; line-height: 1.5; padding-left: 20px; }
-      .vl-takeaways li { margin-bottom: 8px; }
-      .vl-summary { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
     </style>
     """
 
@@ -350,46 +345,12 @@ def build_full_runner_report_html(
                                  " min/km", "Pace change", pace_h["change_pct"]))
         parts.append("</div>")
 
-    if report_model is not None:
-        parts.append("<h3>🧭 Athlete Profile</h3>")
-        parts.append(
-            "<div class='vl-profile-row'>"
-            f"<div class='vl-profile-item'><div class='vl-profile-label'>Profile</div>"
-            f"<div class='vl-profile-value'>{report_model['profile_classification']}</div></div>"
-            f"<div class='vl-profile-item'><div class='vl-profile-label'>Race Character</div>"
-            f"<div class='vl-profile-value'>{report_model['race_character']}</div></div>"
-            f"<div class='vl-profile-item'><div class='vl-profile-label'>Primary Strength</div>"
-            f"<div class='vl-profile-value'>{report_model['primary_strength']}</div></div>"
-            f"<div class='vl-profile-item'><div class='vl-profile-label'>Limiting Factor</div>"
-            f"<div class='vl-profile-value'>{report_model['limiting_factor']}</div></div>"
-            "</div>"
-        )
-
     for title, fig in figures.items():
         parts.append(f"<h3>{title}</h3>")
         parts.append(fig.to_html(full_html=False, include_plotlyjs=False))
 
     parts.append("<h3>📉 Degradation Curve by Segment</h3>")
     parts.append(_table_html(df_segment_degradation))
-
-    if report_model is not None:
-        story = report_model["race_story"]
-        parts.append("<h3>📖 The Race, Explained by Data</h3>")
-        parts.append(
-            "<div class='vl-story'>"
-            f"<p><strong>Opening —</strong> {story['opening']}</p>"
-            f"<p><strong>Turning point —</strong> {story['turning_point']}</p>"
-            f"<p><strong>Closing —</strong> {story['closing']}</p>"
-            "</div>"
-        )
-        parts.append("<h3>✅ Key Takeaways</h3>")
-        parts.append(
-            "<ul class='vl-takeaways'>"
-            + "".join(f"<li>{tk}</li>" for tk in report_model["key_takeaways"])
-            + "</ul>"
-        )
-        parts.append("<h3>📝 Summary</h3>")
-        parts.append(f"<p class='vl-summary'>{report_model['summary_paragraph']}</p>")
 
     parts.append("<h3>📋 Full Summary Table</h3>")
     parts.append(_table_html(df_summary))
@@ -2748,12 +2709,15 @@ with tab_runner_lt:
                 st.session_state['estimated_global_indices_lt'] = indices_lt
                 try:
                     # Real user feedback: this HTML report "ha quedado muy
-                    # simple vs el pdf" - reuses the exact same
-                    # data_mapper/interpretation pipeline the PDF report
-                    # uses, so the half-splits and narrative here are never
-                    # a second, divergent computation. MissingReportData
-                    # (too little data for a meaningful report) just means
-                    # skipping those extra sections, not losing the report.
+                    # simple vs el pdf" (specifically missing the VPI/DMI/ER
+                    # half-splits) - reuses the exact same data_mapper
+                    # pipeline the PDF report uses for that, instead of a
+                    # second, divergent computation. Deliberately does NOT
+                    # also pull in interpretation.build_report_model()'s
+                    # narrative here - see build_full_runner_report_html()'s
+                    # own docstring for why. MissingReportData (too little
+                    # data for a meaningful report) just means skipping the
+                    # half-split section, not losing the report.
                     try:
                         total_gain_lt = calculate_total_elevation_gain(race_data_lt_selected["df"])
                         report_data_lt = build_report_data(
@@ -2762,9 +2726,8 @@ with tab_runner_lt:
                              "df_segment_degradation": df_segment_degradation_lt, "df_crossed": df_crossed_lt},
                             race_data_lt_selected, total_gain_lt,
                         )
-                        report_model_lt = build_report_model(report_data_lt)
                     except MissingReportData:
-                        report_data_lt, report_model_lt = None, None
+                        report_data_lt = None
 
                     full_report_html_lt = build_full_runner_report_html(
                         runner_info=runner_info_lt,
@@ -2774,7 +2737,6 @@ with tab_runner_lt:
                         df_segment_degradation=df_segment_degradation_lt,
                         df_summary=df_summary_lt,
                         report_data=report_data_lt,
-                        report_model=report_model_lt,
                     )
                 except Exception:
                     # A report-generation hiccup shouldn't hide the indices/
@@ -3286,10 +3248,12 @@ with tab_top:
                         report_error_bib = None
                         try:
                             # See the "Runner Metrics (LiveTrail)" tab's own
-                            # call to build_full_runner_report_html() -
-                            # same reasoning: reuse the PDF's own
-                            # data_mapper/interpretation pipeline instead of
-                            # a second, divergent computation.
+                            # call to build_full_runner_report_html() - same
+                            # reasoning: reuse the PDF's own data_mapper
+                            # pipeline for the half-splits only, no
+                            # interpretation.build_report_model() narrative
+                            # here (real user feedback - see that function's
+                            # docstring).
                             try:
                                 report_data_bib = build_report_data(
                                     selected_race_top,
@@ -3299,9 +3263,8 @@ with tab_top:
                                      "df_crossed": analysis_bib["df_crossed"]},
                                     race_data_top, total_race_gain_top,
                                 )
-                                report_model_bib = build_report_model(report_data_bib)
                             except MissingReportData:
-                                report_data_bib, report_model_bib = None, None
+                                report_data_bib = None
 
                             report_html_bib = build_full_runner_report_html(
                                 runner_info=runner_info_bib,
@@ -3311,7 +3274,6 @@ with tab_top:
                                 df_segment_degradation=analysis_bib["df_segment_degradation"],
                                 df_summary=analysis_bib["df_summary"],
                                 report_data=report_data_bib,
-                                report_model=report_model_bib,
                             )
                         except Exception:
                             # A report-generation hiccup for this one runner
