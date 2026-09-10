@@ -43,6 +43,18 @@ MODERATE_SLOPE_MIN = 5            # between 5% and 12% = moderate climb/descent
 MODERATE_SLOPE_MAX = 12
 ALTITUDE_THRESHOLD = 1800         # meters above sea level
 
+# A segment's VPI/DMI only gets computed if the qualifying terrain
+# includes at least one UNBROKEN run of >=12% slope at least this long -
+# a real climb/descent feature, not a handful of scattered/noisy GPS
+# points. Real user feedback (2026-09-10): gating on the segment's own
+# average slope sign instead (an earlier version of this fix) was too
+# strict - it suppressed genuine short climbs/descents embedded in a
+# longer segment that runs the other way overall, which is exactly the
+# kind of real feature this index should capture. Length of the
+# contiguous run, not the segment's overall direction, is what tells
+# real terrain apart from noise.
+MIN_QUALIFYING_RUN_KM = 0.2
+
 # Per-segment VPI/DMI reliability flags (see docs/05-known-issues.md,
 # "VPI/DMI inflado en tramos con terreno corto e irregular"). The
 # checkpoint-to-checkpoint effort-share time allocation in
@@ -691,6 +703,24 @@ def normalize_segment_index(series):
     return ((series / baseline) * 100).round(1)
 
 
+def _max_contiguous_run_km(mask, incremental_dist_km):
+    """Length (km) of the longest UNBROKEN run of consecutive True values
+    in `mask` (e.g. GPS points with slope >= 12% within a segment), using
+    the same per-point incremental distance already computed for the
+    whole race. Distinguishes one real, sustained climb/descent feature
+    from a handful of isolated steep points scattered across an
+    otherwise different segment - those can sum to the same total
+    distance but are not the same thing."""
+    positions = np.flatnonzero(mask.to_numpy())
+    if len(positions) == 0:
+        return 0.0
+    breaks = np.diff(positions) != 1
+    group_ids = np.concatenate(([0], np.cumsum(breaks)))
+    dist_values = incremental_dist_km.to_numpy()[positions]
+    run_sums = np.bincount(group_ids, weights=dist_values)
+    return float(run_sums.max())
+
+
 def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
     """Calculates VPI and DMI INDEPENDENTLY for each segment (degradation
     matrix), instead of one global value for the whole race.
@@ -752,29 +782,27 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
                 # --- VPI: steep-climb points within this segment ---
                 # Real user report: a segment averaging -10.5% slope (net
                 # downhill) showed as the runner's single BEST CLIMB of
-                # the race at 1206 m/h - and symmetrically, a +11.5%
-                # segment (net uphill) showed as BEST DESCENT. The
-                # effort-share time allocation this estimate is built on
-                # (see this function's own docstring) can produce an
-                # arbitrarily large rate from a short/steep sliver hidden
-                # inside an otherwise-opposite-direction segment - as
-                # that sliver's effort share shrinks, the derived rate
-                # does NOT shrink toward zero, it grows without bound
-                # (confirmed by reconstructing this exact segment shape
-                # offline). A segment whose OWN average slope runs the
-                # opposite direction can never be a meaningful "climb
-                # rate"/"descent rate" for that segment as a whole, no
-                # matter what a short embedded feature estimates to - so
-                # this doesn't compute one, rather than computing an
-                # unbounded number and hoping the (relative-to-runner)
-                # outlier flag downstream happens to catch it. Guards
-                # every downstream consumer at the source (index
-                # normalization, best/worst climb & descent, best
-                # recovery, largest degradation), not just the PDF.
+                # the race at 1206 m/h. A first attempt at fixing this
+                # gated on the segment's own average slope sign - too
+                # strict: it also suppressed genuine, real climbs/descents
+                # that happen to sit inside a longer segment running the
+                # other way overall, which real user feedback flagged
+                # immediately ("ahora casi que me quede sin valores").
+                # What actually distinguishes the bogus case from a real
+                # one isn't the segment's overall direction, it's whether
+                # the qualifying terrain is one UNBROKEN run of real
+                # length (a real climb/descent feature) or just a
+                # scattering of isolated/noisy GPS points - so this gates
+                # on contiguous run length (MIN_QUALIFYING_RUN_KM) instead.
+                # A short/borderline qualifying run still gets a value,
+                # not suppressed - it's caught by the existing
+                # relative-to-runner reliability flag downstream instead
+                # (the diamond marker), same as it always was.
                 climb_mask = segment_mask & (full_df_gpx["Slope (%)"] >= STRONG_SLOPE_THRESHOLD)
                 climb_effort_km = incremental_effort_km[climb_mask].sum()
                 climb_gain_m = incremental_elevation_m[climb_mask].sum()
-                if (avg_slope is not None and avg_slope > 0
+                climb_run_km = _max_contiguous_run_km(climb_mask, incremental_dist_km)
+                if (climb_run_km >= MIN_QUALIFYING_RUN_KM
                         and climb_effort_km and climb_effort_km > 0 and climb_gain_m and climb_gain_m > 0):
                     climb_effort_share = climb_effort_km / total_effort_km
                     climb_time_h = segment_time_h * climb_effort_share
@@ -784,7 +812,8 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
                 descent_mask = segment_mask & (full_df_gpx["Slope (%)"] <= -STRONG_SLOPE_THRESHOLD)
                 descent_effort_km = incremental_effort_km[descent_mask].sum()
                 descent_dist_km = incremental_dist_km[descent_mask].sum()
-                if (avg_slope is not None and avg_slope < 0
+                descent_run_km = _max_contiguous_run_km(descent_mask, incremental_dist_km)
+                if (descent_run_km >= MIN_QUALIFYING_RUN_KM
                         and descent_effort_km and descent_effort_km > 0 and descent_dist_km and descent_dist_km > 0):
                     descent_effort_share = descent_effort_km / total_effort_km
                     descent_time_h = segment_time_h * descent_effort_share

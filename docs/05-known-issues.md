@@ -424,7 +424,7 @@ carreras afectadas para recuperar las 9 páginas perdidas.
 ---
 
 ## VPI/DMI inflado en tramos con terreno corto e irregular (subida/bajada corta escondida en un tramo largo)
-**Estado:** caso extremo corregido de raíz (2026-09-10) — resto del problema sigue mitigado con flag visual, no corregido de raíz
+**Estado:** caso extremo (repecho/contra-repecho corto y ruidoso) corregido de raíz (2026-09-10, refinado el mismo día) — resto del problema sigue mitigado con flag visual, no corregido de raíz
 
 **Descripción:** mismo mecanismo de fondo que el issue de arriba ("ER da
 valores inflados"), pero en el VPI/DMI **por tramo** (el gráfico
@@ -519,28 +519,51 @@ la tasa estimada **no tiende a cero** - converge a un techo
 reconstruyendo el caso exacto (checkpoint sintético con el mismo patrón:
 tramo neto -10.5% con un repecho corto embebido) offline.
 
-Corrección aplicada en `calculate_indices_by_segment`: ahora el VPI de
-un tramo solo se calcula si la pendiente promedio del tramo (`Average
-Slope (%)`) es positiva, y el DMI solo si es negativa - un tramo cuya
-pendiente promedio va en el sentido contrario al índice que se está
-calculando ya no produce ningún valor (`None`) para ese índice, sin
-importar qué tan grande estime el reparto de tiempo para el repecho
-embebido. Es una corrección distinta y más acotada que el primer intento
-rechazado (aquel usaba un corte fijo de "effort-share < 15%" aplicado a
-TODOS los tramos, y terminaba marcando casi la mitad de tramos reales
-como no confiables - ver "Mitigación implementada (v1, revisada)"
-arriba); esta en cambio solo actúa cuando el signo de la pendiente del
-tramo es inconsistente con el índice, que es la única situación donde el
-resultado es imposible por definición, no solo estadísticamente inusual.
+**Primer intento (revertido el mismo día):** gatear el VPI de un tramo a
+que la pendiente promedio del tramo (`Average Slope (%)`) sea positiva
+(y el DMI a que sea negativa) - un tramo cuya pendiente promedio va en
+el sentido contrario al índice no produciría ningún valor. Corregía el
+caso de Florian Descamps, pero era demasiado estricto: feedback directo
+del usuario tras probarlo fue "ahora casi que me quede sin valores
+jajajaja" - también suprimía subidas/bajadas REALES y sustanciales que
+ocurren dentro de un tramo cuyo balance general va para el otro lado
+(ej. un repecho real de varios cientos de metros dentro de un tramo que,
+en conjunto, es una bajada). El signo promedio del tramo completo no es
+lo que distingue el caso inválido del válido.
+
+**Corrección aplicada (versión final):** lo que en realidad distingue un
+repecho/contra-repecho REAL de un artefacto de GPS/estimación no es la
+dirección general del tramo, sino si el terreno que califica (≥12% de
+pendiente) forma una racha **continua** de longitud real, o son solo
+puntos GPS sueltos/ruido. `calculate_indices_by_segment` ahora exige
+(`_max_contiguous_run_km`, `MIN_QUALIFYING_RUN_KM = 0.2`) que exista al
+menos una racha ININTERRUMPIDA de ≥200m de terreno calificado dentro del
+tramo para calcular ese índice - sin importar el signo de la pendiente
+promedio del tramo completo. Si esa racha existe, el VPI/DMI SÍ se
+calcula (aunque el tramo en general vaya para el otro lado); si no
+existe ninguna racha de esa longitud (el caso real de Florian Descamps:
+el "repecho" eran unos pocos puntos GPS sueltos de ~30m), el índice
+queda en `None`. Una racha calificada corta/al límite del umbral no se
+suprime - queda capturada por el flag de outlier relativo existente
+(el rombo), tal como pidió el usuario ("si la muestra es muy pequeña...
+lo marca con un rombo").
+
+Verificado con tres escenarios sintéticos: (1) un tramo genuino de +15%
+sigue calculando VPI normalmente (sin regresión), (2) el caso real
+reportado (tramo neto -10.5% con un repecho de ~30m) sigue sin producir
+VPI, y (3) un tramo neto -8% con un repecho REAL de 300m a pendiente
+local alta SÍ produce VPI - confirmando que ya no se pierden subidas o
+bajadas reales por el signo del tramo completo.
+
 Al corregirse en `app.py` (la fuente), se propaga automáticamente a la
 tabla de degradación, el gráfico interactivo, el informe HTML y el PDF
 (`pdf_reports/data_mapper.py`'s `_segment_role_rows` ya descarta filas
 con `VPI Raw (m/h)`/`DMI Raw (km/h)` nulas antes de elegir BEST/WORST
-CLIMB/DESCENT, así que un tramo suprimido simplemente deja de ser
-candidato). El flag de outlier relativo (mitigación v2, arriba) sigue
-activo como red de seguridad para el resto de los casos - tramos con
-pendiente del signo correcto pero igual inflados por un repecho muy
-concentrado.
+CLIMB/DESCENT, así que un tramo sin racha calificada simplemente deja de
+ser candidato). El flag de outlier relativo (mitigación v2, arriba)
+sigue activo como red de seguridad para el resto de los casos - tramos
+con una racha calificada válida pero igual inusualmente altos frente al
+resto de ese mismo corredor.
 
 ---
 
