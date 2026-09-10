@@ -123,7 +123,7 @@ def _segment_display_name(segment_label: str, point_to_name: dict) -> str:
     return segment_label
 
 
-def _segment_progression(df_seg: pd.DataFrame, value_col: str) -> tuple[list, list]:
+def _segment_progression(df_seg: pd.DataFrame, value_col: str, km_col: str = "End Km") -> tuple[list, list]:
     """One (distance_km, value) pair per segment with a finite
     value_col - segments where this runner has no qualifying terrain
     for that metric are skipped rather than plotted as a fake zero.
@@ -131,9 +131,18 @@ def _segment_progression(df_seg: pd.DataFrame, value_col: str) -> tuple[list, li
     near-zero effort-km (e.g. two checkpoints at almost the same km)
     can produce +/-inf from a division, which dropna() does NOT catch -
     matplotlib then fails with "Axis limits cannot be NaN or Inf" on
-    real data (confirmed live on a real runner's Effort Pace column)."""
+    real data (confirmed live on a real runner's Effort Pace column).
+
+    km_col defaults to the official checkpoint segment's End Km, but
+    VPI/DMI pass "VPI Plot Km"/"DMI Plot Km" instead - the actual
+    midpoint of the qualifying climb/descent (app.py's
+    calculate_indices_by_segment), so a short climb/descent plots at its
+    real location instead of the far end of a possibly much longer
+    official segment. Real user feedback: a genuine climb near km
+    111-112 was correct but visually looked smeared across a much wider
+    segment on the chart."""
     finite = df_seg[df_seg[value_col].apply(lambda v: pd.notna(v) and np.isfinite(v))]
-    return finite["End Km"].round(1).tolist(), finite[value_col].tolist()
+    return finite[km_col].round(1).tolist(), finite[value_col].tolist()
 
 
 def _position_progression(df_runner: pd.DataFrame, checkpoints_km: list[dict]) -> dict:
@@ -203,6 +212,32 @@ def _position_summary(pos_progression: dict, turning_point_km, turning_point_idx
     }
 
 
+def _resample_elevation_profile(gpx_df: pd.DataFrame, step_m=200):
+    """Dense elevation profile for chart backgrounds, binned every
+    step_m meters across the FULL race GPX - same resolution app.py's
+    add_elevation_background()/resample_for_chart() use for the
+    interactive dashboard's own elevation silhouette, so the PDF's
+    terrain background matches what the runner already sees there.
+
+    The previous version sampled elevation at each CHECKPOINT segment's
+    End Km only (one point per row of df_seg - as few as 8-10 points
+    for a whole 100km+ race with widely-spaced checkpoints). That lost
+    real peaks/valleys between checkpoints and could distort the shape
+    enough to look wrong next to the actual VPI/DMI line - real user
+    feedback: "el pdf no tiene el mismo perfil que la carrera, entonces
+    parece que esta bajando" (looks like it's descending when it isn't).
+    This resamples the full GPX independently of segment count, so the
+    profile shape doesn't depend on how the checkpoints happen to be
+    spaced for this particular race."""
+    df = gpx_df[["Distance (km)", "Elevation (m)"]].copy()
+    df["bin"] = (df["Distance (km)"] * 1000 // step_m).astype(int)
+    resampled = df.groupby("bin").agg(**{
+        "Distance (km)": ("Distance (km)", "mean"),
+        "Elevation (m)": ("Elevation (m)", "mean"),
+    }).reset_index(drop=True)
+    return resampled["Distance (km)"].round(2).tolist(), resampled["Elevation (m)"].round(1).tolist()
+
+
 def _turning_point_km(df_seg: pd.DataFrame):
     """Rule (confirmed with the user): the segment with the largest
     COMBINED drop in VPI Index + DMI Index versus the immediately
@@ -262,10 +297,25 @@ def _segment_role_rows(df_seg: pd.DataFrame, turning_point_idx, point_to_name: d
             bool(r["DMI Reliable"]) if role in ("BEST DESCENT", "WORST DESCENT") else
             bool(r["VPI Reliable"]) and bool(r["DMI Reliable"])
         )
+        # BEST/WORST CLIMB/DESCENT show the actual climb/descent's own
+        # bounds (VPI/DMI Run Start/End Km) rather than the whole
+        # official checkpoint segment - that segment can span many more
+        # km than the real feature inside it (real user feedback: a
+        # correct +12% climb near km 111-112 read as spanning a much
+        # wider range). Falls back to the segment's own Start/End Km
+        # for cached data predating those columns, or for
+        # LARGEST DEGRADATION/BEST RECOVERY roles that aren't anchored
+        # to one specific climb or descent.
+        if role in ("BEST CLIMB", "WORST CLIMB") and pd.notna(r.get("VPI Run Start Km")):
+            range_start, range_end = r["VPI Run Start Km"], r["VPI Run End Km"]
+        elif role in ("BEST DESCENT", "WORST DESCENT") and pd.notna(r.get("DMI Run Start Km")):
+            range_start, range_end = r["DMI Run Start Km"], r["DMI Run End Km"]
+        else:
+            range_start, range_end = r["Start Km"], r["End Km"]
         return {
             "role": role,
             "name": _segment_display_name(r["Segment"], point_to_name),
-            "distance_km": f"{r['Start Km']:.1f} - {r['End Km']:.1f}",
+            "distance_km": f"{range_start:.1f} - {range_end:.1f}",
             "avg_slope_pct": float(r["Average Slope (%)"]),
             "vpi_m_h": vpi,
             "dmi_km_h": dmi,
@@ -438,8 +488,13 @@ def build_report_data(
 
     race_meta = _parse_race_key(race_key)
 
-    vpi_dist, vpi_val = _segment_progression(df_seg, "VPI Raw (m/h)")
-    dmi_dist, dmi_val = _segment_progression(df_seg, "DMI Raw (km/h)")
+    # Fall back to "End Km" for any cached df_segment_degradation
+    # computed before app.py started emitting "VPI/DMI Plot Km"
+    # (a real-time-computed runner bundle always has them).
+    vpi_km_col = "VPI Plot Km" if "VPI Plot Km" in df_seg.columns else "End Km"
+    dmi_km_col = "DMI Plot Km" if "DMI Plot Km" in df_seg.columns else "End Km"
+    vpi_dist, vpi_val = _segment_progression(df_seg, "VPI Raw (m/h)", km_col=vpi_km_col)
+    dmi_dist, dmi_val = _segment_progression(df_seg, "DMI Raw (km/h)", km_col=dmi_km_col)
     pace_dist, pace_val = _segment_progression(df_seg, "Effort Pace (min/effort-km)")
     if len(vpi_dist) < 2 or len(dmi_dist) < 2 or len(pace_dist) < 2:
         raise MissingReportData(
@@ -455,14 +510,12 @@ def build_report_data(
         c["point"]: c.get("name") for c in race_data["checkpoints_km"] if c.get("name")
     }
 
-    # Elevation motif for the chart backgrounds - sampled from the
-    # race's own GPX at each segment's End Km, nearest match. Purely
-    # decorative (same role it plays in the reference mockup).
+    # Elevation motif for the chart backgrounds - dense, independent of
+    # segment count (see _resample_elevation_profile docstring). Purely
+    # decorative (same role it plays in the reference mockup) but must
+    # actually look like the race to be useful as a decoration.
     gpx_df = race_data["df"]
-    elevation_m = [
-        float(gpx_df.iloc[(gpx_df["Distance (km)"] - km).abs().idxmin()]["Elevation (m)"])
-        for km in df_seg["End Km"]
-    ]
+    elevation_profile_km, elevation_profile_m = _resample_elevation_profile(gpx_df)
 
     # --- vpi_half / dmi_half: same effort-km-weighted first/second-half
     # split calculate_runner_indices() already uses for ER (df_crossed's
@@ -555,7 +608,12 @@ def build_report_data(
             "vpi_index": df_seg["VPI Index (0-100)"].tolist(),
             "dmi_index": df_seg["DMI Index (0-100)"].tolist(),
             "er_index": df_seg["ER Index (0-100)"].tolist(),
-            "elevation_m": elevation_m,
+            # Dense/independent of segment count - see
+            # _resample_elevation_profile(). NOT aligned 1:1 with
+            # distance_km/vpi_index/etc above (those are per-segment);
+            # chart code plots this as its own separate line/series.
+            "elevation_profile_km": elevation_profile_km,
+            "elevation_profile_m": elevation_profile_m,
         },
         "vpi_half": vpi_half,
         "dmi_half": dmi_half,

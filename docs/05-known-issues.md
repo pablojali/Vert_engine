@@ -567,5 +567,76 @@ resto de ese mismo corredor.
 
 ---
 
+## Gráficos del PDF: perfil de elevación no coincidía con la carrera real, y los picos de VPI/DMI se veían "estirados" a lo largo de todo el tramo
+**Estado:** resuelto (2026-09-10)
+
+**Descripción:** dos problemas de UI/visualización relacionados, ambos
+reportados por el usuario mirando el mismo informe (Monterosa Walserwaeg,
+Florian Descamps) justo después de corregir el bug de VPI/DMI de arriba:
+
+1. **Perfil de elevación equivocado en el PDF.** El fondo gris (silueta
+   del terreno) de los gráficos de VPI/DMI/Pace y de la curva de
+   degradación (`pdf_reports/make_charts.py`) se armaba en
+   `data_mapper.py` tomando la elevación SOLO en el "End Km" de cada
+   tramo oficial - es decir, un punto por checkpoint (tan pocos como
+   8-10 puntos para una carrera de 100km+). Eso perdía picos y valles
+   reales entre checkpoints, y podía distorsionar tanto la forma que el
+   perfil del PDF no se parecía al perfil real de la carrera (el mismo
+   que sí se ve bien en el dashboard interactivo). Feedback del usuario:
+   "el pdf no tiene el mismo perfil que la carrera, entonces parece que
+   esta bajando".
+
+   **Fix:** nueva `_resample_elevation_profile()` en `data_mapper.py`
+   que remuestrea el GPX COMPLETO de la carrera cada 200m (mismo
+   step_m que ya usa `app.py`'s `resample_for_chart`/
+   `add_elevation_background` para el dashboard interactivo),
+   independiente de cuántos tramos/checkpoints tenga esa carrera en
+   particular. Nuevas claves `elevation_profile_km`/`elevation_profile_m`
+   en `degradation_index` (reemplazan la vieja `elevation_m`, atada 1:1
+   a la cantidad de tramos). Verificado comparando ambos métodos sobre
+   un GPX sintético con 3 picos/valles reales: el remuestreo denso
+   produce ~150 puntos que preservan la forma real, contra 8 puntos del
+   método viejo.
+
+2. **VPI/DMI se graficaban en el extremo del tramo oficial, no donde
+   realmente está la subida/bajada.** Al corregir el bug de arriba (la
+   racha continua de ≥200m), el usuario confirmó que el pico en km
+   111-112 era correcto (hay una subida real de +12% ahí) - pero como
+   ese valor se graficaba en el "End Km" del tramo OFICIAL completo
+   (que puede ser mucho más largo, sobre todo tras fusionar tramos sin
+   tiempo registrado - `merge_segments_with_runner_times`), visualmente
+   el pico parecía "estirar" la subida a lo largo de todo el tramo en
+   vez de mostrarla localizada donde realmente ocurre.
+
+   **Fix:** `calculate_indices_by_segment` ahora devuelve, además del
+   valor, la ubicación real de la racha calificada más larga
+   (`_longest_run_km_bounds`, que ya existía para el filtro de longitud
+   mínima - ahora también reporta DÓNDE está, no solo cuánto mide):
+   columnas nuevas `VPI Run Start/End Km` y `DMI Run Start/End Km`
+   (`None` cuando no hay racha calificada), más `VPI/DMI Plot Km` (el
+   punto medio de esa racha, o el `End Km` del tramo como respaldo
+   cuando no hay racha - listo para graficar directamente). El gráfico
+   interactivo (`build_runner_analysis_bundle`'s `fig_vpi`/`fig_dmi`) y
+   la progresión del PDF (`data_mapper._segment_progression`, con
+   `km_col="VPI Plot Km"`/`"DMI Plot Km"`) ahora anclan cada punto ahí
+   en vez de en el `End Km` del tramo oficial. La tabla "Key Segments"
+   del PDF (`_segment_role_rows`) también muestra el rango real de la
+   subida/bajada (ej. "12.2 - 12.5") en vez del tramo oficial completo
+   (ej. "9.8 - 15.8") para BEST/WORST CLIMB/DESCENT.
+
+   Verificado reconstruyendo el caso exacto (tramo neto -8% con una
+   subida real de 300m embebida cerca del km 12.2-12.5, dentro de un
+   tramo oficial que va de 9.8 a 15.8km): el punto ahora se grafica en
+   ~12.3km, no en 15.8km, y la tabla de segmentos muestra "12.2 - 12.5"
+   en vez de "9.8 - 15.8".
+
+**Impacto:** ambos afectaban solo la presentación visual, no los
+valores de VPI/DMI en sí (que ya estaban bien calculados desde el fix
+anterior) - pero juntos hacían que un valor correcto se viera
+inconsistente con el terreno real, generando dudas de confiabilidad
+sobre datos que sí eran válidos.
+
+---
+
 <!-- Agregar nuevos issues debajo, con el mismo formato: título, Estado,
      Descripción, Impacto, Próximos pasos. -->

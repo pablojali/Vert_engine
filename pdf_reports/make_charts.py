@@ -128,12 +128,18 @@ def _degradation_chart(deg, w=2.95, h=1.35):
     x = deg["distance_km"]
     fig, ax = plt.subplots()
 
-    elev = deg.get("elevation_m")
-    if elev and max(elev) > 0:
+    # Dense profile (elevation_profile_km/m), NOT aligned 1:1 with x -
+    # see data_mapper._resample_elevation_profile(). twinx() shares the
+    # x-axis with `ax`, so ax.set_xlim(x[0], x[-1]) below still clips
+    # this background to the same visible window even though it's a
+    # longer/differently-sampled series.
+    elev_x = deg.get("elevation_profile_km")
+    elev_y = deg.get("elevation_profile_m")
+    if elev_x and elev_y and max(elev_y) > 0:
         ax2 = ax.twinx()
-        ax2.fill_between(x, 0, elev, color=T.TEXT_FAINT, alpha=0.24, zorder=1)
-        ax2.plot(x, elev, color=T.TEXT_MUTED, linewidth=1.0, alpha=0.6, zorder=1)
-        ax2.set_ylim(0, max(elev) * 3.2)
+        ax2.fill_between(elev_x, 0, elev_y, color=T.TEXT_FAINT, alpha=0.24, zorder=1)
+        ax2.plot(elev_x, elev_y, color=T.TEXT_MUTED, linewidth=1.0, alpha=0.6, zorder=1)
+        ax2.set_ylim(0, max(elev_y) * 3.2)
         ax2.axis("off")
 
     ax.plot(x, deg["vpi_index"], color=T.CYAN, linewidth=2.2, label="VPI", zorder=4)
@@ -195,8 +201,8 @@ def build_charts(data: dict, progression_wh=(4.55, 0.92), degradation_wh=(2.95, 
     with it or the enlarged charts come out blurry."""
     _register_matplotlib_fonts()
 
-    elev_x = data["degradation_index"]["distance_km"]
-    elev_y = data["degradation_index"]["elevation_m"]
+    elev_x = data["degradation_index"]["elevation_profile_km"]
+    elev_y = data["degradation_index"]["elevation_profile_m"]
     pw, ph = progression_wh
     field_avg = data.get("field_average")
 

@@ -703,22 +703,37 @@ def normalize_segment_index(series):
     return ((series / baseline) * 100).round(1)
 
 
-def _max_contiguous_run_km(mask, incremental_dist_km):
-    """Length (km) of the longest UNBROKEN run of consecutive True values
-    in `mask` (e.g. GPS points with slope >= 12% within a segment), using
-    the same per-point incremental distance already computed for the
-    whole race. Distinguishes one real, sustained climb/descent feature
-    from a handful of isolated steep points scattered across an
-    otherwise different segment - those can sum to the same total
-    distance but are not the same thing."""
+def _longest_run_km_bounds(mask, distance_km):
+    """(length_km, start_km, end_km) of the longest UNBROKEN run of
+    consecutive True values in `mask` (e.g. GPS points with slope >= 12%
+    within a segment), using the race's own Distance (km) series to
+    locate it - not just how long it is, but WHERE. Distinguishes one
+    real, sustained climb/descent feature from a handful of isolated
+    steep points scattered across an otherwise different segment - those
+    can sum to the same total distance but are not the same thing.
+
+    Each point's slope (and so its membership in `mask`) describes the
+    stretch from the PREVIOUS point to itself, so a run's start_km is
+    the point just before it begins, not the first True point itself.
+
+    Returns (0.0, None, None) if `mask` has no True values."""
     positions = np.flatnonzero(mask.to_numpy())
     if len(positions) == 0:
-        return 0.0
+        return 0.0, None, None
     breaks = np.diff(positions) != 1
     group_ids = np.concatenate(([0], np.cumsum(breaks)))
-    dist_values = incremental_dist_km.to_numpy()[positions]
-    run_sums = np.bincount(group_ids, weights=dist_values)
-    return float(run_sums.max())
+    dist_arr = distance_km.to_numpy()
+
+    best_len, best_start, best_end = -1.0, None, None
+    for gid in np.unique(group_ids):
+        group_positions = positions[group_ids == gid]
+        start_pos, end_pos = group_positions[0], group_positions[-1]
+        start_km = dist_arr[start_pos - 1] if start_pos > 0 else dist_arr[start_pos]
+        end_km = dist_arr[end_pos]
+        length_km = end_km - start_km
+        if length_km > best_len:
+            best_len, best_start, best_end = length_km, start_km, end_km
+    return best_len, best_start, best_end
 
 
 def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
@@ -773,6 +788,18 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
 
         vpi_raw, dmi_raw = None, None
         climb_effort_share, descent_effort_share = None, None
+        # Where the qualifying climb/descent actually IS within this
+        # segment - not just its raw length. A checkpoint segment can
+        # span many km (especially once merge_segments_with_runner_times
+        # has fused several official segments together), so anchoring
+        # the point at the segment's End Km - as this used to do -
+        # visually "smears" a short, localized climb/descent across the
+        # whole segment's width. Real user feedback: the chart still
+        # correctly showed a real +12% climb near km 111-112, but wanted
+        # it anchored there specifically, not at the far end of a much
+        # longer official segment. None when no qualifying value exists.
+        vpi_run_start_km, vpi_run_end_km = None, None
+        dmi_run_start_km, dmi_run_end_km = None, None
 
         if segment_time_h and segment_time_h > 0:
             segment_mask = (full_df_gpx["Distance (km)"] >= km_start) & (full_df_gpx["Distance (km)"] <= km_end)
@@ -801,23 +828,31 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
                 climb_mask = segment_mask & (full_df_gpx["Slope (%)"] >= STRONG_SLOPE_THRESHOLD)
                 climb_effort_km = incremental_effort_km[climb_mask].sum()
                 climb_gain_m = incremental_elevation_m[climb_mask].sum()
-                climb_run_km = _max_contiguous_run_km(climb_mask, incremental_dist_km)
+                climb_run_km, climb_start_km, climb_end_km = _longest_run_km_bounds(
+                    climb_mask, full_df_gpx["Distance (km)"]
+                )
                 if (climb_run_km >= MIN_QUALIFYING_RUN_KM
                         and climb_effort_km and climb_effort_km > 0 and climb_gain_m and climb_gain_m > 0):
                     climb_effort_share = climb_effort_km / total_effort_km
                     climb_time_h = segment_time_h * climb_effort_share
                     vpi_raw = climb_gain_m / climb_time_h if climb_time_h > 0 else None
+                    if vpi_raw is not None:
+                        vpi_run_start_km, vpi_run_end_km = climb_start_km, climb_end_km
 
                 # --- DMI: steep-descent points within this segment ---
                 descent_mask = segment_mask & (full_df_gpx["Slope (%)"] <= -STRONG_SLOPE_THRESHOLD)
                 descent_effort_km = incremental_effort_km[descent_mask].sum()
                 descent_dist_km = incremental_dist_km[descent_mask].sum()
-                descent_run_km = _max_contiguous_run_km(descent_mask, incremental_dist_km)
+                descent_run_km, descent_start_km, descent_end_km = _longest_run_km_bounds(
+                    descent_mask, full_df_gpx["Distance (km)"]
+                )
                 if (descent_run_km >= MIN_QUALIFYING_RUN_KM
                         and descent_effort_km and descent_effort_km > 0 and descent_dist_km and descent_dist_km > 0):
                     descent_effort_share = descent_effort_km / total_effort_km
                     descent_time_h = segment_time_h * descent_effort_share
                     dmi_raw = descent_dist_km / descent_time_h if descent_time_h > 0 else None
+                    if dmi_raw is not None:
+                        dmi_run_start_km, dmi_run_end_km = descent_start_km, descent_end_km
 
         rows.append({
             "Segment": f"P{p_start}→P{p_end}",
@@ -827,11 +862,27 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
             "Runner Time (h)": round(segment_time_h, 2) if segment_time_h is not None else None,
             "Climb Effort Share (%)": round(climb_effort_share * 100, 1) if climb_effort_share is not None else None,
             "VPI Raw (m/h)": round(vpi_raw, 1) if vpi_raw is not None else None,
+            "VPI Run Start Km": round(vpi_run_start_km, 2) if vpi_run_start_km is not None else None,
+            "VPI Run End Km": round(vpi_run_end_km, 2) if vpi_run_end_km is not None else None,
             "Descent Effort Share (%)": round(descent_effort_share * 100, 1) if descent_effort_share is not None else None,
             "DMI Raw (km/h)": round(dmi_raw, 2) if dmi_raw is not None else None,
+            "DMI Run Start Km": round(dmi_run_start_km, 2) if dmi_run_start_km is not None else None,
+            "DMI Run End Km": round(dmi_run_end_km, 2) if dmi_run_end_km is not None else None,
         })
 
     df_segments_out = pd.DataFrame(rows)
+
+    # Ready-made x-axis anchor for charts: the MIDPOINT of the actual
+    # qualifying run when one exists (so a short climb/descent plots at
+    # its real location, not smeared to the far end of a long official
+    # segment), falling back to the segment's own End Km when there's no
+    # run info to anchor to (e.g. VPI/DMI Raw is None here anyway).
+    df_segments_out["VPI Plot Km"] = (
+        (df_segments_out["VPI Run Start Km"] + df_segments_out["VPI Run End Km"]) / 2
+    ).fillna(df_segments_out["End Km"])
+    df_segments_out["DMI Plot Km"] = (
+        (df_segments_out["DMI Run Start Km"] + df_segments_out["DMI Run End Km"]) / 2
+    ).fillna(df_segments_out["End Km"])
 
     # Normalization against the runner's first valid segment (Segment 1 = 100)
     df_segments_out["VPI Index (0-100)"] = normalize_segment_index(df_segments_out["VPI Raw (m/h)"])
@@ -1395,7 +1446,13 @@ def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km,
     fig_vpi = go.Figure()
     add_elevation_background(fig_vpi, race_df)
     fig_vpi.add_trace(go.Scatter(
-        x=df_segment_degradation["End Km"], y=df_segment_degradation["VPI Raw (m/h)"],
+        # "VPI Plot Km" anchors each point at the actual climb's real
+        # location (midpoint of the qualifying run) instead of the
+        # official checkpoint segment's End Km - real user feedback: a
+        # checkpoint segment can span many km, and anchoring at its far
+        # end visually "smears" a short, localized climb across the
+        # whole segment's width on the chart.
+        x=df_segment_degradation["VPI Plot Km"], y=df_segment_degradation["VPI Raw (m/h)"],
         mode="lines+markers", name="VPI (m/h)", line=dict(color="#22d3ee", width=3),
         text=df_segment_degradation["Segment"],
         hovertemplate="%{text}<br>Km %{x:.0f}<br>VPI: %{y:.0f} m/h<extra></extra>",
@@ -1403,7 +1460,7 @@ def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km,
     vpi_flagged = df_segment_degradation[df_segment_degradation["VPI Reliable"] == False]  # noqa: E712 (pandas bool mask, not Python bool)
     if not vpi_flagged.empty:
         fig_vpi.add_trace(go.Scatter(
-            x=vpi_flagged["End Km"], y=vpi_flagged["VPI Raw (m/h)"],
+            x=vpi_flagged["VPI Plot Km"], y=vpi_flagged["VPI Raw (m/h)"],
             mode="markers", name="Approximate (irregular terrain)",
             marker=dict(color="#f85149", size=13, symbol="diamond", line=dict(width=2, color="#0d1117")),
             text=vpi_flagged["Segment"],
@@ -1421,7 +1478,9 @@ def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km,
     fig_dmi = go.Figure()
     add_elevation_background(fig_dmi, race_df)
     fig_dmi.add_trace(go.Scatter(
-        x=df_segment_degradation["End Km"], y=df_segment_degradation["DMI Raw (km/h)"],
+        # See fig_vpi above - "DMI Plot Km" anchors at the descent's real
+        # location instead of the official segment's End Km.
+        x=df_segment_degradation["DMI Plot Km"], y=df_segment_degradation["DMI Raw (km/h)"],
         mode="lines+markers", name="DMI (km/h)", line=dict(color="#ffa500", width=3),
         text=df_segment_degradation["Segment"],
         hovertemplate="%{text}<br>Km %{x:.0f}<br>DMI: %{y:.2f} km/h<extra></extra>",
@@ -1429,7 +1488,7 @@ def build_runner_analysis_bundle(race_df, race_segments_df, df_runner, total_km,
     dmi_flagged = df_segment_degradation[df_segment_degradation["DMI Reliable"] == False]  # noqa: E712
     if not dmi_flagged.empty:
         fig_dmi.add_trace(go.Scatter(
-            x=dmi_flagged["End Km"], y=dmi_flagged["DMI Raw (km/h)"],
+            x=dmi_flagged["DMI Plot Km"], y=dmi_flagged["DMI Raw (km/h)"],
             mode="markers", name="Approximate (irregular terrain)",
             marker=dict(color="#f85149", size=13, symbol="diamond", line=dict(width=2, color="#0d1117")),
             text=dmi_flagged["Segment"],
