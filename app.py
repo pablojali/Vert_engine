@@ -43,18 +43,6 @@ MODERATE_SLOPE_MIN = 5            # between 5% and 12% = moderate climb/descent
 MODERATE_SLOPE_MAX = 12
 ALTITUDE_THRESHOLD = 1800         # meters above sea level
 
-# A segment's VPI/DMI only gets computed if the qualifying terrain
-# includes at least one UNBROKEN run of >=12% slope at least this long -
-# a real climb/descent feature, not a handful of scattered/noisy GPS
-# points. Real user feedback (2026-09-10): gating on the segment's own
-# average slope sign instead (an earlier version of this fix) was too
-# strict - it suppressed genuine short climbs/descents embedded in a
-# longer segment that runs the other way overall, which is exactly the
-# kind of real feature this index should capture. Length of the
-# contiguous run, not the segment's overall direction, is what tells
-# real terrain apart from noise.
-MIN_QUALIFYING_RUN_KM = 0.2
-
 # Per-segment VPI/DMI reliability flags (see docs/05-known-issues.md,
 # "VPI/DMI inflado en tramos con terreno corto e irregular"). The
 # checkpoint-to-checkpoint effort-share time allocation in
@@ -807,52 +795,45 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
 
             if total_effort_km and total_effort_km > 0:
                 # --- VPI: steep-climb points within this segment ---
-                # Real user report: a segment averaging -10.5% slope (net
-                # downhill) showed as the runner's single BEST CLIMB of
-                # the race at 1206 m/h. A first attempt at fixing this
-                # gated on the segment's own average slope sign - too
-                # strict: it also suppressed genuine, real climbs/descents
-                # that happen to sit inside a longer segment running the
-                # other way overall, which real user feedback flagged
-                # immediately ("ahora casi que me quede sin valores").
-                # What actually distinguishes the bogus case from a real
-                # one isn't the segment's overall direction, it's whether
-                # the qualifying terrain is one UNBROKEN run of real
-                # length (a real climb/descent feature) or just a
-                # scattering of isolated/noisy GPS points - so this gates
-                # on contiguous run length (MIN_QUALIFYING_RUN_KM) instead.
-                # A short/borderline qualifying run still gets a value,
-                # not suppressed - it's caught by the existing
-                # relative-to-runner reliability flag downstream instead
-                # (the diamond marker), same as it always was.
+                # NOTE (2026-09-10): this used to also require the
+                # qualifying terrain to form one unbroken run of at
+                # least MIN_QUALIFYING_RUN_KM, meant to fix a real bug
+                # (a segment averaging -10.5% slope showing as the
+                # runner's BEST CLIMB at 1206 m/h - see
+                # docs/05-known-issues.md). Reverted the same day: real
+                # GPX point-to-point slope is noisy enough that a
+                # genuine, sustained climb regularly has single points
+                # dipping back under the threshold, breaking one real
+                # climb into many short runs that individually never
+                # reach the minimum - on UTMB 174K this suppressed VPI
+                # for the ENTIRE race. Back to the plain effort-based
+                # estimate; the relative-to-runner outlier flag below is
+                # the only guard against implausible values again, same
+                # as before this whole VPI/DMI fix attempt.
                 climb_mask = segment_mask & (full_df_gpx["Slope (%)"] >= STRONG_SLOPE_THRESHOLD)
                 climb_effort_km = incremental_effort_km[climb_mask].sum()
                 climb_gain_m = incremental_elevation_m[climb_mask].sum()
-                climb_run_km, climb_start_km, climb_end_km = _longest_run_km_bounds(
-                    climb_mask, full_df_gpx["Distance (km)"]
-                )
-                if (climb_run_km >= MIN_QUALIFYING_RUN_KM
-                        and climb_effort_km and climb_effort_km > 0 and climb_gain_m and climb_gain_m > 0):
+                if climb_effort_km and climb_effort_km > 0 and climb_gain_m and climb_gain_m > 0:
                     climb_effort_share = climb_effort_km / total_effort_km
                     climb_time_h = segment_time_h * climb_effort_share
                     vpi_raw = climb_gain_m / climb_time_h if climb_time_h > 0 else None
                     if vpi_raw is not None:
-                        vpi_run_start_km, vpi_run_end_km = climb_start_km, climb_end_km
+                        _, vpi_run_start_km, vpi_run_end_km = _longest_run_km_bounds(
+                            climb_mask, full_df_gpx["Distance (km)"]
+                        )
 
                 # --- DMI: steep-descent points within this segment ---
                 descent_mask = segment_mask & (full_df_gpx["Slope (%)"] <= -STRONG_SLOPE_THRESHOLD)
                 descent_effort_km = incremental_effort_km[descent_mask].sum()
                 descent_dist_km = incremental_dist_km[descent_mask].sum()
-                descent_run_km, descent_start_km, descent_end_km = _longest_run_km_bounds(
-                    descent_mask, full_df_gpx["Distance (km)"]
-                )
-                if (descent_run_km >= MIN_QUALIFYING_RUN_KM
-                        and descent_effort_km and descent_effort_km > 0 and descent_dist_km and descent_dist_km > 0):
+                if descent_effort_km and descent_effort_km > 0 and descent_dist_km and descent_dist_km > 0:
                     descent_effort_share = descent_effort_km / total_effort_km
                     descent_time_h = segment_time_h * descent_effort_share
                     dmi_raw = descent_dist_km / descent_time_h if descent_time_h > 0 else None
                     if dmi_raw is not None:
-                        dmi_run_start_km, dmi_run_end_km = descent_start_km, descent_end_km
+                        _, dmi_run_start_km, dmi_run_end_km = _longest_run_km_bounds(
+                            descent_mask, full_df_gpx["Distance (km)"]
+                        )
 
         rows.append({
             "Segment": f"P{p_start}→P{p_end}",

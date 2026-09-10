@@ -424,7 +424,7 @@ carreras afectadas para recuperar las 9 páginas perdidas.
 ---
 
 ## VPI/DMI inflado en tramos con terreno corto e irregular (subida/bajada corta escondida en un tramo largo)
-**Estado:** caso extremo (repecho/contra-repecho corto y ruidoso) corregido de raíz (2026-09-10, refinado el mismo día) — resto del problema sigue mitigado con flag visual, no corregido de raíz
+**Estado:** dos intentos de corrección de raíz, AMBOS revertidos el mismo día (2026-09-10) — sigue mitigado solo con flag visual, no corregido de raíz
 
 **Descripción:** mismo mecanismo de fondo que el issue de arriba ("ER da
 valores inflados"), pero en el VPI/DMI **por tramo** (el gráfico
@@ -564,6 +564,41 @@ ser candidato). El flag de outlier relativo (mitigación v2, arriba)
 sigue activo como red de seguridad para el resto de los casos - tramos
 con una racha calificada válida pero igual inusualmente altos frente al
 resto de ese mismo corredor.
+
+**REVERTIDO el mismo día (2026-09-10):** los tres escenarios sintéticos
+de arriba pasaban, pero en datos reales de una carrera completa (UTMB
+174K) este filtro dejó SIN ningún VPI calculado en TODA la carrera -
+"esto esta muy mal" (feedback del usuario). Causa: la pendiente
+punto-a-punto de un GPX real es ruidosa - una subida real y sostenida
+tiene con frecuencia puntos individuales que caen momentáneamente por
+debajo del umbral (ruido de altímetro/GPS), lo que rompe lo que
+debería ser UNA racha larga en varias rachas cortas, ninguna de las
+cuales individualmente alcanza los 200m exigidos. El filtro que en el
+escenario sintético (datos limpios, sin ruido) distinguía correctamente
+"racha real" de "puntos sueltos" resultó demasiado frágil sobre datos
+reales - no es solo cuestión de ajustar el umbral, la premisa (exigir
+continuidad estricta) no se sostiene frente al ruido típico de un GPX.
+
+Revertido a la condición original (`climb_effort_km > 0 and
+climb_gain_m > 0`, sin exigir racha continua ni verificar el signo de
+la pendiente promedio) - `calculate_indices_by_segment` vuelve a
+calcular VPI/DMI exactamente como antes de este intento de corrección
+del 2026-09-10, así que el caso original (Florian Descamps, tramo
+-10.5% mostrando VPI 1206 m/h) puede volver a aparecer, mitigado
+únicamente por el flag de outlier relativo (mitigación v2, arriba) -
+igual que antes de que se intentaran estos dos fixes. Lo que SÍ se
+mantuvo (no depende del gating, es puramente informativo): la
+ubicación real de la racha calificada más larga (`VPI/DMI Run Start/End
+Km`, `VPI/DMI Plot Km`) sigue calculándose para anclar el punto en el
+gráfico donde realmente está la subida/bajada, en vez del extremo del
+tramo oficial completo - ver el issue de abajo.
+
+**Próximos pasos reales (si se retoma):** cualquier intento futuro de
+resolver esto de raíz sobre datos de checkpoint (sin el GPX propio del
+corredor) necesita tolerar ruido punto-a-punto - por ejemplo, suavizar
+la pendiente con una ventana (media móvil de unos pocos puntos) antes
+de aplicar el umbral de "racha continua", en vez de exigir continuidad
+estricta punto-a-punto. No intentado todavía.
 
 ---
 
