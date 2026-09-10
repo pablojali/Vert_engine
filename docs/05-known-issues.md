@@ -424,7 +424,7 @@ carreras afectadas para recuperar las 9 páginas perdidas.
 ---
 
 ## VPI/DMI inflado en tramos con terreno corto e irregular (subida/bajada corta escondida en un tramo largo)
-**Estado:** causa identificada y mitigada con un flag visual (2026-08-31) — no corregido de raíz
+**Estado:** caso extremo corregido de raíz (2026-09-10) — resto del problema sigue mitigado con flag visual, no corregido de raíz
 
 **Descripción:** mismo mecanismo de fondo que el issue de arriba ("ER da
 valores inflados"), pero en el VPI/DMI **por tramo** (el gráfico
@@ -495,6 +495,52 @@ elimina la necesidad de estimar del todo para quien suba su GPX personal
 público). El multiplicador (`VPI_OUTLIER_MULTIPLIER`/
 `DMI_OUTLIER_MULTIPLIER`, hoy 1.5x) es ajustable sin tocar el resto de
 la lógica si en la práctica marca de más/de menos.
+
+**Caso extremo corregido de raíz (2026-09-10):** un corredor real
+(Florian Descamps, Monterosa Walserwaeg by UTMB) reportó un tramo con
+pendiente promedio **-10.5%** (tramo puramente de bajada, km 107→112)
+apareciendo como su **BEST CLIMB** de toda la carrera con VPI 1206 m/h -
+y de forma simétrica, un tramo de **+11.5%** apareciendo como BEST
+DESCENT. El flag de outlier relativo (arriba) no lo atrapaba porque
+compara contra la mediana del propio corredor, y ese tramo no era
+necesariamente un outlier estadístico frente a sus otros tramos - el
+problema no es que el valor sea inusualmente alto para ese corredor,
+sino que es **conceptualmente imposible**: no puede haber una "tasa de
+subida" (VPI) real para un tramo que, en conjunto, bajó.
+
+Causa: dentro de un tramo con pendiente promedio negativa puede haber
+igual algún punto GPS puntual con pendiente ≥12% (un repecho corto
+dentro de una bajada larga). El método de reparto de tiempo por esfuerzo
+(ver Descripción arriba) no tiene piso: a medida que ese repecho
+representa una porción cada vez más chica del esfuerzo total del tramo,
+la tasa estimada **no tiende a cero** - converge a un techo
+(~100 × esfuerzo_total_km / tiempo_tramo_h) que fácilmente supera
+1000+ m/h sin importar cuán chico sea el repecho. Confirmado
+reconstruyendo el caso exacto (checkpoint sintético con el mismo patrón:
+tramo neto -10.5% con un repecho corto embebido) offline.
+
+Corrección aplicada en `calculate_indices_by_segment`: ahora el VPI de
+un tramo solo se calcula si la pendiente promedio del tramo (`Average
+Slope (%)`) es positiva, y el DMI solo si es negativa - un tramo cuya
+pendiente promedio va en el sentido contrario al índice que se está
+calculando ya no produce ningún valor (`None`) para ese índice, sin
+importar qué tan grande estime el reparto de tiempo para el repecho
+embebido. Es una corrección distinta y más acotada que el primer intento
+rechazado (aquel usaba un corte fijo de "effort-share < 15%" aplicado a
+TODOS los tramos, y terminaba marcando casi la mitad de tramos reales
+como no confiables - ver "Mitigación implementada (v1, revisada)"
+arriba); esta en cambio solo actúa cuando el signo de la pendiente del
+tramo es inconsistente con el índice, que es la única situación donde el
+resultado es imposible por definición, no solo estadísticamente inusual.
+Al corregirse en `app.py` (la fuente), se propaga automáticamente a la
+tabla de degradación, el gráfico interactivo, el informe HTML y el PDF
+(`pdf_reports/data_mapper.py`'s `_segment_role_rows` ya descarta filas
+con `VPI Raw (m/h)`/`DMI Raw (km/h)` nulas antes de elegir BEST/WORST
+CLIMB/DESCENT, así que un tramo suprimido simplemente deja de ser
+candidato). El flag de outlier relativo (mitigación v2, arriba) sigue
+activo como red de seguridad para el resto de los casos - tramos con
+pendiente del signo correcto pero igual inflados por un repecho muy
+concentrado.
 
 ---
 

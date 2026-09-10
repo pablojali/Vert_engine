@@ -750,10 +750,32 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
 
             if total_effort_km and total_effort_km > 0:
                 # --- VPI: steep-climb points within this segment ---
+                # Real user report: a segment averaging -10.5% slope (net
+                # downhill) showed as the runner's single BEST CLIMB of
+                # the race at 1206 m/h - and symmetrically, a +11.5%
+                # segment (net uphill) showed as BEST DESCENT. The
+                # effort-share time allocation this estimate is built on
+                # (see this function's own docstring) can produce an
+                # arbitrarily large rate from a short/steep sliver hidden
+                # inside an otherwise-opposite-direction segment - as
+                # that sliver's effort share shrinks, the derived rate
+                # does NOT shrink toward zero, it grows without bound
+                # (confirmed by reconstructing this exact segment shape
+                # offline). A segment whose OWN average slope runs the
+                # opposite direction can never be a meaningful "climb
+                # rate"/"descent rate" for that segment as a whole, no
+                # matter what a short embedded feature estimates to - so
+                # this doesn't compute one, rather than computing an
+                # unbounded number and hoping the (relative-to-runner)
+                # outlier flag downstream happens to catch it. Guards
+                # every downstream consumer at the source (index
+                # normalization, best/worst climb & descent, best
+                # recovery, largest degradation), not just the PDF.
                 climb_mask = segment_mask & (full_df_gpx["Slope (%)"] >= STRONG_SLOPE_THRESHOLD)
                 climb_effort_km = incremental_effort_km[climb_mask].sum()
                 climb_gain_m = incremental_elevation_m[climb_mask].sum()
-                if climb_effort_km and climb_effort_km > 0 and climb_gain_m and climb_gain_m > 0:
+                if (avg_slope is not None and avg_slope > 0
+                        and climb_effort_km and climb_effort_km > 0 and climb_gain_m and climb_gain_m > 0):
                     climb_effort_share = climb_effort_km / total_effort_km
                     climb_time_h = segment_time_h * climb_effort_share
                     vpi_raw = climb_gain_m / climb_time_h if climb_time_h > 0 else None
@@ -762,7 +784,8 @@ def calculate_indices_by_segment(full_df_gpx, df_segments, df_runner):
                 descent_mask = segment_mask & (full_df_gpx["Slope (%)"] <= -STRONG_SLOPE_THRESHOLD)
                 descent_effort_km = incremental_effort_km[descent_mask].sum()
                 descent_dist_km = incremental_dist_km[descent_mask].sum()
-                if descent_effort_km and descent_effort_km > 0 and descent_dist_km and descent_dist_km > 0:
+                if (avg_slope is not None and avg_slope < 0
+                        and descent_effort_km and descent_effort_km > 0 and descent_dist_km and descent_dist_km > 0):
                     descent_effort_share = descent_effort_km / total_effort_km
                     descent_time_h = segment_time_h * descent_effort_share
                     dmi_raw = descent_dist_km / descent_time_h if descent_time_h > 0 else None
